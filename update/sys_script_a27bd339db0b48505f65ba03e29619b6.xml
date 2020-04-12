@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update sys_domain="global" table="sys_script">
+    <sys_script action="INSERT_OR_UPDATE">
+        <abort_action>false</abort_action>
+        <access>package_private</access>
+        <action_delete>false</action_delete>
+        <action_insert>true</action_insert>
+        <action_label/>
+        <action_name/>
+        <action_query>false</action_query>
+        <action_run_at>server</action_run_at>
+        <action_update>true</action_update>
+        <active>true</active>
+        <add_message>false</add_message>
+        <advanced>true</advanced>
+        <application/>
+        <change_fields>false</change_fields>
+        <client_callable>false</client_callable>
+        <collection>kb_knowledge</collection>
+        <condition/>
+        <description>On the TeamOnline portal is possible to have only 4 important articles (layout and logic restrictions). If user trying to add one more, system will move oldest article from Important Articles category to Base articles, and add new article with Important Article category to database.</description>
+        <execute_function>false</execute_function>
+        <filter_condition table="kb_knowledge">kb_categoryCHANGESTO170f408cdb8388105f65ba03e29619cd^EQ<item display_table="kb_category" display_value="Important articles" endquery="false" field="kb_category" goto="false" newquery="false" operator="CHANGESTO" or="false" value="170f408cdb8388105f65ba03e29619cd"/>
+            <item endquery="true" field="" goto="false" newquery="false" operator="=" or="false" value=""/>
+        </filter_condition>
+        <is_rest>false</is_rest>
+        <message/>
+        <name>Replace oldest important article</name>
+        <onclick/>
+        <order>100</order>
+        <priority>100</priority>
+        <read_access_action>false</read_access_action>
+        <rest_method/>
+        <rest_method_text/>
+        <rest_service/>
+        <rest_service_text/>
+        <rest_variables/>
+        <role_conditions/>
+        <script><![CDATA[(function executeRule(current, previous /*null when async*/) {
+
+	var BASE_ARTICLES = gs.getProperty('x_aaro2_teamonline.base_article');
+	var IMPORTANT_ARTICLES = gs.getProperty('x_aaro2_teamonline.important_article');
+
+	var kbGr = new GlideRecord('kb_knowledge');
+	kbGr.addQuery('kb_category', IMPORTANT_ARTICLES);
+	kbGr.orderBy('sys_updated_on');
+	kbGr.query();
+	var amount = kbGr.getRowCount();
+	if(amount >= 4 && kbGr.next()){
+		kbGr.kb_category = BASE_ARTICLES;
+		kbGr.update();
+	}
+
+
+})(current, previous);]]></script>
+        <sys_class_name>sys_script</sys_class_name>
+        <sys_created_by>xxikochet</sys_created_by>
+        <sys_created_on>2020-02-19 16:46:40</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_domain>global</sys_domain>
+        <sys_id>a27bd339db0b48505f65ba03e29619b6</sys_id>
+        <sys_mod_count>6</sys_mod_count>
+        <sys_name>Replace oldest important article</sys_name>
+        <sys_overrides/>
+        <sys_package display_value="TEAMonline" source="x_aaro2_teamonline">a2dfc25fdb7244105f65ba03e29619fa</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="TEAMonline">a2dfc25fdb7244105f65ba03e29619fa</sys_scope>
+        <sys_update_name>sys_script_a27bd339db0b48505f65ba03e29619b6</sys_update_name>
+        <sys_updated_by>xxikochet</sys_updated_by>
+        <sys_updated_on>2020-02-20 11:25:20</sys_updated_on>
+        <template/>
+        <when>before</when>
+    </sys_script>
+</record_update>

@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sp_css">
+    <sp_css action="INSERT_OR_UPDATE">
+        <css>@function darker($color, $tone) {&#13;
+  $adjust: -16*$tone;&#13;
+  @return adjust-color($color, $red: $adjust, $green: $adjust, $blue: $adjust);&#13;
+}&#13;
+&#13;
+h1, h2, h3, h4, h5, body, .navbar-toggleable-md .navbar-nav .nav-link, .market-header, .btn, .dropdown-item, .form-control, p {&#13;
+  font-family: 'Poppins', serif !important;&#13;
+}&#13;
+&#13;
+body {&#13;
+  text-align: left;&#13;
+}&#13;
+&#13;
+legend.h4.ng-binding{&#13;
+  display:none&#13;
+}&#13;
+&#13;
+body .padding-top {&#13;
+  padding-top: 0rem;&#13;
+}&#13;
+&#13;
+.m-t-1 {&#13;
+	margin-top: 1rem;&#13;
+} &#13;
+&#13;
+#uiNotificationContainer {&#13;
+  z-index: 9999;&#13;
+}&#13;
+&#13;
+.btn {&#13;
+  border: 0 none;&#13;
+  border-radius: 0;&#13;
+  font-size: 14px;&#13;
+  font-weight: bold;&#13;
+  padding: 0.8rem 2rem;&#13;
+  text-transform: none;&#13;
+}&#13;
+.btn-primary {&#13;
+  border: 1px solid #0069C8;&#13;
+  color: #0069C8;&#13;
+  background: #fff;&#13;
+  transition: all .3s;&#13;
+}&#13;
+.btn-primary:hover, .btn-primary:focus {&#13;
+  color: #ffffff !important;&#13;
+  border-color: #fff;&#13;
+  background: rgba(0, 0, 0, 0) linear-gradient(to right, $blue-company-color 0px, $light-blue-company-color 100%) repeat scroll 0 0 !important;&#13;
+}&#13;
+&#13;
+.btn-large {&#13;
+  font-size: 1.2em;&#13;
+}&#13;
+&#13;
+.input-group .form-control:first-child, .input-group-addon:first-child, .input-group-btn:first-child &gt; .btn, .input-group-btn:first-child &gt; .btn-group &gt; .btn, .input-group-btn:first-child &gt; .dropdown-toggle, .input-group-btn:last-child &gt; .btn:not(:last-child):not(.dropdown-toggle), .input-group-btn:last-child &gt; .btn-group:not(:last-child) &gt; .btn {&#13;
+  border-bottom-right-radius: 0;&#13;
+  border-top-right-radius: 0;&#13;
+  border-top: 0;&#13;
+  border-left: 0;&#13;
+  box-shadow: none;&#13;
+  border-bottom: 1px solid black;&#13;
+  border-radius: 0;&#13;
+}&#13;
+&#13;
+.sp-ac-root button.sp-ac-btn {&#13;
+  background-color: $green-company-color;&#13;
+}&#13;
+&#13;
+.sp-ac-root button.sp-ac-btn:hover {&#13;
+  background-color:  darker($green-company-color, 1.1);&#13;
+}&#13;
+&#13;
+.md-05 {&#13;
+	width: 4,16665‬%;&#13;
+}&#13;
+&#13;
+/*** Modal style ***/&#13;
+.modal-content {&#13;
+  padding: 3rem 2rem !important;&#13;
+  position: relative;&#13;
+  background-color: #fff;&#13;
+  border: none;&#13;
+  border-radius: 0;&#13;
+  box-shadow: box-shadow: 0 3px 9px rgba(0, 0, 0, .5);;&#13;
+  -webkit-box-shadow: box-shadow: 0 3px 9px rgba(0, 0, 0, .5);&#13;
+}&#13;
+.modal-content &gt; .panel-default {&#13;
+  padding: 3rem 2rem;&#13;
+  border: 1px dashed #dadada;&#13;
+}&#13;
+&#13;
+.modal-content &gt; .panel-default &gt; .panel-heading {&#13;
+  color: #3a3f51;&#13;
+  background-color: #fff;&#13;
+  border-color: #fff;&#13;
+}&#13;
+&#13;
+.modal-content &gt; .panel-default &gt; .panel-heading &gt; .panel-title {&#13;
+  background: #edeff2 none repeat scroll 0 0;&#13;
+  font-size: 16px;&#13;
+  left: 5%;&#13;
+  line-height: 1;&#13;
+  margin: 0;&#13;
+  padding: 1rem 1.5rem;&#13;
+  position: absolute;&#13;
+  text-align: center;&#13;
+  top: 12px;&#13;
+  font-weight: 600;&#13;
+}&#13;
+&#13;
+.panel-footer {&#13;
+  padding: 10px 15px;&#13;
+  background-color: #fff;&#13;
+  border-top: 1px dashed #dadada;&#13;
+  border-bottom-right-radius: 3px;&#13;
+  border-bottom-left-radius: 3px;&#13;
+}</css>
+        <name>TeamOnline StyleSheet</name>
+        <sys_class_name>sp_css</sys_class_name>
+        <sys_created_by>xxabunko</sys_created_by>
+        <sys_created_on>2020-02-12 16:42:29</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_id>e4c957efdbfac4105f65ba03e2961911</sys_id>
+        <sys_mod_count>33</sys_mod_count>
+        <sys_name>TeamOnline StyleSheet</sys_name>
+        <sys_package display_value="TEAMonline" source="x_aaro2_teamonline">a2dfc25fdb7244105f65ba03e29619fa</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="TEAMonline">a2dfc25fdb7244105f65ba03e29619fa</sys_scope>
+        <sys_update_name>sp_css_e4c957efdbfac4105f65ba03e2961911</sys_update_name>
+        <sys_updated_by>xxabunko</sys_updated_by>
+        <sys_updated_on>2020-04-09 11:30:42</sys_updated_on>
+    </sp_css>
+</record_update>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_package_dependency_m2m">
+    <sys_package_dependency_m2m action="INSERT_OR_UPDATE">
+        <dependency display_value="Knowledge Management" source="com.glideapp.knowledge">f96d25c1bc3030003d782407ef4fb24a</dependency>
+        <min_version/>
+        <sys_created_by>xxabunko</sys_created_by>
+        <sys_created_on>2020-02-11 20:25:40</sys_created_on>
+        <sys_id>d6a74668dba780105f65ba03e2961971</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_package display_value="TEAMonline" source="x_aaro2_teamonline">a2dfc25fdb7244105f65ba03e29619fa</sys_package>
+        <sys_updated_by>xxabunko</sys_updated_by>
+        <sys_updated_on>2020-02-11 20:25:40</sys_updated_on>
+    </sys_package_dependency_m2m>
+</record_update>

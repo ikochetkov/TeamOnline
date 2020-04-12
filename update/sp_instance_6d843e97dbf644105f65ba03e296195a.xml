@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sp_instance">
+    <sp_instance action="INSERT_OR_UPDATE">
+        <active>true</active>
+        <class_name/>
+        <color>default</color>
+        <css/>
+        <glyph/>
+        <id/>
+        <order>1</order>
+        <roles/>
+        <short_description/>
+        <size>md</size>
+        <sp_column display_value="1">8174b2d7dbf644105f65ba03e2961981</sp_column>
+        <sp_widget display_value="HTML">8679ef89cb21120000f8d856634c9c4f</sp_widget>
+        <sys_class_name>sp_instance</sys_class_name>
+        <sys_created_by>xxikochet</sys_created_by>
+        <sys_created_on>2020-02-11 19:20:05</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_id>6d843e97dbf644105f65ba03e296195a</sys_id>
+        <sys_mod_count>3</sys_mod_count>
+        <sys_name>New post</sys_name>
+        <sys_package display_value="TEAMonline" source="x_aaro2_teamonline">a2dfc25fdb7244105f65ba03e29619fa</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="TEAMonline">a2dfc25fdb7244105f65ba03e29619fa</sys_scope>
+        <sys_update_name>sp_instance_6d843e97dbf644105f65ba03e296195a</sys_update_name>
+        <sys_updated_by>xxikochet</sys_updated_by>
+        <sys_updated_on>2020-02-11 20:50:20</sys_updated_on>
+        <title>New post</title>
+        <url/>
+        <widget_parameters><![CDATA[{
+	"html": {
+		"value": "<h1 style=\"text-align: center; font-size: 6vw; color: #fff; font-weight: 800;\" data-mce-style=\"text-align: center; font-size: 6vw; color: #fff; font-weight: 800;\"><em>New post</em></h1>",
+		"displayValue": "<h1 style=\"text-align: center; font-size: 6vw; color: #fff; font-weight: 800;\"><em>New post</em></h1>"
+	}
+}]]></widget_parameters>
+    </sp_instance>
+    <sys_translated_text action="delete_multiple" query="documentkey=6d843e97dbf644105f65ba03e296195a"/>
+</record_update>

@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_script_include">
+    <sys_script_include action="INSERT_OR_UPDATE">
+        <access>package_private</access>
+        <active>true</active>
+        <api_name>x_aaro2_teamonline.TeamOnlineUtils</api_name>
+        <caller_access/>
+        <client_callable>false</client_callable>
+        <description/>
+        <name>TeamOnlineUtils</name>
+        <script><![CDATA[var TeamOnlineUtils = Class.create();
+TeamOnlineUtils.prototype = {
+	initialize: function() {},
+	getAwardInformationFromHTML: function (htmlDescription) {
+		return this._separateTableElments(htmlDescription);
+	},
+
+	_separateTableElments: function (htmlString) {
+		var answer = [];
+		var stringElement = htmlString;
+		var tdRegExp = new RegExp('<table>(.|\n)*?<\/table>', 'g');
+		var matchPart;
+
+		while ((matchPart = tdRegExp.exec(stringElement)) !== null) {
+			if (matchPart.index === tdRegExp.lastIndex) {
+				tdRegExp.lastIndex++;
+			}
+
+			matchPart.forEach(function (match, groupIndex, index) {
+				if (!groupIndex)
+					answer.push(match);
+			});
+		}
+		var awardBody = answer.slice(0, 2);
+		var comments = answer.slice(2, answer.length);
+
+		var awardBodyObject = this._getUserInforation(awardBody);
+		var commentsArray = this._getCommentsForAward(comments);
+		awardBodyObject.date = this._converToServiceNowDateFormat(awardBodyObject.date);
+		awardBodyObject.comments = commentsArray;
+
+		return awardBodyObject;
+	},
+
+	_getUserInforation: function (array) {
+		var newArray = {
+			'date': '',
+			'user': '',
+			'message': '',
+			'comments': []
+		};
+
+		var stringElement = array.join('');
+		var tdRegExp = new RegExp('<td>(.*?)<\/td>', 'g');
+		var keys = ['date', 'user', 'message'];
+		var keysIndex = 0;
+
+		var awardBody = this._matchElements(stringElement, tdRegExp, 1, newArray, keys, keysIndex);
+
+		return awardBody;
+	},
+
+	_getCommentsForAward: function (array) {
+		var newArray = [];
+		for (var index = 0, length = array.length; index < length; index++) {
+			var obj = {
+				user: '',
+				message: ''
+			}
+			var keys = ['user', 'message'];
+			var keysIndex = 0;
+
+			var comments = this._matchElements(array[index], new RegExp('<td>(.*?)<\/td>', 'g'), 1, obj, keys, keysIndex);
+			var userInformation = comments.user.split('</b> ');
+			comments.user = userInformation[0].replace(/(<([^>]+)>)/g, '');
+			comments.date = this._converToServiceNowDateFormat(userInformation[1]);
+
+			newArray.push(comments);
+		}
+		return newArray;
+	},
+
+	_matchElements: function (string, regExp, matchesGroupIndex, object, additionalArray, additionalArrayIndex) {
+		var array = additionalArray;
+		var arrayIndex = additionalArrayIndex;
+		var resultObject = object;
+		var matchPart;
+
+		while ((matchPart = regExp.exec(string)) !== null) {
+			if (matchPart.index === regExp.lastIndex) {
+				regExp.lastIndex++;
+			}
+
+			matchPart.forEach(function (match, groupIndex, index) {
+				if (groupIndex == matchesGroupIndex) {
+					var key = array[arrayIndex];
+					resultObject[key] = match;
+					arrayIndex++;
+				}
+			});
+		}
+
+		return resultObject;
+	},
+
+	_converToServiceNowDateFormat: function (dateString) {
+		var dateFormat = "MMMM dd, yyyy, K:mm a";
+		var dateTime = new GlideDateTime();
+		dateTime.setDisplayValue(dateString, dateFormat);
+		return dateTime.getDisplayValue();
+	},
+
+	type: 'TeamOnlineUtils'
+};]]></script>
+        <sys_class_name>sys_script_include</sys_class_name>
+        <sys_created_by>xxabunko</sys_created_by>
+        <sys_created_on>2020-04-09 11:20:53</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_id>23903f35db4498105f65ba03e296198f</sys_id>
+        <sys_mod_count>2</sys_mod_count>
+        <sys_name>TeamOnlineUtils</sys_name>
+        <sys_package display_value="TEAMonline" source="x_aaro2_teamonline">a2dfc25fdb7244105f65ba03e29619fa</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="TEAMonline">a2dfc25fdb7244105f65ba03e29619fa</sys_scope>
+        <sys_update_name>sys_script_include_23903f35db4498105f65ba03e296198f</sys_update_name>
+        <sys_updated_by>xxabunko</sys_updated_by>
+        <sys_updated_on>2020-04-09 11:23:30</sys_updated_on>
+    </sys_script_include>
+</record_update>

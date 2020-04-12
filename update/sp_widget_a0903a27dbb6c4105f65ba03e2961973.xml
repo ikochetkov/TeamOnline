@@ -1,0 +1,652 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sp_widget">
+    <sp_widget action="INSERT_OR_UPDATE">
+        <category>custom</category>
+        <client_script><![CDATA[function($rootScope, $scope, $window, spUtil, $sce, $location, glideFormFactory, spModal) {
+	/* widget controller */
+	var c = this;
+	$scope.editLayout = $scope.data.editLayout;
+
+	if(typeof $rootScope.isOtherPortal == "undefined") {
+		if($location.search().sys_id != null) {
+			$rootScope.isOtherPortal = true;
+		} else {
+			$rootScope.isOtherPortal = false;
+		}
+	}
+
+	$rootScope.$on('edit_layout', function (response) {
+		$scope.editLayout = response.edit_layout;
+	})
+
+	$scope.changeLayout = function ($event) {
+		$event.preventDefault();
+		$scope.editLayout = !$scope.editLayout;
+	}
+
+	if (c.data.isValid) {
+		if (c.data.kbContentData && c.data.kbContentData.isTemplate ) {
+			c.data.kbContentData.data.forEach(function(field) {
+				if(field.type == 'html')
+					field.content = $sce.trustAsHtml(field.content);
+			});
+		} else {
+			c.data.kbContentData.data = $sce.trustAsHtml(c.data.kbContentData.data);
+		}
+		$rootScope.properties          = $scope.data.properties;
+		$rootScope.messages            = $scope.data.messages;
+		$rootScope.isValid             = $scope.data.isValid;
+		$rootScope.isKBAdmin           = $scope.data.isKBAdmin;
+		$rootScope.isKBOwner           = $scope.data.isKBOwner;
+		$rootScope.article_sys_id      = $scope.data.article_sys_id;
+		$rootScope.attachments         = $scope.data.attachments;
+		$rootScope.attachedIncidents   = $scope.data.attachedIncidents;
+		$rootScope.affectedProducts    = $scope.data.affectedProducts;
+		$rootScope.displayAttachments  = $scope.data.displayAttachments;
+		$rootScope.hideFeedbackOptions = $scope.data.hideFeedbackOptions;
+		$rootScope.helpfulContent      = $scope.data.helpfulContent;
+		$rootScope.tableName           = $scope.data.tableName;
+		$rootScope.hasComments         = $scope.data.hasComments;
+		$rootScope.stackUrl            = window.location.pathname + '?id='+c.data.params.sysparm_article_view_page_id+'%26' +  (c.data.params.sysparm_article ? 'sysparm_article=' + c.data.params.sysparm_article : 'sys_kb_id=' + c.data.params.sys_kb_id);
+
+		if ($scope.data.page_title) {
+			$window.document.title = $scope.data.page_title;
+		}
+
+		$rootScope.$on('articleUpdated', function() {
+			$scope.data.action = 'updateArticle';
+			spUtil.update($scope);
+		});
+
+		var flatFields = [];
+
+		angular.forEach($scope.data.f._fields, function(field) {
+			flatFields.push(field);
+		});
+
+		var uiMessageHandler = function(g_form, type, message) {
+			switch (type) {
+				case 'addInfoMessage':
+					spUtil.addInfoMessage(message);
+					break;
+				case 'addErrorMessage':
+					spUtil.addErrorMessage(message);
+					break;
+				case 'clearMessages':
+					break;
+				default:
+			}
+		};
+
+		var g_form = glideFormFactory.create($scope, $scope.data.f.table, $scope.data.f.sys_id, flatFields, null, {uiMessageHandler: uiMessageHandler});
+		$scope.getGlideForm = function() {
+			return g_form;
+		}
+	}
+
+	$scope.deleteArticle = function(){
+		spModal.open({
+			title: 'Delete this article?',
+			message: 'Article will be deleted from system permanently',
+			buttons: [
+				{label:'✘ ${No}', cancel: true},
+				{label:'✔️ ${Yes}', primary: true}
+			]
+		}).then(function() {
+			$scope.data.action = 'deleteArticle';
+			spUtil.update($scope).then(function(){
+				$location.url('/teamonline');
+				spUtil.addInfoMessage('Article was deleted');
+			});
+		});
+	}
+
+
+}
+]]></client_script>
+        <controller_as>c</controller_as>
+        <css>.section {
+  padding: 4rem 0;
+  display: block;
+  position: relative;
+  background-color: #ffffff;
+}
+
+.single-wrapper {
+  margin-top: 2rem;
+}
+
+.blog-title-area {
+  display: block;
+  position: relative;
+  padding: 0;
+  margin-bottom: 3rem;
+}
+
+.text-center {
+  text-align: center !important;
+}
+
+.blog-title-area span {
+  margin: 0.5rem 0;
+  display: block;
+}
+
+.blog-title-area span a {
+  font-size: 13px;
+}
+
+.blog-title-area span a {
+  padding: 0 1rem;
+  color: #ffffff !important;
+  border-radius: 3px;
+}
+
+.page-title .bg-blue, .masonry-box:hover .blog-meta span.bg-blue, .color-blue a {
+  background-color: #0069C8 !important;
+}
+
+.btn {
+  transition: all .3s ease;
+  margin-right: 5px;
+}
+
+.blue-button:hover {
+  background-color: #0069C8;
+  color: #fff;
+}
+
+.danger-button:hover {
+  color: #fff;
+  background-color: #d9534f;
+  border-color: #d43f3a;
+}
+
+.blog-title-area h3 {
+  font-size: 41px;
+  line-height: 50px;
+  margin-bottom: 7px;
+  margin-top: 0;
+  overflow-wrap: break-word;
+}
+
+h1, h2, h3, h4, h5 {
+  font-weight: 600;
+}
+
+.blog-title-area .blog-meta small, .blog-title-area a {
+  color: #a3a5a8;
+}
+
+.blog-title-area .header-wrapper-editable {
+  display: flex;
+  justify-content: space-between;
+}
+
+.blog-title-area .header-wrapper {
+  display: flex;
+  justify-content: center;
+}
+
+.blog-title-area .header-wrapper-editable .color-blue {
+  margin-right: 19%;
+}
+
+.blog-title-area .header-wrapper .blue-button {
+  transition: all .3s linear;
+}
+
+.blog-title-area .header-wrapper .blue-button:hover {
+  background-color: #98dd05;
+  color: #fff;
+}
+
+.blog-meta small a, .blog-meta small {
+  font-weight: 500;
+  color: #999 !important;
+}
+
+.blog-title-area .blog-content {
+  text-align: left;
+}
+
+.blog-meta small {
+  font-size: 11px;
+  display: inline-block;
+  margin-bottom: 0;
+  padding-bottom: 0;
+  color: #111111;
+  font-weight: bold;
+  text-transform: uppercase;
+  margin-right: 0.5rem;
+}
+small, .small {
+  font-size: 80%;
+  font-weight: normal;
+}
+small {
+  font-size: 80%;
+}
+
+.pp {
+  padding-left: 5%;
+  padding-right: 5%;
+}
+
+p {
+  margin-bottom: 26px;
+  font-size: 15px;
+  line-height: 26px;
+}
+
+ul {
+  padding-bottom: 0;
+  margin-bottom: 25px;
+  list-style: none;
+}
+li:before {
+  font-family: FontAwesome;
+  content: "\f105";
+  padding-right: 0.5rem;
+  color: #111111;
+}
+
+.pp img {
+  max-width: 880px !important;
+  margin-bottom: 2rem;
+  max-height: 100% !important;
+}
+
+.glyphicon-star {
+  color: #0069C8;
+}</css>
+        <data_table>sp_instance</data_table>
+        <demo_data/>
+        <description/>
+        <docs/>
+        <field_list>color,css</field_list>
+        <has_preview>true</has_preview>
+        <id>team_online_article</id>
+        <internal>false</internal>
+        <link><![CDATA[function(scope,$timeout) {
+	var c = scope.c,
+			$uibModal = $injector.get('$uibModal'),
+			$rootScope = $injector.get("$rootScope");
+	var options = {
+		scope: scope,
+		keyboard: true,
+		templateUrl: 'knowledge-image-modal.html'
+	};
+	setTimeout(function(){
+		$(".kb-article-content").find("img").attr("tabindex","0");
+		var timer = 0;
+		var prevent = false;
+		var element;
+
+		$(".kb-article-content").on("click keypress","img", function() {
+			element = this;
+			timer = setTimeout(function() {
+				if (!prevent)
+					openModal(element);
+				prevent=false;
+			}, 200);
+		});
+
+		$(".kb-article-content").on("dblclick","img", function() {
+			element = this;
+			prevent = true;
+			clearTimeout(timer);
+			openModal(element);
+		});
+
+	});
+
+	function openModal(element){
+		if( c.imageInstance == '' ||  c.imageInstance.closed.$$state.status == 1 ){
+			var src= element.src;
+			c.imageInstance = $uibModal.open(options);
+			var orignalWidth = $(element).prop('naturalWidth');
+			var orignalHeight = $(element).prop('naturalHeight');
+			setTimeout(function(){
+				var modal = document.getElementById('knowledgeImageModal'),
+						modalImg = $('#modalImage')[0];
+				modal.style.display = "block";
+				modalImg.src = src;
+				c.imagesrc = src;
+				modalImg.width = orignalWidth > c.minImageWidth ? orignalWidth : c.minImageWidth;
+				modalImg.style.minHeight = orignalHeight > c.minImageHeight ? orignalHeight : c.minImageHeight +"px";
+				$('.modal-dialog').width(modalImg.width);
+				$('#modal-close').focus();
+
+			});
+		}
+	}
+
+	c.showAttachArticle = function(){
+		try{
+			if(window.opener && window.opener.document.getElementById("section_form_id") != null && c.data.params.sysparm_kb_search_table){
+				$('.kb_container-right').css('display','none').removeClass('col-md-3');
+				$('.kb_container-left').removeClass('col-md-9').addClass('col-md-12');
+				$('.kb-article-content').find('a').attr("target","_blank");
+				if($rootScope.properties.readOnlyPage == "true") {
+					$rootScope.readOnly = true;
+					$("[ng-click='c.toggleVersions()']").off("click").addClass("disabled");
+				}
+				return true;
+			}
+		}catch(e){
+			return false;
+		}
+		return false;
+	};
+
+	c.attachToTask = function(){
+		self = window;
+		if (self.opener) {
+			var lastSaved = self.opener.document.getElementById("onLoad_sys_updated_on").value;
+			if (!lastSaved) {
+				self.close();
+				self.opener.g_form.addErrorMessage("Invalid action: Record needs to be saved first");
+				return false;
+			}
+			var e = self.opener.document.getElementById("sys_uniqueValue");
+			var taskID = e.value;
+
+
+			var articleID = c.data.article_sys_id;
+			var args = [];
+			args.push(articleID);
+			args.push(c.data.properties.attachFields);
+
+			c.server.get({action : 'kbAttachArticle', value : articleID + "," + taskID}).then(function(resp){
+				var fieldName = self.opener.fillField;
+				var tableName = fieldName.split('.')[0];
+				var targetFields = c.data.properties.attachFields;
+
+        var articleContent = resp.data.articleContent;
+
+				var names = [];
+				if (targetFields) {
+					var parts = targetFields.split(",");
+					for(var i=0; i<parts.length; i++)
+						names.push(parts[i]);
+				}
+				names.push('comments');
+				names.push('description');
+
+				var target = null;
+				var targetName = null;
+				for (var i=0;i<names.length; i++) {
+					targetName = names[i];
+					target = self.opener.document.getElementById(tableName + "." + targetName);
+					if (target){
+						var ed = self.opener.g_form.getGlideUIElement(targetName);
+						if (ed && ed.type == 'reference') {
+							self.opener.g_form.setValue(targetName, articleID);
+						} else {
+							var newValue = "";
+							if (target.value == "")
+								newValue = articleContent;
+							else
+									newValue = target.value + "\n" + articleContent;
+								self.opener.g_form.setValue(targetName, newValue);
+						}
+						break;
+					}
+
+				}
+				self.close();
+			})
+		}
+	};
+}]]></link>
+        <name>Team Online Article</name>
+        <option_schema>[{"hint":"Hide all article actions (Subscribe, Edit, Create Incident, Flag Article)","name":"hide_all_actions","default_value":"false","section":"other","label":"Hide All Actions","type":"boolean"},{"hint":"Show Article Versioning Information","name":"show_version_info","default_value":"true","section":"other","label":"Show Version Information","type":"boolean"},{"hint":"Show the Create Incident action","name":"show_create_incident_action","default_value":"false","section":"other","label":"Show Create Incident Action","type":"boolean"},{"hint":"Label for the Create Incident action","name":"create_task_prompt","section":"other","label":"Create Incident Action Label","type":"string"},{"hint":"Change the url for the create incident action to any custom task form (default url is populated based on glide.knowman.create_incident_link system property)","name":"create_task_url","section":"other","label":"Create Incident Action URL","type":"string"},{"hint":"If there's a new version of the article available, it will redirect to the latest version. You must have Show Article Versioning disabled","name":"redirect_latest","section":"other","default_value":"false","label":"Redirect to the latest article","type":"boolean"}]</option_schema>
+        <public>true</public>
+        <roles/>
+        <script><![CDATA[(function(){
+	data.editLayout = $sp.getParameter('edit') || false;
+	data.editWidget = $sp.getWidget('team_online_article_editor', { modal: false, operation: 'Edit' });
+	data.canEdit = gs.getUser().isMemberOf(gs.getProperty('x_aaro2_teamonline.teamonline_administration_group')) || gs.hasRole('admin');
+	data.isValid = isValidKbRecord();
+	if (!data.isValid) { return }
+	if (!input || (input && input.action == 'updateArticle')) {
+		var kbViewModel = new global.KBViewModel();
+		var kbPortal = new global.KBPortalServiceImpl();
+
+		data.params = populateParameters();
+		kbViewModel.getInfoForSP(data.params);
+
+		var isValidRecord = kbViewModel.isValid;
+		data.knowledgeExists = kbViewModel.knowledgeExists;
+		data.kb_knowledge_page = $sp.getDisplayValue("kb_knowledge_page") || "kb_view2";
+
+		options.knowledge_bases = options.knowledge_bases || String(kbPortal.getServicePortalKnowledgeBases($sp.getPortalRecord().url_suffix)) || "";
+		var knowledgeRecord = data.kb_record = kbViewModel.knowledgeRecord;
+
+		if ( options.knowledge_bases && knowledgeRecord && knowledgeRecord.kb_knowledge_base) {
+			if ( options.knowledge_bases.indexOf(knowledgeRecord.kb_knowledge_base) == -1 )
+				if ( !kbPortal.isMemberOfAOG(knowledgeRecord) )
+					isValidRecord = false;
+		}
+		if (isValidRecord && !!knowledgeRecord) {
+			data.isKBAdmin = gs.hasRole('knowledge_admin');
+			data.isKBOwner = (gs.getUserID() == knowledgeRecord.kb_knowledge_base.owner);
+
+			populateDataFromKBViewModel(kbViewModel, knowledgeRecord);
+			data.page_title = getPageTitle();
+
+
+			populateCommonProperties();
+			data.viewCount = handleViewCountIncrement() || 0;
+
+			data.sys_updated_on = "";
+			if (kbViewModel.publishedRecord) {
+				published = kbViewModel.publishedRecord.published;
+				data.sys_updated_on = kbViewModel.publishedRecord.sys_updated_on + "";
+			}
+
+			data.shortDesc = knowledgeRecord.getValue('short_description');
+			data.kbCategory = knowledgeRecord.getDisplayValue('meta');
+
+			data.properties = populateSystemProperties(kbViewModel) || {};
+			data.messages = populateMessages(data.avgRating) || {};
+
+		}
+		else{
+			data.messages.INSUFFICIENT_PREVILEGES = gs.getMessage("You do not have sufficient privileges to access this knowledge item");
+			data.messages.RECORD_NOT_FOUND = gs.getMessage("Knowledge record not found");
+		}
+
+		data.view = 'teamonline_kb';
+		data.f = $sp.getForm(data.tableName, data.params.sys_kb_id, data.query, data.view);
+		data.f._fields.kb_knowledge_base.value = data.kbSysId;
+		data.f._fields.kb_knowledge_base.visible = false;
+	}
+	else if (input && input.action == 'deleteArticle') {
+		var articleGr = new GlideRecord('kb_knowledge');
+		if (articleGr.get(input.params.sys_kb_id)) {
+			articleGr.deleteRecord();
+		}
+	}
+
+
+	function populateParameters() {
+		var params = {
+			sys_kb_id                    : $sp.getParameter('sys_kb_id') || $sp.getParameter('sys_id'),
+			sysparm_article_view_page_id : $sp.getParameter('id')
+		};
+		return params;
+	}
+
+	function isValidKbRecord() {
+		var record = new GlideRecord('kb_knowledge');
+		if (record.get($sp.getParameter('sys_kb_id'))) {
+			return true
+		}
+		return false;
+	}
+
+	function populateSystemProperties(kbViewModel) {
+		var properties = {
+			showStarRating       : getProperty("glide.knowman.show_star_rating", "show_star_rating", true, true),
+			showRatingOptions    : getProperty("glide.knowman.show_rating_options", "show_rating_options", true, true),
+			showYesNoRatings     : getProperty("glide.knowman.show_yn_rating", "show_yn_rating", true, true),
+			showUserComments     : getProperty("glide.knowman.show_user_feedback", "show_user_feedback", 'onload'),
+			showAffectedProducts : gs.getProperty('glide.knowman.affected_products.display','true'),
+			isEditable           : kbViewModel.isEditable,
+			showFeedBack         : kbViewModel.showKBFeedback,
+			showKBRatingOptions  : kbViewModel.showKBRatingOptions,
+			showKBHelpfullRating : kbViewModel.showKBHelpfullRating,
+			showKBStarRating     : kbViewModel.showKBStarRating,
+			showKBUpdateAction   : kbViewModel.showKBUpdateAction
+		}
+		return properties;
+	}
+
+	function populateMessages(avgRating) {
+		var messages = {
+			REASON                    : gs.getMessage("Reason"),
+			DETAILS                   : gs.getMessage("Details"),
+			FEEDBACK                  : gs.getMessage("Feedback"),
+			THANKYOU_FEEDBACK         : gs.getMessage("Thank you for the feedback"),
+			ADDTIONAL_DETAILS         : gs.getMessage("Please provide additional details"),
+			NO_THANKS                 : gs.getMessage("No thanks"),
+			ADD_DETAIL                : gs.getMessage("Add a Detail Comment"),
+			ARTICLE_FLAGGED           : gs.getMessage("Article has been flagged"),
+			FLAG_THIS_ARTICLE         : gs.getMessage("Flag this article"),
+			ADD_COMMENT               : gs.getMessage("Add a comment"),
+			NOT_RETIRED               : gs.getMessage("Article not retired"),
+			NOT_PUBLISHED             : gs.getMessage("Article not published"),
+			NOT_SAVED                 : gs.getMessage("Article not saved"),
+			SAVED                     : gs.getMessage("Article saved"),
+			HOME                      : gs.getMessage('Home'),
+			DISCARDED                 : gs.getMessage("Article changes discarded"),
+			SUBMITTED                 : gs.getMessage("Your article has been submitted"),
+			UPDATED                   : gs.getMessage("Article has been updated"),
+			PREVIEW                   : gs.getMessage(" Preview "),
+			PREVIEW_HINT              : gs.getMessage("Preview changes"),
+			DELETE                    : gs.getMessage("Delete"),
+			CONFIRM_DELETE            : gs.getMessage("Confirm deletion of this article?"),
+			TITLE_CANCEL              : gs.getMessage("Cancel changes"),
+			MESSAGE_CANCEL            : gs.getMessage("Discard all changes?"),
+			TITLE_RETIRE              : gs.getMessage("Retire"),
+			MESSAGE_RETIRE            : gs.getMessage("Retire this article?"),
+			SUBMIT                    : gs.getMessage('Submit'),
+			COMMENTS                  : gs.getMessage('Comments'),
+			KNOWLEDGE_BASE            : gs.getMessage('Knowledge Base'),
+			KNOWLEDGE                 : gs.getMessage('Knowledge'),
+			THANK_YOU                 : gs.getMessage("Thank you"),
+			RATE_LIMIT_REACHED        : gs.getMessage("You have reached the daily limit for comments posted by a user."),
+			EDIT                      : gs.getMessage("Edit"),
+			HELPFUL                   : gs.getMessage('Helpful?'),
+			SUBSCRIPTION_CONFIRMATION : gs.getMessage("You are now subscribed to {0}. You will be notified of any new comments or activity according to your notification settings", data.number),
+			YES                       : gs.getMessage("Yes"),
+			NO                        : gs.getMessage("No"),
+			CANCEL                    : gs.getMessage("Cancel"),
+			ACTION_MENU               : gs.getMessage("Action Menu. Please click for available actions on the article"),
+			CLOSE                     : gs.getMessage("Close"),
+			JUST_NOW                  : gs.getMessage("just now"),
+			ARTICLE_RATING            : gs.getMessage("Average article rating - {0} stars", avgRating), 
+			EXTERNAL_CONTENT          : gs.getMessage(gs.getProperty("sn_km_intg.glide.knowman.external.ui_label_for_external_content", "External Content"))
+		}
+		return messages;
+	}
+
+	function getProperty(propertyName, optionName, defaultValue, checkRoles) {
+		var optionVal = options[optionName];
+		if (!optionVal || optionVal === 'use_system' || !(optionVal === 'yes' || optionVal === 'no') ) {
+			var propValue = gs.getProperty(propertyName, defaultValue);
+			if (propValue && checkRoles){
+				var roles = gs.getProperty(propertyName + '.roles');
+				if (roles != null && roles != ''){
+					propValue = gs.hasRole(roles);
+				}
+			}
+			return propValue;
+		}
+		else {
+			return optionVal === 'yes' ? true : false;
+		}
+	}
+
+	function populateCommonProperties() {
+		data.isMobileView = ($sp.getParameter('sysparm_device') != "" && $sp.getParameter('sysparm_device') == "mobile");
+		data.isKBLanguagesNewUI = GlidePluginManager.isActive('com.glideapp.knowledge.i18n2');
+		if (data.isKBLanguagesNewUI) {
+			data.langList = kbViewModel.getLanguagesToDisplay(knowledgeRecord);
+		}
+	}
+
+	function populateDataFromKBViewModel(kbViewModel, knowledgeRecord) {
+		data.isValid                  = true;
+		data.isLoggedInUser           = gs.getSession().isLoggedIn();
+		data.canContributeToKnowledge = kbViewModel.canContributeToKnowledgeBase; //canContributeHelper.canContribute(kbViewModel.knowledgeRecord);
+		data.article_sys_id           = knowledgeRecord.sys_id + '';
+		data.authorTitle              = kbViewModel.authorTitle || kbViewModel.getAuthorInfo("author.title");
+		data.kbContentData            = kbViewModel.getArticleViewData();
+		data.avgRating                = Math.round(knowledgeRecord.rating);
+		data.number                   = knowledgeRecord.getValue('number');
+		data.articleType              = knowledgeRecord.getValue('article_type');
+		data.category                 = knowledgeRecord.category;
+		data.shortDesc                = knowledgeRecord.getValue('short_description');
+		data.viewCount                = knowledgeRecord.getDisplayValue('sys_view_count');
+		data.tableName                = knowledgeRecord.getValue('sys_class_name');
+		data.disableSuggesting        = knowledgeRecord.getValue('disable_suggesting');
+		data.revisionString           = kbViewModel.revisionString;
+		data.articleTemplate          = kbViewModel.articleTemplateName;
+		data.isSubscriptionEnabled    = kbViewModel.isSubscriptionEnabled;
+		data.helpfulContent           = kbViewModel.helpfulText;
+
+		data.kbSysId                  = knowledgeRecord.kb_knowledge_base.getRefRecord().getUniqueValue();
+		data.kbName                   = knowledgeRecord.getDisplayValue('kb_knowledge_base');
+		data.externalArticle          = kbViewModel.externalArticle;
+		data.hasComments              = !kbViewModel.feedbackEntryInitialDisplay;
+	}
+
+	function handleViewCountIncrement() {
+		knowledgeRecord.incrementViewCount();
+		var viewCountGR = new GlideRecord('kb_knowledge');
+		if (viewCountGR.get(knowledgeRecord.sys_id)) return viewCountGR.getValue('sys_view_count');
+	}
+
+	function getPageTitle() {
+		var title = gs.getMessage("Knowledge Article View");
+		if (!gs.nil(data.article_sys_id)) // kb record found
+			title = knowledgeRecord.kb_knowledge_base.getDisplayValue() + " - " + data.shortDesc; // kb name - kb short_desc
+		else if (!gs.nil(data.params.sysparm_article_view_page_id)) {
+			// kb record NOT found - fetching the kb_article_view portal page title
+			var kbPage = new GlideRecord('sp_page');
+			kbPage.addQuery("id",data.params.sysparm_article_view_page_id+"");
+			kbPage.query();
+			if(kbPage.next())
+				title = kbPage.getValue('title');
+		}
+
+		return title;
+	}
+
+})()]]></script>
+        <servicenow>false</servicenow>
+        <sys_class_name>sp_widget</sys_class_name>
+        <sys_created_by>xxikochet</sys_created_by>
+        <sys_created_on>2020-02-12 13:41:18</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_id>a0903a27dbb6c4105f65ba03e2961973</sys_id>
+        <sys_mod_count>171</sys_mod_count>
+        <sys_name>Team Online Article</sys_name>
+        <sys_package display_value="TEAMonline" source="x_aaro2_teamonline">a2dfc25fdb7244105f65ba03e29619fa</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="TEAMonline">a2dfc25fdb7244105f65ba03e29619fa</sys_scope>
+        <sys_update_name>sp_widget_a0903a27dbb6c4105f65ba03e2961973</sys_update_name>
+        <sys_updated_by>xxikochet</sys_updated_by>
+        <sys_updated_on>2020-02-23 11:49:04</sys_updated_on>
+        <template><![CDATA[<div ng-if="!editLayout">
+  <ng-include src="'article_view.html'"></ng-include>
+</div>
+<div ng-if="editLayout">
+  <sp_widget widget="data.editWidget"></sp_widget>
+</div>
+]]></template>
+    </sp_widget>
+</record_update>

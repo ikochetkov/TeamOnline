@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sp_ng_template">
+    <sp_ng_template action="INSERT_OR_UPDATE">
+        <id>article_information.html</id>
+        <sp_widget display_value="Team Online Article Editor">f63cc5a3db3a84105f65ba03e29619f7</sp_widget>
+        <sys_class_name>sp_ng_template</sys_class_name>
+        <sys_created_by>xxikochet</sys_created_by>
+        <sys_created_on>2020-02-17 13:03:24</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_id>d0c7501ddb8304505f65ba03e2961908</sys_id>
+        <sys_mod_count>47</sys_mod_count>
+        <sys_name>article_information.html</sys_name>
+        <sys_package display_value="TEAMonline" source="x_aaro2_teamonline">a2dfc25fdb7244105f65ba03e29619fa</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="TEAMonline">a2dfc25fdb7244105f65ba03e29619fa</sys_scope>
+        <sys_update_name>sp_ng_template_d0c7501ddb8304505f65ba03e2961908</sys_update_name>
+        <sys_updated_by>xxikochet</sys_updated_by>
+        <sys_updated_on>2020-03-10 09:53:47</sys_updated_on>
+        <template><![CDATA[<div class="panel panel-default" ng-init="initGForm()">
+  <div class="panel-heading">
+    <h4 class="panel-title">{{options.operation}} Article</h4>
+  </div>
+  <div class="panel-body wrapper-xl">
+    <label class="field-label"  tooltip-right="true">Featured Image</label><br>
+    <img title="{{data.f._fields.x_aaro2_teamonline_background_from_images.displayValue}}" ng-src="{{data.f._fields.x_aaro2_teamonline_background_from_images.displayValue}}" style="margin-bottom:10px; max-height: 128px; max-width: 128px; display:block" role="presentation">
+    <uib-accordion>
+      <div uib-accordion-group class="panel-default" is-open="expand">
+        <uib-accordion-heading>
+          ${Select/upload an image}<i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': expand, 'glyphicon-chevron-right': !expand}"></i>
+        </uib-accordion-heading>
+        <ng-include src="'select_image.html'"></ng-include>
+      </div>
+    </uib-accordion>
+    <sp-model container.captionDisplay="false" form_model="data.f" glide-form="getGlideForm()" mandatory="mandatory"></sp-model>
+  </div>
+  <div class="panel-footer">
+    <button class="btn btn-primary" ng-click="close()">${Close}</button>
+    <button class="btn btn-primary"style="float:right" ng-click="update()">${Post article}</button>
+  </div>]]></template>
+    </sp_ng_template>
+</record_update>

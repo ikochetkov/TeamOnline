@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sp_ng_template">
+    <sp_ng_template action="INSERT_OR_UPDATE">
+        <id>article_view.html</id>
+        <sp_widget display_value="Team Online Article">a0903a27dbb6c4105f65ba03e2961973</sp_widget>
+        <sys_class_name>sp_ng_template</sys_class_name>
+        <sys_created_by>xxabunko</sys_created_by>
+        <sys_created_on>2020-02-17 11:01:22</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_id>9a1bfb41db4fc0505f65ba03e2961935</sys_id>
+        <sys_mod_count>24</sys_mod_count>
+        <sys_name>article_view.html</sys_name>
+        <sys_package display_value="TEAMonline" source="x_aaro2_teamonline">a2dfc25fdb7244105f65ba03e29619fa</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="TEAMonline">a2dfc25fdb7244105f65ba03e29619fa</sys_scope>
+        <sys_update_name>sp_ng_template_9a1bfb41db4fc0505f65ba03e2961935</sys_update_name>
+        <sys_updated_by>xxabunko</sys_updated_by>
+        <sys_updated_on>2020-02-21 16:08:12</sys_updated_on>
+        <template><![CDATA[<section class="section single-wrapper">
+  <div class="container">
+    <div class="row">
+      <div ng-if="data.isValid" class="col-lg-10 col-md-12 col-sm-12 col-xs-12 col-lg-offset-1">
+        <div class="page-wrapper">
+          <div class="blog-title-area text-center">
+            <div ng-class="{'header-wrapper-editable': data.canEdit, 'header-wrapper': !data.canEdit }">
+              <span  class="color-blue"><a ng-show="data.kbCategory">{{data.kbCategory}}</a></span>
+              <div class="button-group">
+                <button class="btn blue-button" ng-if="data.canEdit" ng-click="changeLayout($event)">
+                  Edit Article
+                </button>
+                <button class="btn danger-button" ng-if="data.canEdit" ng-click="deleteArticle()">
+                  Delete Article
+                </button>
+              </div>
+            </div>
+            <h3>{{data.shortDesc}}</h3>
+            <div class="blog-meta big-meta">
+              <small><span><sn-time-ago timestamp="data.sys_updated_on" /></span></small>
+              <small><span>{{data.revisionString}}</span></small>
+              <small><span><i class="fa fa-eye"></i> ${{{::data.viewCount}} View}</span></small>
+              <small><uib-rating ng-model="::data.avgRating" ng-class="{{addColor}}" max="5" aria-label="{{::data.messages.ARTICLE_RATING}}" readonly="true"/></small>
+            </div>
+            <div class="blog-content">  
+              <div class="pp" ng-bind-html="c.data.kbContentData.data">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div ng-if="!data.isValid">
+        <div class="alert alert-danger" role="alert">Record not found</div>
+      </div>
+    </div>
+  </div>
+</section>]]></template>
+    </sp_ng_template>
+</record_update>

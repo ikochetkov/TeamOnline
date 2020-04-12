@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sp_ng_template">
+    <sp_ng_template action="INSERT_OR_UPDATE">
+        <id>modal_uploader.html</id>
+        <sp_widget display_value="Team Online Image Uploader">b3b06124db07cc105f65ba03e296192c</sp_widget>
+        <sys_class_name>sp_ng_template</sys_class_name>
+        <sys_created_by>xxikochet</sys_created_by>
+        <sys_created_on>2020-02-17 14:18:26</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_id>f7c7ecd9db0704505f65ba03e296190e</sys_id>
+        <sys_mod_count>18</sys_mod_count>
+        <sys_name>modal_uploader.html</sys_name>
+        <sys_package display_value="TEAMonline" source="x_aaro2_teamonline">a2dfc25fdb7244105f65ba03e29619fa</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="TEAMonline">a2dfc25fdb7244105f65ba03e29619fa</sys_scope>
+        <sys_update_name>sp_ng_template_f7c7ecd9db0704505f65ba03e296190e</sys_update_name>
+        <sys_updated_by>xxabunko</sys_updated_by>
+        <sys_updated_on>2020-03-30 12:03:06</sys_updated_on>
+        <template><![CDATA[<div class="panel panel-default" ng-init="initializeUploaderScope()">
+  <div class="panel-heading">
+    <h4 class="panel-title">${Add new image}</h4>
+  </div>
+  <div class="panel-body wrapper-xl">
+
+    <sp-form-field form-model="data.f" field="data.f._fields.image" glide-form="getGlideForm()"></sp-form-field>
+
+    <label class="field-label ng-binding ng-scope" for="data.imageName" title="" aria-label="" tooltip-right="true" style="" data-original-title=""><span class="field-decorations"><span class="fa fa-asterisk mandatory" ng-class="{'mandatory-filled': data.imageName.length}" title="Required" style="padding-right: .25em" aria-label="Required " aria-hidden="false"></span></span>Name</label>
+    <input type="text" maxlength="40" ng-model="data.imageName" class="form-control" placeholder="Type image name"><br>
+
+  </div>
+  <div class="panel-footer">
+    <button class="btn btn-danger" ng-click="close()">${Close}</button>
+    <button class="btn btn-success" style="float:right" ng-click="uploadImage()">
+      ${Use this image}
+    </button>
+  </div>
+</div>
+
+<style>
+  .form-control{width:50%}
+</style>]]></template>
+    </sp_ng_template>
+</record_update>

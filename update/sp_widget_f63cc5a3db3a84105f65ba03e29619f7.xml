@@ -1,0 +1,345 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sp_widget">
+    <sp_widget action="INSERT_OR_UPDATE">
+        <category>custom</category>
+        <client_script><![CDATA[function($scope, $rootScope, $location, $timeout, spUtil, glideFormFactory, spAriaUtil, spAriaFocusManager, $uibModal, spModal) {
+	/* widget controller */
+	var c = this;
+	var d = $scope.data;
+
+	$scope.expand = false;
+
+	/* === collect g_form object of form fields === */
+	var flatFields = [];
+	angular.forEach($scope.data.f._fields, function(field) {
+		flatFields.push(field);
+	});
+
+	var g_form = glideFormFactory.create($scope, $scope.data.f.table, $scope.data.f.sys_id, flatFields, null, {uiMessageHandler: uiMessageHandler});
+
+	$scope.getGlideForm = function() {
+		return g_form;
+	}
+	
+	var uiMessageHandler = function(g_form, type, message) {
+		switch (type) {
+			case 'addInfoMessage':
+				spUtil.addInfoMessage(message);
+				break;
+			case 'addErrorMessage':
+				spUtil.addErrorMessage(message);
+				break;
+			case 'clearMessages':
+				break;
+			default:
+		}
+	};
+
+	$scope.deleteImage = function(imageSysID){
+		spModal.open({
+			title: 'Delete this image?',
+			message: 'It will be removed from all articles which contains this image in background',
+			buttons: [
+				{label:'✘ ${No}', cancel: true},
+				{label:'✔ ${Yes}', primary: true}
+			]
+		}).then(function(){
+			d.imageSysID = imageSysID;
+			d.action = 'deleteImage';
+			spUtil.update($scope).then(function(){
+				spUtil.addInfoMessage('Image was deleted');
+				d.action = undefined;
+			});
+		})
+	};
+
+	$scope.deleteArticle = function(){
+		spModal.open({
+			title: 'Delete this article?',
+			message: 'Article will be deleted from system permanently',
+			buttons: [
+				{label:'✘ ${No}', cancel: true},
+				{label:'✔ ${Yes}', primary: true}
+			]
+		}).then(function() {
+			d.action = 'deleteArticle';
+			spUtil.update($scope).then(function(){
+				spAriaFocusManager.navigateToLink('teamonline');
+				spUtil.addInfoMessage('Article was deleted');
+			});
+		});
+	}
+
+	$scope.contextMenu = function(sys_id){
+		if(!d.canEdit) return [];
+		return [
+			['Delete Image', function($itemScope){
+				$itemScope.$parent.$parent.deleteImage(sys_id);
+			}]
+		];
+	}
+
+	
+
+	/*==================  PAGINATION  ==================*/
+	$scope.getNumber = function(num) {
+		return new Array(num);
+	}
+
+	$scope.setPageNum = function(num) {
+		d.p = num;
+		spUtil.update($scope);
+	}
+
+	$scope.mathMin = function(v1,v2) {
+		return Math.min(v1,v2);
+	}
+	/*===== search ====*/
+	$scope.$watch('data.searchForm', function (newValue, oldValue) {
+		if(newValue != oldValue){
+			d.searchForm = newValue;
+			d.p = 1;
+			$scope.loading = true; //to disable search form
+			c.server.update().then(function(){
+				$scope.loading = false;
+			})
+		}
+	});
+
+	$scope.closeEdit = function () {
+		$rootScope.$broadcast('edit_layout', { edit_layout: false })
+	}	
+	/*=== catch event update image on the form === */
+	$rootScope.$on('teamonline.imageLoadedAndSelected', function(event, respData){
+		d.f._fields.x_aaro2_teamonline_background_from_images.value = respData.sys_id;
+		d.f._fields.x_aaro2_teamonline_background_from_images.displayValue = respData.name;
+		spUtil.update($scope);
+	});
+
+	/* === create modal window with article info === */
+	$scope.open = function () {
+		$scope.modalInstance = $uibModal.open({
+			animation: true,
+			templateUrl: 'article_information.html',
+			size: 'lg',
+			backdrop: false,
+			scope: $scope
+		});
+	};
+
+	/* === function on image selection === */
+	$scope.selectImg = function(obj){
+		d.f._fields.x_aaro2_teamonline_background_from_images.value = obj.sys_id;
+		d.f._fields.x_aaro2_teamonline_background_from_images.displayValue = obj.name;
+		spUtil.addInfoMessage('New background selected !');
+	}
+
+	/* === close modal ===*/
+	$scope.close = function(){
+		d = null;
+		$scope.modalInstance.close();
+	}
+
+	/* === validate and save form === */
+	$scope.update = function() {
+
+		var kbCategory = g_form.getValue('kb_category');
+		//text and short description - mandatory
+		if (d.f._fields.text.value === "" || d.f._fields.short_description.value === "") {
+			spUtil.addErrorMessage(d.formValidationErr);
+			spAriaUtil.sendLiveMessage(d.formValidationErr);
+			return;
+		}
+		//only 4 articles can be in important category
+		if (kbCategory == d.importantArticlesCategory && d.needReplaceOldImportantArticle){
+			spModal.open({
+				title: 'Replace oldest article?',
+				message: d.toManyImportantArticles,
+				buttons: [
+					{label:'✘ ${No}', cancel: true},
+					{label:'✔ ${Yes}', primary: true}
+				]
+			}).then(function() {
+				//if user press Yes - will be executed, if No-skipped
+				$scope.saveRecord();
+			});
+		} else {
+			$scope.saveRecord();
+		}
+	}
+
+
+	/*=== save current g_form object to table ===*/
+	$scope.saveRecord = function (){
+		var x = {};
+		x.method = "save";
+		x.table = d.table;
+		x.sys_id = d.sys_id;
+		x._fields = d.f._fields;
+		x._fields._attachmentGUID = d.f._attachmentGUID;
+
+		spUtil.get($scope, x).then(function(response) {
+			if($scope.modalInstance){
+				$scope.modalInstance.close();
+				$location.search({id: 'article', sys_kb_id: response.data.sys_id});
+			}else{
+				$scope.closeEdit();
+			}
+			d.f = '';
+			$rootScope.$broadcast('articleUpdated');
+
+			spUtil.update($scope);
+		});
+	}
+}]]></client_script>
+        <controller_as>c</controller_as>
+        <css>.label-button {
+  color: rgba(255, 255, 255, .6);
+  line-height: 39px;
+}
+.label-button:hover {
+  color:#fff
+}
+
+
+
+</css>
+        <data_table>sp_instance</data_table>
+        <demo_data/>
+        <description/>
+        <docs/>
+        <field_list/>
+        <has_preview>true</has_preview>
+        <id>team_online_article_editor</id>
+        <internal>false</internal>
+        <link><![CDATA[function link(scope, element, attrs, controller) {  }]]></link>
+        <name>Team Online Article Editor</name>
+        <option_schema>[{"name":"modal","section":"Data","default_value":"true","label":"Modal","type":"boolean"},{"name":"operation","section":"other","default_value":"New","label":"Operation","type":"choice","choices":[{"label":"New,Edit","value":"New,Edit"}]},{"name":"max_count_important_articles","section":"other","default_value":"4","label":"Max count important articles","type":"integer"},{"name":"photos_in_modal","section":"other","default_value":"12","label":"Photos in modal","type":"integer"},{"name":"photos_in_window","section":"other","default_value":"15","label":"Photos in window","type":"integer"},{"name":"table","section":"Data","default_value":"kb_knowledge","label":"Table","type":"string"},{"name":"view","section":"Data","default_value":"teamonline_kb","label":"View","type":"string"}]</option_schema>
+        <public>false</public>
+        <roles/>
+        <script><![CDATA[(function() {
+
+	data.searchForm = input ?  input.searchForm : '';
+
+	if(input && input.action == 'deleteImage'){
+		var imageGr = new GlideRecord('db_image');
+		imageGr.get(input.imageSysID);
+		imageGr.deleteRecord();
+		data.dbImage = getImages();
+	} else {
+
+		data.operation = input ?  input.operation : options.operation;
+		data.sys_id = data.operation === 'New' ? '-1' : $sp.getParameter('sys_kb_id');
+		data.table = 'kb_knowledge';
+		data.view = 'teamonline_kb';
+		data.canEdit = gs.getUser().isMemberOf(gs.getProperty("x_aaro2_teamonline.teamonline_administration_group")) || gs.hasRole("admin");
+		data.toManyImportantArticles = gs.getMessage('Homepage already contains 4 articles from "Important Articles" category, the oldest articles from "Important Articles" category will be moved to "Base articles" category. Press <b"Yes"</b> to continue, or <b>"No"</b> to skip.<br><br><b>Noticed: </b><em>You also can change manually category of existing Important article, to free one space for this article</em>');
+		data.importantArticlesCategory = gs.getProperty('x_aaro2_teamonline.important_article');
+		data.importantArticles = $sp.getKBCategoryArticleSummaries(data.importantArticlesCategory, options.max_count_important_articles, options.max_count_important_articles) || 0;
+		data.importantArticlesCount = data.importantArticles.length;
+		//if current article is not important at the moment and amount of important = 4 - need to replace one
+		data.needReplaceOldImportantArticle = !isImportantArticle() && data.importantArticlesCount == options.max_count_important_articles;
+
+		data.formValidationErr = gs.getMessage('Please fill Article body and Short description');
+		data.imageUploader = $sp.getWidget('team_online_image_uploader');
+
+		data.knowledgeBase = $sp.getPortalRecord().getValue("sqanda_knowledge_base"); //pulls from choosen kb in portal
+
+
+		if (input && input.action == 'deleteArticle')
+		{
+			var kbGr = new GlideRecord(data.table);
+			kbGr.get(data.sys_id);
+			kbGr.deleteRecord();
+
+		} else if (input && input.method === 'save')
+		{
+			var result = {};
+			if (input._fields) {
+				result = $sp.saveRecord(input.table, input.sys_id, input._fields);
+			}
+			data.result = result;
+			data.sys_id = result.sys_id;
+		}
+		//delete operations
+
+		data.f = input && input.f ? input.f : $sp.getForm(data.table, data.sys_id, data.query, data.view);
+		data.f._fields.kb_knowledge_base.value = data.knowledgeBase;
+		data.f._fields.kb_knowledge_base.visible = false;
+		data.f._fields.x_aaro2_teamonline_background_from_images.visible = false;
+		//kb category by default - base articles
+		/*if(data.f._fields.kb_category.value == ''){
+			data.f._fields.kb_category.value = gs.getProperty('x_aaro2_teamonline.base_article');
+			data.f._fields.kb_category.displayValue = "Base articles";
+		}*/
+
+		data.dbImage = getImages();
+	}
+
+	function getImages(){
+
+		data.p = input && input.p? input.p: 1;
+		data.page_index = data.p - 1;
+
+		var imageObjects = [];
+		var img = new GlideRecord('db_image');
+		img.addQuery('name','CONTAINS', data.searchForm);
+		img.addQuery('category','kb');
+		img.query();
+
+		data.row_count = img.getRowCount();
+		if(data.operation == 'New'){
+			data.window_size = options.photos_in_modal; //in modal 4 per row
+		}else{
+			data.window_size = options.photos_in_window; //in page view 5 per row
+		}
+		data.window_start = data.page_index * data.window_size;
+		data.window_end = (data.page_index + 1) * data.window_size;
+		data.num_pages = Math.ceil(data.row_count / data.window_size);
+
+		img.chooseWindow(data.window_start, data.window_end);
+		img.query();
+		while(img.next()){
+			imageObjects.push({
+				sys_id	: img.getUniqueValue(),
+				name		: img.getDisplayValue('name'),
+				created	: img.orderBy('sys_created_on')
+			});
+		}
+
+		return imageObjects;
+	}
+
+
+	function isImportantArticle(){
+		var answer = false;
+		data.importantArticles.forEach(function (element) {
+			if (element.sys_id == data.sys_id) {
+				answer = true;
+			}
+		})
+		return answer;
+	}
+
+
+})($sp, input, data, gs, GlideRecord);]]></script>
+        <servicenow>false</servicenow>
+        <sys_class_name>sp_widget</sys_class_name>
+        <sys_created_by>xxikochet</sys_created_by>
+        <sys_created_on>2020-02-12 06:22:55</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_id>f63cc5a3db3a84105f65ba03e29619f7</sys_id>
+        <sys_mod_count>667</sys_mod_count>
+        <sys_name>Team Online Article Editor</sys_name>
+        <sys_package display_value="TEAMonline" source="x_aaro2_teamonline">a2dfc25fdb7244105f65ba03e29619fa</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="TEAMonline">a2dfc25fdb7244105f65ba03e29619fa</sys_scope>
+        <sys_update_name>sp_widget_f63cc5a3db3a84105f65ba03e29619f7</sys_update_name>
+        <sys_updated_by>xxikochet</sys_updated_by>
+        <sys_updated_on>2020-04-08 10:10:39</sys_updated_on>
+        <template><![CDATA[<span class="label-button" ng-if="options.operation === 'New'" ng-click="open()">
+  Create New Article
+</span>
+<ng-include ng-if="!options.modal && options.operation === 'Edit'" src="'edit_article.html'"></ng-include>]]></template>
+    </sp_widget>
+</record_update>

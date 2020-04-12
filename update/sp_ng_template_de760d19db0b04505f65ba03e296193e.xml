@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sp_ng_template">
+    <sp_ng_template action="INSERT_OR_UPDATE">
+        <id>edit_article.html</id>
+        <sp_widget display_value="Team Online Article Editor">f63cc5a3db3a84105f65ba03e29619f7</sp_widget>
+        <sys_class_name>sp_ng_template</sys_class_name>
+        <sys_created_by>xxabunko</sys_created_by>
+        <sys_created_on>2020-02-17 16:27:37</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_id>de760d19db0b04505f65ba03e296193e</sys_id>
+        <sys_mod_count>26</sys_mod_count>
+        <sys_name>edit_article.html</sys_name>
+        <sys_package display_value="TEAMonline" source="x_aaro2_teamonline">a2dfc25fdb7244105f65ba03e29619fa</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="TEAMonline">a2dfc25fdb7244105f65ba03e29619fa</sys_scope>
+        <sys_update_name>sp_ng_template_de760d19db0b04505f65ba03e296193e</sys_update_name>
+        <sys_updated_by>xxikochet</sys_updated_by>
+        <sys_updated_on>2020-03-10 09:54:46</sys_updated_on>
+        <template><![CDATA[<div class="panel panel-default" ng-init="initGForm()">
+  <div class="panel-heading clearfix">
+    <div class="col-md-6" style="padding-top:10px;">
+      <h4 class="panel-title">Edit Article</h4>
+    </div>
+    <div class="col-md-6">
+      <button ng-if="data.canEdit" style="float:right" class="btn btn-del" ng-click="deleteArticle()">${Delete article}</button>
+    </div> 
+  </div>
+  <div class="panel-body wrapper-xl">
+    <label class="field-label" tooltip-right="true">Featured Image</label>
+    <img title="{{data.f._fields.x_aaro2_teamonline_background_from_images.displayValue}}" ng-src="{{data.f._fields.x_aaro2_teamonline_background_from_images.displayValue}}" style="margin-bottom:10px; max-height: 128px; max-width: 128px; display:block" role="presentation">
+    <uib-accordion>
+      <div uib-accordion-group class="panel-default" is-open="expand">
+        <uib-accordion-heading>
+          ${Select/upload an image} <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': expand, 'glyphicon-chevron-right': !expand}"></i>
+        </uib-accordion-heading>
+        <ng-include src="'select_image.html'"></ng-include>
+      </div>
+    </uib-accordion>
+    <sp-model container.captionDisplay="false" form_model="data.f" glide-form="getGlideForm()" mandatory="mandatory"></sp-model>
+  </div>
+  <div class="panel-footer">
+    <button class="btn btn-primary" ng-click="closeEdit()">${Close}</button>
+    <button style="float:right" class="btn btn-primary" ng-click="update()">${Save changes}</button>
+  </div>
+</div>
+
+<style>
+  .btn-del:hover{
+  	color: #fff;
+    background-color: #d9534f;
+    border-color: #d43f3a;
+  }
+</style>]]></template>
+    </sp_ng_template>
+</record_update>

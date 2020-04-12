@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sp_ng_template">
+    <sp_ng_template action="INSERT_OR_UPDATE">
+        <id>select_image.html</id>
+        <sp_widget display_value="Team Online Article Editor">f63cc5a3db3a84105f65ba03e29619f7</sp_widget>
+        <sys_class_name>sp_ng_template</sys_class_name>
+        <sys_created_by>xxikochet</sys_created_by>
+        <sys_created_on>2020-02-17 13:01:27</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_id>04571c5ddb8304505f65ba03e29619ad</sys_id>
+        <sys_mod_count>54</sys_mod_count>
+        <sys_name>select_image.html</sys_name>
+        <sys_package display_value="TEAMonline" source="x_aaro2_teamonline">a2dfc25fdb7244105f65ba03e29619fa</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="TEAMonline">a2dfc25fdb7244105f65ba03e29619fa</sys_scope>
+        <sys_update_name>sp_ng_template_04571c5ddb8304505f65ba03e29619ad</sys_update_name>
+        <sys_updated_by>xxikochet</sys_updated_by>
+        <sys_updated_on>2020-02-21 14:45:38</sys_updated_on>
+        <template><![CDATA[<div style="align-items: center" class="header-group">
+  <!---search--->
+  <input ng-model-options="{debounce: 1000}" ng-disabled="loading" ng-model="data.searchForm" class="form-control" type="text" placeholder="Dynamic search: type image name" aria-label="Search">
+	<!---widget db_image_uploader --->
+  <sp-widget style='float:right' widget="data.imageUploader"></sp-widget>
+</div>
+<div class="image-col">
+  <img title="{{obj.name}}" ng-repeat="obj in data.dbImage" ng-class="{'image-new': data.opeartion=='New', 'image-edit': data.operation=='Edit'}" ng-src="{{obj.name}}"  class="list-img" ng-click="selectImg(obj); expand = !expand" context-menu="contextMenu(obj.sys_id)" />
+</div>
+<div class="panel-footer">
+  <!---pagination--->
+  <div class="btn-toolbar m-r pull-left">
+    <div class="btn-group">
+      <a ng-if="data.num_pages > 1" ng-disabled="data.p == 1" href="javascript:void(0)" ng-click="setPageNum(data.p - 1)" class="btn btn-default"  aria-label="${Previous page}"><i class="fa fa-chevron-left"></i></a>
+    </div>
+    <div ng-if="data.num_pages > 1 && data.num_pages < 9" class="btn-group">
+      <a ng-repeat="i in getNumber(data.num_pages) track by $index" ng-click="setPageNum($index + 1)" href="javascript:void(0)" ng-class="{active: ($index + 1) == data.p}" type="button" class="btn btn-default" aria-label="${Page} {{$index + 1}}">{{$index + 1}}</a>
+    </div>
+    <div class="btn-group">
+      <a ng-if="data.num_pages > 1" ng-disabled="data.p == data.num_pages" href="javascript:void(0)" ng-click="setPageNum(data.p + 1)" class="btn btn-default" aria-label="${Next page}"><i class="fa fa-chevron-right"></i></a>
+    </div>
+  </div>
+  <div class="m-t-xs panel-title">${Rows {{data.window_start + 1}} - {{ mathMin(data.window_end,data.row_count) }} of {{data.row_count}}}</div>
+  <span class="clearfix"></span>
+  <!---pagination--->
+</div>
+
+<style>
+  .header-group {
+    display: flex;
+  }
+  .header-group div {
+    flex: 2;
+  }
+  .header-group input {
+    flex: 3;
+  }
+  .image-col{
+    display: flex;
+    align-items: center;
+    flex-wrap:wrap;
+  }
+  .list-img{
+    max-width: 170px;
+    height:auto;
+    margin:10px;
+    cursor:pointer;
+  }
+  img:hover {
+    opacity:0.8
+  }
+  .image-new{
+  	max-width: 170px;
+  }
+  .image-edit{
+  	max-width: 181px;
+  }
+</style>]]></template>
+    </sp_ng_template>
+</record_update>

@@ -1,0 +1,765 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sp_widget">
+    <sp_widget action="INSERT_OR_UPDATE">
+        <category>custom</category>
+        <client_script><![CDATA[function($scope, $rootScope, $uibModal, spUtil, $location, spModal) {
+	/* widget controller */
+	var c = this;
+
+	/* ---------------------- Call modal with base articles ---------------------- */
+	/* ------------------- to which we change current article ------------------- */
+	$scope.changeArticleOnMainWidget = function (highlight, index) {
+		$scope.highlight = highlight;
+		$scope.elementIndex = index;
+		$scope.modalInstance = $uibModal.open({
+			animation   : true,
+			templateUrl : 'choice_main_article.html',
+			scope       : $scope,
+			size        : 'lg'
+		});
+	}
+
+	$scope.getUrl = function (elementSysID) {
+		if (!elementSysID) { return '';}
+		return 'teamonline?id=article&sys_kb_id=' + elementSysID;
+	}
+
+	$scope.removeArticle = function (article) {
+		$scope.data.remove_article = article;
+		$scope.data.action = 'remove_article';
+		spUtil.update($scope);
+		$rootScope.$broadcast("refreshList");
+	}
+
+
+	$scope.removeImportantArticle = function (article, index) {
+		event.preventDefault();
+		$scope.removeArticle(article);
+		$scope.data.important_articles.splice(index, 1, {});
+	}
+
+	$scope.removeHighlightArticle = function () {
+		$scope.removeArticle($scope.data.highlight_article);
+		$scope.data.highlight_article = {};
+	}
+
+	$scope.deleteArticle = function (highlight, index) {
+		spModal.open({
+			title: 'Delete this article?',
+			message: 'Article will be deleted from system permanently',
+			buttons: [
+				{label:'✘ ${No}', cancel: true},
+				{label:'✔️ ${Yes}', primary: true}
+			]
+		}).then(function() {
+			$scope.data.delete_article = highlight ? $scope.data.highlight_article : $scope.data.important_articles[index];
+			$scope.data.action = "delete_article";
+			spUtil.update($scope);
+			spUtil.addInfoMessage('Article was deleted');
+		});
+	}
+
+	$scope.editArticle = function (highlight, index) {
+		var article = highlight ? $scope.data.highlight_article : $scope.data.important_articles[index];
+		$location.search({
+			id: 'article',
+			sys_kb_id: article.sys_id,
+			edit: 'true'
+		})
+	}
+
+	$scope.contextMenu = function (highlight, emptyElement) {
+		if (!$scope.data.canEdit || emptyElement) { return [] }
+		return [
+			['Change Article on this place', function ($itemScope) {
+				if (highlight) $itemScope.changeArticleOnMainWidget(highlight, $itemScope.$index);
+				else $itemScope.$parent.changeArticleOnMainWidget(highlight, $itemScope.$index);
+			}],
+			['Remove Article from this place', function ($itemScope) {
+				if (highlight) $itemScope.removeHighlightArticle(highlight);
+				else $itemScope.$parent.removeImportantArticle($itemScope.smallArticles, $itemScope.$index);
+			}],
+			['Edit Article', function ($itemScope) {
+				if (highlight) $itemScope.editArticle(highlight);
+				else $itemScope.$parent.editArticle(highlight, $itemScope.$index);
+			}],
+			['Delete Article', function ($itemScope) {
+				if (highlight) $itemScope.deleteArticle(highlight);
+				else $itemScope.$parent.deleteArticle(highlight, $itemScope.$index)
+			}]
+		]
+	}
+
+	$scope.changeArticle = function (event, article) {
+		event.preventDefault();
+		if ($scope.highlight) {
+			$scope.data.highlight_article = article;
+			$scope.data.action = 'change_article_highlight';
+		} else {
+			$scope.data.action = 'change_important_article';
+			$scope.data.changed_element = $scope.data.kb_articles[$scope.elementIndex];
+			$scope.data.new_element = article;
+			$scope.data.important_articles[$scope.elementIndex] = article;
+		}
+		spUtil.update($scope);
+		$scope.modalInstance.close();
+		$rootScope.$broadcast("refreshList");
+	}
+}]]></client_script>
+        <controller_as>c</controller_as>
+        <css>.each-article-content {
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-flex-flow: row wrap;
+  -moz-flex-flow: row wrap;
+  -ms-flex-flow: row wrap;
+  flex-flow: row wrap;
+}
+
+.big {
+  width: 50%;
+}
+
+.each-article-content .small {
+  width: 50%;
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-flex-flow: row wrap;
+  -moz-flex-flow: row wrap;
+  -ms-flex-flow: row wrap;
+  flex-flow: row wrap;
+  -webkit-align-items: flex-start;
+  -moz-align-items: flex-start;
+  -ms-align-items: flex-start;
+  align-items: flex-start;
+  -webkit-align-content: flex-start;
+  -moz-align-content: flex-start;
+  -ms-align-content: flex-start;
+  align-content: flex-start;
+}
+
+.big .each-article-empty,
+.big .each-article {
+  display: block;
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  padding-top: 114%;
+}
+
+.big .each-article-empty:before,
+.big .each-article:before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  transition: all 0.5s cubic-bezier(0, 0.1, 0.58, 1);
+}
+
+.big .each-article:before {
+  background-color: rgba(0, 0, 0, .6);
+}
+
+.big .each-article-empty:after,
+.big .each-article:after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: 0;
+  background-color: #0069C8;
+  z-index: 1;
+  transition: all 0.5s cubic-bezier(0, 0.1, 0.58, 1);
+}
+
+
+
+big .each-article:hover:before {
+  background-color: rgba(0, 0, 0, 0);
+}
+
+.big .each-article:hover:after {
+  height: 50%;
+}
+.each-article-content .big.active .each-article-empty .each-article-img:before,
+.each-article-content .big.active .each-article .each-article-img:before, 
+.each-article-content .small.active .each-article .each-article-img:before {
+  width: 0;
+}
+
+.each-article-content .big .each-article-empty .each-article-img:before,
+.each-article-content .big .each-article .each-article-img:before {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #fff;
+  z-index: 3;
+  transition: all 1s cubic-bezier(0, 0.1, 0.58, 1);
+}
+
+.each-article-img {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+}
+
+.each-article-img img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.big .each-article-empty .post-content,
+.big .each-article .post-content {
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-flex-direction: column;
+  -moz-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -webkit-justify-content: space-between;
+  -moz-justify-content: space-between;
+  -ms-justify-content: space-between;
+  justify-content: space-between;
+  -ms-flex-pack: space-between;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  padding: 20px;
+  border: 1px solid #fff;
+  z-index: 2;
+}
+
+.each-article-content .big .each-article .post-content .author-catname {
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-justify-content: space-between;
+  -moz-justify-content: space-between;
+  -ms-justify-content: space-between;
+  justify-content: space-between;
+  -ms-flex-pack: space-between;
+}
+
+.right {
+  display: flex;
+  align-items: center;
+}
+
+.m-l-1 {
+  margin-left: 5px;
+}
+
+.h7 {
+  font-size: 18px;
+  line-height: 1.4;
+  margin: 0;
+  font-weight: unset;
+}
+
+.small-font {
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+.h8 {
+  font-size: 1.5rem;
+  line-height: 1.4;
+  margin: 0;
+  font-weight: unset;
+}
+
+.h6 {
+  font-size: 2.2rem;
+  line-height: 1.4;
+  margin: 0;
+  font-weight: unset;
+}
+
+h5, .h5 {
+  font-size: 30px;
+  line-height: 1.2;
+  margin: 0;
+  font-weight: unset;
+}
+
+.green {
+  color: #98dd05;
+}
+
+.font-medium {
+  font-family: 'Poppins', serif !important;
+  font-weight: 500;
+}
+
+.white {
+  color: #fff;
+}
+
+.blog-auth-name {
+  cursor: pointer;
+}
+
+.font-bold {
+  font-family: 'Poppins', serif !important;
+  font-weight: 700;
+}
+
+.each-article-content .big .each-article .post-content .post-description {
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-flex-direction: column;
+  -moz-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -webkit-align-items: flex-start;
+  -moz-align-items: flex-start;
+  -ms-align-items: flex-start;
+  align-items: flex-start;
+}
+
+.each-article-content .big .each-article .post-content .post-description .each-blog-date {
+  -webkit-align-self: flex-end;
+  -moz-align-self: flex-end;
+  -ms-align-self: flex-end;
+  align-self: flex-end;
+}
+
+.each-article-content .small .each-article-empty,
+.each-article-content .small .each-article {
+  display: block;
+  position: relative;
+  width: 50%;
+  overflow: hidden;
+  padding-top: 57%;
+}
+
+.each-article-content .small .each-article-empty:before,
+.each-article-content .small .each-article:before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  transition: all 0.5s cubic-bezier(0, 0.1, 0.58, 1);
+  z-index: 1;
+}
+
+.each-article-content .small .each-article:before {
+  background-color: rgba(0, 0, 0, .6);
+}
+
+.each-article-empty:after,
+.each-article-content .small .each-article:after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: 0;
+  background-color: #0069C8;
+  z-index: 1;
+  transition: all 0.5s cubic-bezier(0, 0.1, 0.58, 1);
+}
+
+.each-article-content .small .each-article-empty .each-article-img,
+.each-article-content .small .each-article .each-article-img {
+  position: absolute;
+  width: 100%;
+  top: 0;
+  left: 0;
+  height: 100%;
+}
+
+.each-article-content .small.active .each-article-empty .each-article-img:before,
+.each-article-content .small.active .each-article .each-article-img:before {
+  width: 0;
+}
+
+.each-article-content .small .each-article-empty .each-article-img:before,
+.each-article-content .small .each-article .each-article-img:before {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #fff;
+  z-index: 3;
+  transition: all 1s cubic-bezier(0, 0.1, 0.58, 1);
+}
+
+.each-article-content .small .each-article .each-article-img img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.each-article-content .small .each-article-empty .post-content,
+.each-article-content .small .each-article .post-content {
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-flex-direction: column;
+  -moz-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -webkit-justify-content: space-between;
+  -moz-justify-content: space-between;
+  -ms-justify-content: space-between;
+  justify-content: space-between;
+  -ms-flex-pack: space-between;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  padding: 20px;
+  border: 1px solid #fff;
+  z-index: 2;
+}
+
+.each-article-content .small .each-article .post-content .author-catname {
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-justify-content: space-between;
+  -moz-justify-content: space-between;
+  -ms-justify-content: space-between;
+  justify-content: space-between;
+  -ms-flex-pack: space-between;
+}
+
+.each-article-content  .small .each-article .post-content .post-description {
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-flex-direction: column;
+  -moz-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -webkit-align-items: flex-start;
+  -moz-align-items: flex-start;
+  -ms-align-items: flex-start;
+  align-items: flex-start;
+}
+
+.each-article-content  .small .each-article:hover:before {
+  background-color: rgba(0, 0, 0, 0);
+}
+
+.each-article-content .small .each-article:hover:after {
+  height: 53%;
+}
+
+.btn {
+  z-index: 999;
+}
+
+.post-text {
+  color: #fff;
+  position: absolute;
+  bottom: -55%;
+  transition: all .5s cubic-bezier(0, .1, .58, 1);
+  padding: 20px 20px 20px 0px;
+  line-height: 1.2;
+}
+
+.small .each-article .post-content .post-text {
+  font-size: 1.5rem;
+  padding: 10px 12px 10px 0px;
+}
+.big .each-article .post-content .post-text {
+  font-size: 1.8rem;
+}
+
+.each-article:hover .post-content .author-catname .right  {
+  -webkit-justify-content: flex-end;
+  -moz-justify-content: flex-end;
+  -ms-justify-content: flex-end;
+  justify-content: flex-end;
+  -ms-flex-pack: flex-end;
+}
+
+.big .each-article:hover .post-content .post-text,
+.small .each-article:hover .post-content .post-text {
+  bottom: 0;
+}
+
+.small .each-article .post-content:hover .post-description {
+  display: none;
+}
+
+.big .each-article:hover .post-content .post-description {
+  display: none;
+}
+
+.plus-button {
+  position: absolute;
+  border: 2px solid lightgrey;
+  background-color: #fff;
+  font-size: 2rem;
+  height: 2.5em;
+  width: 2.5em;
+  border-radius: 50%;
+  top: 50%;
+  left: 50%;
+  margin-left: -1.5em;
+  margin-top: -2rem;
+
+  &amp;:after,
+  &amp;:before {
+    content: "";
+    display: block;
+    background-color: grey;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  &amp;:before {
+    height: 1em;
+    width: 0.2em;
+  }
+
+  &amp;:after {
+    height: 0.2em;
+    width: 1em;
+  }
+}
+
+.plus-button:hover {
+  background-color: #0069C8;
+
+  &amp;:after,
+  &amp;:before {
+    background-color: #fff;
+  }
+}
+
+</css>
+        <data_table>sp_instance</data_table>
+        <demo_data/>
+        <description/>
+        <docs/>
+        <field_list/>
+        <has_preview>true</has_preview>
+        <id>team_online_highlight_articles</id>
+        <internal>false</internal>
+        <link><![CDATA[function link(scope, element, attrs, controller) { 
+  
+}]]></link>
+        <name>Team Online Highlight Articles</name>
+        <option_schema>[{"name":"max_count_important_articles","section":"other","default_value":"4","label":"Max count important articles","type":"integer"}]</option_schema>
+        <public>false</public>
+        <roles/>
+        <script><![CDATA[(function() {
+	data.kb_sys_id = $sp.getPortalRecord().getValue("sqanda_knowledge_base");
+	data.canEdit = gs.getUser().isMemberOf(gs.getProperty("x_aaro2_teamonline.teamonline_administration_group")) || gs.hasRole("admin");
+
+	data.categories = {
+		base      : gs.getProperty("x_aaro2_teamonline.base_article", ""),
+		important : gs.getProperty("x_aaro2_teamonline.important_article", ""),
+		highlight : gs.getProperty("x_aaro2_teamonline.highlight_article", "")
+	};
+
+	/* ----------------- Preload all articles when page loaded ----------------- */
+	/* --------------------- If we change highlight article, -------------------- */
+	/* ----------------- set to new article category = Highlight ---------------- */
+	if (input && input.action == "change_article_highlight") 
+	{
+		updateArticle(input.highlight_article.sys_id, data.categories.highlight);
+	}
+
+	/* --------------------- If we change important article, -------------------- */
+	/* ---------------- set to new article category to improtant ---------------- */
+	/* ------------------ and old article set category to base ------------------ */
+	else if (input && input.action == "change_important_article") 
+	{
+		updateArticle(input.changed_element.sys_id, data.categories.base);
+		updateArticle(input.new_element.sys_id, data.categories.important);
+	}
+
+	/* ------------------ If we delete article from highlight, ------------------ */
+	/* --------------------- we set article category to base -------------------- */
+	else if (input && input.action == "remove_article") 
+	{
+		updateArticle(input.remove_article.sys_id, '');
+	}
+	else if (input && input.action == "delete_article") 
+	{
+		var article = new GlideRecord("kb_knowledge");
+		if (article.get(input.delete_article.sys_id))
+		{
+			article.deleteRecord();
+		}
+	}
+
+	data.highlight_article = getArticles(data.kb_sys_id, "kb_category=" + data.categories.highlight)[0] || {};
+	data.important_articles = getArticles(data.kb_sys_id, "kb_category=" + data.categories.important);
+	if (data.important_articles.length < options.max_count_important_articles) {
+		while (data.important_articles.length < options.max_count_important_articles) {
+			data.important_articles.push({});
+		}
+	}
+	
+	data.kb_articles = getArticles(data.kb_sys_id, 'kb_category=' + data.categories.base +'^ORkb_categoryISEMPTY');
+	data.no_base_article = !data.kb_articles.length;
+
+	function updateArticle(sysId, category) {
+		var articles = new GlideRecord("kb_knowledge");
+		articles.get(sysId);
+		articles.setValue("kb_category", category);
+		articles.update();
+	}
+
+	function getArticles(kbSysId, encodedQuery) {
+		var answer = [];
+		var allArticles = new GlideRecord("kb_knowledge");
+		allArticles.addQuery("kb_knowledge_base", "IN", kbSysId);
+		allArticles.addQuery("workflow_state", "published");
+		if (encodedQuery) allArticles.addEncodedQuery(encodedQuery);
+		allArticles.orderBy("sys_created_on");
+		allArticles.addActiveQuery();
+		allArticles.query();
+		while (allArticles.next()) {
+			answer.push({
+				sys_id     : allArticles.getUniqueValue(),
+				category   : allArticles.getDisplayValue("meta"),
+				author     : allArticles.getDisplayValue("author"),
+				title      : allArticles.getValue("short_description"),
+				created    : allArticles.getValue("sys_created_on"),
+				background : allArticles.getDisplayValue("x_aaro2_teamonline_background_from_images"),
+				text       : allArticles.getValue("text").replace(/<[^>]*>/g, ""),
+				count_view : allArticles.getValue("sys_view_count")
+			});
+		}
+		return answer;
+	}
+})();
+]]></script>
+        <servicenow>false</servicenow>
+        <sys_class_name>sp_widget</sys_class_name>
+        <sys_created_by>xxabunko</sys_created_by>
+        <sys_created_on>2020-02-11 19:28:48</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_id>0986b293db3244108f26550a4896199b</sys_id>
+        <sys_mod_count>367</sys_mod_count>
+        <sys_name>Team Online Highlight Articles</sys_name>
+        <sys_package display_value="TEAMonline" source="x_aaro2_teamonline">a2dfc25fdb7244105f65ba03e29619fa</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="TEAMonline">a2dfc25fdb7244105f65ba03e29619fa</sys_scope>
+        <sys_update_name>sp_widget_0986b293db3244108f26550a4896199b</sys_update_name>
+        <sys_updated_by>xxikochet</sys_updated_by>
+        <sys_updated_on>2020-04-08 12:32:36</sys_updated_on>
+        <template><![CDATA[<div class="each-article-content ffffff" >
+  <div class="big active">
+    <a
+       context-menu="contextMenu(true, !data.highlight_article.sys_id)"
+       ng-href="{{getUrl(data.highlight_article.sys_id)}}"
+       class="know-how post"
+       ng-class="{'each-article-empty': !data.highlight_article.sys_id, 'each-article': data.highlight_article.sys_id}"
+       >
+      <div class="each-article-img">
+        <img ng-if="data.highlight_article.background" ng-src="{{data.highlight_article.background}}" alt="">
+      </div>
+      <div class="post-content">
+        <div class="author-catname" ng-if="data.highlight_article.sys_id">
+          <p class="h7 font-medium green">{{data.highlight_article.category}}</p>
+          <p class="h8 font-medium white">{{data.highlight_article.author}}</p>
+        </div>
+        <div class="post-description" ng-if="data.highlight_article.sys_id">
+          <h3 class="h5 font-bold white each-blog-title">{{data.highlight_article.title}}</h3>
+          <h5 class="p font-regular white each-blog-excerpt"></h5>
+          <sn-day-ago date="data.highlight_article.created" class="h8 font-medium white each-blog-date" />
+        </div>
+        <div class="post-text" ng-if="data.highlight_article.sys_id">
+          {{data.highlight_article.text | limitTo:650 }} {{ data.highlight_article.text.length > 650 ? '...' : '' }}
+        </div>
+        <button 
+         class="plus-button" 
+         ng-if="!data.highlight_article.sys_id && data.canEdit" 
+         ng-click="changeArticleOnMainWidget($event, true)"
+         title="Add highlight article to this place"
+        ></button>
+      </div>
+    </a>
+  </div>
+  <div class="small active">
+    <a 
+       context-menu="contextMenu(false, !smallArticles.sys_id)"
+       ng-repeat="smallArticles in data.important_articles track by $index"
+       ng-href="{{getUrl(smallArticles.sys_id)}}"
+       class="know-how post"
+       ng-class="{'each-article-empty': !smallArticles.sys_id, 'each-article': smallArticles.sys_id}"
+       >
+      <div class="each-article-img">
+        <img ng-if="smallArticles.background" ng-src="{{smallArticles.background}}" alt="Important Picture">
+      </div>
+      <div class="post-content">
+        <div class="author-catname" ng-if="smallArticles.sys_id">
+          <p class="small-font font-medium green">{{smallArticles.category}}</p>
+          <p class="small-font font-medium white">{{smallArticles.author}}</p>
+        </div>
+        <div class="post-description" ng-if="smallArticles.sys_id">
+          <h3 class="h6 font-bold white each-blog-title">{{smallArticles.title}}</h3>
+          <h5 class="p font-regular white each-blog-excerpt"></h5>
+          <sn-day-ago date="smallArticles.created" class="h8 font-medium white each-blog-date" />
+        </div>
+        <div class="post-text" ng-if="smallArticles.sys_id">
+          {{smallArticles.text | limitTo:240 }} {{ smallArticles.text.length > 240 ? '...' : '' }}
+        </div>
+        <button 
+                class="plus-button" 
+                ng-if="!smallArticles.sys_id && data.canEdit" 
+                ng-click="changeArticleOnMainWidget(false, $index)"
+                title="Add important article to this place"
+                ></button>
+      </div>
+    </a>
+  </div>
+</div>
+]]></template>
+    </sp_widget>
+</record_update>

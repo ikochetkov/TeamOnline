@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sp_agent_chat_config">
+    <sp_agent_chat_config action="INSERT_OR_UPDATE">
+        <active>true</active>
+        <name>Teamonline Agent</name>
+        <order>200</order>
+        <portal>7320169fdb7244105f65ba03e296190c</portal>
+        <public>true</public>
+        <roles/>
+        <server_script><![CDATA[(function($sp) {
+	return {
+		live_agent_queue: $sp.getDisplayValue('sp_chat_queue'),
+		skip_load_history: true
+		};
+})($sp);]]></server_script>
+        <sys_class_name>sp_agent_chat_config</sys_class_name>
+        <sys_created_by>xxikochet</sys_created_by>
+        <sys_created_on>2020-03-25 08:34:03</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_id>210cf989db7f80d05f65ba03e29619a3</sys_id>
+        <sys_mod_count>7</sys_mod_count>
+        <sys_name>Teamonline Agent</sys_name>
+        <sys_package display_value="TEAMonline" source="x_aaro2_teamonline">a2dfc25fdb7244105f65ba03e29619fa</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="TEAMonline">a2dfc25fdb7244105f65ba03e29619fa</sys_scope>
+        <sys_update_name>sp_agent_chat_config_210cf989db7f80d05f65ba03e29619a3</sys_update_name>
+        <sys_updated_by>xxikochet</sys_updated_by>
+        <sys_updated_on>2020-03-25 17:13:52</sys_updated_on>
+    </sp_agent_chat_config>
+    <sys_translated_text action="delete_multiple" query="documentkey=210cf989db7f80d05f65ba03e29619a3"/>
+</record_update>

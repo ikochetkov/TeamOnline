@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sp_widget">
+    <sp_widget action="INSERT_OR_UPDATE">
+        <category>custom</category>
+        <client_script><![CDATA[function($element,snAttachmentHandler ,$scope, $location, $timeout, spUtil, glideFormFactory, $rootScope,spAriaUtil, spAriaFocusManager, $uibModal) {
+	/* widget controller */
+	var c = this;
+	var g_form = null;
+
+	/*=== open uploader in modal ===*/
+	$scope.openUploader = function () {
+		$scope.modalUploader = $uibModal.open({
+			animation: true,
+			templateUrl: 'modal_uploader.html',
+			size: 'lg',
+			backdrop: true,
+			scope: $scope
+		});
+	};
+
+	/*=== upload image to db_image table ===*/
+	$scope.uploadImage = function() {
+		var d = $scope.data;
+		if (!isValidImageName(d.f._fields.name.value) || d.f._fields.image.value==="") {
+			spUtil.addErrorMessage(d.loadErr);
+			return;
+		}
+		d.action = 'checkName';
+		d.imgName = g_form.getValue('name');
+		spUtil.update($scope).then(function(){
+			if(d.nameAlreadyExists){
+				spUtil.addErrorMessage(d.nameExistsErr);
+				return;
+			}else{
+				var x = {};
+				x.method = "save";
+				x.table = d.table;
+				x.sys_id = d.sys_id;
+				x._fields = d.f._fields;
+				x._fields._attachmentGUID = d.f._attachmentGUID;
+
+				spUtil.get($scope, x).then(function(response) {
+					$rootScope.$broadcast('teamonline.imageLoadedAndSelected',{
+						name: response.data.imgName,
+						sys_id: response.data.sys_id
+					});
+					$scope.modalUploader.close();
+				});
+			}
+		});
+	}
+
+	$scope.close = function(){
+		$scope.modalUploader.close();
+		//$scope.data = null;
+		spUtil.update($scope).then(function(){
+
+		});
+	}
+
+	/*=== validate image name ===*/
+	function isValidImageName(name) {
+		if (!name)
+			return false;
+
+		var valid = ['.gif', '.png', '.jpg', '.bmp', '.ico', '.svg', '.jpeg'];
+		for (var i = 0; i < valid.length; i++)
+			if (name.endsWith(valid[i]))
+				return true;
+
+		return false;
+	}
+
+	$scope.initializeUploaderScope = function(){
+
+		/*=== get fields from db_image(g_form) ===*/
+		var flatFields = [];
+		angular.forEach($scope.data.f._fields, function(field) {
+			flatFields.push(field);
+		});
+
+		var uiMessageHandler = function(g_form, type, message) {
+			switch (type) {
+				case 'addInfoMessage':
+					spUtil.addInfoMessage(message);
+					break;
+				case 'addErrorMessage':
+					spUtil.addErrorMessage(message);
+					break;
+				case 'clearMessages':
+					break;
+				default:
+			}
+		};
+
+		g_form = glideFormFactory.create($scope, $scope.data.f.table, $scope.data.f.sys_id, flatFields, null, {uiMessageHandler: uiMessageHandler});
+		$scope.getGlideForm = function() {
+			return g_form;
+		}
+
+
+		$timeout(function(){
+			$scope.uploaderScope = angular.element(document.querySelector("body > div:nth-child(1) > div > div > div > div.panel-body.wrapper-xl > div > span > span:nth-child(2) > div > input")).scope();			
+			$scope.uploaderScope.onFileSelect = function($files) {
+				if ($scope.uploaderScope.readOnly === 'true')
+					return;
+				if ($files.length == 0)
+					return;
+				var file = $files[0];
+				$scope.data.imageName = file.name; //Set image name
+				//g_form.setValue('name', file.name);
+				var uploadParams = {
+					sysparm_fieldname: $scope.uploaderScope.fieldName
+				};
+				$scope.uploaderScope.uploading = true;
+				snAttachmentHandler.create($scope.uploaderScope.tableName, $scope.uploaderScope.sysId).uploadAttachment(file, uploadParams).then(function(response) {
+					$timeout(function() {
+						$scope.uploaderScope.uploading = false;
+					});
+					if ($scope.uploaderScope.onUpload)
+						$scope.uploaderScope.onUpload(response);
+					$rootScope.$broadcast("snImageUploader:complete", $scope.uploaderScope.sysId, response);
+				});
+			}
+		});
+	};
+
+
+	$scope.$watch('data.imageName', function (newValue, oldValue) {
+		if(newValue!=oldValue && newValue!=undefined){
+			g_form.setValue('name', newValue);
+		}
+	});
+
+}]]></client_script>
+        <controller_as>c</controller_as>
+        <css/>
+        <data_table>sp_instance</data_table>
+        <demo_data/>
+        <description/>
+        <docs/>
+        <field_list/>
+        <has_preview>true</has_preview>
+        <id>team_online_image_uploader</id>
+        <internal>false</internal>
+        <link><![CDATA[function link(scope, element, attrs, controller) {  }]]></link>
+        <name>Team Online Image Uploader</name>
+        <option_schema/>
+        <public>false</public>
+        <roles/>
+        <script><![CDATA[(function() {
+	if(input && input.action == 'checkName'){
+		var imgLib = new GlideRecord('db_image');
+		if(imgLib.get('name', input.imgName)){
+			data.nameAlreadyExists = true;
+		}else{data.nameAlreadyExists = false;}
+	}else{
+		data.loadErr = gs.getMessage("Select image from your computer and fill name");
+		data.nameExistsErr = gs.getMessage("This name already exists, change image name (image name is unique value).");
+		data.sys_id='-1';
+		data.table = 'db_image';
+		data.f = $sp.getForm(data.table, data.sys_id, data.query, data.view);
+		data.f._fields.category.value = 'kb';
+		/*=== save data to db_image ===*/
+		if (input && input.method === 'save') {
+			data.table = input.table;
+			data.sys_id = input.sys_id;
+			var result = {};
+			if (input._fields) {
+				result = $sp.saveRecord(data.table, data.sys_id, input._fields);
+			}
+			//sys_id and imgName will be sent via event
+			data.sys_id = result.sys_id;
+			data.imgName = input._fields.name.displayValue;
+		}
+	}
+
+})();]]></script>
+        <servicenow>false</servicenow>
+        <sys_class_name>sp_widget</sys_class_name>
+        <sys_created_by>xxikochet</sys_created_by>
+        <sys_created_on>2020-02-15 10:26:28</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_id>b3b06124db07cc105f65ba03e296192c</sys_id>
+        <sys_mod_count>214</sys_mod_count>
+        <sys_name>Team Online Image Uploader</sys_name>
+        <sys_package display_value="TEAMonline" source="x_aaro2_teamonline">a2dfc25fdb7244105f65ba03e29619fa</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="TEAMonline">a2dfc25fdb7244105f65ba03e29619fa</sys_scope>
+        <sys_update_name>sp_widget_b3b06124db07cc105f65ba03e296192c</sys_update_name>
+        <sys_updated_by>xxikochet</sys_updated_by>
+        <sys_updated_on>2020-03-10 17:05:59</sys_updated_on>
+        <template><![CDATA[<button ng-click="openUploader()" class="btn btn-primary" style='float:right'><span class="glyphicon glyphicon-upload" char="upload"></span><span class="ng-binding"> Load new image from PC</span></button>
+]]></template>
+    </sp_widget>
+</record_update>

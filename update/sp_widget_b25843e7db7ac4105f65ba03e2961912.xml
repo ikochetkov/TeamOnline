@@ -1,0 +1,619 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sp_widget">
+    <sp_widget action="INSERT_OR_UPDATE">
+        <category>custom</category>
+        <client_script><![CDATA[function($scope, $rootScope, $location, spUtil, spModal) {
+	/* widget controller */
+	var c = this;
+
+	/* ============================DRAG AND DROP ===========================*/
+	var selector = ".blog-box"; //selector of object that we working with
+	
+	c.dragStart = function (event) {
+		if(!$scope.data.isHomePage || !$scope.data.canEdit || !event.target.attributes.hasOwnProperty('articleid')){return;}
+		$scope.data.dragObject = {
+			"sys_id":event.target.attributes.articleid.nodeValue,
+			"order": event.target.attributes.articleorder.nodeValue
+		};
+		event.target.classList.add('dragging'); //add drag styles
+	};
+
+	c.dragEnd = function(event){
+		if(!$scope.data.isHomePage || !$scope.data.canEdit){return;}
+		event.target.classList.remove('dragging'); //remove drag styles
+	};
+
+	c.drop = function(event){
+		if(!$scope.data.isHomePage || !$scope.data.canEdit){return;}
+		var parent = findParentBySelector(event.target, selector);
+		$scope.data.dragTarget = {
+			"sys_id":parent.getAttribute('articleid'),
+			"order": parent.getAttribute('articleorder')
+		};
+		//prevent drop on himself
+		if($scope.data.dragTarget.sys_id != $scope.data.dragObject.sys_id){
+			$scope.data.action = "changeOrder";
+			spUtil.update($scope);
+		}
+	}
+
+	c.dragOver = function (event, article) {
+		if(!$scope.data.isHomePage || !$scope.data.canEdit){return;}
+		if (event.preventDefault) {
+			event.preventDefault(); // Necessary. Allows us to drop.
+		}
+		event.dataTransfer.dropEffect = 'move';
+		return false;
+	};
+
+	/*========================== end drag and drop =============================*/
+
+
+	$scope.articleFilter = {
+		category: ''
+	};
+
+	/**
+     * @function deleteArticle this function call from context menu
+     * @param {Integer} index The article index that we delete
+     * @returns {void}
+     */
+	$scope.deleteArticle = function (index) {
+		spModal.open({
+			title: 'Delete this article?',
+			message: 'Article will be deleted from system permanently',
+			buttons: [
+				{label:'✘ ${No}', cancel: true},
+				{label:'✔️ ${Yes}', primary: true}
+			]
+		}).then(function() {
+			$scope.data.delete_article = $scope.data.kb_articles[index];
+			$scope.data.action = 'delete_article';
+			spUtil.update($scope);
+			spUtil.addInfoMessage('Article was deleted');
+		});
+	}
+
+	/**
+     * @function editArticle this function call from context menu and transfer
+     * to the article page and opening edit
+     * @param {Integer} index The article index that we edit
+     * @returns {void}
+     */
+	$scope.editArticle = function (index) {
+		var article = $scope.data.kb_articles[index];
+		$location.search({
+			id: 'article',
+			sys_kb_id: article.sys_id,
+			edit: 'true'
+		})
+	}
+
+	/**
+     * @function contextMenu this function populate options to context menu (right click) 
+     * @returns {void}
+     */
+	$scope.contextMenu = function () {
+		if (!$scope.data.canEdit) { return [] }
+		return [
+			['Edit Article', function ($itemScope) {
+				$itemScope.$parent.editArticle($itemScope.$index);
+			}],
+			['Delete Article', function ($itemScope) {
+				$itemScope.$parent.deleteArticle($itemScope.$index)
+			}]
+		]
+	}
+
+	/**
+     * @function allArticles this function transfer to all articles page 
+     * @returns {void}
+     */
+	$scope.allArticles = function () {
+		$location.search({
+			id: 'all_articles'
+		});
+	}
+
+	/**
+     * @function getNumber this function create array from incomming data
+     * @param {intenger} num Number of pages
+     * @returns {Array} Array number of pages
+     */
+	$scope.getNumber = function(num) {
+		return new Array(num);
+	}
+
+	/**
+     * @function setPageNum this function used to go between pages
+     * @param {Integer} num number of page
+     * @returns {void}
+     */
+	$scope.setPageNum = function(num) {
+		$scope.data.p = num;
+		spUtil.update($scope);
+	}
+
+	/**
+     * @function mathMin this function used for calculate count of elements on page
+     * @param {intenger} lastElementOnPage number of last element on current page
+     * @param {intenger} countAllElements count of all records
+     * @returns {number} last element on current page 
+     */
+	$scope.mathMin = function(lastElementOnPage,countAllElements) {
+		return Math.min(lastElementOnPage, countAllElements);
+	}
+
+	/**
+  * @event articlesCategories send categories to TeamOnline Articles Category widget
+  */
+	$rootScope.$broadcast('articlesCategories', $scope.data.categories);
+
+
+	/**
+     * @event refreshList if data in knowledge base changes need update list of articles
+     */
+	$rootScope.$on("refreshList",function(){
+		spUtil.update($scope);
+	});
+
+
+	/**
+     * @event filter-category if user choose specific category need update list of articles
+     * @param {string} data choosen category
+     */
+	$rootScope.$on('filter-category', function (event, data) {
+		$scope.articleFilter.category = data;
+		$scope.data.category = data;
+		$scope.data.p = 0;
+		spUtil.update($scope);
+	})
+}
+
+
+/**
+* @function findParentBySelector returns html element by selector
+* @param elm
+* @param selector
+*/
+
+function findParentBySelector(elm, selector) {
+	var all = document.querySelectorAll(selector);
+	var cur = elm.parentNode;
+	while(cur && !collectionHas(all, cur)) { //keep going up until you find a match
+		cur = cur.parentNode; //go up
+	}
+	return cur; //will return null if not found
+}
+
+function collectionHas(a, b) { //helper function (see below)
+	for(var i = 0, len = a.length; i < len; i ++) {
+		if(a[i] == b) return true;
+	}
+	return false;
+}]]></client_script>
+        <controller_as>c</controller_as>
+        <css>.dragging{
+  opacity 0.4;
+  background: lightblue;
+  border: 2px solid black;
+  cursor: grabbing;
+}
+
+.section {
+  padding: 2rem;
+  display: block;
+  position: relative;
+  background-color: #ffffff;
+  overflow: hidden;
+}
+
+.blog-top {
+  margin-bottom: 2rem;
+}
+
+.blog-top h4 {
+  padding: 0;
+  margin: 0;
+  line-height: 1;
+}
+.blog-top .fa {
+  font-size: 18px !important;
+  line-height: 1 !important;
+  padding-left: 10px;
+}
+.blog-top .fa-rss, a:hover, a:focus {
+  color: #0069C8 !important;
+}
+.post-media {
+  position: relative;
+  overflow: hidden;
+}
+
+.blog-box {
+  margin-bottom: 10px;
+}
+
+.blog-box.ng-enter {
+  -webkit-transition: .5s;
+  transition: .5s;
+  opacity: 0;
+}
+.blog-box.ng-enter-active {
+  opacity: 1;
+}
+
+.blog-box.ng-leave {
+  -webkit-transition: .5s;
+  transition: .5s;
+  opacity: 1;
+}
+.blog-box.ng-leave-active {
+  opacity: 0;
+}
+
+a {
+  text-decoration: none !important;
+  color: #111111;
+}
+.post-media img, .masonry-box img {
+  -webkit-transition: all .3s ease-in-out;
+  -moz-transition: all .3s ease-in-out;
+  -ms-transition: all .3s ease-in-out;
+  -o-transition: all .3s ease-in-out;
+  transition: all .3s ease-in-out;
+  -webkit-transform: scale(1);
+  -moz-transform: scale(1);
+  -ms-transform: scale(1);
+  -o-transform: scale(1);
+  transform: scale(1);
+}
+
+.post-media img {
+  width: 100%;
+}
+.img-fluid {
+  max-width: 100%;
+  height: auto;
+}
+.hovereffect {
+  position: absolute;
+  top: 0;
+  opacity: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.2);
+  -webkit-transition: all .3s ease-in-out;
+  -moz-transition: all .3s ease-in-out;
+  -ms-transition: all .3s ease-in-out;
+  -o-transition: all .3s ease-in-out;
+  transition: all .3s ease-in-out;
+  zoom: 1;
+  filter: alpha(opacity=0);
+  opacity: 0.5;
+  background: -moz-linear-gradient(0deg, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0.1) 50%);
+  background: -webkit-linear-gradient(0deg, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0.1) 50%);
+  background: linear-gradient(0deg, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0.1) 50%);
+  filter: progid: DXImageTransform.Microsoft.gradient( startColorstr='#000000', endColorstr='#00000000', GradientType=1);
+}
+
+.empty-background {
+  width: 100%;
+  height: 160px;
+  background-color: #ededed;
+}
+
+.blog-list .blog-meta.big-meta h4 {
+  margin-left: -20%;
+  margin-top: 1rem;
+  background-color: #ffffff;
+  padding: 1rem 1.5rem 1rem;
+
+  a {
+    font-size: 24px;
+    font-weight: 600;
+  }
+
+}
+.blog-meta.big-meta h4 {
+  font-size: 24px;
+  font-family: 'Poppins', serif !important;
+  font-weight: 500;
+}
+.blog-meta.big-meta h4 {
+  padding: 1rem 0 0.6rem;
+  margin: 0;
+  font-size: 21px;
+}
+.blog-meta h4 {
+  padding: 1rem 0 0.5rem;
+  margin: 0;
+  font-size: 21px;
+}
+.blog-meta.big-meta p {
+  margin-bottom: 0.5rem;
+  padding-bottom: 0;
+}
+.blog-meta small a, .blog-meta small {
+  font-weight: 500;
+  color: #999 !important;
+}
+.blog-meta small {
+  font-size: 11px;
+  display: inline-block;
+  margin-bottom: 0;
+  padding-bottom: 0;
+  color: #111111;
+  font-weight: bold;
+  text-transform: uppercase;
+  margin-right: 0.5rem;
+}
+small, .small {
+  font-size: 80%;
+  font-weight: normal;
+}
+small {
+  font-size: 80%;
+}
+.blog-meta .bg-blue {
+  color: #ffffff !important;
+  padding: 0 0.8rem;
+  border-radius: 3px;
+}
+.blog-meta small a, .blog-meta small {
+  font-weight: 500;
+  color: #999 !important;
+}
+.bg-blue {
+  background-color: #0069C8 !important;
+}
+.blog-meta small.firstsmall:after {
+  content: "" !important;
+  padding-left: 0;
+}
+
+.blog-meta small:after {
+  content: "/";
+  padding-left: 1rem;
+}
+*, *::before, *::after {
+  -webkit-box-sizing: inherit;
+  box-sizing: inherit;
+}
+
+@media (max-width: 989px) {
+  .blog-list .blog-meta.big-meta h4 {
+    background-color: #ffffff;
+    margin-left: 0;
+    margin-top: 1rem;
+    padding: 1rem 0;
+  }
+}
+
+
+
+</css>
+        <data_table>sp_instance</data_table>
+        <demo_data/>
+        <description/>
+        <docs/>
+        <field_list/>
+        <has_preview>true</has_preview>
+        <id>team_online _all_base_articles</id>
+        <internal>false</internal>
+        <link><![CDATA[function link(scope, element, attrs, controller) {  }]]></link>
+        <name>Team Online All Base Articles</name>
+        <option_schema>[{"name":"limit_records","section":"Data","default_value":"10","label":"Limit records","type":"integer"},{"hint":"As need order artciles by sys_created_on","name":"order_by","section":"Data","default_value":"orderByDesc","label":"Order By","type":"choice","choices":[{"label":"orderBy","value":"orderBy"},{"label":"orderByDesc","value":"orderByDesc"}]},{"hint":"system name of field (sys_creted_on, x_aaro2_teamonline_order)","name":"order_by_field","section":"Data","default_value":"sys_created_on","label":"Order by field","type":"string","choices":[{"label":"sys_created_on","value":"sys_created_on"},{"label":"order","value":"order"}]},{"name":"count_of_records_on_page","section":"other","default_value":"20","label":"Count of records on page","type":"integer"}]</option_schema>
+        <public>false</public>
+        <roles/>
+        <script><![CDATA[(function() {
+	if (input && input.action == 'delete_article') {
+		var articleGr = new GlideRecord('kb_knowledge');
+		if (articleGr.get(input.delete_article.sys_id)) {
+			articleGr.deleteRecord();
+		}
+	}
+
+	data.isHomePage = $sp.getParameter('id') === 'home' || !$sp.getParameter('id');
+	data.categories = [];
+	data.kb_articles = [];
+	data.kb_sys_id = $sp.getPortalRecord().getValue('sqanda_knowledge_base'); //Portal KnowledgeBase Sys_id
+	data.canEdit = gs.getUser().isMemberOf(gs.getProperty("x_aaro2_teamonline.teamonline_administration_group")) || gs.hasRole("admin");
+
+	/* ============ onDrag ========= */
+	if(input && input.action == "changeOrder"){
+		var dragObjectOrder = input.dragObject.order;
+		var dragTargetOrder = input.dragTarget.order;
+
+		var articlesGr = new GlideRecord("kb_knowledge");
+
+		//if Object and Target near elements just change their orders
+		articlesGr.get(input.dragObject.sys_id);
+		articlesGr.x_aaro2_teamonline_order = dragTargetOrder;
+		articlesGr.update();
+		articlesGr.get(input.dragTarget.sys_id);
+		articlesGr.x_aaro2_teamonline_order = dragObjectOrder;
+		articlesGr.update();
+	}
+	/* ========== end onDrag ========= */
+
+	data.category = input &&  input.category ? input.category : null;//filled if user choosen category
+	if (!data.isHomePage) 
+	{
+		data.categories = getCategories(data.kb_sys_id);
+
+		/********* Calculate count pages so that do pagination **************/
+		data.row_count = getCountOfArticles(data.kb_sys_id, data.category);
+
+		data.p = input && input.p ? input.p : 1; //Number of page
+		data.page_index = data.p - 1;
+
+		data.window_start = data.page_index * options.count_of_records_on_page; //Start with that number record
+		data.window_end = (data.page_index + 1) * options.count_of_records_on_page; //End with that number record to end
+		data.num_pages = Math.ceil(data.row_count / options.count_of_records_on_page); //Calculate number of pages
+		/********* End calculate count pages so that do pagination **************/
+	}
+
+	var articles = new GlideRecord("kb_knowledge");
+	articles.addQuery("kb_knowledge_base", "IN", data.kb_sys_id);
+	articles.addQuery("workflow_state", "published");
+	if(data.isHomePage){
+		articles.addQuery('kb_category.label', 'Base articles');
+		articles.orderBy('x_aaro2_teamonline_order');
+	}else{
+		articles[options.order_by](options.order_by_field);
+	}
+
+	if (data.category) articles.addQuery('meta', data.category);
+	articles.setLimit(options.limit_records);
+	articles.addActiveQuery();
+	if (!data.isHomePage) articles.chooseWindow(data.window_start, data.window_end);
+	articles.query();
+	while (articles.next()) {
+		data.kb_articles.push({
+			sys_id     : articles.getUniqueValue(),
+			category   : articles.getDisplayValue('meta'),
+			author     : articles.getDisplayValue('author'),
+			title      : articles.getValue('short_description'),
+			created    : articles.getValue('sys_created_on'),
+			background : articles.getDisplayValue('x_aaro2_teamonline_background_from_images'),
+			text       : articles.getValue('text').replace(/<[^>]*>/g, ''),
+			view_count : articles.getValue('sys_view_count'),
+			order			 : articles.getValue('x_aaro2_teamonline_order')
+		})
+	}
+})();
+
+/**
+ * @function _glideAggregate call GlideAggregate to sample the data
+ * @param knowledgeBaseId {String} Knowledge Base GUID
+ * @param category {String} Type of articles
+ * @param operator {Object} GlideAggregate agrFunction and value ex. { function: 'addAggregate',  value: 'COUNT'} => articles['addAggregate']('COUNT')
+ */
+function _glideAggregate (knowledgeBaseId, category, operator) {
+	var articles = new GlideAggregate("kb_knowledge");
+	articles.addQuery("kb_knowledge_base", "IN", knowledgeBaseId);
+	articles.addQuery("workflow_state", "published");
+	articles.addQuery('active', true);
+	if (category) articles.addQuery('meta', category);
+	articles[operator.agrFunction](operator.value);
+	articles.query();
+	return articles;
+}
+
+/**
+ * @function getCountOfArticles get count of records
+ * @param knowledgeBaseId {String} Knowledge Base GUID
+ * @param category {String} Type of articles
+ */
+function getCountOfArticles (knowledgeBaseId, category) {
+	var articles = _glideAggregate(knowledgeBaseId, category, { agrFunction: 'addAggregate',  value: 'COUNT'});
+	if (articles.next()) {
+		return articles.getAggregate("COUNT");
+	}
+	return 0;
+}
+
+/**
+ * @function getCategories get all meta from articles
+ * @param knowledgeBaseId {String} Knowledge Base GUID
+ */
+function getCategories (knowledgeBaseId) {
+	var answer = [];
+
+	var articles = _glideAggregate(knowledgeBaseId, null, { agrFunction: 'groupBy', value: 'meta' });
+	while (articles.next()) {
+		answer.push(articles.meta.getDisplayValue());
+	}
+	return answer;
+}
+]]></script>
+        <servicenow>false</servicenow>
+        <sys_class_name>sp_widget</sys_class_name>
+        <sys_created_by>xxabunko</sys_created_by>
+        <sys_created_on>2020-02-12 15:25:13</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_id>b25843e7db7ac4105f65ba03e2961912</sys_id>
+        <sys_mod_count>379</sys_mod_count>
+        <sys_name>Team Online All Base Articles</sys_name>
+        <sys_package display_value="TEAMonline" source="x_aaro2_teamonline">a2dfc25fdb7244105f65ba03e29619fa</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="TEAMonline">a2dfc25fdb7244105f65ba03e29619fa</sys_scope>
+        <sys_update_name>sp_widget_b25843e7db7ac4105f65ba03e2961912</sys_update_name>
+        <sys_updated_by>xxikochet</sys_updated_by>
+        <sys_updated_on>2020-04-10 12:55:13</sys_updated_on>
+        <template><![CDATA[<script>
+  //gets the angular scope from outside because 
+  //we don't have access to it for drag events
+  function getScope() {
+    return angular.element('#drag-n-drop').scope().c;
+  }
+</script>
+
+<section class="section" id="drag-n-drop">
+  <div class="row">
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+      <div class="page-wrapper">
+        <div ng-if="data.isHomePage" class="blog-top clearfix">
+          <h4 class="pull-left">Recent Articles <i class="fa fa-rss"></i></h4>
+        </div>
+        <div ng-if="data.kb_articles.length == 0">No new articles</div>
+        <div class="blog-list clearfix">
+          <div ng-repeat="article in data.kb_articles | filter:articleFilter track by $index"
+               draggable="true" 
+               ondragstart="getScope().dragStart(event)" 
+               ondragend="getScope().dragEnd(event)"
+               ondrop="getScope().drop(event)"
+               ondragover="getScope().dragOver(event)"
+               context-menu="contextMenu()"
+               class="blog-box row"
+               articleid="{{article.sys_id}}"
+               articleorder={{article.order}} >
+            <div class="col-md-4">
+              <div class="post-media">
+                <span ng-if="article.background" href="teamonline?id=article&sys_kb_id={{article.sys_id}}">
+                  <img ng-src="{{article.background}}" alt="{{article.title}}" class="img-fluid">
+                  <div class="hovereffect"></div>
+                </span>
+                <a ng-if="!article.background" href="teamonline?id=article&sys_kb_id={{article.sys_id}}">
+                  <div class="empty-background"></div>
+                </a>
+              </div>
+            </div>
+            <div class="blog-meta big-meta col-md-8">
+              <h4><a ng-href="teamonline?id=article&sys_kb_id={{article.sys_id}}" title="{{article.title}}">{{article.title}}</a></h4>
+              <p>{{ article.text |limitTo:200 }}</p>
+              <small ng-if="article.category" class="firstsmall"><a class="bg-blue" title="{{article.category}}">{{article.category}}</a></small>
+              <small><a title=""><sn-day-ago date="article.created" /></a></small>
+              <small><a title="">by {{article.author}}</a></small>
+              <small><a title=""><i class="fa fa-eye"></i> {{ article.view_count }}</a></small>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="pagination" ng-if="!data.isHomePage && data.kb_articles.length">
+    <div class="btn-toolbar m-r pull-left">
+      <div class="btn-group">
+        <a ng-if="data.num_pages > 1" ng-disabled="data.p == 1" href="javascript:void(0)" ng-click="setPageNum(data.p - 1)" class="btn btn-default"  aria-label="${Previous page}"><i class="fa fa-chevron-left"></i></a>
+      </div>
+      <div ng-if="data.num_pages > 1 && data.num_pages < 9" class="btn-group">
+        <a ng-repeat="i in getNumber(data.num_pages) track by $index" ng-click="setPageNum($index + 1)" href="javascript:void(0)" ng-class="{active: ($index + 1) == data.p}" type="button" class="btn btn-default" aria-label="${Page} {{$index + 1}}">{{$index + 1}}</a>
+      </div>
+      <div class="btn-group">
+        <a ng-if="data.num_pages > 1" ng-disabled="data.p == data.num_pages" href="javascript:void(0)" ng-click="setPageNum(data.p + 1)" class="btn btn-default" aria-label="${Next page}"><i class="fa fa-chevron-right"></i></a>
+      </div>
+    </div>
+    <div class="m-t-xs panel-title">${Rows {{data.window_start + 1}} - {{ mathMin(data.window_end,data.row_count) }} of {{data.row_count}}}</div>
+    <span class="clearfix"></span>
+  </div>
+  <div ng-if="data.kb_articles.length && data.isHomePage" class="text-center">
+    <button class="btn btn-primary btn-large" ng-click="allArticles()">
+      View all articles
+    </button>
+  </div>
+</section>]]></template>
+    </sp_widget>
+</record_update>

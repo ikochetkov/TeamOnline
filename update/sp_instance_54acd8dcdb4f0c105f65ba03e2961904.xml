@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sp_instance">
+    <sp_instance action="INSERT_OR_UPDATE">
+        <active>true</active>
+        <class_name/>
+        <color>default</color>
+        <css/>
+        <glyph/>
+        <id/>
+        <order>2</order>
+        <roles/>
+        <short_description/>
+        <size>md</size>
+        <sp_column display_value="1">44ee937fdbba48105f65ba03e296194c</sp_column>
+        <sp_widget display_value="Knowledge Article Helpful">5f599c490be432004ce28ffe15673a5b</sp_widget>
+        <sys_class_name>sp_instance</sys_class_name>
+        <sys_created_by>xxikochet</sys_created_by>
+        <sys_created_on>2020-02-14 10:50:23</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_id>54acd8dcdb4f0c105f65ba03e2961904</sys_id>
+        <sys_mod_count>9</sys_mod_count>
+        <sys_name/>
+        <sys_package display_value="TEAMonline" source="x_aaro2_teamonline">a2dfc25fdb7244105f65ba03e29619fa</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="TEAMonline">a2dfc25fdb7244105f65ba03e29619fa</sys_scope>
+        <sys_update_name>sp_instance_54acd8dcdb4f0c105f65ba03e2961904</sys_update_name>
+        <sys_updated_by>xxikochet</sys_updated_by>
+        <sys_updated_on>2020-03-10 09:49:33</sys_updated_on>
+        <title/>
+        <url/>
+        <widget_parameters><![CDATA[{
+	"show_star_rating": {
+		"value": "Yes",
+		"displayValue": "Yes"
+	},
+	"show_percent_helpful": {
+		"value": "true",
+		"displayValue": "true"
+	},
+	"helpful_prompt": {
+		"value": "Did you find this interesting?",
+		"displayValue": "Did you find this interesting?"
+	},
+	"feedback_message": {
+		"value": "Thanks for the feedback !",
+		"displayValue": "Thanks for the feedback !"
+	}
+}]]></widget_parameters>
+    </sp_instance>
+    <sys_translated_text action="delete_multiple" query="documentkey=54acd8dcdb4f0c105f65ba03e2961904"/>
+</record_update>

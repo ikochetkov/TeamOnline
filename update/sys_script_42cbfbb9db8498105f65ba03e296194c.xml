@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update sys_domain="global" table="sys_script">
+    <sys_script action="INSERT_OR_UPDATE">
+        <abort_action>false</abort_action>
+        <access>package_private</access>
+        <action_delete>false</action_delete>
+        <action_insert>true</action_insert>
+        <action_label/>
+        <action_name/>
+        <action_query>false</action_query>
+        <action_run_at>server</action_run_at>
+        <action_update>true</action_update>
+        <active>true</active>
+        <add_message>false</add_message>
+        <advanced>true</advanced>
+        <application/>
+        <change_fields>false</change_fields>
+        <client_callable>false</client_callable>
+        <collection>kb_knowledge</collection>
+        <condition/>
+        <description>Gives to article , that goes to Base Category , unique Order to be used in Teamonline in Base Articles widget for drag-n-drop.</description>
+        <execute_function>false</execute_function>
+        <filter_condition table="kb_knowledge">kb_knowledge_base=ada02741dbffc0d05f65ba03e296197f^kb_categoryCHANGESTO3c78f697db3244108f26550a4896194c^EQ<item display_table="kb_knowledge_base" display_value="TeamOnline" endquery="false" field="kb_knowledge_base" goto="false" newquery="false" operator="=" or="false" value="ada02741dbffc0d05f65ba03e296197f"/>
+            <item display_table="kb_category" display_value="Base articles " endquery="false" field="kb_category" goto="false" newquery="false" operator="CHANGESTO" or="false" value="3c78f697db3244108f26550a4896194c"/>
+            <item endquery="true" field="" goto="false" newquery="false" operator="=" or="false" value=""/>
+        </filter_condition>
+        <is_rest>false</is_rest>
+        <message/>
+        <name>Fill order when article goes to Base</name>
+        <onclick/>
+        <order>100</order>
+        <priority>100</priority>
+        <read_access_action>false</read_access_action>
+        <rest_method/>
+        <rest_method_text/>
+        <rest_service/>
+        <rest_service_text/>
+        <rest_variables/>
+        <role_conditions/>
+        <script><![CDATA[(function executeRule(current, previous /*null when async*/) {
+
+	var existingOrderNumbers = [];
+	var maxNum = 0;
+	var kbGr = new GlideRecord('kb_knowledge');
+	kbGr.addQuery('kb_category.label', 'Base articles');
+	kbGr.addQuery("workflow_state", "published");
+	kbGr.addEncodedQuery('x_aaro2_teamonline_orderISNOTEMPTY');
+	kbGr.query();
+	while(kbGr.next()){
+		existingOrderNumbers.push(kbGr.getValue('x_aaro2_teamonline_order'));
+	}
+	if(existingOrderNumbers.length){
+		maxNum = Math.max.apply(null, existingOrderNumbers);
+	}
+	current.x_aaro2_teamonline_order = maxNum+1 ;
+
+})(current, previous);]]></script>
+        <sys_class_name>sys_script</sys_class_name>
+        <sys_created_by>xxikochet</sys_created_by>
+        <sys_created_on>2020-04-09 12:07:10</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_domain>global</sys_domain>
+        <sys_id>42cbfbb9db8498105f65ba03e296194c</sys_id>
+        <sys_mod_count>3</sys_mod_count>
+        <sys_name>Fill order when article goes to Base</sys_name>
+        <sys_overrides/>
+        <sys_package display_value="TEAMonline" source="x_aaro2_teamonline">a2dfc25fdb7244105f65ba03e29619fa</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="TEAMonline">a2dfc25fdb7244105f65ba03e29619fa</sys_scope>
+        <sys_update_name>sys_script_42cbfbb9db8498105f65ba03e296194c</sys_update_name>
+        <sys_updated_by>xxikochet</sys_updated_by>
+        <sys_updated_on>2020-04-10 12:57:26</sys_updated_on>
+        <template/>
+        <when>before</when>
+    </sys_script>
+</record_update>

@@ -1,0 +1,463 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sp_widget">
+    <sp_widget action="INSERT_OR_UPDATE">
+        <category>custom</category>
+        <client_script><![CDATA[function($scope, $sce, spUtil) {
+	/* widget controller */
+	var c = this;
+	$scope.isLoading = true;
+	
+	$scope.showComments = false;
+	
+	$scope.trustedHTML = function (html) {
+		return $sce.getTrustedHtml(html)
+	}
+	
+	$scope.isHasComments = function (comments) {
+		return !!comments.length;
+	}
+}]]></client_script>
+        <controller_as>c</controller_as>
+        <css>$primary: #0069C8;
+
+.comments {
+  background: white;
+}
+
+.comments-thread {
+  display: flex;
+  flex-direction: column;
+  max-height: 600px;
+  overflow-y: scroll;
+  overflow-x: hidden;
+
+  &amp;::-webkit-scrollbar {
+    width: .5em;
+  }
+
+  &amp;::-webkit-scrollbar-thumb {
+    background-color: darkgrey;
+    outline: 1px solid slategrey;
+  }
+}
+
+.comments-title {
+  position: relative;
+  text-align: center;
+  font-size: 24px;
+  margin: 0;
+  padding: 2rem 0;
+  line-height: 1;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+
+  &amp;:after {
+    content: "";
+    position: absolute;
+    bottom: 14px;
+    left: 42%;
+    height: 2px;
+    width: 86px;
+    background: #91C712;
+  }
+}
+
+.comments-thread--text {
+  display: flex;
+  flex-direction: row;
+  position: relative;
+  align-items: flex-start;
+  padding: 20px 20px 10px 20px;
+  cursor: pointer;
+  border-top: 5px solid #eceff1;
+  opacity: .7;
+  transition: opacity .2s ease-out;
+
+  &amp;:hover {
+    opacity: 1;
+  }
+
+  .text--user-information,
+  .text--award-information {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .text--user-information {
+    justify-content: center;
+
+    .avatar-container {
+      height: 5.2rem;
+      width: 5.2rem;
+    }
+
+    .avatar-container .avatar.soloAvatar .sub-avatar {
+      width: 100%;
+      height: 100%;
+      border-radius: 0;
+      font-size: 2rem;
+      line-height: 5.2rem;
+    }
+
+    sn-time-ago {
+      margin: 0;
+      padding: 0;
+      width: 55px;
+      text-align: center;
+    }
+  }
+
+  .text--award-information {
+    margin-left: 10px;
+    min-height: 150px;
+    .text--award-more-information {
+      overflow: hidden;
+      padding: 10px;
+      background: #eceff1;
+      transition: all .3s;
+    }
+
+    .text--show-comments {
+      padding-top: 5px;
+    }
+
+    .congratulate-award {
+      font-size: 2rem;
+      color: #007bff;
+      border: 1px solid transparent;
+      cursor: pointer;
+      height: 45px;
+      line-height: 50px;
+      text-align: center;
+      padding: 0;
+      border-radius: 50%;
+
+      &amp;:hover {
+        border-color:#007bff;
+      }
+    }
+    .comment-award {
+      padding: 10px 0 0 0;
+      margin-top: auto;
+    }
+  }
+}
+
+.award-congratulations
+{
+  list-style: none;
+  margin: 0;
+  padding: 10px;
+}
+
+.award-congratulations li
+{
+  margin-bottom: 10px;
+  padding-bottom: 5px;
+  border-bottom: 1px dotted #B3A9A9;
+}
+
+.award-congratulations li.left .chat-body
+{
+  margin-left: 40px;
+}
+
+.award-congratulations li .chat-body p
+{
+  margin: 0;
+  color: #777777;
+}
+
+.icon-up,
+.icon-down {
+  &amp;:after {
+    position: absolute;
+    right: 30px;
+    font-family: 'Glyphicons Halflings';
+  }
+}
+
+.show {
+  display: none;
+}
+
+.hide {
+  display: block;
+}
+
+.icon-up {
+  &amp;:after {
+    content: "\e259";
+  }
+}
+
+.icon-down {
+  &amp;:after {
+    content: "\e260";
+  }
+}
+
+
+@mixin transition($property: all, $duration: 0.45s, $ease: cubic-bezier(0.65,0,.076,1)) {
+  transition: $property $duration $ease;
+}
+
+.circle-button {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+  outline: none;
+  border: 0;
+  vertical-align: middle;
+  text-decoration: none;
+  background: transparent;
+  padding: 0;
+  font-size: inherit;
+  font-family: inherit;
+
+  &amp;.learn-more {
+    width: 24rem;
+    height: auto;
+    .circle {
+      @include transition(all, 0.45s, cubic-bezier(0.65,0,.076,1));
+      position: relative;
+      display: block;
+      margin: 0;
+      width: 3rem;
+      height: 3rem;
+      background: $primary;
+      border-radius: 1.625rem;
+      .icon {
+        @include transition(all, 0.45s, cubic-bezier(0.65,0,.076,1));
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        margin: auto;
+        background: white;
+        &amp;.arrow {
+          @include transition(all, 0.45s, cubic-bezier(0.65,0,.076,1));
+          left: 0.625rem;
+          width: 1.125rem;
+          height: 0.125rem;
+          background: none;
+          &amp;::before {
+            position: absolute;
+            content: '';
+            top: -0.25rem;
+            right: 0.0625rem;
+            width: 0.625rem;
+            height: 0.625rem;
+            border-top: 0.125rem solid #fff;
+            border-right: 0.125rem solid #fff;
+            transform: rotate(45deg);
+          }
+        }
+      }
+    }
+    .button-text {
+      @include transition(all, 0.45s, cubic-bezier(0.65,0,.076,1));
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      padding: 0.4rem 0;
+      margin: 0 0 0 2rem;
+      color: gray;
+      font-weight: 500;
+      line-height: 1.6;
+      text-align: center;
+      text-transform: uppercase;
+    }
+  }
+  &amp;:hover {
+    .circle {
+      width: 100%;
+      .icon {
+        &amp;.arrow {
+          background: white;
+          transform: translate(1rem, 0);
+        }
+      }
+    }
+    .button-text {
+      color: white;
+      font-weight: 700;
+    }
+  }
+}
+
+.see-more {
+  border-top: 10px solid #eceff1;
+
+  a {
+    width: 100%
+  }
+}
+
+.badge {
+  padding: 3px 6px;
+  font-size: 10px;
+}
+
+.lds-ring {
+  display: inline-block;
+  position: relative;
+  width: 80px;
+  height: 80px;
+}
+.lds-ring div {
+  box-sizing: border-box;
+  display: block;
+  position: absolute;
+  width: 64px;
+  height: 64px;
+  margin: 8px;
+  border: 8px solid $primary;
+  border-radius: 50%;
+  animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+  border-color: $primary transparent transparent transparent;
+}
+.lds-ring div:nth-child(1) {
+  animation-delay: -0.45s;
+}
+.lds-ring div:nth-child(2) {
+  animation-delay: -0.3s;
+}
+.lds-ring div:nth-child(3) {
+  animation-delay: -0.15s;
+}
+@keyframes lds-ring {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+</css>
+        <data_table>sp_instance</data_table>
+        <demo_data/>
+        <description/>
+        <docs/>
+        <field_list/>
+        <has_preview>true</has_preview>
+        <id>team_online_aarons_awards_feed</id>
+        <internal>false</internal>
+        <link><![CDATA[function link(scope, element, attrs, controller) {  }]]></link>
+        <name>Team Online Aaron's Awards Feed</name>
+        <option_schema/>
+        <public>false</public>
+        <roles/>
+        <script><![CDATA[(function() {
+		var teamOnlineUtil = new TeamOnlineUtils();
+		var r = new sn_ws.RESTMessageV2('x_aaro2_teamonline.Team Award RSS', 'Default GET');
+		var response = r.execute();
+		var responseBody = response.getBody();
+		var httpStatus = response.getStatusCode();
+
+		var companyAwardRssFeed = gs.xmlToJSON(responseBody);
+
+		data.rss_information = {
+			link: companyAwardRssFeed.rss.channel.link,
+			title: companyAwardRssFeed.rss.channel.title
+		};
+
+		var companyAwardArray = companyAwardRssFeed.rss.channel.item;
+
+		companyAwardArray.forEach(function (award) {
+			award.award_information = teamOnlineUtil.getAwardInformationFromHTML(award.description);
+			award.user_color = generateRandomColor();
+		});
+
+		data.company_awards = companyAwardArray;
+})();
+
+
+function generateRandomColor () {
+	var letters = '0123456789ABCDEF';
+	var color = '#';
+	for (var i = 0; i < 6; i++) {
+		color += letters[Math.floor(Math.random() * 16)];
+	}
+	return color;
+}]]></script>
+        <servicenow>false</servicenow>
+        <sys_class_name>sp_widget</sys_class_name>
+        <sys_created_by>xxabunko</sys_created_by>
+        <sys_created_on>2020-03-27 11:39:34</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_id>1eaabcf5dbff08d05f65ba03e296197b</sys_id>
+        <sys_mod_count>433</sys_mod_count>
+        <sys_name>Team Online Aaron's Awards Feed</sys_name>
+        <sys_package display_value="TEAMonline" source="x_aaro2_teamonline">a2dfc25fdb7244105f65ba03e29619fa</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="TEAMonline">a2dfc25fdb7244105f65ba03e29619fa</sys_scope>
+        <sys_update_name>sp_widget_1eaabcf5dbff08d05f65ba03e296197b</sys_update_name>
+        <sys_updated_by>xxabunko</sys_updated_by>
+        <sys_updated_on>2020-04-09 16:40:28</sys_updated_on>
+        <template><![CDATA[<div class="comments">
+  <h2 class="comments-title">
+    {{ data.rss_information.title }}
+  </h2>
+  <div class="comments-thread">
+    <div class="comments-thread--text"
+         ng-repeat="award in data.company_awards track by $index"
+         >
+      <div class="text--user-information">
+        <sn-avatar class="avatar-small-medium" primary="award.award_information.user" style="background: {{ award.user_color }}"/>
+        <sn-time-ago timestamp="award.award_information.date" />
+      </div>
+      <div class="text--award-information">
+        <span><strong ng->{{ award.award_information.user }}</strong></span>
+        <text>{{ award.title }}</text>
+        <div ng-if="award.award_information.message" class="text--award-more-information show">
+          <span><strong ng-bind-html='trustedHTML(award.award_information.message)'></strong></span>
+        </div>
+        <a class="text--show-comments icon-up" 
+           ng-class="{'icon-down': showComments, 'icon-up': !showComments}" 
+           ng-click="showComments = !showComments"
+           ng-show="isHasComments(award.award_information.comments)"
+           >
+          Show Comments <span class="badge" style="background: #0069C8 ">{{award.award_information.comments.length}}</span>
+        </a>
+        <ul class="award-congratulations" ng-class="{'show': showComments, 'hide': !showComments}">
+          <li class="left clearfix" ng-repeat="comment in award.award_information.comments track by $index">
+            <span class="chat-img pull-left">
+              <sn-avatar class="avatar-small-medium" primary="comment.user"/>
+            </span>
+            <div class="chat-body clearfix">
+              <div class="header">
+                <strong class="primary-font">{{ comment.user }}</strong> <small class="pull-right text-muted">
+                <span class="glyphicon glyphicon-time"></span><sn-time-ago timestamp="comment.date" /></small>
+              </div>
+              <p ng-bind-html="trustedHTML(comment.message)"></p>
+            </div>
+          </li>
+        </ul>
+        <a 
+           ng-href="{{award.link}}"
+           target="_blank"
+           class="comment-award"
+           >
+          <div>
+            <button class="circle-button learn-more">
+              <span class="circle" aria-hidden="true">
+                <span class="icon arrow"></span>
+              </span>
+              <span class="button-text">Congratulate this award</span>
+            </button>
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
+  <div class="see-more">
+    <a ng-href="{{ data.rss_information.link }}" class="btn btn-primary">
+      See more on Aaron's Applause
+    </a>
+  </div>
+</div>
+]]></template>
+    </sp_widget>
+</record_update>
