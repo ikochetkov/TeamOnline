@@ -7,31 +7,38 @@
         <sys_created_on>2020-04-10 11:23:20</sys_created_on>
         <sys_customer_update>false</sys_customer_update>
         <sys_id>031d3c52db005c105f65ba03e2961987</sys_id>
-        <sys_mod_count>1</sys_mod_count>
+        <sys_mod_count>3</sys_mod_count>
         <sys_name>teamOnlineMainMenu</sys_name>
         <sys_package display_value="TEAMonline" source="x_aaro2_teamonline">a2dfc25fdb7244105f65ba03e29619fa</sys_package>
         <sys_policy/>
         <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
         <sys_scope display_value="TEAMonline">a2dfc25fdb7244105f65ba03e29619fa</sys_scope>
         <sys_update_name>sp_ng_template_031d3c52db005c105f65ba03e2961987</sys_update_name>
-        <sys_updated_by>xxabunko</sys_updated_by>
-        <sys_updated_on>2020-04-10 11:25:24</sys_updated_on>
-        <template><![CDATA[<a role="menuitem" ng-if="item.items.length == 0 && !item.scriptedItems" ng-href="{{::item.href}}" ng-click="collapse()" target="{{::item.url_target}}" title="{{::item.hint}}">
+        <sys_updated_by>andrey.mironyuk</sys_updated_by>
+        <sys_updated_on>2020-04-13 10:07:40</sys_updated_on>
+        <template><![CDATA[<a role="menuitem" ng-if="item.items.length == 0 && !item.scriptedItems" ng-href="{{::item.href}}" ng-click="collapse()"
+  target="{{::item.url_target}}" title="{{::item.hint}}">
   <fa ng-if="::item.glyph" name="{{::item.glyph}}"></fa>
   <span ng-bind-html="::item.label"></span>
 </a>
-<a role="menuitem" aria-haspopup="true"  ng-if="item.items.length > 0" href class="dropdown-toggle sp-menu-has-items" data-toggle="dropdown" aria-controls="{{::item.label.split(' ').join('')}}" aria-haspopup="true" title="{{::item.hint}}">
+
+<a role="menuitem" aria-haspopup="true" ng-if="item.items.length > 0" href class="dropdown-toggle sp-menu-has-items"
+  data-toggle="dropdown" aria-controls="{{::item.label.split(' ').join('')}}" aria-haspopup="true"
+  title="{{::item.hint}}">
   <fa ng-if="::item.glyph" name="{{::item.glyph}}"></fa>
   <span ng-bind-html="::item.label"></span> <span class="caret"></span>
 </a>
 <ul ng-if="item.items.length > 0" class="dropdown-menu" role="menu" id="{{::item.label.split(' ').join('')}}">
   <li ng-repeat="item in item.items" ng-include="'teamOnlineMainMenu'" role="presentation" />
 </ul>
-<a role="menuitem" aria-haspopup="true" ng-if="item.scriptedItems.count > 0" href data-toggle="dropdown" aria-label="{{::item.label}} : {{item.scriptedItems.count}}" title="{{::item.hint}}">
+<a role="menuitem" aria-haspopup="true" ng-if="item.scriptedItems.count > 0" href data-toggle="dropdown"
+  aria-label="{{::item.label}} : {{item.scriptedItems.count}}" title="{{::item.hint}}">
   <fa ng-if="::item.glyph" name="{{::item.glyph}}"></fa>
   <span ng-bind-html="::item.label"></span>
-  <span ng-if="::!item.scriptedItems.omitBadge" class="label label-as-badge label-primary sp-navbar-badge-count">{{item.scriptedItems.count}}</span>
+  <span ng-if="::!item.scriptedItems.omitBadge"
+    class="label label-as-badge label-primary sp-navbar-badge-count">{{item.scriptedItems.count}}</span>
 </a>
-<sp-dropdown-tree role="menu" aria-label="{{::item.label}}" ng-if="item.scriptedItems.count > 0" items="item.scriptedItems.items" />]]></template>
+<sp-dropdown-tree role="menu" aria-label="{{::item.label}}" ng-if="item.scriptedItems.count > 0"
+  items="item.scriptedItems.items" />]]></template>
     </sp_ng_template>
 </record_update>

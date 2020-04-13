@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="m2m_sp_dependency_js_include">
+    <m2m_sp_dependency_js_include action="INSERT_OR_UPDATE">
+        <order>100</order>
+        <sp_dependency display_value="sn.dragdrop">690cff32db4c10508f26550a4896197b</sp_dependency>
+        <sp_js_include display_value="/scripts/sn.dragdrop/ng_jqdnd_includes.js">794c3772db4c10508f26550a489619d3</sp_js_include>
+        <sys_class_name>m2m_sp_dependency_js_include</sys_class_name>
+        <sys_created_by>xxikochet</sys_created_by>
+        <sys_created_on>2020-04-12 14:35:25</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_id>5a5c7772db4c10508f26550a489619ec</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>sn.dragdrop./scripts/sn.dragdrop/ng_jqdnd_includes.js</sys_name>
+        <sys_package display_value="TEAMonline" source="x_aaro2_teamonline">a2dfc25fdb7244105f65ba03e29619fa</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="TEAMonline">a2dfc25fdb7244105f65ba03e29619fa</sys_scope>
+        <sys_update_name>m2m_sp_dependency_js_include_5a5c7772db4c10508f26550a489619ec</sys_update_name>
+        <sys_updated_by>xxikochet</sys_updated_by>
+        <sys_updated_on>2020-04-12 14:35:25</sys_updated_on>
+    </m2m_sp_dependency_js_include>
+</record_update>
