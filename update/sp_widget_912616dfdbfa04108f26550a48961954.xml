@@ -3,7 +3,9 @@
         <category>custom</category>
         <client_script><![CDATA[function ($scope, spUtil, $rootScope, $timeout, spAriaUtil, spGtd, $window, spModal) {
 
-	$scope.collapse = function() {
+	$scope.justlog = function () { console.log($scope.data) };
+
+	$scope.collapse = function () {
 		$rootScope.$emit('sp-navbar-collapse');
 	}
 	$scope.loadingIndicator = $rootScope.loadingIndicator;
@@ -11,14 +13,14 @@
 	$scope.wishlistItemCount = 0;
 	$scope.itemAddedTooltipOpen = false;
 	$scope.accessibilityEnabled = spAriaUtil.g_accessibility === "true";
-	$scope.$on("$sp.service_catalog.cart.count", function($evt, count) {
+	$scope.$on("$sp.service_catalog.cart.count", function ($evt, count) {
 		$scope.cartItemCount = count;
 	});
-	$scope.$on("$sp.service_catalog.wishlist.count", function($evt, count) {
+	$scope.$on("$sp.service_catalog.wishlist.count", function ($evt, count) {
 		$scope.wishlistItemCount = count;
 	});
 	var cancelTooltipPromise;
-	$scope.$on('sp_loading_indicator', function(e, value) {
+	$scope.$on('sp_loading_indicator', function (e, value) {
 		$scope.loadingIndicator = value;
 	});
 	// PRB1108244: visibleItems array is used to improve keyboard nav
@@ -30,7 +32,7 @@
 		initials: $window.NOW.user_initials
 	};
 
-	$scope.createArticle = function() {
+	$scope.createArticle = function () {
 		spModal.open({
 			title: '',
 			widget: 'team_online_article_editor',
@@ -44,9 +46,9 @@
 		$scope.avatarProfile.userImage = $window.NOW.user_avatar;
 	}
 
-	$scope.openPopUp = function() {
+	$scope.openPopUp = function () {
 		var url = "$chat_support.do?queueID=" + $scope.data.connect_support_queue_id;
-		var popup = window.open (url, "popup", "width=900, height=600");
+		var popup = window.open(url, "popup", "width=900, height=600");
 	};
 
 	$scope.openLogin = function () {
@@ -63,29 +65,29 @@
 	$scope.isAgentChatConfigured = g_has_agent_chat_config;
 
 	angular.element($window).on('resize', function () {
-		if(xsScreenSize !== isXSScreenSize() && (!$scope.showXSAvatar || !$scope.showAvatar)){
+		if (xsScreenSize !== isXSScreenSize() && (!$scope.showXSAvatar || !$scope.showAvatar)) {
 			$scope.showXSAvatar = true;
 			$scope.showAvatar = true;
 		}
 	});
 
-	spUtil.get("team_online_article_editor").then(function(response) {
+	spUtil.get("team_online_article_editor").then(function (response) {
 		$scope.newArticle = response;
 	});
 	function isXSScreenSize() {
 		return $window.matchMedia('(max-width: 767px)').matches;
 	}
 
-	$rootScope.$on('sp.avatar_changed', function(evt, obj) {
+	$rootScope.$on('sp.avatar_changed', function (evt, obj) {
 		$scope.userID = "";
 		$scope.newAvatarId = obj.newAvatarId;
-		$timeout(function(){
+		$timeout(function () {
 			$scope.userID = $scope.user.sys_id;
 			$(".sub-avatar").css("background-image", 'url("' + $scope.newAvatarId + '.iix?t=small")');
 		});
 	});
 
-	$scope.$watch('data.menu.items', function() {
+	$scope.$watch('data.menu.items', function () {
 		$scope.visibleItems = [];
 		if ($scope.data.menu.items) {
 			for (var i in $scope.data.menu.items) {
@@ -95,7 +97,7 @@
 			}
 		}
 	}, true);
-	$scope.$on('sp-menu-update-tours', function(event, tours) {
+	$scope.$on('sp-menu-update-tours', function (event, tours) {
 		$scope.data.showTours = $scope.data.showTours && !spUtil.isMobile();
 		if ($scope.data.showTours === false) return;
 		var guidedToursLabel = 'Guided Tours';
@@ -104,11 +106,11 @@
 			collection: []
 		};
 		if (tours.length > 0) {
-			$scope.data.guidedTours.collection = tours.map(function(t) {
+			$scope.data.guidedTours.collection = tours.map(function (t) {
 				return {
-					title:  t.name,
+					title: t.name,
 					id: t.id,
-					clicked: function() {
+					clicked: function () {
 						spGtd.launch(t.id);
 					}
 				};
@@ -118,26 +120,28 @@
 	// Get list of record watchers
 	var record_watchers = [];
 	if ($scope.data.menu.items) {
-		for(var i in $scope.data.menu.items) {
+		for (var i in $scope.data.menu.items) {
 			var item = $scope.data.menu.items[i];
 			if (item.type == 'scripted') {
 				if (item.scriptedItems.record_watchers)
 					record_watchers = record_watchers.concat(item.scriptedItems.record_watchers);
 			}
 			if (item.type == 'filtered') {
-				record_watchers.push({'table':item.table,'filter':item.filter});
+				record_watchers.push({ 'table': item.table, 'filter': item.filter });
 			}
 		}
 	}
 	// Init record watchers
-	for (var y in record_watchers){
+	for (var y in record_watchers) {
 		var watcher = record_watchers[y];
 		spUtil.recordWatch($scope, watcher.table, watcher.filter);
 	}
 	$rootScope.$broadcast('sp-header-loaded');
 }]]></client_script>
         <controller_as>c</controller_as>
-        <css>.header-loader {&#13;
+        <css>$blue:#0069C8;&#13;
+$lightblue: #0071ce;&#13;
+.header-loader {&#13;
   float: left;&#13;
   width: 24px;&#13;
   position: relative;&#13;
@@ -147,18 +151,29 @@
 .avatar {&#13;
   float: right;&#13;
 }&#13;
-&#13;
+.header__nav .megamenu{&#13;
+  position: static;&#13;
+}&#13;
 .header__nav li.has-children {&#13;
   padding-right: 3.3rem;&#13;
 }&#13;
-&#13;
-.header__nav li a {&#13;
+.profile-dropdown{&#13;
+  background-color: $lightblue;&#13;
+  top:39px;&#13;
+  z-index: 500;&#13;
+  li{&#13;
+    display: block;&#13;
+    a{&#13;
+      line-height: inherit;&#13;
+    }&#13;
+  }&#13;
+}&#13;
+/*.header__nav li a {&#13;
   display: block;&#13;
   color: rgba(255, 255, 255, 0.6);&#13;
   line-height: 39px;&#13;
-}&#13;
-&#13;
-.header__nav li.has-children &gt; a::after {&#13;
+}*/&#13;
+/*.header__nav li.has-children &gt; a::after {&#13;
   border-bottom: 1px solid rgba(255, 255, 255, 0.3);&#13;
   border-right: 1px solid rgba(255, 255, 255, 0.3);&#13;
   content: '';&#13;
@@ -178,7 +193,7 @@
   transform: rotate(45deg);&#13;
   -webkit-transition: all 0.3s ease-in-out;&#13;
   transition: all 0.3s ease-in-out;&#13;
-}&#13;
+}*/&#13;
 &#13;
 .header__nav li:hover &gt; a, .header__nav li:focus &gt; a {&#13;
   color: #FFFFFF;&#13;
@@ -187,7 +202,7 @@
 .header__nav li:hover li, .header__nav li:focus li {&#13;
   background: transparent;&#13;
 }&#13;
-&#13;
+/*&#13;
 .header__nav li ul {&#13;
   position: absolute;&#13;
   top: 45px;&#13;
@@ -195,7 +210,7 @@
   font-size: 14px;&#13;
   margin: 0;&#13;
   padding: 1.8rem 0;&#13;
-  background: #0069C8;&#13;
+  background: $blue;&#13;
   border-radius: 0 0 3px 3px;&#13;
   z-index: 500;&#13;
   -webkit-transform: translate3d(0, 15px, 0);&#13;
@@ -206,7 +221,8 @@
   opacity: 0;&#13;
   visibility: hidden;&#13;
 }&#13;
-&#13;
+*/&#13;
+/*&#13;
 .header__nav li ul ul {&#13;
   position: absolute;&#13;
   top: 0;&#13;
@@ -215,7 +231,8 @@
   border-radius: 0 0 3px 3px;&#13;
   padding-top: 1.2rem;&#13;
 }&#13;
-&#13;
+*/&#13;
+/*&#13;
 .header__nav li ul li {&#13;
   display: block;&#13;
   text-align: left;&#13;
@@ -232,18 +249,100 @@
   font-family: sans-serif;&#13;
   line-height: 18px;&#13;
   color: rgba(255, 255, 255, 0.6);&#13;
-}&#13;
-&#13;
+}*/&#13;
+/*&#13;
 .header__nav li ul li a:hover, .header__nav li ul li a:focus {&#13;
   color: #5C6BC0;&#13;
 }&#13;
-&#13;
+*/&#13;
+/*&#13;
 .header__nav li:hover &gt; ul {&#13;
   opacity: 1;&#13;
   visibility: visible;&#13;
   -webkit-transform: translate3d(0, 0, 0);&#13;
   -ms-transform: translate3d(0, 0, 0);&#13;
   transform: translate3d(0, 0, 0);&#13;
+}*/&#13;
+.profile-menu-item{&#13;
+  position: relative;&#13;
+}&#13;
+.header__nav&gt;li&gt;a{&#13;
+  line-height: 39px;&#13;
+}&#13;
+.header-menu-item&#13;
+{&#13;
+  &amp;.dropdown{&#13;
+    position: static;&#13;
+  }&#13;
+}&#13;
+.megamenu{&#13;
+  position: static;&#13;
+}&#13;
+.megamenu-container{&#13;
+  position: absolute;&#13;
+  top:auto;&#13;
+  min-width: 100%;&#13;
+  border: none;&#13;
+  border-radius: 0px;&#13;
+  background-color:$lightblue;&#13;
+  color: white;&#13;
+  ul li{&#13;
+    position: relative;&#13;
+  }&#13;
+}&#13;
+.megamenu-list, .megamenu-list-item{&#13;
+position: relative;&#13;
+}&#13;
+&#13;
+.megamenu-subcategory{&#13;
+  text-decoration: none;&#13;
+}&#13;
+.subheading-list-item{&#13;
+  margin-left: 5px;&#13;
+}&#13;
+.megamenu-subcategory:hover{&#13;
+  color: white;&#13;
+}&#13;
+.three-column-layout{&#13;
+  -webkit-column-width: 30%;&#13;
+    -moz-column-width: 30%;&#13;
+    column-width: 30%;&#13;
+    -webkit-column-count: 3;&#13;
+    -moz-column-count: 3;&#13;
+    column-count: 3;&#13;
+    -webkit-column-gap: 30px;&#13;
+    -moz-column-gap: 30px;&#13;
+    column-gap: 30px;&#13;
+}&#13;
+.btn-add-subcategory{&#13;
+    border: none;&#13;
+    background: none;&#13;
+    color: white;&#13;
+}&#13;
+.btn-add-subcategory:hover{&#13;
+    border: none;&#13;
+    background: none;&#13;
+    color:gray&#13;
+}&#13;
+.megamenu__category{&#13;
+  display: inline;&#13;
+}&#13;
+&#13;
+.dropdown .dropdown-menu {&#13;
+  opacity: 0;&#13;
+  display: none;&#13;
+&#13;
+}&#13;
+&#13;
+.dropdown.open .dropdown-menu {&#13;
+  display: block;&#13;
+  -webkit-transform: translate3d(0, 15px, 0);&#13;
+  -ms-transform: translate3d(0, 15px, 0);&#13;
+  transform: translate3d(0, 15px, 0);&#13;
+  -webkit-transition: all 0.5s ease-in-out;&#13;
+  transition: all 0.5s ease-in-out;&#13;
+  &#13;
+  opacity: 1;&#13;
 }</css>
         <data_table>sp_instance_menu</data_table>
         <demo_data/>
@@ -258,8 +357,9 @@
         <option_schema/>
         <public>true</public>
         <roles/>
-        <script><![CDATA[(function(input){
+        <script><![CDATA[(function (input) {
 	// build menus
+	data.canEdit = gs.getUser().isMemberOf(gs.getProperty("x_aaro2_teamonline.teamonline_administration_group")) || gs.hasRole("admin");
 	var menu_id = $sp.getValue('sys_id'); // instance sys_id
 	var gr = new GlideRecord('sp_instance_menu');
 	data.login_page = $sp.getValue('login_page');
@@ -272,10 +372,10 @@
 	data.showTours = (gs.getProperty('com.snc.guided_tours.sp.enable') === 'true') && data.isLoggedIn;
 	var catalogArr = ($sp.getCatalogs().value + "").split(",");
 	data.loginWidget = $sp.getWidgetFromInstance('login-modal');
-	catalogArr.forEach(function(catalog) {
+	catalogArr.forEach(function (catalog) {
 		data.showWishlist = data.showWishlist || new sn_sc.Catalog(catalog).isWishlistEnabled();
 	});
-	
+
 
 })();]]></script>
         <servicenow>false</servicenow>
@@ -284,15 +384,15 @@
         <sys_created_on>2020-02-11 17:07:22</sys_created_on>
         <sys_customer_update>false</sys_customer_update>
         <sys_id>912616dfdbfa04108f26550a48961954</sys_id>
-        <sys_mod_count>67</sys_mod_count>
+        <sys_mod_count>133</sys_mod_count>
         <sys_name>Team Online Header Menu</sys_name>
         <sys_package display_value="TEAMonline" source="x_aaro2_teamonline">a2dfc25fdb7244105f65ba03e29619fa</sys_package>
         <sys_policy/>
         <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
         <sys_scope display_value="TEAMonline">a2dfc25fdb7244105f65ba03e29619fa</sys_scope>
         <sys_update_name>sp_widget_912616dfdbfa04108f26550a48961954</sys_update_name>
-        <sys_updated_by>xxabunko</sys_updated_by>
-        <sys_updated_on>2020-04-10 11:25:45</sys_updated_on>
+        <sys_updated_by>andrey.mironyuk</sys_updated_by>
+        <sys_updated_on>2020-04-15 14:41:46</sys_updated_on>
         <template><![CDATA[<nav class="header__nav-wrap">
   <ul ng-if="user.logged_in" class="header__nav" aria-label="${Header menu}" role="menubar">
     <div class="header-loader" ng-class="{'invisible': !loadingIndicator}">
@@ -303,30 +403,39 @@
       </div>
     </div>
 
-     <li ng-repeat="item in visibleItems" ng-class="{dropdown: item.items.length > 0, 'header-menu-item': true}" ng-include="'teamOnlineMainMenu'" role="presentation"></li>
-    <li>
+    <li ng-repeat="item in visibleItems" ng-class="{dropdown: item.items.length > 0, 'header-menu-item': true}"
+      ng-include="'teamOnlineMainMenu'" role="presentation"></li>
+    <li ng-if="data.canEdit">
       <sp-widget widget="newArticle"></sp-widget>
     </li>
-    <li ng-if="showAvatar" class="hidden-xs dropdown has-children avatar" role="presentation">
-      <a href class="toggle-dropdown" data-toggle="dropdown" aria-expanded="false" title="{{::data.profileBtnMsg}}" aria-label="{{::data.profileBtnMsg}}: {{::user.name}}" id="profile-dropdown"  role="menuitem" aria-haspopup="true">
-        <span aria-hidden="true"><sn-avatar class="avatar-small-medium" primary="avatarProfile" /></span>
+    <li ng-if="showAvatar" class="hidden-xs dropdown has-children avatar profile-menu-item" role="presentation">
+      <a href class="toggle-dropdown" data-toggle="dropdown" aria-expanded="false" title="{{::data.profileBtnMsg}}"
+        aria-label="{{::data.profileBtnMsg}}: {{::user.name}}" id="profile-dropdown" role="menuitem"
+        aria-haspopup="true">
+        <span aria-hidden="true">
+          <sn-avatar class="avatar-small-medium" primary="avatarProfile" /></span>
         <span class="visible-lg-inline">{{::user.name}}</span>
       </a>
-      <ul class="dropdown-menu sub-menu" role="menu" aria-label="{{::data.profileBtnMsg}}">
-        <li role="presentation"><a tabindex="-1" ng-href="?id=user_profile&sys_id={{::user.sys_id}}" role="menuitem">${Profile}</a></li>
-        <li ng-if="::!(isViewNative || isViewNativeTablet)" role="presentation"><a tabindex="-1" href="{{::portal.logoutUrl}}" role="menuitem">${Logout}</a></li>
+      <ul class="dropdown-menu sub-menu profile-dropdown" role="menu" aria-label="{{::data.profileBtnMsg}}">
+        <li role="presentation"><a tabindex="-1" ng-href="?id=user_profile&sys_id={{::user.sys_id}}"
+            role="menuitem">${Profile}</a></li>
+        <li ng-if="::!(isViewNative || isViewNativeTablet)" role="presentation"><a tabindex="-1"
+            href="{{::portal.logoutUrl}}" role="menuitem">${Logout}</a></li>
       </ul>
     </li>
-    <li ng-if="showXSAvatar" class="visible-xs-block" role="presentation"><a role="menuitem" ng-href="?id=user_profile&sys_id={{::user.sys_id}}" ng-click="collapse()">
-      <span class="navbar-avatar"><sn-avatar class="avatar-small-medium" primary="avatarProfile" /></span>{{::user.name}}</a>
+    <li ng-if="showXSAvatar" class="visible-xs-block" role="presentation"><a role="menuitem"
+        ng-href="?id=user_profile&sys_id={{::user.sys_id}}" ng-click="collapse()">
+        <span class="navbar-avatar">
+          <sn-avatar class="avatar-small-medium" primary="avatarProfile" /></span>{{::user.name}}</a>
     </li>
-    <li ng-if="::!(isViewNative || isViewNativeTablet)" class="visible-xs-block" role="presentation"><a role="menuitem" ng-href="{{::portal.logoutUrl}}" ng-click="collapse()">${Logout}</a></li>
+    <li ng-if="::!(isViewNative || isViewNativeTablet)" class="visible-xs-block" role="presentation"><a role="menuitem"
+        ng-href="{{::portal.logoutUrl}}" ng-click="collapse()">${Logout}</a></li>
   </ul>
 
-  <ul ng-if="(!user.logged_in && page.id != portal.login_page_dv && !data.hasLogin)" class="nav navbar-nav" role="presentation">
+  <ul ng-if="(!user.logged_in && page.id != portal.login_page_dv && !data.hasLogin)" class="nav navbar-nav"
+    role="presentation">
     <li role="presentation"><a href ng-click="::openLogin()">${Login}</a></li>
   </ul>
-</nav>
-]]></template>
+</nav>]]></template>
     </sp_widget>
 </record_update>

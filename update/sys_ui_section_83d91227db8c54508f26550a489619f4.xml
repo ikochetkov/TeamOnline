@@ -1,0 +1,408 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update>
+    <sys_ui_section caption="" section_id="83d91227db8c54508f26550a489619f4" sys_domain="global" table="sp_rectangle_menu_item" version="3" view="teamonline">
+        <sys_ui_element action="INSERT_OR_UPDATE">
+            <element>label</element>
+            <position>0</position>
+            <sys_created_by>andrey.mironyuk</sys_created_by>
+            <sys_created_on>2020-04-14 15:20:43</sys_created_on>
+            <sys_id>d5e99227db8c54508f26550a48961986</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_ui_formatter/>
+            <sys_ui_section caption="NULL" display_value="" name="sp_rectangle_menu_item" sys_domain="global" view="bed99ee3db8c54508f26550a489619d4">83d91227db8c54508f26550a489619f4</sys_ui_section>
+            <sys_updated_by>andrey.mironyuk</sys_updated_by>
+            <sys_updated_on>2020-04-14 15:20:43</sys_updated_on>
+            <sys_user/>
+            <type/>
+        </sys_ui_element>
+        <sys_ui_element action="INSERT_OR_UPDATE">
+            <element>.begin_split</element>
+            <position>1</position>
+            <sys_created_by>andrey.mironyuk</sys_created_by>
+            <sys_created_on>2020-04-14 15:20:43</sys_created_on>
+            <sys_id>5de99227db8c54508f26550a48961986</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_ui_formatter/>
+            <sys_ui_section caption="NULL" display_value="" name="sp_rectangle_menu_item" sys_domain="global" view="bed99ee3db8c54508f26550a489619d4">83d91227db8c54508f26550a489619f4</sys_ui_section>
+            <sys_updated_by>andrey.mironyuk</sys_updated_by>
+            <sys_updated_on>2020-04-14 15:20:43</sys_updated_on>
+            <sys_user/>
+            <type>.begin_split</type>
+        </sys_ui_element>
+        <sys_ui_element action="INSERT_OR_UPDATE">
+            <element>sp_rectangle_menu</element>
+            <position>2</position>
+            <sys_created_by>andrey.mironyuk</sys_created_by>
+            <sys_created_on>2020-04-14 15:20:43</sys_created_on>
+            <sys_id>d1e99227db8c54508f26550a48961987</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_ui_formatter/>
+            <sys_ui_section caption="NULL" display_value="" name="sp_rectangle_menu_item" sys_domain="global" view="bed99ee3db8c54508f26550a489619d4">83d91227db8c54508f26550a489619f4</sys_ui_section>
+            <sys_updated_by>andrey.mironyuk</sys_updated_by>
+            <sys_updated_on>2020-04-14 15:20:43</sys_updated_on>
+            <sys_user/>
+            <type/>
+        </sys_ui_element>
+        <sys_ui_element action="INSERT_OR_UPDATE">
+            <element>sp_rectangle_menu_item</element>
+            <position>3</position>
+            <sys_created_by>andrey.mironyuk</sys_created_by>
+            <sys_created_on>2020-04-14 15:20:43</sys_created_on>
+            <sys_id>59e99227db8c54508f26550a48961987</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_ui_formatter/>
+            <sys_ui_section caption="NULL" display_value="" name="sp_rectangle_menu_item" sys_domain="global" view="bed99ee3db8c54508f26550a489619d4">83d91227db8c54508f26550a489619f4</sys_ui_section>
+            <sys_updated_by>andrey.mironyuk</sys_updated_by>
+            <sys_updated_on>2020-04-14 15:20:43</sys_updated_on>
+            <sys_user/>
+            <type/>
+        </sys_ui_element>
+        <sys_ui_element action="INSERT_OR_UPDATE">
+            <element>type</element>
+            <position>4</position>
+            <sys_created_by>andrey.mironyuk</sys_created_by>
+            <sys_created_on>2020-04-14 15:20:43</sys_created_on>
+            <sys_id>dde99227db8c54508f26550a48961987</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_ui_formatter/>
+            <sys_ui_section caption="NULL" display_value="" name="sp_rectangle_menu_item" sys_domain="global" view="bed99ee3db8c54508f26550a489619d4">83d91227db8c54508f26550a489619f4</sys_ui_section>
+            <sys_updated_by>andrey.mironyuk</sys_updated_by>
+            <sys_updated_on>2020-04-14 15:20:43</sys_updated_on>
+            <sys_user/>
+            <type/>
+        </sys_ui_element>
+        <sys_ui_element action="INSERT_OR_UPDATE">
+            <element>sc_category</element>
+            <position>5</position>
+            <sys_created_by>andrey.mironyuk</sys_created_by>
+            <sys_created_on>2020-04-14 15:20:43</sys_created_on>
+            <sys_id>55e99227db8c54508f26550a48961988</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_ui_formatter/>
+            <sys_ui_section caption="NULL" display_value="" name="sp_rectangle_menu_item" sys_domain="global" view="bed99ee3db8c54508f26550a489619d4">83d91227db8c54508f26550a489619f4</sys_ui_section>
+            <sys_updated_by>andrey.mironyuk</sys_updated_by>
+            <sys_updated_on>2020-04-14 15:20:43</sys_updated_on>
+            <sys_user/>
+            <type/>
+        </sys_ui_element>
+        <sys_ui_element action="INSERT_OR_UPDATE">
+            <element>sc_cat_item</element>
+            <position>6</position>
+            <sys_created_by>andrey.mironyuk</sys_created_by>
+            <sys_created_on>2020-04-14 15:20:43</sys_created_on>
+            <sys_id>d9e99227db8c54508f26550a48961988</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_ui_formatter/>
+            <sys_ui_section caption="NULL" display_value="" name="sp_rectangle_menu_item" sys_domain="global" view="bed99ee3db8c54508f26550a489619d4">83d91227db8c54508f26550a489619f4</sys_ui_section>
+            <sys_updated_by>andrey.mironyuk</sys_updated_by>
+            <sys_updated_on>2020-04-14 15:20:43</sys_updated_on>
+            <sys_user/>
+            <type/>
+        </sys_ui_element>
+        <sys_ui_element action="INSERT_OR_UPDATE">
+            <element>kb_article</element>
+            <position>7</position>
+            <sys_created_by>andrey.mironyuk</sys_created_by>
+            <sys_created_on>2020-04-14 15:20:43</sys_created_on>
+            <sys_id>51e99227db8c54508f26550a48961989</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_ui_formatter/>
+            <sys_ui_section caption="NULL" display_value="" name="sp_rectangle_menu_item" sys_domain="global" view="bed99ee3db8c54508f26550a489619d4">83d91227db8c54508f26550a489619f4</sys_ui_section>
+            <sys_updated_by>andrey.mironyuk</sys_updated_by>
+            <sys_updated_on>2020-04-14 15:20:43</sys_updated_on>
+            <sys_user/>
+            <type/>
+        </sys_ui_element>
+        <sys_ui_element action="INSERT_OR_UPDATE">
+            <element>kb_topic</element>
+            <position>8</position>
+            <sys_created_by>andrey.mironyuk</sys_created_by>
+            <sys_created_on>2020-04-14 15:20:43</sys_created_on>
+            <sys_id>d5e99227db8c54508f26550a48961989</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_ui_formatter/>
+            <sys_ui_section caption="NULL" display_value="" name="sp_rectangle_menu_item" sys_domain="global" view="bed99ee3db8c54508f26550a489619d4">83d91227db8c54508f26550a489619f4</sys_ui_section>
+            <sys_updated_by>andrey.mironyuk</sys_updated_by>
+            <sys_updated_on>2020-04-14 15:20:43</sys_updated_on>
+            <sys_user/>
+            <type/>
+        </sys_ui_element>
+        <sys_ui_element action="INSERT_OR_UPDATE">
+            <element>kb_category</element>
+            <position>9</position>
+            <sys_created_by>andrey.mironyuk</sys_created_by>
+            <sys_created_on>2020-04-14 15:20:43</sys_created_on>
+            <sys_id>6de99227db8c54508f26550a48961989</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_ui_formatter/>
+            <sys_ui_section caption="NULL" display_value="" name="sp_rectangle_menu_item" sys_domain="global" view="bed99ee3db8c54508f26550a489619d4">83d91227db8c54508f26550a489619f4</sys_ui_section>
+            <sys_updated_by>andrey.mironyuk</sys_updated_by>
+            <sys_updated_on>2020-04-14 15:20:43</sys_updated_on>
+            <sys_user/>
+            <type/>
+        </sys_ui_element>
+        <sys_ui_element action="INSERT_OR_UPDATE">
+            <element>.split</element>
+            <position>10</position>
+            <sys_created_by>andrey.mironyuk</sys_created_by>
+            <sys_created_on>2020-04-14 15:20:43</sys_created_on>
+            <sys_id>e1e99227db8c54508f26550a4896198a</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_ui_formatter/>
+            <sys_ui_section caption="NULL" display_value="" name="sp_rectangle_menu_item" sys_domain="global" view="bed99ee3db8c54508f26550a489619d4">83d91227db8c54508f26550a489619f4</sys_ui_section>
+            <sys_updated_by>andrey.mironyuk</sys_updated_by>
+            <sys_updated_on>2020-04-14 15:20:43</sys_updated_on>
+            <sys_user/>
+            <type>.split</type>
+        </sys_ui_element>
+        <sys_ui_element action="INSERT_OR_UPDATE">
+            <element>order</element>
+            <position>11</position>
+            <sys_created_by>andrey.mironyuk</sys_created_by>
+            <sys_created_on>2020-04-14 15:20:43</sys_created_on>
+            <sys_id>69e99227db8c54508f26550a4896198a</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_ui_formatter/>
+            <sys_ui_section caption="NULL" display_value="" name="sp_rectangle_menu_item" sys_domain="global" view="bed99ee3db8c54508f26550a489619d4">83d91227db8c54508f26550a489619f4</sys_ui_section>
+            <sys_updated_by>andrey.mironyuk</sys_updated_by>
+            <sys_updated_on>2020-04-14 15:20:43</sys_updated_on>
+            <sys_user/>
+            <type/>
+        </sys_ui_element>
+        <sys_ui_element action="INSERT_OR_UPDATE">
+            <element>sp_page</element>
+            <position>12</position>
+            <sys_created_by>andrey.mironyuk</sys_created_by>
+            <sys_created_on>2020-04-14 15:20:43</sys_created_on>
+            <sys_id>ede99227db8c54508f26550a4896198a</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_ui_formatter/>
+            <sys_ui_section caption="NULL" display_value="" name="sp_rectangle_menu_item" sys_domain="global" view="bed99ee3db8c54508f26550a489619d4">83d91227db8c54508f26550a489619f4</sys_ui_section>
+            <sys_updated_by>andrey.mironyuk</sys_updated_by>
+            <sys_updated_on>2020-04-14 15:20:43</sys_updated_on>
+            <sys_user/>
+            <type/>
+        </sys_ui_element>
+        <sys_ui_element action="INSERT_OR_UPDATE">
+            <element>.end_split</element>
+            <position>13</position>
+            <sys_created_by>andrey.mironyuk</sys_created_by>
+            <sys_created_on>2020-04-14 15:20:43</sys_created_on>
+            <sys_id>65e99227db8c54508f26550a4896198b</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_ui_formatter/>
+            <sys_ui_section caption="NULL" display_value="" name="sp_rectangle_menu_item" sys_domain="global" view="bed99ee3db8c54508f26550a489619d4">83d91227db8c54508f26550a489619f4</sys_ui_section>
+            <sys_updated_by>andrey.mironyuk</sys_updated_by>
+            <sys_updated_on>2020-04-14 15:20:43</sys_updated_on>
+            <sys_user/>
+            <type>.end_split</type>
+        </sys_ui_element>
+        <sys_ui_element action="INSERT_OR_UPDATE">
+            <element>url</element>
+            <position>14</position>
+            <sys_created_by>andrey.mironyuk</sys_created_by>
+            <sys_created_on>2020-04-14 15:20:43</sys_created_on>
+            <sys_id>e9e99227db8c54508f26550a4896198b</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_ui_formatter/>
+            <sys_ui_section caption="NULL" display_value="" name="sp_rectangle_menu_item" sys_domain="global" view="bed99ee3db8c54508f26550a489619d4">83d91227db8c54508f26550a489619f4</sys_ui_section>
+            <sys_updated_by>andrey.mironyuk</sys_updated_by>
+            <sys_updated_on>2020-04-14 15:20:43</sys_updated_on>
+            <sys_user/>
+            <type/>
+        </sys_ui_element>
+        <sys_ui_element action="INSERT_OR_UPDATE">
+            <element>url_target</element>
+            <position>15</position>
+            <sys_created_by>andrey.mironyuk</sys_created_by>
+            <sys_created_on>2020-04-14 15:20:43</sys_created_on>
+            <sys_id>61e99227db8c54508f26550a4896198c</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_ui_formatter/>
+            <sys_ui_section caption="NULL" display_value="" name="sp_rectangle_menu_item" sys_domain="global" view="bed99ee3db8c54508f26550a489619d4">83d91227db8c54508f26550a489619f4</sys_ui_section>
+            <sys_updated_by>andrey.mironyuk</sys_updated_by>
+            <sys_updated_on>2020-04-14 15:20:43</sys_updated_on>
+            <sys_user/>
+            <type/>
+        </sys_ui_element>
+        <sys_ui_element action="INSERT_OR_UPDATE">
+            <element>condition</element>
+            <position>16</position>
+            <sys_created_by>andrey.mironyuk</sys_created_by>
+            <sys_created_on>2020-04-14 15:20:43</sys_created_on>
+            <sys_id>e5e99227db8c54508f26550a4896198c</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_ui_formatter/>
+            <sys_ui_section caption="NULL" display_value="" name="sp_rectangle_menu_item" sys_domain="global" view="bed99ee3db8c54508f26550a489619d4">83d91227db8c54508f26550a489619f4</sys_ui_section>
+            <sys_updated_by>andrey.mironyuk</sys_updated_by>
+            <sys_updated_on>2020-04-14 15:20:43</sys_updated_on>
+            <sys_user/>
+            <type/>
+        </sys_ui_element>
+        <sys_ui_element action="INSERT_OR_UPDATE">
+            <element>table</element>
+            <position>17</position>
+            <sys_created_by>andrey.mironyuk</sys_created_by>
+            <sys_created_on>2020-04-14 15:20:43</sys_created_on>
+            <sys_id>6de99227db8c54508f26550a4896198c</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_ui_formatter/>
+            <sys_ui_section caption="NULL" display_value="" name="sp_rectangle_menu_item" sys_domain="global" view="bed99ee3db8c54508f26550a489619d4">83d91227db8c54508f26550a489619f4</sys_ui_section>
+            <sys_updated_by>andrey.mironyuk</sys_updated_by>
+            <sys_updated_on>2020-04-14 15:20:43</sys_updated_on>
+            <sys_user/>
+            <type/>
+        </sys_ui_element>
+        <sys_ui_element action="INSERT_OR_UPDATE">
+            <element>filter</element>
+            <position>18</position>
+            <sys_created_by>andrey.mironyuk</sys_created_by>
+            <sys_created_on>2020-04-14 15:20:43</sys_created_on>
+            <sys_id>e1e99227db8c54508f26550a4896198d</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_ui_formatter/>
+            <sys_ui_section caption="NULL" display_value="" name="sp_rectangle_menu_item" sys_domain="global" view="bed99ee3db8c54508f26550a489619d4">83d91227db8c54508f26550a489619f4</sys_ui_section>
+            <sys_updated_by>andrey.mironyuk</sys_updated_by>
+            <sys_updated_on>2020-04-14 15:20:43</sys_updated_on>
+            <sys_user/>
+            <type/>
+        </sys_ui_element>
+        <sys_ui_element action="INSERT_OR_UPDATE">
+            <element>.begin_split</element>
+            <position>19</position>
+            <sys_created_by>andrey.mironyuk</sys_created_by>
+            <sys_created_on>2020-04-14 15:20:44</sys_created_on>
+            <sys_id>21e99227db8c54508f26550a4896199a</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_ui_formatter/>
+            <sys_ui_section caption="NULL" display_value="" name="sp_rectangle_menu_item" sys_domain="global" view="bed99ee3db8c54508f26550a489619d4">83d91227db8c54508f26550a489619f4</sys_ui_section>
+            <sys_updated_by>andrey.mironyuk</sys_updated_by>
+            <sys_updated_on>2020-04-14 15:20:44</sys_updated_on>
+            <sys_user/>
+            <type>.begin_split</type>
+        </sys_ui_element>
+        <sys_ui_element action="INSERT_OR_UPDATE">
+            <element>display_1</element>
+            <position>20</position>
+            <sys_created_by>andrey.mironyuk</sys_created_by>
+            <sys_created_on>2020-04-14 15:20:44</sys_created_on>
+            <sys_id>a5e99227db8c54508f26550a4896199a</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_ui_formatter/>
+            <sys_ui_section caption="NULL" display_value="" name="sp_rectangle_menu_item" sys_domain="global" view="bed99ee3db8c54508f26550a489619d4">83d91227db8c54508f26550a489619f4</sys_ui_section>
+            <sys_updated_by>andrey.mironyuk</sys_updated_by>
+            <sys_updated_on>2020-04-14 15:20:44</sys_updated_on>
+            <sys_user/>
+            <type/>
+        </sys_ui_element>
+        <sys_ui_element action="INSERT_OR_UPDATE">
+            <element>display_2</element>
+            <position>21</position>
+            <sys_created_by>andrey.mironyuk</sys_created_by>
+            <sys_created_on>2020-04-14 15:20:44</sys_created_on>
+            <sys_id>2de99227db8c54508f26550a4896199a</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_ui_formatter/>
+            <sys_ui_section caption="NULL" display_value="" name="sp_rectangle_menu_item" sys_domain="global" view="bed99ee3db8c54508f26550a489619d4">83d91227db8c54508f26550a489619f4</sys_ui_section>
+            <sys_updated_by>andrey.mironyuk</sys_updated_by>
+            <sys_updated_on>2020-04-14 15:20:44</sys_updated_on>
+            <sys_user/>
+            <type/>
+        </sys_ui_element>
+        <sys_ui_element action="INSERT_OR_UPDATE">
+            <element>display_date</element>
+            <position>22</position>
+            <sys_created_by>andrey.mironyuk</sys_created_by>
+            <sys_created_on>2020-04-14 15:20:44</sys_created_on>
+            <sys_id>a1e99227db8c54508f26550a4896199b</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_ui_formatter/>
+            <sys_ui_section caption="NULL" display_value="" name="sp_rectangle_menu_item" sys_domain="global" view="bed99ee3db8c54508f26550a489619d4">83d91227db8c54508f26550a489619f4</sys_ui_section>
+            <sys_updated_by>andrey.mironyuk</sys_updated_by>
+            <sys_updated_on>2020-04-14 15:20:44</sys_updated_on>
+            <sys_user/>
+            <type/>
+        </sys_ui_element>
+        <sys_ui_element action="INSERT_OR_UPDATE">
+            <element>.split</element>
+            <position>23</position>
+            <sys_created_by>andrey.mironyuk</sys_created_by>
+            <sys_created_on>2020-04-14 15:20:44</sys_created_on>
+            <sys_id>29e99227db8c54508f26550a4896199b</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_ui_formatter/>
+            <sys_ui_section caption="NULL" display_value="" name="sp_rectangle_menu_item" sys_domain="global" view="bed99ee3db8c54508f26550a489619d4">83d91227db8c54508f26550a489619f4</sys_ui_section>
+            <sys_updated_by>andrey.mironyuk</sys_updated_by>
+            <sys_updated_on>2020-04-14 15:20:44</sys_updated_on>
+            <sys_user/>
+            <type>.split</type>
+        </sys_ui_element>
+        <sys_ui_element action="INSERT_OR_UPDATE">
+            <element>.end_split</element>
+            <position>24</position>
+            <sys_created_by>andrey.mironyuk</sys_created_by>
+            <sys_created_on>2020-04-14 15:20:44</sys_created_on>
+            <sys_id>ade99227db8c54508f26550a4896199b</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_ui_formatter/>
+            <sys_ui_section caption="NULL" display_value="" name="sp_rectangle_menu_item" sys_domain="global" view="bed99ee3db8c54508f26550a489619d4">83d91227db8c54508f26550a489619f4</sys_ui_section>
+            <sys_updated_by>andrey.mironyuk</sys_updated_by>
+            <sys_updated_on>2020-04-14 15:20:44</sys_updated_on>
+            <sys_user/>
+            <type>.end_split</type>
+        </sys_ui_element>
+        <sys_ui_element action="INSERT_OR_UPDATE">
+            <element>record_script</element>
+            <position>25</position>
+            <sys_created_by>andrey.mironyuk</sys_created_by>
+            <sys_created_on>2020-04-14 15:20:44</sys_created_on>
+            <sys_id>25e99227db8c54508f26550a4896199c</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_ui_formatter/>
+            <sys_ui_section caption="NULL" display_value="" name="sp_rectangle_menu_item" sys_domain="global" view="bed99ee3db8c54508f26550a489619d4">83d91227db8c54508f26550a489619f4</sys_ui_section>
+            <sys_updated_by>andrey.mironyuk</sys_updated_by>
+            <sys_updated_on>2020-04-14 15:20:44</sys_updated_on>
+            <sys_user/>
+            <type/>
+        </sys_ui_element>
+        <sys_ui_element action="INSERT_OR_UPDATE">
+            <element>glyph</element>
+            <position>26</position>
+            <sys_created_by>andrey.mironyuk</sys_created_by>
+            <sys_created_on>2020-04-14 15:20:44</sys_created_on>
+            <sys_id>a9e99227db8c54508f26550a4896199c</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_ui_formatter/>
+            <sys_ui_section caption="NULL" display_value="" name="sp_rectangle_menu_item" sys_domain="global" view="bed99ee3db8c54508f26550a489619d4">83d91227db8c54508f26550a489619f4</sys_ui_section>
+            <sys_updated_by>andrey.mironyuk</sys_updated_by>
+            <sys_updated_on>2020-04-14 15:20:44</sys_updated_on>
+            <sys_user/>
+            <type/>
+        </sys_ui_element>
+        <sys_ui_section action="INSERT_OR_UPDATE">
+            <caption/>
+            <header>false</header>
+            <name>sp_rectangle_menu_item</name>
+            <roles/>
+            <sys_class_name>sys_ui_section</sys_class_name>
+            <sys_created_by>andrey.mironyuk</sys_created_by>
+            <sys_created_on>2020-04-14 15:20:33</sys_created_on>
+            <sys_customer_update>false</sys_customer_update>
+            <sys_domain>global</sys_domain>
+            <sys_id>83d91227db8c54508f26550a489619f4</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_name>sp_rectangle_menu_item</sys_name>
+            <sys_overrides/>
+            <sys_package display_value="TEAMonline" source="x_aaro2_teamonline">a2dfc25fdb7244105f65ba03e29619fa</sys_package>
+            <sys_policy/>
+            <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+            <sys_scope display_value="TEAMonline">a2dfc25fdb7244105f65ba03e29619fa</sys_scope>
+            <sys_update_name>sys_ui_section_83d91227db8c54508f26550a489619f4</sys_update_name>
+            <sys_updated_by>andrey.mironyuk</sys_updated_by>
+            <sys_updated_on>2020-04-14 15:20:33</sys_updated_on>
+            <sys_user/>
+            <title>false</title>
+            <view display_value="TEAMOnline" name="teamonline">bed99ee3db8c54508f26550a489619d4</view>
+            <view_name/>
+        </sys_ui_section>
+    </sys_ui_section>
+</record_update>

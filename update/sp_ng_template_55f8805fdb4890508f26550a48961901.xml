@@ -1,21 +1,38 @@
 <?xml version="1.0" encoding="UTF-8"?><record_update table="sp_ng_template">
     <sp_ng_template action="INSERT_OR_UPDATE">
-        <id>teamOnlineWideLinkPanel</id>
+        <id>teamOnlineMegamenu</id>
         <sp_widget display_value="Team Online Header Menu">912616dfdbfa04108f26550a48961954</sp_widget>
         <sys_class_name>sp_ng_template</sys_class_name>
         <sys_created_by>andrey.mironyuk</sys_created_by>
         <sys_created_on>2020-04-13 10:10:08</sys_created_on>
         <sys_customer_update>false</sys_customer_update>
         <sys_id>55f8805fdb4890508f26550a48961901</sys_id>
-        <sys_mod_count>0</sys_mod_count>
-        <sys_name>teamOnlineWideLinkPanel</sys_name>
+        <sys_mod_count>42</sys_mod_count>
+        <sys_name>teamOnlineMegamenu</sys_name>
         <sys_package display_value="TEAMonline" source="x_aaro2_teamonline">a2dfc25fdb7244105f65ba03e29619fa</sys_package>
         <sys_policy/>
         <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
         <sys_scope display_value="TEAMonline">a2dfc25fdb7244105f65ba03e29619fa</sys_scope>
         <sys_update_name>sp_ng_template_55f8805fdb4890508f26550a48961901</sys_update_name>
         <sys_updated_by>andrey.mironyuk</sys_updated_by>
-        <sys_updated_on>2020-04-13 10:10:08</sys_updated_on>
-        <template><![CDATA[<div></div>]]></template>
+        <sys_updated_on>2020-04-15 14:21:23</sys_updated_on>
+        <template><![CDATA[<div class="container">
+  <div class="row bg-white rounded-0 m-0 shadow-sm">
+    <div class="col three-column-layout">
+      <div ng-repeat="sitem in item.items">
+        <h3 class="font-weight-bold text-uppercase"><a class="megamenu__category" href="">{{::sitem.label}}</a>
+          <button ng-if="data.canEdit" class="btn btn-add-subcategory">
+            <fa name="plus-circle"></fa>
+          </button></h3>
+        <div ng-if="item.items.length > 0" class="subheading-list">
+          <div class="subheading-list-item" ng-repeat="subitem in sitem.items">
+            <a class="megamenu-subcategory" href="" style="line-height: 25pt;">
+              <fa ng-if="::subitem.glyph" name="{{::subitem.glyph}}"></fa><span> {{::subitem.label}}</span>
+            </a></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>]]></template>
     </sp_ng_template>
 </record_update>

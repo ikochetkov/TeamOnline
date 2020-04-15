@@ -265,7 +265,11 @@
 		data.f = input && input.f ? input.f : $sp.getForm(data.table, data.sys_id, data.query, data.view);
 		data.f._fields.kb_knowledge_base.value = data.knowledgeBase;
 		data.f._fields.kb_knowledge_base.visible = false;
-		data.f._fields.x_aaro2_teamonline_background_from_images.visible = false;
+		if(data.f._fields.x_aaro2_teamonline_background_from_images){
+			data.f._fields.x_aaro2_teamonline_background_from_images.visible = false;
+		}
+
+
 		//kb category by default - base articles
 		/*if(data.f._fields.kb_category.value == ''){
 			data.f._fields.kb_category.value = gs.getProperty('x_aaro2_teamonline.base_article');
@@ -328,7 +332,7 @@
         <sys_created_on>2020-02-12 06:22:55</sys_created_on>
         <sys_customer_update>false</sys_customer_update>
         <sys_id>f63cc5a3db3a84105f65ba03e29619f7</sys_id>
-        <sys_mod_count>667</sys_mod_count>
+        <sys_mod_count>675</sys_mod_count>
         <sys_name>Team Online Article Editor</sys_name>
         <sys_package display_value="TEAMonline" source="x_aaro2_teamonline">a2dfc25fdb7244105f65ba03e29619fa</sys_package>
         <sys_policy/>
@@ -336,7 +340,7 @@
         <sys_scope display_value="TEAMonline">a2dfc25fdb7244105f65ba03e29619fa</sys_scope>
         <sys_update_name>sp_widget_f63cc5a3db3a84105f65ba03e29619f7</sys_update_name>
         <sys_updated_by>xxikochet</sys_updated_by>
-        <sys_updated_on>2020-04-08 10:10:39</sys_updated_on>
+        <sys_updated_on>2020-04-15 14:01:54</sys_updated_on>
         <template><![CDATA[<span class="label-button" ng-if="options.operation === 'New'" ng-click="open()">
   Create New Article
 </span>
