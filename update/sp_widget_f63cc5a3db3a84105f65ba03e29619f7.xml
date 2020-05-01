@@ -10,17 +10,17 @@
 
 	/* === collect g_form object of form fields === */
 	var flatFields = [];
-	angular.forEach($scope.data.f._fields, function(field) {
+	angular.forEach($scope.data.f._fields, function (field) {
 		flatFields.push(field);
 	});
 
-	var g_form = glideFormFactory.create($scope, $scope.data.f.table, $scope.data.f.sys_id, flatFields, null, {uiMessageHandler: uiMessageHandler});
+	var g_form = glideFormFactory.create($scope, $scope.data.f.table, $scope.data.f.sys_id, flatFields, null, { uiMessageHandler: uiMessageHandler });
 
-	$scope.getGlideForm = function() {
+	$scope.getGlideForm = function () {
 		return g_form;
 	}
-	
-	var uiMessageHandler = function(g_form, type, message) {
+
+	var uiMessageHandler = function (g_form, type, message) {
 		switch (type) {
 			case 'addInfoMessage':
 				spUtil.addInfoMessage(message);
@@ -34,72 +34,72 @@
 		}
 	};
 
-	$scope.deleteImage = function(imageSysID){
+	$scope.deleteImage = function (imageSysID) {
 		spModal.open({
 			title: 'Delete this image?',
 			message: 'It will be removed from all articles which contains this image in background',
 			buttons: [
-				{label:'✘ ${No}', cancel: true},
-				{label:'✔ ${Yes}', primary: true}
+				{ label: '✘ ${No}', cancel: true },
+				{ label: '✔ ${Yes}', primary: true }
 			]
-		}).then(function(){
+		}).then(function () {
 			d.imageSysID = imageSysID;
 			d.action = 'deleteImage';
-			spUtil.update($scope).then(function(){
+			spUtil.update($scope).then(function () {
 				spUtil.addInfoMessage('Image was deleted');
 				d.action = undefined;
 			});
 		})
 	};
 
-	$scope.deleteArticle = function(){
+	$scope.deleteArticle = function () {
 		spModal.open({
 			title: 'Delete this article?',
 			message: 'Article will be deleted from system permanently',
 			buttons: [
-				{label:'✘ ${No}', cancel: true},
-				{label:'✔ ${Yes}', primary: true}
+				{ label: '✘ ${No}', cancel: true },
+				{ label: '✔ ${Yes}', primary: true }
 			]
-		}).then(function() {
+		}).then(function () {
 			d.action = 'deleteArticle';
-			spUtil.update($scope).then(function(){
+			spUtil.update($scope).then(function () {
 				spAriaFocusManager.navigateToLink('teamonline');
 				spUtil.addInfoMessage('Article was deleted');
 			});
 		});
 	}
 
-	$scope.contextMenu = function(sys_id){
-		if(!d.canEdit) return [];
+	$scope.contextMenu = function (sys_id) {
+		if (!d.canEdit) return [];
 		return [
-			['Delete Image', function($itemScope){
+			['Delete Image', function ($itemScope) {
 				$itemScope.$parent.$parent.deleteImage(sys_id);
 			}]
 		];
 	}
 
-	
+
 
 	/*==================  PAGINATION  ==================*/
-	$scope.getNumber = function(num) {
+	$scope.getNumber = function (num) {
 		return new Array(num);
 	}
 
-	$scope.setPageNum = function(num) {
+	$scope.setPageNum = function (num) {
 		d.p = num;
 		spUtil.update($scope);
 	}
 
-	$scope.mathMin = function(v1,v2) {
-		return Math.min(v1,v2);
+	$scope.mathMin = function (v1, v2) {
+		return Math.min(v1, v2);
 	}
 	/*===== search ====*/
 	$scope.$watch('data.searchForm', function (newValue, oldValue) {
-		if(newValue != oldValue){
+		if (newValue != oldValue) {
 			d.searchForm = newValue;
 			d.p = 1;
 			$scope.loading = true; //to disable search form
-			c.server.update().then(function(){
+			c.server.update().then(function () {
 				$scope.loading = false;
 			})
 		}
@@ -107,9 +107,9 @@
 
 	$scope.closeEdit = function () {
 		$rootScope.$broadcast('edit_layout', { edit_layout: false })
-	}	
+	}
 	/*=== catch event update image on the form === */
-	$rootScope.$on('teamonline.imageLoadedAndSelected', function(event, respData){
+	$rootScope.$on('teamonline.imageLoadedAndSelected', function (event, respData) {
 		d.f._fields.x_aaro2_teamonline_background_from_images.value = respData.sys_id;
 		d.f._fields.x_aaro2_teamonline_background_from_images.displayValue = respData.name;
 		spUtil.update($scope);
@@ -127,20 +127,20 @@
 	};
 
 	/* === function on image selection === */
-	$scope.selectImg = function(obj){
+	$scope.selectImg = function (obj) {
 		d.f._fields.x_aaro2_teamonline_background_from_images.value = obj.sys_id;
 		d.f._fields.x_aaro2_teamonline_background_from_images.displayValue = obj.name;
 		spUtil.addInfoMessage('New background selected !');
 	}
 
 	/* === close modal ===*/
-	$scope.close = function(){
+	$scope.close = function () {
 		d = null;
 		$scope.modalInstance.close();
 	}
 
 	/* === validate and save form === */
-	$scope.update = function() {
+	$scope.update = function () {
 
 		var kbCategory = g_form.getValue('kb_category');
 		//text and short description - mandatory
@@ -150,15 +150,15 @@
 			return;
 		}
 		//only 4 articles can be in important category
-		if (kbCategory == d.importantArticlesCategory && d.needReplaceOldImportantArticle){
+		if (kbCategory == d.importantArticlesCategory && d.needReplaceOldImportantArticle) {
 			spModal.open({
 				title: 'Replace oldest article?',
 				message: d.toManyImportantArticles,
 				buttons: [
-					{label:'✘ ${No}', cancel: true},
-					{label:'✔ ${Yes}', primary: true}
+					{ label: '✘ ${No}', cancel: true },
+					{ label: '✔ ${Yes}', primary: true }
 				]
-			}).then(function() {
+			}).then(function () {
 				//if user press Yes - will be executed, if No-skipped
 				$scope.saveRecord();
 			});
@@ -169,7 +169,7 @@
 
 
 	/*=== save current g_form object to table ===*/
-	$scope.saveRecord = function (){
+	$scope.saveRecord = function () {
 		var x = {};
 		x.method = "save";
 		x.table = d.table;
@@ -177,11 +177,11 @@
 		x._fields = d.f._fields;
 		x._fields._attachmentGUID = d.f._attachmentGUID;
 
-		spUtil.get($scope, x).then(function(response) {
-			if($scope.modalInstance){
+		spUtil.get($scope, x).then(function (response) {
+			if ($scope.modalInstance) {
 				$scope.modalInstance.close();
-				$location.search({id: 'article', sys_kb_id: response.data.sys_id});
-			}else{
+				$location.search({ id: 'article', sys_kb_id: response.data.sys_id });
+			} else {
 				$scope.closeEdit();
 			}
 			d.f = '';
@@ -332,15 +332,15 @@
         <sys_created_on>2020-02-12 06:22:55</sys_created_on>
         <sys_customer_update>false</sys_customer_update>
         <sys_id>f63cc5a3db3a84105f65ba03e29619f7</sys_id>
-        <sys_mod_count>675</sys_mod_count>
+        <sys_mod_count>677</sys_mod_count>
         <sys_name>Team Online Article Editor</sys_name>
         <sys_package display_value="TEAMonline" source="x_aaro2_teamonline">a2dfc25fdb7244105f65ba03e29619fa</sys_package>
         <sys_policy/>
         <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
         <sys_scope display_value="TEAMonline">a2dfc25fdb7244105f65ba03e29619fa</sys_scope>
         <sys_update_name>sp_widget_f63cc5a3db3a84105f65ba03e29619f7</sys_update_name>
-        <sys_updated_by>xxikochet</sys_updated_by>
-        <sys_updated_on>2020-04-15 14:01:54</sys_updated_on>
+        <sys_updated_by>andrey.mironyuk</sys_updated_by>
+        <sys_updated_on>2020-04-30 16:28:02</sys_updated_on>
         <template><![CDATA[<span class="label-button" ng-if="options.operation === 'New'" ng-click="open()">
   Create New Article
 </span>

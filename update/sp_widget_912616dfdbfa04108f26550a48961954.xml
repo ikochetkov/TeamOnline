@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?><record_update table="sp_widget">
     <sp_widget action="INSERT_OR_UPDATE">
         <category>custom</category>
-        <client_script><![CDATA[function ($scope, spUtil, $rootScope, $timeout, spAriaUtil, spGtd, $window, spModal) {
+        <client_script><![CDATA[function ($scope, spUtil, $rootScope, $timeout, spAriaUtil, spGtd, $window, spModal, $uibModal) {
 
-	$scope.justlog = function () { console.log($scope.data) };
-
+	window.scope = $scope.data;
 	$scope.collapse = function () {
 		$rootScope.$emit('sp-navbar-collapse');
 	}
@@ -13,6 +12,8 @@
 	$scope.wishlistItemCount = 0;
 	$scope.itemAddedTooltipOpen = false;
 	$scope.accessibilityEnabled = spAriaUtil.g_accessibility === "true";
+	$scope.data.linkEditAllowed = false;
+
 	$scope.$on("$sp.service_catalog.cart.count", function ($evt, count) {
 		$scope.cartItemCount = count;
 	});
@@ -40,6 +41,10 @@
 			size: 'md',
 			buttons: []
 		});
+	}
+
+	$scope.allowEdit = function () {
+		$scope.data.linkEditAllowed = !$scope.data.linkEditAllowed;
 	}
 
 	if ($window.NOW.user_avatar) {
@@ -74,6 +79,7 @@
 	spUtil.get("team_online_article_editor").then(function (response) {
 		$scope.newArticle = response;
 	});
+
 	function isXSScreenSize() {
 		return $window.matchMedia('(max-width: 767px)').matches;
 	}
@@ -137,6 +143,110 @@
 		spUtil.recordWatch($scope, watcher.table, watcher.filter);
 	}
 	$rootScope.$broadcast('sp-header-loaded');
+
+
+	var flatFields = [];
+	if ($scope.data.canEdit)
+		angular.forEach($scope.data.linkData.form._fields, function (field) {
+			flatFields.push(field);
+		});
+
+
+	$scope.getGlideForm = function () {
+		var uiMessageHandler = function (g_form, type, message) {
+			switch (type) {
+				case 'addInfoMessage':
+					spUtil.addInfoMessage(message);
+					break;
+				case 'addErrorMessage':
+					spUtil.addErrorMessage(message);
+					break;
+				case 'clearMessages':
+					break;
+				default:
+			}
+		};
+
+		var g_form = glideFormFactory.create($scope, $scope.data.linkData.form.table, $scope.data.linkData.form.sys_id, flatFields, null, { uiMessageHandler: uiMessageHandler });
+		return g_form;
+	}
+
+
+	$scope.openLinkEditor = function (item, operation, parent) {
+		$scope.data.link = {};
+		$scope.data.link.sys_id = item.sys_id;
+		$scope.data.link.operation = operation;
+
+		if (parent) {
+			$scope.data.link.parent = {
+				sys_id: parent.sys_id,
+				displayValue: parent.label
+			}
+
+		}
+
+		spUtil.update($scope).then(function () {
+			$scope.showModal();
+			$scope.data.link = {};
+		})
+
+	};
+	$scope.showModal = function () {
+		$scope.modalInstance = $uibModal.open({
+			animation: true,
+			templateUrl: 'teamonlineQuickLinkEditor',
+			size: 'lg',
+			backdrop: false,
+			scope: $scope
+		});
+	}
+	$scope.closeEditor = function () {
+		$scope.data.linkData.sys_id = '';
+		$scope.modalInstance.close();
+	};
+	$scope.openUrl = function (url) {
+		window.location = url;
+	}
+	$scope.saveRecord = function () {
+		var x = {};
+		x.method = "save";
+		x.table = $scope.data.linkData.table;
+		x.sys_id = $scope.data.linkData.sys_id;
+		x._fields = $scope.data.linkData.form._fields;
+
+		if (!x._fields.label.value || !x._fields.url.value) {
+			spUtil.addErrorMessage("Please fill Label and Url");
+			return;
+		}
+
+
+		spUtil.get($scope, x).then(function (response) {
+			if ($scope.modalInstance) {
+				$scope.modalInstance.close();
+			}
+			spUtil.update($scope)
+		});
+	}
+
+	$scope.deleteRecord = function (item, type) {
+		spModal.open({
+			title: 'Delete this ' + type + '?',
+			message: type + ' will be deleted from system permanently',
+			buttons: [
+				{ label: '${No}', cancel: true },
+				{ label: '${Yes}', primary: true }
+			]
+		}).then(function () {
+			$scope.data.linkData.operation = 'delete';
+			$scope.data.linkData.sys_id = item.sys_id;
+			spUtil.update($scope).then(function () {
+				spUtil.addInfoMessage(type + ' was deleted');
+				spUtil.update($scope)
+			});
+		});
+	}
+
+
 }]]></client_script>
         <controller_as>c</controller_as>
         <css>$blue:#0069C8;&#13;
@@ -147,7 +257,18 @@ $lightblue: #0071ce;&#13;
   position: relative;&#13;
   top: 24px;&#13;
 }&#13;
-&#13;
+.color-white{&#13;
+  color: white;&#13;
+}&#13;
+.color-white:hover{&#13;
+  color: rgba(255,255,255, 0.6);&#13;
+}&#13;
+.semi-transparent{&#13;
+color: rgba(255,255,255, 0.6);&#13;
+}&#13;
+a.semi-transparent:hover{&#13;
+  color: white;&#13;
+}&#13;
 .avatar {&#13;
   float: right;&#13;
 }&#13;
@@ -168,32 +289,6 @@ $lightblue: #0071ce;&#13;
     }&#13;
   }&#13;
 }&#13;
-/*.header__nav li a {&#13;
-  display: block;&#13;
-  color: rgba(255, 255, 255, 0.6);&#13;
-  line-height: 39px;&#13;
-}*/&#13;
-/*.header__nav li.has-children &gt; a::after {&#13;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.3);&#13;
-  border-right: 1px solid rgba(255, 255, 255, 0.3);&#13;
-  content: '';&#13;
-  display: block;&#13;
-  height: 5px;&#13;
-  width: 5px;&#13;
-  margin-top: -4px;&#13;
-  pointer-events: none;&#13;
-  position: absolute;&#13;
-  right: 1.8rem;&#13;
-  top: 21px;&#13;
-  -webkit-transform-origin: 66% 66%;&#13;
-  -ms-transform-origin: 66% 66%;&#13;
-  transform-origin: 66% 66%;&#13;
-  -webkit-transform: rotate(45deg);&#13;
-  -ms-transform: rotate(45deg);&#13;
-  transform: rotate(45deg);&#13;
-  -webkit-transition: all 0.3s ease-in-out;&#13;
-  transition: all 0.3s ease-in-out;&#13;
-}*/&#13;
 &#13;
 .header__nav li:hover &gt; a, .header__nav li:focus &gt; a {&#13;
   color: #FFFFFF;&#13;
@@ -202,67 +297,7 @@ $lightblue: #0071ce;&#13;
 .header__nav li:hover li, .header__nav li:focus li {&#13;
   background: transparent;&#13;
 }&#13;
-/*&#13;
-.header__nav li ul {&#13;
-  position: absolute;&#13;
-  top: 45px;&#13;
-  left: 0;&#13;
-  font-size: 14px;&#13;
-  margin: 0;&#13;
-  padding: 1.8rem 0;&#13;
-  background: $blue;&#13;
-  border-radius: 0 0 3px 3px;&#13;
-  z-index: 500;&#13;
-  -webkit-transform: translate3d(0, 15px, 0);&#13;
-  -ms-transform: translate3d(0, 15px, 0);&#13;
-  transform: translate3d(0, 15px, 0);&#13;
-  -webkit-transition: all 0.5s ease-in-out;&#13;
-  transition: all 0.5s ease-in-out;&#13;
-  opacity: 0;&#13;
-  visibility: hidden;&#13;
-}&#13;
-*/&#13;
-/*&#13;
-.header__nav li ul ul {&#13;
-  position: absolute;&#13;
-  top: 0;&#13;
-  left: 100%;&#13;
-  left: calc(100% + 1px);&#13;
-  border-radius: 0 0 3px 3px;&#13;
-  padding-top: 1.2rem;&#13;
-}&#13;
-*/&#13;
-/*&#13;
-.header__nav li ul li {&#13;
-  display: block;&#13;
-  text-align: left;&#13;
-  padding: 0;&#13;
-  margin: 0;&#13;
-  min-height: 33px;&#13;
-  width: 100%;&#13;
-}&#13;
 &#13;
-.header__nav li ul li a {&#13;
-  display: block;&#13;
-  white-space: nowrap;&#13;
-  padding: 7.5px 3rem 7.5px 2rem;&#13;
-  font-family: sans-serif;&#13;
-  line-height: 18px;&#13;
-  color: rgba(255, 255, 255, 0.6);&#13;
-}*/&#13;
-/*&#13;
-.header__nav li ul li a:hover, .header__nav li ul li a:focus {&#13;
-  color: #5C6BC0;&#13;
-}&#13;
-*/&#13;
-/*&#13;
-.header__nav li:hover &gt; ul {&#13;
-  opacity: 1;&#13;
-  visibility: visible;&#13;
-  -webkit-transform: translate3d(0, 0, 0);&#13;
-  -ms-transform: translate3d(0, 0, 0);&#13;
-  transform: translate3d(0, 0, 0);&#13;
-}*/&#13;
 .profile-menu-item{&#13;
   position: relative;&#13;
 }&#13;
@@ -278,14 +313,23 @@ $lightblue: #0071ce;&#13;
 .megamenu{&#13;
   position: static;&#13;
 }&#13;
+.megamenu-bg{&#13;
+  background-color:$lightblue;&#13;
+  border-radius: 0px;&#13;
+}&#13;
 .megamenu-container{&#13;
   position: absolute;&#13;
-  top:auto;&#13;
+  top: auto;&#13;
+  left:0;&#13;
+  padding-top:20px;&#13;
   min-width: 100%;&#13;
   border: none;&#13;
-  border-radius: 0px;&#13;
-  background-color:$lightblue;&#13;
+  z-index: 500;&#13;
   color: white;&#13;
+  visibility: hidden;&#13;
+  opacity: 0;&#13;
+  transform: translate3d(0,-15px, 0);&#13;
+  transition: visibility 0s 200ms, opacity 200ms ease-in-out, transform 200ms ease-in-out;&#13;
   ul li{&#13;
     position: relative;&#13;
   }&#13;
@@ -313,6 +357,17 @@ position: relative;&#13;
     -webkit-column-gap: 30px;&#13;
     -moz-column-gap: 30px;&#13;
     column-gap: 30px;&#13;
+    text-align: left;&#13;
+    &#13;
+}&#13;
+.column-fill-auto{&#13;
+column-fill: auto;&#13;
+}&#13;
+.column-fill-balance{&#13;
+column-fill: balance;&#13;
+}&#13;
+.i-b{&#13;
+  display:inline-block;&#13;
 }&#13;
 .btn-add-subcategory{&#13;
     border: none;&#13;
@@ -338,11 +393,25 @@ position: relative;&#13;
   display: block;&#13;
   -webkit-transform: translate3d(0, 15px, 0);&#13;
   -ms-transform: translate3d(0, 15px, 0);&#13;
-  transform: translate3d(0, 15px, 0);&#13;
+   transform: translate3d(0, 15px, 0);&#13;
   -webkit-transition: all 0.5s ease-in-out;&#13;
   transition: all 0.5s ease-in-out;&#13;
   &#13;
   opacity: 1;&#13;
+}&#13;
+&#13;
+.megamenu{&#13;
+  &amp;:hover &gt; .megamenu-container{&#13;
+    visibility: visible;&#13;
+    opacity: 1;&#13;
+    transform: translate3d(0,0px, 0);&#13;
+    transition: 300ms ease-in-out;&#13;
+  }&#13;
+}&#13;
+.btn-lock{&#13;
+  &amp;:hover{&#13;
+    color: white;&#13;
+  }&#13;
 }</css>
         <data_table>sp_instance_menu</data_table>
         <demo_data/>
@@ -357,17 +426,22 @@ position: relative;&#13;
         <option_schema/>
         <public>true</public>
         <roles/>
-        <script><![CDATA[(function (input) {
+        <script><![CDATA[(function () {
 	// build menus
 	data.canEdit = gs.getUser().isMemberOf(gs.getProperty("x_aaro2_teamonline.teamonline_administration_group")) || gs.hasRole("admin");
-	var menu_id = $sp.getValue('sys_id'); // instance sys_id
-	var gr = new GlideRecord('sp_instance_menu');
+	data.isLoggedIn = gs.getSession().isLoggedIn();
+
 	data.login_page = $sp.getValue('login_page');
 	data.profileBtnMsg = gs.getMessage("User options");
+
+	data.menuid = $sp.getValue('sys_id');
+	var menu_id = $sp.getValue('sys_id'); // instance sys_id
+	var gr = new GlideRecord('sp_instance_menu');
 	gr.get(menu_id);
+
 	data.menu = {};
 	data.menu.items = $sp.getMenuItems(menu_id);
-	data.isLoggedIn = GlideSession.get().isLoggedIn();
+
 	// Show tours only if gtd's sp sys property is set
 	data.showTours = (gs.getProperty('com.snc.guided_tours.sp.enable') === 'true') && data.isLoggedIn;
 	var catalogArr = ($sp.getCatalogs().value + "").split(",");
@@ -375,16 +449,112 @@ position: relative;&#13;
 	catalogArr.forEach(function (catalog) {
 		data.showWishlist = data.showWishlist || new sn_sc.Catalog(catalog).isWishlistEnabled();
 	});
+	if (data.canEdit) {
+		var linkFields = {
+			label: {
+				readonly: false,
+				value: '',
+				displayValue: '',
+				mandatory: true,
+			},
+			url: {
+				readonly: false,
+				value: '',
+				displayValue: '',
+				mandatory: true,
+			},
+			glyph: {
+				readonly: false,
+				value: '',
+				displayValue: '',
+				mandatory: false,
+			},
+			order: {
+				readonly: false,
+				value: '',
+				displayValue: '',
+				mandatory: false,
+			},
+			type: {
+				readonly: true,
+				value: 'url',
+				displayValue: 'Url',
+				mandatory: false,
+			},
+			sp_rectangle_menu_item: {
+				readonly: false,
+				value: '',
+				displayValue: '',
+				mandatory: true
+			}
+		}
+		data.linkData = {};
+		data.linkData.table = 'sp_rectangle_menu_item';
+		data.linkData.sys_id = '-1';
+		data.linkData.view = 'teamonlineportaledit';
+		data.linkData.operation = 'Create';
+		data.linkData.query = '';
+		data.linkData.wasInput = !!input;
+		if (input && input.link) {
+			data.linkData.sys_id = input.link.sys_id ? input.link.sys_id : '-1';
+			data.linkData.operation = input.link.operation || 'Create';
+			data.linkData.parent = input.link.parent;
+		}
+		if (input && input._fields) {
+			saveFormData(input.table, input.sys_id, input._fields, linkFields);
+		}
+		if (input && input.linkData && input.linkData.operation == 'delete') {
+			data.deleteInfo = 'input.linkData.sys_id';
+			var menuItemGr = new GlideRecord(data.linkData.table);
+			menuItemGr.get(input.linkData.sys_id);
+			menuItemGr.deleteRecord();
+		}
+		data.linkData.form = $sp.getForm(data.linkData.table, data.linkData.sys_id, data.linkData.query, data.linkData.view);
+		var fields = data.linkData.form._fields;
 
+		if (data.linkData.parent) {
+			linkFields.sp_rectangle_menu_item.value = data.linkData.parent.sys_id;
+			linkFields.sp_rectangle_menu_item.displayValue = data.linkData.parent.displayValue;
+			linkFields.sp_rectangle_menu_item.readonly = true;
+		}
 
-})();]]></script>
+		data.linkData.form._fields = prepareFormFields(fields, linkFields);
+	}
+})();
+
+function saveFormData(table, sys_id, fields, fieldsToSave) {
+	var recordGr = new GlideRecord(table);
+	var isInsert = !recordGr.get(sys_id);
+	if (isInsert) recordGr.initialize();
+	for (var key in fieldsToSave) {
+		recordGr[key] = fields[key].value;
+	}
+	if (isInsert) recordGr.insert();
+	else recordGr.update();
+}
+
+function prepareFormFields(fields, props) {
+
+	if (fields.sp_rectangle_menu_item.displayValue === 'Quick Links')
+		props.sp_rectangle_menu_item.readonly = true;
+
+	for (var key in props) {
+		for (var prop in props[key]) {
+			fields[key][prop] = props[key][prop] !== '' ? props[key][prop] : fields[key][prop];
+		}
+		fields[key].sys_readonly = false;
+
+	}
+
+	return fields;
+}]]></script>
         <servicenow>false</servicenow>
         <sys_class_name>sp_widget</sys_class_name>
         <sys_created_by>xxabunko</sys_created_by>
         <sys_created_on>2020-02-11 17:07:22</sys_created_on>
         <sys_customer_update>false</sys_customer_update>
         <sys_id>912616dfdbfa04108f26550a48961954</sys_id>
-        <sys_mod_count>133</sys_mod_count>
+        <sys_mod_count>267</sys_mod_count>
         <sys_name>Team Online Header Menu</sys_name>
         <sys_package display_value="TEAMonline" source="x_aaro2_teamonline">a2dfc25fdb7244105f65ba03e29619fa</sys_package>
         <sys_policy/>
@@ -392,7 +562,7 @@ position: relative;&#13;
         <sys_scope display_value="TEAMonline">a2dfc25fdb7244105f65ba03e29619fa</sys_scope>
         <sys_update_name>sp_widget_912616dfdbfa04108f26550a48961954</sys_update_name>
         <sys_updated_by>andrey.mironyuk</sys_updated_by>
-        <sys_updated_on>2020-04-15 14:41:46</sys_updated_on>
+        <sys_updated_on>2020-05-01 12:08:49</sys_updated_on>
         <template><![CDATA[<nav class="header__nav-wrap">
   <ul ng-if="user.logged_in" class="header__nav" aria-label="${Header menu}" role="menubar">
     <div class="header-loader" ng-class="{'invisible': !loadingIndicator}">
