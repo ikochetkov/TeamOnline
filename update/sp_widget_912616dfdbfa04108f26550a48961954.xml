@@ -218,7 +218,10 @@
 			spUtil.addErrorMessage("Please fill Label and Url");
 			return;
 		}
-
+		if (!validateUrl(x._fields.url.value)) {
+			spUtil.addErrorMessage("Please provide correct URL in format: https://sitename.domain");
+			return
+		}
 
 		spUtil.get($scope, x).then(function (response) {
 			if ($scope.modalInstance) {
@@ -245,7 +248,10 @@
 			});
 		});
 	}
-
+	function validateUrl(url) {
+		var regex = new RegExp(/https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/);
+		return regex.test(url)
+	}
 
 }]]></client_script>
         <controller_as>c</controller_as>
@@ -455,31 +461,31 @@ column-fill: balance;&#13;
 				readonly: false,
 				value: '',
 				displayValue: '',
-				mandatory: true,
+				mandatory: true
 			},
 			url: {
 				readonly: false,
 				value: '',
 				displayValue: '',
-				mandatory: true,
+				mandatory: true
 			},
 			glyph: {
 				readonly: false,
 				value: '',
 				displayValue: '',
-				mandatory: false,
+				mandatory: false
 			},
 			order: {
 				readonly: false,
 				value: '',
 				displayValue: '',
-				mandatory: false,
+				mandatory: false
 			},
 			type: {
 				readonly: true,
 				value: 'url',
 				displayValue: 'Url',
-				mandatory: false,
+				mandatory: false
 			},
 			sp_rectangle_menu_item: {
 				readonly: false,
@@ -554,7 +560,7 @@ function prepareFormFields(fields, props) {
         <sys_created_on>2020-02-11 17:07:22</sys_created_on>
         <sys_customer_update>false</sys_customer_update>
         <sys_id>912616dfdbfa04108f26550a48961954</sys_id>
-        <sys_mod_count>267</sys_mod_count>
+        <sys_mod_count>270</sys_mod_count>
         <sys_name>Team Online Header Menu</sys_name>
         <sys_package display_value="TEAMonline" source="x_aaro2_teamonline">a2dfc25fdb7244105f65ba03e29619fa</sys_package>
         <sys_policy/>
@@ -562,7 +568,7 @@ function prepareFormFields(fields, props) {
         <sys_scope display_value="TEAMonline">a2dfc25fdb7244105f65ba03e29619fa</sys_scope>
         <sys_update_name>sp_widget_912616dfdbfa04108f26550a48961954</sys_update_name>
         <sys_updated_by>andrey.mironyuk</sys_updated_by>
-        <sys_updated_on>2020-05-01 12:08:49</sys_updated_on>
+        <sys_updated_on>2020-05-07 09:50:00</sys_updated_on>
         <template><![CDATA[<nav class="header__nav-wrap">
   <ul ng-if="user.logged_in" class="header__nav" aria-label="${Header menu}" role="menubar">
     <div class="header-loader" ng-class="{'invisible': !loadingIndicator}">
