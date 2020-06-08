@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update>
+    <sys_ui_form_sections form_id="5efcbaa7dbc590905f65ba03e2961976" sys_domain="global" table="x_aaro2_teamonline_instance_of_teamonline_carousel" version="3">
+        <sys_ui_form_section action="INSERT_OR_UPDATE">
+            <position>0</position>
+            <sys_created_by>xxikochet</sys_created_by>
+            <sys_created_on>2020-06-03 10:56:47</sys_created_on>
+            <sys_domain>global</sys_domain>
+            <sys_id>dafcbaa7dbc590905f65ba03e2961992</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_overrides/>
+            <sys_ui_form display_value="x_aaro2_teamonline_instance_of_teamonline_carousel" name="x_aaro2_teamonline_instance_of_teamonline_carousel" sys_domain="global" view="0ce54027b33232007a6de81816a8dca1">5efcbaa7dbc590905f65ba03e2961976</sys_ui_form>
+            <sys_ui_section caption="Data" display_value="Data" name="x_aaro2_teamonline_instance_of_teamonline_carousel" sys_domain="global" view="0ce54027b33232007a6de81816a8dca1">1afcbaa7dbc590905f65ba03e296198d</sys_ui_section>
+            <sys_updated_by>xxikochet</sys_updated_by>
+            <sys_updated_on>2020-06-03 10:56:47</sys_updated_on>
+        </sys_ui_form_section>
+        <sys_ui_form_section action="INSERT_OR_UPDATE">
+            <position>1</position>
+            <sys_created_by>xxikochet</sys_created_by>
+            <sys_created_on>2020-06-03 10:56:47</sys_created_on>
+            <sys_domain>global</sys_domain>
+            <sys_id>12fcbaa7dbc590905f65ba03e296198d</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_overrides/>
+            <sys_ui_form display_value="x_aaro2_teamonline_instance_of_teamonline_carousel" name="x_aaro2_teamonline_instance_of_teamonline_carousel" sys_domain="global" view="0ce54027b33232007a6de81816a8dca1">5efcbaa7dbc590905f65ba03e2961976</sys_ui_form>
+            <sys_ui_section caption="Presentation" display_value="Presentation" name="x_aaro2_teamonline_instance_of_teamonline_carousel" sys_domain="global" view="0ce54027b33232007a6de81816a8dca1">9efcbaa7dbc590905f65ba03e2961985</sys_ui_section>
+            <sys_updated_by>xxikochet</sys_updated_by>
+            <sys_updated_on>2020-06-03 10:56:47</sys_updated_on>
+        </sys_ui_form_section>
+        <sys_ui_form_section action="INSERT_OR_UPDATE">
+            <position>2</position>
+            <sys_created_by>xxikochet</sys_created_by>
+            <sys_created_on>2020-06-03 10:56:47</sys_created_on>
+            <sys_domain>global</sys_domain>
+            <sys_id>6afcbaa7dbc590905f65ba03e2961997</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_overrides/>
+            <sys_ui_form display_value="x_aaro2_teamonline_instance_of_teamonline_carousel" name="x_aaro2_teamonline_instance_of_teamonline_carousel" sys_domain="global" view="0ce54027b33232007a6de81816a8dca1">5efcbaa7dbc590905f65ba03e2961976</sys_ui_form>
+            <sys_ui_section caption="Behavior" display_value="Behavior" name="x_aaro2_teamonline_instance_of_teamonline_carousel" sys_domain="global" view="0ce54027b33232007a6de81816a8dca1">d2fcbaa7dbc590905f65ba03e2961993</sys_ui_section>
+            <sys_updated_by>xxikochet</sys_updated_by>
+            <sys_updated_on>2020-06-03 10:56:47</sys_updated_on>
+        </sys_ui_form_section>
+        <sys_ui_form action="INSERT_OR_UPDATE">
+            <name>x_aaro2_teamonline_instance_of_teamonline_carousel</name>
+            <roles/>
+            <sys_class_name>sys_ui_form</sys_class_name>
+            <sys_created_by>xxikochet</sys_created_by>
+            <sys_created_on>2020-06-03 10:56:46</sys_created_on>
+            <sys_customer_update>false</sys_customer_update>
+            <sys_domain>global</sys_domain>
+            <sys_id>5efcbaa7dbc590905f65ba03e2961976</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_name>x_aaro2_teamonline_instance_of_teamonline_carousel</sys_name>
+            <sys_overrides/>
+            <sys_package display_value="TEAMonline" source="x_aaro2_teamonline">a2dfc25fdb7244105f65ba03e29619fa</sys_package>
+            <sys_policy/>
+            <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+            <sys_scope display_value="TEAMonline">a2dfc25fdb7244105f65ba03e29619fa</sys_scope>
+            <sys_update_name>sys_ui_form_sections_5efcbaa7dbc590905f65ba03e2961976</sys_update_name>
+            <sys_updated_by>xxikochet</sys_updated_by>
+            <sys_updated_on>2020-06-03 10:56:46</sys_updated_on>
+            <sys_user/>
+            <view display_value="SP Instance Config" name="sp_instance_config">0ce54027b33232007a6de81816a8dca1</view>
+            <view_name/>
+        </sys_ui_form>
+    </sys_ui_form_sections>
+</record_update>

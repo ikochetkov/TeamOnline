@@ -252,189 +252,218 @@
 		var regex = new RegExp(/https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/);
 		return regex.test(url)
 	}
+	var spWindow = getSpWindow();
+	var header = getHeader();
+	var head = getHead()
+	var sticky = header.offsetTop;
+	spWindow.addEventListener('scroll', function (e) {
+		onScroll();
+	});
 
+
+
+	// Add the sticky class to the header when you reach its scroll position. Remove "sticky" when you leave the scroll position
+	function onScroll() {
+
+		if (spWindow.scrollTop > sticky) {
+			header.classList.add("header-fixed");
+			head.classList.add("margin-bottom")
+		} else {
+			header.classList.remove("header-fixed");
+			head.classList.remove("margin-bottom")
+		}
+	}
+	function getHeader() {
+		return document.getElementsByClassName("menu-container")[0];
+	}
+	function getSpWindow() {
+		return document.getElementsByClassName('sp-scroll')[0];
+	}
+	function getHead() {
+		return document.getElementsByClassName('navbar-inverse')[0];
+	}
 }]]></client_script>
         <controller_as>c</controller_as>
-        <css>$blue: #0069c8;&#13;
-$lightblue: #0071ce;&#13;
-.header-loader {&#13;
-  float: left;&#13;
-  width: 24px;&#13;
-  position: relative;&#13;
-  top: 24px;&#13;
-}&#13;
-.color-white {&#13;
-  color: white;&#13;
-}&#13;
-.color-white:hover {&#13;
-  color: rgba(255, 255, 255, 0.6);&#13;
-}&#13;
-.semi-transparent {&#13;
-  color: rgba(255, 255, 255, 0.6);&#13;
-}&#13;
-a.semi-transparent:hover {&#13;
-  color: white;&#13;
-}&#13;
-.avatar {&#13;
-  float: right;&#13;
-}&#13;
-.header__nav .megamenu {&#13;
-  position: static;&#13;
-}&#13;
-.header__nav li.has-children {&#13;
-  padding-right: 3.3rem;&#13;
-}&#13;
-.profile-dropdown {&#13;
-  background-color: $lightblue;&#13;
-  top: 39px;&#13;
-  z-index: 500;&#13;
-  li {&#13;
-    display: block;&#13;
-    a {&#13;
-      line-height: inherit;&#13;
-    }&#13;
-  }&#13;
-}&#13;
-&#13;
-.header__nav li:hover &gt; a,&#13;
-.header__nav li:focus &gt; a {&#13;
-  color: #ffffff;&#13;
-}&#13;
-&#13;
-.header__nav li:hover li,&#13;
-.header__nav li:focus li {&#13;
-  background: transparent;&#13;
-}&#13;
-&#13;
-.profile-menu-item {&#13;
-  position: relative;&#13;
-}&#13;
-.header__nav &gt; li &gt; a {&#13;
-  line-height: 39px;&#13;
-}&#13;
-.header-menu-item {&#13;
-  &amp;.dropdown {&#13;
-    position: static;&#13;
-  }&#13;
-}&#13;
-.megamenu {&#13;
-  position: static;&#13;
-}&#13;
-.megamenu-bg {&#13;
-  background-color: $lightblue;&#13;
-  border-radius: 0px;&#13;
-  max-height: calc(100vh - 132px);&#13;
-  overflow: auto;&#13;
-  &amp;::-webkit-scrollbar-track {&#13;
-    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);&#13;
-    border-radius: 10px;&#13;
-    background-color: $lightblue;&#13;
-  }&#13;
-  &amp;::-webkit-scrollbar {&#13;
-    width: 12px;&#13;
-    background-color: $lightblue;&#13;
-  }&#13;
-  &amp;::-webkit-scrollbar-thumb {&#13;
-    border-radius: 10px;&#13;
-    background-color: rgba(255, 255, 255, 0.884);&#13;
-  }&#13;
-}&#13;
-.megamenu-container {&#13;
-  position: absolute;&#13;
-  top: auto;&#13;
-  left: 0;&#13;
-  padding-top: 20px;&#13;
-  min-width: 100%;&#13;
-  border: none;&#13;
-  z-index: 500;&#13;
-  color: white;&#13;
-  visibility: hidden;&#13;
-  opacity: 0;&#13;
-  transform: translate3d(0, -15px, 0);&#13;
-  transition: visibility 0s 200ms, opacity 200ms ease-in-out, transform 200ms ease-in-out;&#13;
-&#13;
-  ul li {&#13;
-    position: relative;&#13;
-  }&#13;
-}&#13;
-.megamenu-list,&#13;
-.megamenu-list-item {&#13;
-  position: relative;&#13;
-}&#13;
-&#13;
-.megamenu-subcategory {&#13;
-  text-decoration: none;&#13;
-}&#13;
-.subheading-list-item {&#13;
-  margin-left: 5px;&#13;
-}&#13;
-.megamenu-subcategory:hover {&#13;
-  color: white;&#13;
-}&#13;
-.three-column-layout {&#13;
-  -webkit-column-width: 30%;&#13;
-  -moz-column-width: 30%;&#13;
-  column-width: 30%;&#13;
-  -webkit-column-count: 3;&#13;
-  -moz-column-count: 3;&#13;
-  column-count: 3;&#13;
-  -webkit-column-gap: 30px;&#13;
-  -moz-column-gap: 30px;&#13;
-  column-gap: 30px;&#13;
-  text-align: left;&#13;
-}&#13;
-.column-fill-auto {&#13;
-  column-fill: auto;&#13;
-}&#13;
-.column-fill-balance {&#13;
-  column-fill: balance;&#13;
-}&#13;
-.i-b {&#13;
-  display: inline-block;&#13;
-}&#13;
-.btn-add-subcategory {&#13;
-  border: none;&#13;
-  background: none;&#13;
-  color: white;&#13;
-}&#13;
-.btn-add-subcategory:hover {&#13;
-  border: none;&#13;
-  background: none;&#13;
-  color: gray;&#13;
-}&#13;
-.megamenu__category {&#13;
-  display: inline;&#13;
-}&#13;
-&#13;
-.dropdown .dropdown-menu {&#13;
-  opacity: 0;&#13;
-  display: none;&#13;
-}&#13;
-&#13;
-.dropdown.open .dropdown-menu {&#13;
-  display: block;&#13;
-  -webkit-transform: translate3d(0, 15px, 0);&#13;
-  -ms-transform: translate3d(0, 15px, 0);&#13;
-  transform: translate3d(0, 15px, 0);&#13;
-  -webkit-transition: all 0.5s ease-in-out;&#13;
-  transition: all 0.5s ease-in-out;&#13;
-&#13;
-  opacity: 1;&#13;
-}&#13;
-&#13;
-.megamenu {&#13;
-  &amp;:hover &gt; .megamenu-container {&#13;
-    visibility: visible;&#13;
-    opacity: 1;&#13;
-    transform: translate3d(0, 0px, 0);&#13;
-    transition: 300ms ease-in-out;&#13;
-  }&#13;
-}&#13;
-.btn-lock {&#13;
-  &amp;:hover {&#13;
-    color: white;&#13;
-  }&#13;
-}&#13;
+        <css>$blue: #0069c8;
+$lightblue: #0071ce;
+.header-loader {
+  float: left;
+  width: 24px;
+  position: relative;
+  top: 24px;
+}
+.color-white {
+  color: white;
+}
+.color-white:hover {
+  color: rgba(255, 255, 255, 0.6);
+}
+.semi-transparent {
+  color: rgba(255, 255, 255, 0.6);
+}
+a.semi-transparent:hover {
+  color: white;
+}
+.avatar {
+  float: right;
+}
+.header__nav .megamenu {
+  position: static;
+}
+.header__nav li.has-children {
+  padding-right: 3.3rem;
+}
+.profile-dropdown {
+  background-color: $lightblue;
+  top: 39px;
+  z-index: 500;
+  li {
+    display: block;
+    a {
+      line-height: inherit;
+    }
+  }
+}
+
+.header__nav li:hover &gt; a,
+.header__nav li:focus &gt; a {
+  color: #ffffff;
+}
+
+.header__nav li:hover li,
+.header__nav li:focus li {
+  background: transparent;
+}
+
+.profile-menu-item {
+  position: relative;
+}
+.header__nav &gt; li &gt; a {
+  line-height: 39px;
+}
+.header-menu-item {
+  &amp;.dropdown {
+    position: static;
+  }
+}
+.megamenu {
+  position: static;
+}
+.megamenu-bg {
+  background-color: $lightblue;
+  border-radius: 0px;
+  max-height: calc(100vh - 132px);
+  overflow: auto;
+  &amp;::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+    border-radius: 10px;
+    background-color: $lightblue;
+  }
+  &amp;::-webkit-scrollbar {
+    width: 12px;
+    background-color: $lightblue;
+  }
+  &amp;::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    background-color: rgba(255, 255, 255, 0.884);
+  }
+}
+.megamenu-container {
+  position: absolute;
+  top: auto;
+  left: 0;
+  padding-top: 20px;
+  min-width: 100%;
+  border: none;
+  z-index: 500;
+  color: white;
+  visibility: hidden;
+  opacity: 0;
+  transform: translate3d(0, -15px, 0);
+  transition: visibility 0s 200ms, opacity 200ms ease-in-out, transform 200ms ease-in-out;
+
+  ul li {
+    position: relative;
+  }
+}
+.megamenu-list,
+.megamenu-list-item {
+  position: relative;
+}
+
+.megamenu-subcategory {
+  text-decoration: none;
+}
+.subheading-list-item {
+  margin-left: 5px;
+}
+.megamenu-subcategory:hover {
+  color: white;
+}
+.three-column-layout {
+  -webkit-column-width: 30%;
+  -moz-column-width: 30%;
+  column-width: 30%;
+  -webkit-column-count: 3;
+  -moz-column-count: 3;
+  column-count: 3;
+  -webkit-column-gap: 30px;
+  -moz-column-gap: 30px;
+  column-gap: 30px;
+  text-align: left;
+}
+.column-fill-auto {
+  column-fill: auto;
+}
+.column-fill-balance {
+  column-fill: balance;
+}
+.i-b {
+  display: inline-block;
+}
+.btn-add-subcategory {
+  border: none;
+  background: none;
+  color: white;
+}
+.btn-add-subcategory:hover {
+  border: none;
+  background: none;
+  color: gray;
+}
+.megamenu__category {
+  display: inline;
+}
+
+.dropdown .dropdown-menu {
+  opacity: 0;
+  display: none;
+}
+
+.dropdown.open .dropdown-menu {
+  display: block;
+  -webkit-transform: translate3d(0, 15px, 0);
+  -ms-transform: translate3d(0, 15px, 0);
+  transform: translate3d(0, 15px, 0);
+  -webkit-transition: all 0.5s ease-in-out;
+  transition: all 0.5s ease-in-out;
+
+  opacity: 1;
+}
+
+.megamenu {
+  &amp;:hover &gt; .megamenu-container {
+    visibility: visible;
+    opacity: 1;
+    transform: translate3d(0, 0px, 0);
+    transition: 300ms ease-in-out;
+  }
+}
+.btn-lock {
+  &amp;:hover {
+    color: white;
+  }
+}
 </css>
         <data_table>sp_instance_menu</data_table>
         <demo_data/>
@@ -543,6 +572,7 @@ a.semi-transparent:hover {&#13;
 
 		data.linkData.form._fields = prepareFormFields(fields, linkFields);
 	}
+
 })();
 
 function saveFormData(table, sys_id, fields, fieldsToSave) {
@@ -577,7 +607,7 @@ function prepareFormFields(fields, props) {
         <sys_created_on>2020-02-11 17:07:22</sys_created_on>
         <sys_customer_update>false</sys_customer_update>
         <sys_id>912616dfdbfa04108f26550a48961954</sys_id>
-        <sys_mod_count>281</sys_mod_count>
+        <sys_mod_count>311</sys_mod_count>
         <sys_name>Team Online Header Menu</sys_name>
         <sys_package display_value="TEAMonline" source="x_aaro2_teamonline">a2dfc25fdb7244105f65ba03e29619fa</sys_package>
         <sys_policy/>
@@ -585,50 +615,52 @@ function prepareFormFields(fields, props) {
         <sys_scope display_value="TEAMonline">a2dfc25fdb7244105f65ba03e29619fa</sys_scope>
         <sys_update_name>sp_widget_912616dfdbfa04108f26550a48961954</sys_update_name>
         <sys_updated_by>andrey.mironyuk</sys_updated_by>
-        <sys_updated_on>2020-05-07 16:38:41</sys_updated_on>
-        <template><![CDATA[<nav class="header__nav-wrap">
-  <ul ng-if="user.logged_in" class="header__nav" aria-label="${Header menu}" role="menubar">
-    <div class="header-loader" ng-class="{'invisible': !loadingIndicator}">
-      <div class="hidden-xs sp-loading-indicator la-sm">
-        <div></div>
-        <div></div>
-        <div></div>
+        <sys_updated_on>2020-06-03 12:34:26</sys_updated_on>
+        <template><![CDATA[<div class="menu-container">
+  <nav class="header__nav-wrap" style="margin-top: 0">
+    <ul ng-if="user.logged_in" class="header__nav" aria-label="${Header menu}" role="menubar">
+      <div class="header-loader" ng-class="{'invisible': !loadingIndicator}">
+        <div class="hidden-xs sp-loading-indicator la-sm">
+          <div></div>
+          <div></div>
+          <div></div>
+        </div>
       </div>
-    </div>
 
-    <li ng-repeat="item in visibleItems" ng-class="{dropdown: item.items.length > 0, 'header-menu-item': true}"
-      ng-include="'teamOnlineMainMenu'" role="presentation"></li>
-    <li ng-if="data.canEdit">
-      <sp-widget widget="newArticle"></sp-widget>
-    </li>
-    <li ng-if="showAvatar" class="hidden-xs dropdown has-children avatar profile-menu-item" role="presentation">
-      <a href class="toggle-dropdown" data-toggle="dropdown" aria-expanded="false" title="{{::data.profileBtnMsg}}"
-        aria-label="{{::data.profileBtnMsg}}: {{::user.name}}" id="profile-dropdown" role="menuitem"
-        aria-haspopup="true">
-        <span aria-hidden="true">
-          <sn-avatar class="avatar-small-medium" primary="avatarProfile" /></span>
-        <span class="visible-lg-inline">{{::user.name}}</span>
-      </a>
-      <ul class="dropdown-menu sub-menu profile-dropdown" role="menu" aria-label="{{::data.profileBtnMsg}}">
-        <li role="presentation"><a tabindex="-1" ng-href="?id=user_profile&sys_id={{::user.sys_id}}"
-            role="menuitem">${Profile}</a></li>
-        <li ng-if="::!(isViewNative || isViewNativeTablet)" role="presentation"><a tabindex="-1"
-            href="{{::portal.logoutUrl}}" role="menuitem">${Logout}</a></li>
-      </ul>
-    </li>
-    <li ng-if="showXSAvatar" class="visible-xs-block" role="presentation"><a role="menuitem"
-        ng-href="?id=user_profile&sys_id={{::user.sys_id}}" ng-click="collapse()">
-        <span class="navbar-avatar">
-          <sn-avatar class="avatar-small-medium" primary="avatarProfile" /></span>{{::user.name}}</a>
-    </li>
-    <li ng-if="::!(isViewNative || isViewNativeTablet)" class="visible-xs-block" role="presentation"><a role="menuitem"
-        ng-href="{{::portal.logoutUrl}}" ng-click="collapse()">${Logout}</a></li>
-  </ul>
+      <li ng-repeat="item in visibleItems" ng-class="{dropdown: item.items.length > 0, 'header-menu-item': true}"
+        ng-include="'teamOnlineMainMenu'" role="presentation"></li>
+      <li ng-if="data.canEdit">
+        <sp-widget widget="newArticle"></sp-widget>
+      </li>
+      <li ng-if="showAvatar" class="hidden-xs dropdown has-children avatar profile-menu-item" role="presentation">
+        <a href class="toggle-dropdown" data-toggle="dropdown" aria-expanded="false" title="{{::data.profileBtnMsg}}"
+          aria-label="{{::data.profileBtnMsg}}: {{::user.name}}" id="profile-dropdown" role="menuitem"
+          aria-haspopup="true">
+          <span aria-hidden="true">
+            <sn-avatar class="avatar-small-medium" primary="avatarProfile" /></span>
+          <span class="visible-lg-inline">{{::user.name}}</span>
+        </a>
+        <ul class="dropdown-menu sub-menu profile-dropdown" role="menu" aria-label="{{::data.profileBtnMsg}}">
+          <li role="presentation"><a tabindex="-1" ng-href="?id=user_profile&sys_id={{::user.sys_id}}"
+              role="menuitem">${Profile}</a></li>
+          <li ng-if="::!(isViewNative || isViewNativeTablet)" role="presentation"><a tabindex="-1"
+              href="{{::portal.logoutUrl}}" role="menuitem">${Logout}</a></li>
+        </ul>
+      </li>
+      <li ng-if="showXSAvatar" class="visible-xs-block" role="presentation"><a role="menuitem"
+          ng-href="?id=user_profile&sys_id={{::user.sys_id}}" ng-click="collapse()">
+          <span class="navbar-avatar">
+            <sn-avatar class="avatar-small-medium" primary="avatarProfile" /></span>{{::user.name}}</a>
+      </li>
+      <li ng-if="::!(isViewNative || isViewNativeTablet)" class="visible-xs-block" role="presentation"><a
+          role="menuitem" ng-href="{{::portal.logoutUrl}}" ng-click="collapse()">${Logout}</a></li>
+    </ul>
 
-  <ul ng-if="(!user.logged_in && page.id != portal.login_page_dv && !data.hasLogin)" class="nav navbar-nav"
-    role="presentation">
-    <li role="presentation"><a href ng-click="::openLogin()">${Login}</a></li>
-  </ul>
-</nav>]]></template>
+    <ul ng-if="(!user.logged_in && page.id != portal.login_page_dv && !data.hasLogin)" class="nav navbar-nav"
+      role="presentation">
+      <li role="presentation"><a href ng-click="::openLogin()">${Login}</a></li>
+    </ul>
+  </nav>
+</div>]]></template>
     </sp_widget>
 </record_update>

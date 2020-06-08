@@ -1,0 +1,779 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sp_widget">
+    <sp_widget action="INSERT_OR_UPDATE">
+        <category>custom</category>
+        <client_script><![CDATA[function($scope, $rootScope, $location, $timeout, spUtil, glideFormFactory, spAriaUtil, spAriaFocusManager, $uibModal, spModal) {
+	/* widget controller */
+	var c = this; var d = $scope.data;
+
+	/* === collect g_form object of form fields === */
+
+	$scope.contextMenu = function () {
+		if (!d.canEdit) { return [] }
+		return [
+			['Edit item', function ($itemScope) {
+
+				if($itemScope.hasOwnProperty('data')){
+					d.sys_id = $itemScope.data.largeBlock.sys_id;
+				} else {
+					d.sys_id = $itemScope.block.sys_id;
+				}
+				d.action = 'editItem';
+				spUtil.update($scope).then(function(){
+					d.f._fields.article.attributes.ref_auto_completer = "AJAXTableCompleter";
+					d.f._fields.article.attributes.ref_ac_columns = "short_description";
+					d.f._fields.article.attributes.ref_ac_columns_search = "true";
+					
+					var flatFields = [];
+					angular.forEach(d.f._fields, function (field) {
+						flatFields.push(field);
+					});
+					
+
+					var g_form = glideFormFactory.create($scope, d.f.table, d.f.sys_id, flatFields, null, { uiMessageHandler: uiMessageHandler });
+					
+					$scope.getGlideForm = function () {
+						return g_form;
+					}
+
+					var uiMessageHandler = function (g_form, type, message) {
+						switch (type) {
+							case 'addInfoMessage':
+								spUtil.addInfoMessage(message);
+								break;
+							case 'addErrorMessage':
+								spUtil.addErrorMessage(message);
+								break;
+							case 'clearMessages':
+								break;
+							default:
+						}
+					};
+					$scope.editItem(d.sys_id);
+
+				});
+			}]
+		]
+	}
+	
+	$rootScope.$on('ImageLibrary.imageSelected', function (event, respData) {
+		d.f._fields.background.value = respData.sys_id;
+		d.f._fields.background.displayValue = respData.name;
+		spUtil.addInfoMessage('New background selected!');
+	})
+
+	/* Modal to add new/edit */
+	$scope.editItem = function () {
+		$scope.modalInstance = $uibModal.open({
+			animation: true,
+			templateUrl: 'item_editor.html',
+			size: 'lg',
+			backdrop: false,
+			scope: $scope
+		});
+	};
+
+	$scope.closeEdit = function(){
+		$scope.modalInstance.close();
+		spUtil.update($scope);
+	}
+
+	$scope.getUrl = function (block) {
+		if (!block.sys_id) { return '';}
+		if(block.redirect_to_article){
+			return 'teamonline?id=article&sys_kb_id=' + block.article;
+		} else {
+			return block.link;
+		}
+		
+	}
+
+	/*=== save current g_form object to table ===*/
+	$scope.saveRecord = function () {
+		d.action = "saveRecord";
+		spUtil.update($scope).then(function (response) {
+			$scope.closeEdit();
+		});
+	}
+
+
+}]]></client_script>
+        <controller_as>c</controller_as>
+        <css>body{font-size:5px;}
+//@media (min-width: 544px) { /* Стили CSS ... */ }
+.each-article-content {
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-flex-flow: row wrap;
+  -moz-flex-flow: row wrap;
+  -ms-flex-flow: row wrap;
+  flex-flow: row wrap;
+}
+
+.big {
+  width: 50%;
+}
+
+.each-article-content .small {
+  width: 50%;
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-flex-flow: row wrap;
+  -moz-flex-flow: row wrap;
+  -ms-flex-flow: row wrap;
+  flex-flow: row wrap;
+  -webkit-align-items: flex-start;
+  -moz-align-items: flex-start;
+  -ms-align-items: flex-start;
+  align-items: flex-start;
+  -webkit-align-content: flex-start;
+  -moz-align-content: flex-start;
+  -ms-align-content: flex-start;
+  align-content: flex-start;
+}
+
+.big .each-article-empty,
+.big .each-article {
+  display: block;
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  padding-top: 114%;
+}
+
+.big .each-article-empty:before,
+.big .each-article:before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  transition: all 0.5s cubic-bezier(0, 0.1, 0.58, 1);
+}
+
+.big .each-article:before {
+  background-color: rgba(0, 0, 0, .6);
+}
+
+.big .each-article-empty:after,
+.big .each-article:after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: 0;
+  background-color: #0069C8;
+  z-index: 1;
+  transition: all 0.5s cubic-bezier(0, 0.1, 0.58, 1);
+}
+
+
+
+big .each-article:hover:before {
+  background-color: rgba(0, 0, 0, 0);
+}
+
+.big .each-article:hover:after {
+  height: 50%;
+}
+.each-article-content .big.active .each-article-empty .each-article-img:before,
+.each-article-content .big.active .each-article .each-article-img:before, 
+.each-article-content .small.active .each-article .each-article-img:before {
+  width: 0;
+}
+
+.each-article-content .big .each-article-empty .each-article-img:before,
+.each-article-content .big .each-article .each-article-img:before {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #fff;
+  z-index: 3;
+  transition: all 1s cubic-bezier(0, 0.1, 0.58, 1);
+}
+
+.each-article-img {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+}
+
+.each-article-img img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.big .each-article-empty .post-content,
+.big .each-article .post-content {
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-flex-direction: column;
+  -moz-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -webkit-justify-content: space-between;
+  -moz-justify-content: space-between;
+  -ms-justify-content: space-between;
+  justify-content: space-between;
+  -ms-flex-pack: space-between;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  padding: 20px;
+  border: 1px solid #fff;
+  z-index: 2;
+}
+
+.each-article-content .big .each-article .post-content .author-catname {
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-justify-content: space-between;
+  -moz-justify-content: space-between;
+  -ms-justify-content: space-between;
+  justify-content: space-between;
+  -ms-flex-pack: space-between;
+}
+
+.right {
+  display: flex;
+  align-items: center;
+}
+
+.m-l-1 {
+  margin-left: 5px;
+}
+
+.h7 {
+  font-size: 18px;
+  line-height: 1.4;
+  margin: 0;
+  font-weight: unset;
+}
+
+.small-font {
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+.h8 {
+  font-size: 1.5rem;
+  line-height: 1.4;
+  margin: 0;
+  font-weight: unset;
+}
+
+.h6 {
+  font-size: 2.2rem;
+  line-height: 1.4;
+  margin: 0;
+  font-weight: unset;
+}
+
+h5, .h5 {
+  font-size: 30px;
+  line-height: 1.2;
+  margin: 0;
+  font-weight: unset;
+}
+
+.green {
+  color: #98dd05;
+}
+
+.font-medium {
+  font-family: 'Poppins', serif !important;
+  font-weight: 500;
+}
+
+.white {
+  color: #fff;
+}
+
+.blog-auth-name {
+  cursor: pointer;
+}
+
+.font-bold {
+  font-family: 'Poppins', serif !important;
+  font-weight: 700;
+}
+
+.each-article-content .big .each-article .post-content .post-description {
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-flex-direction: column;
+  -moz-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -webkit-align-items: flex-start;
+  -moz-align-items: flex-start;
+  -ms-align-items: flex-start;
+  align-items: flex-start;
+}
+
+.each-article-content .big .each-article .post-content .post-description .each-blog-date {
+  -webkit-align-self: flex-end;
+  -moz-align-self: flex-end;
+  -ms-align-self: flex-end;
+  align-self: flex-end;
+}
+
+.each-article-content .small .each-article-empty,
+.each-article-content .small .each-article {
+  display: block;
+  position: relative;
+  width: 50%;
+  overflow: hidden;
+  padding-top: 57%;
+}
+
+.each-article-content .small .each-article-empty:before,
+.each-article-content .small .each-article:before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  transition: all 0.5s cubic-bezier(0, 0.1, 0.58, 1);
+  z-index: 1;
+}
+
+.each-article-content .small .each-article:before {
+  background-color: rgba(0, 0, 0, .6);
+}
+
+.each-article-empty:after,
+.each-article-content .small .each-article:after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: 0;
+  background-color: #0069C8;
+  z-index: 1;
+  transition: all 0.5s cubic-bezier(0, 0.1, 0.58, 1);
+}
+
+.each-article-content .small .each-article-empty .each-article-img,
+.each-article-content .small .each-article .each-article-img {
+  position: absolute;
+  width: 100%;
+  top: 0;
+  left: 0;
+  height: 100%;
+}
+
+.each-article-content .small.active .each-article-empty .each-article-img:before,
+.each-article-content .small.active .each-article .each-article-img:before {
+  width: 0;
+}
+
+.each-article-content .small .each-article-empty .each-article-img:before,
+.each-article-content .small .each-article .each-article-img:before {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #fff;
+  z-index: 3;
+  transition: all 1s cubic-bezier(0, 0.1, 0.58, 1);
+}
+
+.each-article-content .small .each-article .each-article-img img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.each-article-content .small .each-article-empty .post-content,
+.each-article-content .small .each-article .post-content {
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-flex-direction: column;
+  -moz-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -webkit-justify-content: space-between;
+  -moz-justify-content: space-between;
+  -ms-justify-content: space-between;
+  justify-content: space-between;
+  -ms-flex-pack: space-between;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  padding: 20px;
+  border: 1px solid #fff;
+  z-index: 2;
+}
+
+.each-article-content .small .each-article .post-content .author-catname {
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-justify-content: space-between;
+  -moz-justify-content: space-between;
+  -ms-justify-content: space-between;
+  justify-content: space-between;
+  -ms-flex-pack: space-between;
+}
+
+.each-article-content  .small .each-article .post-content .post-description {
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-flex-direction: column;
+  -moz-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -webkit-align-items: flex-start;
+  -moz-align-items: flex-start;
+  -ms-align-items: flex-start;
+  align-items: flex-start;
+}
+
+.each-article-content  .small .each-article:hover:before {
+  background-color: rgba(0, 0, 0, 0);
+}
+
+.each-article-content .small .each-article:hover:after {
+  height: 53%;
+}
+
+.btn {
+  z-index: 999;
+}
+
+.post-text {
+  color: #fff;
+  position: absolute;
+  bottom: -55%;
+  transition: all .5s cubic-bezier(0, .1, .58, 1);
+  padding: 20px 20px 20px 0px;
+  line-height: 1.2;
+}
+/*
+
+FIX HERE with media.
+
+*/
+.small .each-article .post-content .post-text {
+  font-size: 1.4rem;
+  //padding: 10px 12px 10px 0px;
+}
+
+.big .each-article .post-content .post-text {
+  font-size: 1.8rem;
+}
+
+.each-article:hover .post-content .author-catname .right  {
+  -webkit-justify-content: flex-end;
+  -moz-justify-content: flex-end;
+  -ms-justify-content: flex-end;
+  justify-content: flex-end;
+  -ms-flex-pack: flex-end;
+}
+
+.big .each-article:hover .post-content .post-text,
+.small .each-article:hover .post-content .post-text {
+  bottom: 0;
+}
+
+.small .each-article .post-content:hover .post-description {
+  display: none;
+}
+
+.big .each-article:hover .post-content .post-description {
+  display: none;
+}
+
+.plus-button {
+  position: absolute;
+  border: 2px solid lightgrey;
+  background-color: #fff;
+  font-size: 2rem;
+  height: 2.5em;
+  width: 2.5em;
+  border-radius: 50%;
+  top: 50%;
+  left: 50%;
+  margin-left: -1.5em;
+  margin-top: -2rem;
+
+  &amp;:after,
+  &amp;:before {
+    content: "";
+    display: block;
+    background-color: grey;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  &amp;:before {
+    height: 1em;
+    width: 0.2em;
+  }
+
+  &amp;:after {
+    height: 0.2em;
+    width: 1em;
+  }
+}
+
+.plus-button:hover {
+  background-color: #0069C8;
+
+  &amp;:after,
+  &amp;:before {
+    background-color: #fff;
+  }
+}
+
+/* media */
+
+@media (max-width: 1800px){
+  .small .each-article .post-content .post-text {
+    font-size: 1.3rem;
+  }
+}
+
+@media (max-width: 1600px){
+  .small .each-article .post-content .post-text {
+    font-size: 1.19rem;
+  }
+}
+
+@media (max-width: 1300px){
+  .small .each-article .post-content .post-text {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 1150px){
+  .small .each-article .post-content .post-text {
+    font-size: 0.8rem;
+  }
+}
+
+@media (max-width: 991px){
+  .small .each-article .post-content .post-text {
+    font-size: 1.2rem;
+  }
+}
+
+@media (max-width: 850px){
+  .small .each-article .post-content .post-text {
+    font-size: 1rem;
+  }
+}
+@media (max-width: 800px){
+  .small .each-article .post-content .post-text {
+    font-size: 0.8rem;
+  }
+}
+
+@media (max-width: 630px){
+  .small .each-article .post-content .post-text {
+    display:none;
+  }
+}
+
+</css>
+        <data_table>sp_instance</data_table>
+        <demo_data/>
+        <description/>
+        <docs/>
+        <field_list/>
+        <has_preview>true</has_preview>
+        <id>team_online_blocks</id>
+        <internal>false</internal>
+        <link><![CDATA[function link(scope, element, attrs, controller) { 
+  
+}]]></link>
+        <name>Team Online Blocks</name>
+        <option_schema>[{"name":"max_count_important_articles","section":"other","default_value":"4","label":"Max count important articles","type":"integer"}]</option_schema>
+        <public>false</public>
+        <roles/>
+        <script><![CDATA[(function() {
+
+	data.searchForm = input ?  input.searchForm : '';
+	data.table = "x_aaro2_teamonline_blocks_config";
+	data.imageLibrary = $sp.getWidget('image_library');
+
+	if(!input){
+
+		data.canEdit = gs.getUser().isMemberOf(gs.getProperty("x_aaro2_teamonline.teamonline_administration_group")) || gs.hasRole("admin");
+		collectBlocks();
+
+	} else if (input && input.action == 'editItem'){
+
+		data.sys_id = input.sys_id;
+		data.f = $sp.getForm(data.table, data.sys_id, data.query, 'Blocks');
+
+	} else if (input && input.action ==  'saveRecord'){
+		var res = $sp.saveRecord(input.table, input.sys_id, input.f._fields);
+		if(res)collectBlocks();
+	}
+
+	function collectBlocks(){
+		var blocks = [];
+		var blocksGr = new GlideRecord(data.table);
+		blocksGr.orderBy('number');
+		blocksGr.addQuery('widget.name','Team Online Blocks');
+		blocksGr.query();
+		while(blocksGr.next()){
+			blocks.push({
+				sys_id: blocksGr.getUniqueValue(),
+				number: blocksGr.getValue('number'),
+				title: blocksGr.getValue('title'),
+				description: blocksGr.getValue('description'),
+				meta: blocksGr.getValue('meta'),
+				link: blocksGr.getValue('link'),
+				background: blocksGr.getDisplayValue('background'),
+				display_author: Number(blocksGr.getValue('display_author')),
+				author: blocksGr.getDisplayValue('author'),
+				created: blocksGr.getValue('sys_created_on'),
+				redirect_to_article: Number(blocksGr.getValue('redirect_to_article')),
+				article: blocksGr.getValue('article')
+			})
+		}
+		data.largeBlock = blocks[0];
+		blocks.splice(0, 1);
+		data.blocks = blocks;
+		//console.log(blocks);
+	}
+
+})();
+]]></script>
+        <servicenow>false</servicenow>
+        <sys_class_name>sp_widget</sys_class_name>
+        <sys_created_by>xxikochet</sys_created_by>
+        <sys_created_on>2020-06-03 19:18:06</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_id>cebf68bbdbc5d0905f65ba03e2961959</sys_id>
+        <sys_mod_count>148</sys_mod_count>
+        <sys_name>Team Online Blocks</sys_name>
+        <sys_package display_value="TEAMonline" source="x_aaro2_teamonline">a2dfc25fdb7244105f65ba03e29619fa</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="TEAMonline">a2dfc25fdb7244105f65ba03e29619fa</sys_scope>
+        <sys_update_name>sp_widget_cebf68bbdbc5d0905f65ba03e2961959</sys_update_name>
+        <sys_updated_by>xxikochet</sys_updated_by>
+        <sys_updated_on>2020-06-08 07:45:53</sys_updated_on>
+        <template><![CDATA[<div class="each-article-content ffffff" >
+  <div class="big active">
+    <a
+       context-menu="contextMenu(true, !data.largeBlock.sys_id)"
+       ng-href="{{getUrl(data.largeBlock)}}"
+       class="know-how post"
+       ng-class="{'each-article-empty': !data.largeBlock.sys_id, 'each-article': data.largeBlock.sys_id}"
+       >
+      <div class="each-article-img">
+        <img ng-if="data.largeBlock.background" ng-src="{{data.largeBlock.background}}" alt="">
+      </div>
+      <div class="post-content">
+        <div class="author-catname" ng-if="data.largeBlock.sys_id">
+          <p class="h7 font-medium green">{{data.largeBlock.meta}}</p>
+          <p ng-if="data.largeBlock.display_author" class="h8 font-medium white">{{data.largeBlock.author}}</p>
+        </div>
+        <div class="post-description" ng-if="data.largeBlock.sys_id">
+          <h3 class="h5 font-bold white each-blog-title">{{data.largeBlock.title}}</h3>
+          <h5 class="p font-regular white each-blog-excerpt"></h5>
+          <sn-day-ago date="data.largeBlock.created" class="h8 font-medium white each-blog-date" />
+        </div>
+        <div class="post-text" ng-if="data.largeBlock.sys_id">
+          {{data.largeBlock.description | limitTo:650 }} {{ data.largeBlock.description.length > 650 ? '...' : '' }}
+        </div>
+        <button 
+         class="plus-button" 
+         ng-if="!data.largeBlock.sys_id && data.canEdit" 
+         ng-click="changeArticleOnMainWidget($event, true)"
+         title="Add item to this place"
+        ></button>
+      </div>
+    </a>
+  </div>
+  <div class="small active">
+    <a 
+       context-menu="contextMenu(false, !block.sys_id)"
+       ng-repeat="block in data.blocks track by $index"
+       ng-href="{{getUrl(block)}}"
+       class="know-how post"
+       ng-class="{'each-article-empty': !block.sys_id, 'each-article': block.sys_id}"
+       >
+      <div class="each-article-img">
+        <img ng-if="block.background" ng-src="{{block.background}}" alt="Important Picture">
+      </div>
+      <div class="post-content">
+        <div class="author-catname" ng-if="block.sys_id">
+          <p class="small-font font-medium green">{{block.meta}}</p>
+          <p ng-if="block.display_author" class="small-font font-medium white">{{block.author}}</p>
+        </div>
+        <div class="post-description" ng-if="block.sys_id">
+          <h3 class="h6 font-bold white each-blog-title">{{block.title}}</h3>
+          <h5 class="p font-regular white each-blog-excerpt"></h5>
+          <sn-day-ago date="block.created" class="h8 font-medium white each-blog-date" />
+        </div>
+        <div class="post-text" ng-if="block.sys_id">
+          {{block.description | limitTo:160 }} {{ block.description.length > 160 ? '...' : '' }}
+        </div>
+        <button 
+                class="plus-button" 
+                ng-if="!block.sys_id && data.canEdit" 
+                ng-click="changeArticleOnMainWidget(false, $index)"
+                title="Add important article to this place"
+                ></button>
+      </div>
+    </a>
+  </div>
+</div>
+]]></template>
+    </sp_widget>
+</record_update>

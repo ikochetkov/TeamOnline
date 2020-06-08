@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update sys_domain="global" table="sysrule_view">
+    <sysrule_view action="INSERT_OR_UPDATE">
+        <active>true</active>
+        <advanced>false</advanced>
+        <condition table="x_aaro2_teamonline_blocks_config">widget=cebf68bbdbc5d0905f65ba03e2961959^EQ<item display_table="sp_widget" display_value="Team Online Blocks" endquery="false" field="widget" goto="false" newquery="false" operator="=" or="false" value="cebf68bbdbc5d0905f65ba03e2961959"/>
+            <item endquery="true" field="" goto="false" newquery="false" operator="=" or="false" value=""/>
+        </condition>
+        <description/>
+        <device_type>browser</device_type>
+        <match_conditions>ALL</match_conditions>
+        <name>Blocks</name>
+        <order>100</order>
+        <overrides_user_preference>true</overrides_user_preference>
+        <script><![CDATA[(function overrideView(view, is_list) {
+
+	// Add your code here
+	answer = null;  // set the new view to answer
+
+})(view, is_list);]]></script>
+        <sys_class_name>sysrule_view</sys_class_name>
+        <sys_created_by>xxikochet</sys_created_by>
+        <sys_created_on>2020-06-05 10:55:43</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_domain>global</sys_domain>
+        <sys_id>26bf0d54db955c905f65ba03e2961981</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>Blocks</sys_name>
+        <sys_overrides/>
+        <sys_package display_value="TEAMonline" source="x_aaro2_teamonline">a2dfc25fdb7244105f65ba03e29619fa</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="TEAMonline">a2dfc25fdb7244105f65ba03e29619fa</sys_scope>
+        <sys_update_name>sysrule_view_26bf0d54db955c905f65ba03e2961981</sys_update_name>
+        <sys_updated_by>xxikochet</sys_updated_by>
+        <sys_updated_on>2020-06-05 10:55:43</sys_updated_on>
+        <table>x_aaro2_teamonline_blocks_config</table>
+        <view>Blocks</view>
+    </sysrule_view>
+</record_update>

@@ -3,7 +3,7 @@
         <category>custom</category>
         <client_script><![CDATA[function ($rootScope, $scope, snRecordWatcher, spUtil, $location, $uibModal, cabrillo, $timeout, $window) {
 
-	$scope.collapse = function() {
+	$scope.collapse = function () {
 		$rootScope.$emit('sp-navbar-collapse');
 	}
 
@@ -26,9 +26,9 @@
 	}
 
 
-	$scope.openPopUp = function() {
+	$scope.openPopUp = function () {
 		var url = "$chat_support.do?queueID=" + $scope.data.connect_support_queue_id;
-		var popup = window.open (url, "popup", "width=900, height=600");
+		var popup = window.open(url, "popup", "width=900, height=600");
 	};
 
 	$scope.openLogin = function () {
@@ -45,7 +45,7 @@
 	$scope.isAgentChatConfigured = g_has_agent_chat_config;
 
 	angular.element($window).on('resize', function () {
-		if(xsScreenSize !== isXSScreenSize() && (!$scope.showXSAvatar || !$scope.showAvatar)){
+		if (xsScreenSize !== isXSScreenSize() && (!$scope.showXSAvatar || !$scope.showAvatar)) {
 			$scope.showXSAvatar = true;
 			$scope.showAvatar = true;
 		}
@@ -56,16 +56,16 @@
 		return $window.matchMedia('(max-width: 767px)').matches;
 	}
 
-	$rootScope.$on('sp.avatar_changed', function(evt, obj) {
+	$rootScope.$on('sp.avatar_changed', function (evt, obj) {
 		$scope.userID = "";
 		$scope.newAvatarId = obj.newAvatarId;
-		$timeout(function(){
+		$timeout(function () {
 			$scope.userID = $scope.user.sys_id;
 			$(".sub-avatar").css("background-image", 'url("' + $scope.newAvatarId + '.iix?t=small")');
 		});
 	});
 
-	$scope.isHomepage = function() {
+	$scope.isHomepage = function () {
 		if (!$scope.page.id)
 			return true;
 
@@ -74,208 +74,236 @@
 
 		return false;
 	};
+
+
 }
-		]]></client_script>
+]]></client_script>
         <controller_as>c</controller_as>
-        <css>.navbar {&#13;
-  transition: 250ms opacity ease-in-out;&#13;
-  -webkit-transition: 250ms opacity ease-in-out;&#13;
-  border: 0;&#13;
-}&#13;
-&#13;
-.header__content {&#13;
-  display: grid;&#13;
-  grid-template-columns: .3fr .5fr .25fr;&#13;
-  grid-template-areas: "links logo search";&#13;
-  align-items: end;&#13;
-  padding: .5rem 0 0 0;&#13;
-}&#13;
-&#13;
-.header__social {&#13;
-  list-style: none;&#13;
-  font-size: 23px;&#13;
-  margin: 0;&#13;
-  padding: 0;&#13;
-  grid-area: links;&#13;
-}&#13;
-&#13;
-.header__social a {&#13;
-  color: black;&#13;
-}&#13;
-&#13;
-.header__social li {&#13;
-  display: inline-block;&#13;
-  margin-right: 5px;&#13;
-  padding-left: 0;&#13;
-}&#13;
-&#13;
-.header__social li:last-child {&#13;
-  margin-right: 0;&#13;
-}&#13;
-&#13;
-.header__logo {&#13;
-  padding: 0;&#13;
-  margin-top: -.5em;&#13;
-  z-index: 501;&#13;
-  grid-area: logo;&#13;
-}&#13;
-&#13;
-.header__logo a {&#13;
-  display: block;&#13;
-  padding: 0;&#13;
-  outline: 0;&#13;
-  border: none;&#13;
-  font-size: 2em;&#13;
-  color: black;&#13;
-  font-family: 'Roboto', cursive;&#13;
-}&#13;
-&#13;
-.header__logo a img {&#13;
-  height: 30px;&#13;
-}&#13;
-&#13;
-.header__search {&#13;
-	grid-area: search;&#13;
-}&#13;
-&#13;
-.header__nav-wrap {&#13;
-  display: flex;&#13;
-  text-align: center;&#13;
-  justify-content: center;&#13;
-  margin-top: 15px;&#13;
-  border-top: 1px solid rgba(255, 255, 255, 0.04);&#13;
-  padding-top: 15px;&#13;
-  background-color: #0069C8;&#13;
-}&#13;
-&#13;
-.header__nav {&#13;
-  list-style: none;&#13;
-  margin: 0;&#13;
-  padding: 0;&#13;
-  font-family: sans-serif;&#13;
-  font-size: 15px;&#13;
-}&#13;
-&#13;
-.header__nav li {&#13;
-  display: inline-block;&#13;
-  position: relative;&#13;
-  padding: 0 2rem;&#13;
-&#13;
-}&#13;
-&#13;
-.header__nav li&gt;a {&#13;
-  display: block;&#13;
-  color: rgba(255, 255, 255, 0.6);&#13;
-  line-height: 39px;&#13;
-}&#13;
-&#13;
-.header__nav li:hover &gt; a {&#13;
-  color: #FFFFFF;&#13;
-}&#13;
-&#13;
-.navbar-fade {&#13;
-  opacity: 0.4;&#13;
-}&#13;
-&#13;
-.navbar-inverse .navbar-toggle {&#13;
-  border-color: rgba(255, 255, 255, 0.25);&#13;
-}&#13;
-&#13;
-header[role="banner"],&#13;
-.nav &gt; li &gt; a {&#13;
-  max-height: 60px;&#13;
-}&#13;
-&#13;
-@media screen and (max-width: 768px){&#13;
-  .nav &gt; li &gt; a {&#13;
-    padding-right: 0.5rem;&#13;
-    padding-left: 0.5rem;&#13;
-  }&#13;
-}&#13;
-&#13;
-.row {&#13;
-  width: 94%;&#13;
-  max-width: 1200px;&#13;
-  margin: 0 auto;&#13;
-}&#13;
-&#13;
-.navbar-brand {&#13;
-  max-height: 60px;&#13;
-  padding: 0;&#13;
-  padding-bottom: 0.5rem;&#13;
-}&#13;
-&#13;
-.navbar-brand img, .navbar-brand span {&#13;
-  margin-left: $sp-logo-margin-x;&#13;
-  margin-right: $sp-logo-margin-x;&#13;
-  margin-top: $sp-logo-margin-y;&#13;
-  margin-bottom: $sp-logo-margin-y;&#13;
-  display: block;&#13;
-  max-height: $sp-logo-max-height;&#13;
-  max-width: $sp-logo-max-width;&#13;
-  position: relative;&#13;
-  top: 50%;&#13;
-  -webkit-transform: translateY(-50%);&#13;
-  -ms-transform: translateY(-50%);&#13;
-  transform: translateY(-50%);&#13;
-}&#13;
-&#13;
-.breadcrumb-container {&#13;
-  background-color: $panel-bg;&#13;
-}&#13;
-&#13;
-/* for mobile app */&#13;
-.navbar-inverse.is-native {&#13;
-  background-color: #405060;&#13;
-}&#13;
-&#13;
-nav {&#13;
-  margin-bottom: 0px;&#13;
-  border-radius: 0px;&#13;
-&#13;
-  .toggle-dropdown {&#13;
-    height: 60px;&#13;
-  }&#13;
-&#13;
-}&#13;
-&#13;
-.navbar-right {&#13;
-  padding-right: 0px;&#13;
-  padding-left: 7px;&#13;
-}&#13;
-&#13;
-.navbar-nav {&#13;
-  margin: 0px;&#13;
-}&#13;
-&#13;
-.header {&#13;
-  text-align: center;&#13;
-  top: 30px;&#13;
-  width: 100%;&#13;
-}&#13;
-&#13;
-// PRB711244: Dropdown menu is scrollable when too many items&#13;
-.scrollable-dropdown {&#13;
-  max-height: 80vh;&#13;
-  overflow: auto;&#13;
-  height: auto;&#13;
-}&#13;
-&#13;
-.is-native {&#13;
-  .scrollable-dropdown {&#13;
-    max-height: 100vh;&#13;
-    overflow: scroll;&#13;
-    height: auto;&#13;
-  }&#13;
-}&#13;
-&#13;
-&#13;
-/* PRB923910: Fix for Service Portal - Header Poorly Aligned in Safari */&#13;
-@media screen and (min-width: 768px) {&#13;
-  .navbar-right {&#13;
-    display: flex !important;&#13;
-  }&#13;
-}</css>
+        <css>.navbar {
+  transition: 250ms opacity ease-in-out;
+  -webkit-transition: 250ms opacity ease-in-out;
+  border: 0;
+}
+.menu-container {
+  z-index: 1000;
+  top: 0;
+  left: 0;
+  width: 100%;
+}
+.header-fixed {
+  position: fixed;
+  width: calc(100% - 17px);
+}
+.margin-bottom {
+  margin-bottom: 70px;
+}
+.header__content {
+  display: flex;
+  justify-content: space-between;
+  padding: 15px 0 15px 0;
+  .header__content-item {
+    align-self: center;
+  }
+}
+
+.header__social {
+  list-style: none;
+  font-size: 23px;
+  margin: 0;
+  padding: 0;
+  grid-area: links;
+}
+
+.header__social a {
+  color: black;
+}
+
+.header__social li {
+  display: inline-block;
+  margin-right: 5px;
+  padding-left: 0;
+}
+
+.header__social li:last-child {
+  margin-right: 0;
+}
+
+.header__logo {
+  padding: 0;
+  margin-top: -0.5em;
+  z-index: 501;
+}
+
+.header__logo a {
+  display: block;
+  padding: 0;
+  outline: 0;
+  border: none;
+  font-size: 2em;
+  color: black;
+  font-family: "Roboto", cursive;
+}
+
+.header__logo a img {
+  height: 30px;
+}
+
+.header__nav-wrap {
+  display: flex;
+  text-align: center;
+  justify-content: center;
+  margin-top: 15px;
+  border-top: 1px solid rgba(255, 255, 255, 0.04);
+  padding-top: 15px;
+  background-color: #0069c8;
+}
+
+.header__nav {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif;
+  font-size: 15px;
+}
+
+.header__nav li {
+  display: inline-block;
+  position: relative;
+  padding: 0 2rem;
+}
+
+.header__nav li &gt; a {
+  display: block;
+  color: rgba(255, 255, 255, 0.6);
+  line-height: 39px;
+}
+
+.header__nav li:hover &gt; a {
+  color: #ffffff;
+}
+
+.navbar-fade {
+  opacity: 0.4;
+}
+
+.navbar-inverse .navbar-toggle {
+  border-color: rgba(255, 255, 255, 0.25);
+}
+
+header[role="banner"],
+.nav &gt; li &gt; a {
+  max-height: 60px;
+}
+
+@media screen and (max-width: 768px) {
+  .nav &gt; li &gt; a {
+    padding-right: 0.5rem;
+    padding-left: 0.5rem;
+  }
+}
+
+.navbar-brand {
+  max-height: 60px;
+  padding: 0;
+  padding-bottom: 0.5rem;
+}
+
+.navbar-brand img,
+.navbar-brand span {
+  margin-left: $sp-logo-margin-x;
+  margin-right: $sp-logo-margin-x;
+  margin-top: $sp-logo-margin-y;
+  margin-bottom: $sp-logo-margin-y;
+  display: block;
+  max-height: $sp-logo-max-height;
+  max-width: $sp-logo-max-width;
+  position: relative;
+  top: 50%;
+  -webkit-transform: translateY(-50%);
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%);
+}
+
+.breadcrumb-container {
+  background-color: $panel-bg;
+}
+
+/* for mobile app */
+.navbar-inverse.is-native {
+  background-color: #405060;
+}
+
+nav {
+  margin-bottom: 0px;
+  border-radius: 0px;
+
+  .toggle-dropdown {
+    height: 60px;
+  }
+}
+
+.navbar-right {
+  padding-right: 0px;
+  padding-left: 7px;
+}
+
+.navbar-nav {
+  margin: 0px;
+}
+
+.header {
+  text-align: center;
+  top: 30px;
+  width: 100%;
+}
+
+// PRB711244: Dropdown menu is scrollable when too many items
+.scrollable-dropdown {
+  max-height: 80vh;
+  overflow: auto;
+  height: auto;
+}
+
+.is-native {
+  .scrollable-dropdown {
+    max-height: 100vh;
+    overflow: scroll;
+    height: auto;
+  }
+}
+
+.quick-links-container {
+  display: flex;
+  justify-content: space-evenly;
+  height: 66px;
+  .quick-link {
+    margin: 0 10px 0 10px;
+    align-self: center;
+    filter: grayscale(1);
+    transition: 0.5s;
+    &amp;:hover {
+      filter: grayscale(0);
+    }
+
+    a {
+      span {
+        color: #0069c8;
+        font-size: 20px;
+      }
+      img {
+        max-height: 20px;
+      }
+    }
+  }
+}
+
+/* PRB923910: Fix for Service Portal - Header Poorly Aligned in Safari */
+@media screen and (min-width: 768px) {
+  .navbar-right {
+    display: flex !important;
+  }
+}
+</css>
         <data_table>sp_instance</data_table>
         <demo_data/>
         <description/>
@@ -351,7 +379,7 @@ if (data.menu && data.menu.data) {
         <sys_created_on>2020-02-11 17:58:33</sys_created_on>
         <sys_customer_update>false</sys_customer_update>
         <sys_id>47d12a1fdb7e04108f26550a48961944</sys_id>
-        <sys_mod_count>67</sys_mod_count>
+        <sys_mod_count>123</sys_mod_count>
         <sys_name>Team Online Header</sys_name>
         <sys_package display_value="TEAMonline" source="x_aaro2_teamonline">a2dfc25fdb7244105f65ba03e29619fa</sys_package>
         <sys_policy/>
@@ -359,31 +387,69 @@ if (data.menu && data.menu.data) {
         <sys_scope display_value="TEAMonline">a2dfc25fdb7244105f65ba03e29619fa</sys_scope>
         <sys_update_name>sp_header_footer_47d12a1fdb7e04108f26550a48961944</sys_update_name>
         <sys_updated_by>andrey.mironyuk</sys_updated_by>
-        <sys_updated_on>2020-04-16 12:44:36</sys_updated_on>
-        <template><![CDATA[<div class="header navbar-inverse">
-  <div class="header__content row">
-    <ul class="header__social">
-      <li>
-        <a href="#0"><i class="fa fa-facebook" aria-hidden="true"></i></a>
-      </li>
-      <li>
-        <a href="#0"><i class="fa fa-twitter" aria-hidden="true"></i></a>
-      </li>
-      <li>
-        <a href="#0"><i class="fa fa-instagram" aria-hidden="true"></i></a>
-      </li>
-      <li>
-        <a href="#0"><i class="fa fa-pinterest" aria-hidden="true"></i></a>
-      </li>
-    </ul>
-    <div class="header__logo">
-      <a href="?id={{::portal.homepage_dv}}"><img ng-src="{{::portal.logo}}"></a>
+        <sys_updated_on>2020-06-04 08:59:40</sys_updated_on>
+        <template><![CDATA[<div class="container">
+  <div class="quick-links-container">
+    <div class="quick-link">
+      <a href="https://www.aarons.com">
+        <img src="teamonline_aarons_logo.png" style="max-height: 25px;" />
+      </a>
     </div>
-    <div class="header__search">
-      <sp-widget widget="data.search"></sp-widget>
+    <div class="quick-link">
+      <a href="https://progleasing.com/ ">
+        <img src="teamonline_progressive_logo.png" style="max-height: 35px" />
+      </a>
+    </div>
+    <div class="quick-link">
+      <a href="https://www.teamwork.com">
+        <img src="https://www.teamwork.com/app/themes/teamwork-theme/dist/images/twork-slate.svg" />
+      </a>
+    </div>
+    <div class="quick-link">
+      <a href="https://www.dayforcehcm.com/mydayforce/login.aspx">
+        <span>DAYFORCE</span>
+      </a>
+    </div>
+    <div class="quick-link">
+      <a href="https://www.dayforcehcm.com/clock/index.html">
+        <span>TIMECLOCK</span>
+      </a>
+    </div>
+    <div class="quick-link">
+      <a href="https://www.teamwork.com">
+        <img src="teamonline_woodhaven_logo.png" style="max-height: 35px" />
+      </a>
     </div>
   </div>
-  <sp-widget widget="::data.menu"></sp-widget>
-]]></template>
+</div>
+<div class="header navbar-inverse">
+  <div class="container">
+    <div class="header__content">
+      <div class="header__content-item">
+        <ul class="header__social">
+          <li>
+            <a href="#0"><i class="fa fa-facebook" aria-hidden="true"></i></a>
+          </li>
+          <li>
+            <a href="#0"><i class="fa fa-twitter" aria-hidden="true"></i></a>
+          </li>
+          <li>
+            <a href="#0"><i class="fa fa-instagram" aria-hidden="true"></i></a>
+          </li>
+          <li>
+            <a href="#0"><i class="fa fa-pinterest" aria-hidden="true"></i></a>
+          </li>
+        </ul>
+      </div>
+      <div class="header__logo header__content-item">
+        <a href="?id={{::portal.homepage_dv}}"><img ng-src="{{::portal.logo}}"></a>
+      </div>
+      <div class="header__search header__content-item">
+        <sp-widget widget="data.search"></sp-widget>
+      </div>
+    </div>
+  </div>
+</div>
+<sp-widget widget="::data.menu"></sp-widget>]]></template>
     </sp_header_footer>
 </record_update>

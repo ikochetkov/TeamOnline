@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update>
+    <sys_ui_list parent="" relationship="" sys_domain="global" table="x_aaro2_teamonline_carousel_slide" version="2" view="">
+        <sys_ui_list_element action="INSERT_OR_UPDATE">
+            <average_value>false</average_value>
+            <element>name</element>
+            <list_id display_value="x_aaro2_teamonline_carousel_slide" element="NULL" name="x_aaro2_teamonline_carousel_slide" parent="NULL" relationship="NULL" sys_domain="global" view="Default view">8f974fe3db4990905f65ba03e296198c</list_id>
+            <max_value>false</max_value>
+            <min_value>false</min_value>
+            <position>0</position>
+            <sum>false</sum>
+            <sys_created_by>xxikochet</sys_created_by>
+            <sys_created_on>2020-06-03 11:43:14</sys_created_on>
+            <sys_id>c7974fe3db4990905f65ba03e296198d</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_updated_by>xxikochet</sys_updated_by>
+            <sys_updated_on>2020-06-03 11:43:14</sys_updated_on>
+        </sys_ui_list_element>
+        <sys_ui_list_element action="INSERT_OR_UPDATE">
+            <average_value>false</average_value>
+            <element>background</element>
+            <list_id display_value="x_aaro2_teamonline_carousel_slide" element="NULL" name="x_aaro2_teamonline_carousel_slide" parent="NULL" relationship="NULL" sys_domain="global" view="Default view">8f974fe3db4990905f65ba03e296198c</list_id>
+            <max_value>false</max_value>
+            <min_value>false</min_value>
+            <position>1</position>
+            <sum>false</sum>
+            <sys_created_by>xxikochet</sys_created_by>
+            <sys_created_on>2020-06-03 11:43:14</sys_created_on>
+            <sys_id>4b974fe3db4990905f65ba03e296198d</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_updated_by>xxikochet</sys_updated_by>
+            <sys_updated_on>2020-06-03 11:43:14</sys_updated_on>
+        </sys_ui_list_element>
+        <sys_ui_list_element action="INSERT_OR_UPDATE">
+            <average_value>false</average_value>
+            <element>carousel</element>
+            <list_id display_value="x_aaro2_teamonline_carousel_slide" element="NULL" name="x_aaro2_teamonline_carousel_slide" parent="NULL" relationship="NULL" sys_domain="global" view="Default view">8f974fe3db4990905f65ba03e296198c</list_id>
+            <max_value>false</max_value>
+            <min_value>false</min_value>
+            <position>2</position>
+            <sum>false</sum>
+            <sys_created_by>xxikochet</sys_created_by>
+            <sys_created_on>2020-06-03 11:43:14</sys_created_on>
+            <sys_id>cb974fe3db4990905f65ba03e296198d</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_updated_by>xxikochet</sys_updated_by>
+            <sys_updated_on>2020-06-03 11:43:14</sys_updated_on>
+        </sys_ui_list_element>
+        <sys_ui_list_element action="INSERT_OR_UPDATE">
+            <average_value>false</average_value>
+            <element>description</element>
+            <list_id display_value="x_aaro2_teamonline_carousel_slide" element="NULL" name="x_aaro2_teamonline_carousel_slide" parent="NULL" relationship="NULL" sys_domain="global" view="Default view">8f974fe3db4990905f65ba03e296198c</list_id>
+            <max_value>false</max_value>
+            <min_value>false</min_value>
+            <position>3</position>
+            <sum>false</sum>
+            <sys_created_by>xxikochet</sys_created_by>
+            <sys_created_on>2020-06-03 11:43:14</sys_created_on>
+            <sys_id>4f974fe3db4990905f65ba03e296198d</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_updated_by>xxikochet</sys_updated_by>
+            <sys_updated_on>2020-06-03 11:43:14</sys_updated_on>
+        </sys_ui_list_element>
+        <sys_ui_list_element action="INSERT_OR_UPDATE">
+            <average_value>false</average_value>
+            <element>full_description</element>
+            <list_id display_value="x_aaro2_teamonline_carousel_slide" element="NULL" name="x_aaro2_teamonline_carousel_slide" parent="NULL" relationship="NULL" sys_domain="global" view="Default view">8f974fe3db4990905f65ba03e296198c</list_id>
+            <max_value>false</max_value>
+            <min_value>false</min_value>
+            <position>4</position>
+            <sum>false</sum>
+            <sys_created_by>xxikochet</sys_created_by>
+            <sys_created_on>2020-06-03 11:43:14</sys_created_on>
+            <sys_id>cf974fe3db4990905f65ba03e296198d</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_updated_by>xxikochet</sys_updated_by>
+            <sys_updated_on>2020-06-03 11:43:14</sys_updated_on>
+        </sys_ui_list_element>
+        <sys_ui_list_element action="INSERT_OR_UPDATE">
+            <average_value>false</average_value>
+            <element>header</element>
+            <list_id display_value="x_aaro2_teamonline_carousel_slide" element="NULL" name="x_aaro2_teamonline_carousel_slide" parent="NULL" relationship="NULL" sys_domain="global" view="Default view">8f974fe3db4990905f65ba03e296198c</list_id>
+            <max_value>false</max_value>
+            <min_value>false</min_value>
+            <position>5</position>
+            <sum>false</sum>
+            <sys_created_by>xxikochet</sys_created_by>
+            <sys_created_on>2020-06-03 11:43:14</sys_created_on>
+            <sys_id>43974fe3db4990905f65ba03e296198e</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_updated_by>xxikochet</sys_updated_by>
+            <sys_updated_on>2020-06-03 11:43:14</sys_updated_on>
+        </sys_ui_list_element>
+        <sys_ui_list_element action="INSERT_OR_UPDATE">
+            <average_value>false</average_value>
+            <element>order</element>
+            <list_id display_value="x_aaro2_teamonline_carousel_slide" element="NULL" name="x_aaro2_teamonline_carousel_slide" parent="NULL" relationship="NULL" sys_domain="global" view="Default view">8f974fe3db4990905f65ba03e296198c</list_id>
+            <max_value>false</max_value>
+            <min_value>false</min_value>
+            <position>6</position>
+            <sum>false</sum>
+            <sys_created_by>xxikochet</sys_created_by>
+            <sys_created_on>2020-06-03 11:43:14</sys_created_on>
+            <sys_id>c3974fe3db4990905f65ba03e296198e</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_updated_by>xxikochet</sys_updated_by>
+            <sys_updated_on>2020-06-03 11:43:14</sys_updated_on>
+        </sys_ui_list_element>
+        <sys_ui_list_element action="INSERT_OR_UPDATE">
+            <average_value>false</average_value>
+            <element>url</element>
+            <list_id display_value="x_aaro2_teamonline_carousel_slide" element="NULL" name="x_aaro2_teamonline_carousel_slide" parent="NULL" relationship="NULL" sys_domain="global" view="Default view">8f974fe3db4990905f65ba03e296198c</list_id>
+            <max_value>false</max_value>
+            <min_value>false</min_value>
+            <position>7</position>
+            <sum>false</sum>
+            <sys_created_by>xxikochet</sys_created_by>
+            <sys_created_on>2020-06-03 11:43:14</sys_created_on>
+            <sys_id>47974fe3db4990905f65ba03e296198e</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_updated_by>xxikochet</sys_updated_by>
+            <sys_updated_on>2020-06-03 11:43:14</sys_updated_on>
+        </sys_ui_list_element>
+        <sys_ui_list action="INSERT_OR_UPDATE">
+            <average_value>false</average_value>
+            <element/>
+            <max_value>false</max_value>
+            <min_value>false</min_value>
+            <name>x_aaro2_teamonline_carousel_slide</name>
+            <parent/>
+            <position/>
+            <relationship/>
+            <sum>false</sum>
+            <sys_class_name>sys_ui_list</sys_class_name>
+            <sys_created_by>xxikochet</sys_created_by>
+            <sys_created_on>2020-06-03 11:43:14</sys_created_on>
+            <sys_customer_update>false</sys_customer_update>
+            <sys_domain>global</sys_domain>
+            <sys_id>8f974fe3db4990905f65ba03e296198c</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_name>x_aaro2_teamonline_carousel_slide</sys_name>
+            <sys_package display_value="TEAMonline" source="x_aaro2_teamonline">a2dfc25fdb7244105f65ba03e29619fa</sys_package>
+            <sys_policy/>
+            <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+            <sys_scope display_value="TEAMonline">a2dfc25fdb7244105f65ba03e29619fa</sys_scope>
+            <sys_update_name>sys_ui_list_x_aaro2_teamonline_carousel_slide_null</sys_update_name>
+            <sys_updated_by>xxikochet</sys_updated_by>
+            <sys_updated_on>2020-06-03 11:43:14</sys_updated_on>
+            <sys_user/>
+            <view display_value="Default view" name="NULL">Default view</view>
+            <view_name/>
+        </sys_ui_list>
+    </sys_ui_list>
+</record_update>

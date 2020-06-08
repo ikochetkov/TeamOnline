@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?><database>
+    <element label="Blocks Config" max_length="40" name="x_aaro2_teamonline_blocks_config" type="collection">
+        <element calculation="(function calculatedFieldValue(current) {&#13;&#10;&#13;&#10;&#9;// Add your code here&#13;&#10;&#9;return '';  // return the calculated value&#13;&#10;&#13;&#10;})(current);" label="Article" max_length="32" name="article" reference="kb_knowledge" type="reference"/>
+        <element calculation="(function calculatedFieldValue(current) {&#13;&#10;&#13;&#10;&#9;// Add your code here&#13;&#10;&#9;return '';  // return the calculated value&#13;&#10;&#13;&#10;})(current);" default="javascript: gs.getUserID()" label="Author" max_length="32" name="author" reference="sys_user" type="reference"/>
+        <element calculation="(function calculatedFieldValue(current) {&#13;&#10;&#13;&#10;&#9;// Add your code here&#13;&#10;&#9;return '';  // return the calculated value&#13;&#10;&#13;&#10;})(current);" label="Background" max_length="40" name="background" reference="db_image" reference_qual="category=kb^EQ" reference_qual_condition="category=kb^EQ" type="reference"/>
+        <element calculation="(function calculatedFieldValue(current) {&#13;&#10;&#13;&#10;&#9;// Add your code here&#13;&#10;&#9;return '';  // return the calculated value&#13;&#10;&#13;&#10;})(current);" label="Description" max_length="1000" name="description" type="string"/>
+        <element calculation="(function calculatedFieldValue(current) {&#13;&#10;&#13;&#10;&#9;// Add your code here&#13;&#10;&#9;return '';  // return the calculated value&#13;&#10;&#13;&#10;})(current);" default="true" label="Display author" max_length="40" name="display_author" type="boolean"/>
+        <element choice="3" default="by_width" label="Fit Type" max_length="40" name="fit_type" type="choice">
+            <choice>
+                <element inactive_on_update="false" label="By Height" value="by_height"/>
+                <element inactive_on_update="false" label="By Width" value="by_width"/>
+            </choice>
+        </element>
+        <element calculation="(function calculatedFieldValue(current) {&#13;&#10;&#13;&#10;&#9;// Add your code here&#13;&#10;&#9;return '';  // return the calculated value&#13;&#10;&#13;&#10;})(current);" label="Link" max_length="255" name="link" type="string"/>
+        <element calculation="(function calculatedFieldValue(current) {&#13;&#10;&#13;&#10;&#9;// Add your code here&#13;&#10;&#9;return '';  // return the calculated value&#13;&#10;&#13;&#10;})(current);" label="Meta" max_length="40" name="meta" type="string"/>
+        <element calculation="(function calculatedFieldValue(current) {&#13;&#10;&#13;&#10;&#9;// Add your code here&#13;&#10;&#9;return '';  // return the calculated value&#13;&#10;&#13;&#10;})(current);" label="Number" max_length="40" name="number" type="integer"/>
+        <element calculation="(function calculatedFieldValue(current) {&#13;&#10;&#13;&#10;&#9;// Add your code here&#13;&#10;&#9;return '';  // return the calculated value&#13;&#10;&#13;&#10;})(current);" label="Redirect to Article" max_length="40" name="redirect_to_article" type="boolean"/>
+        <element calculation="(function calculatedFieldValue(current) {&#13;&#10;&#13;&#10;&#9;// Add your code here&#13;&#10;&#9;return '';  // return the calculated value&#13;&#10;&#13;&#10;})(current);" label="Title" max_length="40" name="title" type="string"/>
+        <element choice="1" label="Type" max_length="40" name="type" type="choice">
+            <choice>
+                <element inactive_on_update="false" label="Block" value="block"/>
+                <element inactive_on_update="false" label="Company Goals" value="company_goals"/>
+                <element inactive_on_update="false" label="Rally Cry" value="rally_cry"/>
+            </choice>
+        </element>
+        <element label="Widget" max_length="32" name="widget" reference="sp_widget" type="reference"/>
+        <index name="index">
+            <element name="widget"/>
+        </index>
+        <index name="index2">
+            <element name="author"/>
+        </index>
+        <index name="index3">
+            <element name="article"/>
+        </index>
+    </element>
+</database>

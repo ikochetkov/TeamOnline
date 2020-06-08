@@ -1,0 +1,252 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sp_widget">
+    <sp_widget action="INSERT_OR_UPDATE">
+        <category>custom</category>
+        <client_script><![CDATA[function($scope, $rootScope, $location, spUtil, $uibModal, glideFormFactory, spAriaUtil, spAriaFocusManager) {
+  /* widget controller */
+  var c = this;
+	
+	/* === collect g_form object of form fields === */
+	var flatFields = [];
+	angular.forEach($scope.data.f._fields, function (field) {
+		flatFields.push(field);
+	});
+
+	var g_form = glideFormFactory.create($scope, $scope.data.f.table, $scope.data.f.sys_id, flatFields, null, { uiMessageHandler: uiMessageHandler });
+
+	$scope.getGlideForm = function () {
+		return g_form;
+	}
+
+	var uiMessageHandler = function (g_form, type, message) {
+		switch (type) {
+			case 'addInfoMessage':
+				spUtil.addInfoMessage(message);
+				break;
+			case 'addErrorMessage':
+				spUtil.addErrorMessage(message);
+				break;
+			case 'clearMessages':
+				break;
+			default:
+		}
+	};
+	
+	/* context Menu */
+	$scope.contextMenu = function () {
+		if (!$scope.data.canEdit) { return [] }
+		return [
+			['Edit Slide', function ($itemScope) {
+				$itemScope.$parent.$parent.editSlide($itemScope.$parent.$parent.slide);
+			}],
+			['Delete Slide', function ($itemScope) {
+				$itemScope.$parent.deleteSlide($itemScope.$index)
+			}],
+			['Add new Slide', function ($itemScope) {
+				$itemScope.$parent.createSlide($itemScope.$index)
+			}]
+		]
+	}
+	
+	/* Modal to add new/edit */
+	$scope.open = function () {
+		$scope.modalInstance = $uibModal.open({
+			animation: true,
+			templateUrl: 'slider_editor.html',
+			size: 'lg',
+			backdrop: false,
+			scope: $scope
+		});
+	};
+	
+	$scope.closeEdit = function(){
+		$scope.modalInstance.close();
+	}
+	
+	$scope.editSlide = function(itemScope){
+		console.log(itemScope);
+		$scope.open();
+	}
+	
+	$scope.deleteSlide = function(){
+		console.log();
+	}
+	
+	$scope.createSlide = function(){
+		console.log();
+	}
+	
+	
+}]]></client_script>
+        <controller_as>c</controller_as>
+        <css>.container{
+  padding:0px;
+  width:100%; 
+  height:300px;
+  background-repeat: no-repeat;
+  background-size:cover;
+  background-color: #333;
+}
+
+#slider{
+  padding:0px 15px 0px 15px
+}
+.carousel-control {
+  width:5%;
+  background-image:none;
+}
+
+
+/* dark picture */
+
+img{ 
+  opacity:0.6;
+  -moz-opacity:0.6;
+  filter: alpha(opacity=60) black;
+  -khtml-opacity: 0.6;
+  background-color:rgba(0, 0, 0, .6);
+}
+
+/* button */
+
+.button-wrapper {
+  position: relative;
+  //transform: translateY(120%);
+  margin: 0 auto;
+  width: 320px;
+}
+.shape {
+  stroke-dasharray: 140 540;
+  stroke-dashoffset: -474;
+  stroke-width: 8px;
+  fill: transparent;
+  stroke: #19f6e8;
+  border-bottom: 5px solid black;
+  transition: stroke-width 1s, stroke-dashoffset 1s, stroke-dasharray 1s;
+}
+.button-text {
+  font-family: 'Roboto Condensed';
+  font-size: 22px;
+  line-height: 32px;
+  letter-spacing: 8px;
+  color: #fff;
+  top: -48px;
+  position: relative;
+}
+.button-wrapper:hover .shape {
+  stroke-width: 4px;
+  stroke-dashoffset: 0;
+  stroke-dasharray: 760;
+}
+
+/* indicators */
+.carousel-indicators li {
+  position: relative;
+  -webkit-box-flex: 0;
+  -ms-flex: 0 1 auto;
+  flex: 0 1 auto;
+  width: 30px;
+  height: 3px;
+  margin-right: 3px;
+  margin-left: 3px;
+  text-indent: -999px;
+  background-color: rgba(255,255,255,.5);
+}
+
+.carousel-indicators .active {
+  background-color: #fff;
+}
+</css>
+        <data_table>x_aaro2_teamonline_instance_of_teamonline_carousel</data_table>
+        <demo_data/>
+        <description/>
+        <docs/>
+        <field_list>interval</field_list>
+        <has_preview>false</has_preview>
+        <id>teamonline_carousel</id>
+        <internal>false</internal>
+        <link><![CDATA[function link(scope, element, attrs, controller) {  }]]></link>
+        <name>TeamOnline Carousel</name>
+        <option_schema/>
+        <public>false</public>
+        <roles/>
+        <script><![CDATA[//data.slides = $sp.getRelatedList('x_aaro2_teamonline_carousel_slide','carousel');
+data.canEdit = gs.getUser().isMemberOf(gs.getProperty("x_aaro2_teamonline.teamonline_administration_group")) || gs.hasRole("admin");
+data.slides = [];
+var widgetInstanceRecord = $sp.getInstanceRecord();
+var slidesGr = new GlideRecord('x_aaro2_teamonline_carousel_slide');
+slidesGr.addQuery('carousel', widgetInstanceRecord.getUniqueValue());
+slidesGr.query();
+while(slidesGr.next()){
+	data.slides.push({
+		sys_id: slidesGr.getUniqueValue(),
+		name : slidesGr.getValue('name'),
+		order : slidesGr.getValue('order'),
+		background: slidesGr.getDisplayValue('background'),
+		description: slidesGr.getValue('description'),
+		full_description : slidesGr.getValue('full_description'),
+		header : slidesGr.getValue('header'),
+		enable_link : slidesGr.getDisplayValue('enable_link'),
+		link_title : slidesGr.getValue('link_title'),
+		url : slidesGr.getValue('url')	
+	})
+}
+
+console.log(data.slides);
+
+
+data.table = 'x_aaro2_teamonline_carousel_slide';
+
+data.f = $sp.getForm(data.table, data.sys_id, data.query, data.view);
+
+if (input && input.method === 'save'){
+	var result = {};
+	if (input._fields) {
+		result = $sp.saveRecord(input.table, input.sys_id, input._fields);
+	}
+	//data.result = result;
+	//data.sys_id = result.sys_id;
+}]]></script>
+        <servicenow>false</servicenow>
+        <sys_class_name>sp_widget</sys_class_name>
+        <sys_created_by>xxikochet</sys_created_by>
+        <sys_created_on>2020-06-01 11:22:57</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_id>1acfa40fdb855c505f65ba03e29619e0</sys_id>
+        <sys_mod_count>215</sys_mod_count>
+        <sys_name>TeamOnline Carousel</sys_name>
+        <sys_package display_value="TEAMonline" source="x_aaro2_teamonline">a2dfc25fdb7244105f65ba03e29619fa</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="TEAMonline">a2dfc25fdb7244105f65ba03e29619fa</sys_scope>
+        <sys_update_name>sp_widget_1acfa40fdb855c505f65ba03e29619e0</sys_update_name>
+        <sys_updated_by>xxikochet</sys_updated_by>
+        <sys_updated_on>2020-06-03 15:12:24</sys_updated_on>
+        <template><![CDATA[<div id="slider">
+  <div class="pull-in">
+    <uib-carousel interval="options.interval">
+      <uib-slide ng-repeat="slide in ::data.slides" active="slide.active">
+        <div class="container">
+
+          <img context-menu="contextMenu()" ng-src="{{::slide.background}}" style="margin:auto; width:100%;" role="presentation">
+
+          <div context-menu="contextMenu()" class="carousel-caption d-none d-md-block">
+            <h2 class="name">{{::slide.header}}</h2>
+            <h4 class="description">{{::slide.description}}</h4>
+            <p class="description">{{::slide.full_description}}</p>
+            <div ng-if="slide.enable_link == 'true'" class="button-wrapper">
+              <svg height="60" width="320" xmlns="http://www.w3.org/2000/svg">
+                <rect class="shape" height="60" width="320" />
+                <div class="button-text">
+                  <a style="color: #fff" href="{{::slide.url}}" title="Open link">{{::slide.link_title}}</a>
+                </div>
+              </svg>
+            </div>
+          </div>
+        </div>
+
+      </uib-slide>
+    </uib-carousel>
+  </div>
+</div>]]></template>
+    </sp_widget>
+</record_update>
