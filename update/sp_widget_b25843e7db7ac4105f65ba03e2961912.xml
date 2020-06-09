@@ -349,6 +349,7 @@ small {&#13;
         <public>false</public>
         <roles/>
         <script><![CDATA[(function() {
+	data.kb_category = $sp.getParameter('kb_category');
 	if (input && input.action == 'delete_article') {
 		var articleGr = new GlideRecord('kb_knowledge');
 		if (articleGr.get(input.delete_article.sys_id)) {
@@ -375,6 +376,7 @@ small {&#13;
 	}
 
 	data.category = input &&  input.category ? input.category : null;//filled if user choosen category
+	//data.kb_category_value = input &&  input.kb_category_value ? input.kb_category_value : null;
 	if (!data.isHomePage) 
 	{
 		data.categories = getCategories(data.kb_sys_id);
@@ -395,13 +397,15 @@ small {&#13;
 	articles.addQuery("kb_knowledge_base", "IN", data.kb_sys_id);
 	articles.addQuery("workflow_state", "published");
 	if(data.isHomePage){
-		articles.addQuery('kb_category.label', 'Base articles');
+		articles.addQuery('kb_category.label', 'IN', 'Base articles');
 		articles.orderBy('x_aaro2_teamonline_order');
 	}else{
 		articles[options.order_by](options.order_by_field);
+		if(data.kb_category) articles.addQuery('kb_category.value',data.kb_category);
 	}
 
 	if (data.category) articles.addQuery('meta', data.category);
+	if (data.kb_category_value) articles.addQuery('kb_category.value',data.kb_category_value);
 	articles.setLimit(options.limit_records);
 	articles.addActiveQuery();
 	if (!data.isHomePage) articles.chooseWindow(data.window_start, data.window_end);
@@ -416,7 +420,8 @@ small {&#13;
 			background : articles.getDisplayValue('x_aaro2_teamonline_background_from_images'),
 			text       : articles.getValue('text').replace(/<[^>]*>/g, ''),
 			view_count : articles.getValue('sys_view_count'),
-			order			 : articles.getValue('x_aaro2_teamonline_order')
+			order			 : articles.getValue('x_aaro2_teamonline_order'),
+			kb_category_value: articles.kb_category.value.toString()
 		})
 	}
 })();
@@ -471,7 +476,7 @@ function getCategories (knowledgeBaseId) {
         <sys_created_on>2020-02-12 15:25:13</sys_created_on>
         <sys_customer_update>false</sys_customer_update>
         <sys_id>b25843e7db7ac4105f65ba03e2961912</sys_id>
-        <sys_mod_count>387</sys_mod_count>
+        <sys_mod_count>418</sys_mod_count>
         <sys_name>Team Online All Base Articles</sys_name>
         <sys_package display_value="TEAMonline" source="x_aaro2_teamonline">a2dfc25fdb7244105f65ba03e29619fa</sys_package>
         <sys_policy/>
@@ -479,7 +484,7 @@ function getCategories (knowledgeBaseId) {
         <sys_scope display_value="TEAMonline">a2dfc25fdb7244105f65ba03e29619fa</sys_scope>
         <sys_update_name>sp_widget_b25843e7db7ac4105f65ba03e2961912</sys_update_name>
         <sys_updated_by>xxikochet</sys_updated_by>
-        <sys_updated_on>2020-04-15 08:59:44</sys_updated_on>
+        <sys_updated_on>2020-06-09 13:57:59</sys_updated_on>
         <template><![CDATA[<section class="section">
   <div class="row">
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
