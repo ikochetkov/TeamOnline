@@ -4,21 +4,87 @@
         <client_script><![CDATA[function($scope, $rootScope, $location, $timeout, spUtil, glideFormFactory, spAriaUtil, spAriaFocusManager, $uibModal, spModal) {
 
   var c = this;
+  var d = $scope.data
 
-  console.log('RCCG:: ', $scope.data);
+  $scope.contextMenu = function (sys_id) {
+    if (!d.canEdit) { return [] }
+    return [
+      ['Edit item', function ($itemScope) {
+
+        d.sys_id = sys_id;
+        d.action = 'editItem';
+        spUtil.update($scope).then(function () {
+          var flatFields = [];
+          angular.forEach(d.f._fields, function (field) {
+            flatFields.push(field);
+          });
+
+
+          var g_form = glideFormFactory.create($scope, d.f.table, d.f.sys_id, flatFields, null, { uiMessageHandler: uiMessageHandler });
+
+          $scope.getGlideForm = function () {
+            return g_form;
+          }
+
+          var uiMessageHandler = function (g_form, type, message) {
+            switch (type) {
+              case 'addInfoMessage':
+                spUtil.addInfoMessage(message);
+                break;
+              case 'addErrorMessage':
+                spUtil.addErrorMessage(message);
+                break;
+              case 'clearMessages':
+                break;
+              default:
+            }
+          };
+          $scope.editImage(d.sys_id);
+
+        });
+      }]
+    ]
+  }
+
+  $rootScope.$on('ImageLibrary.imageSelected', function (event, respData) {
+    d.f._fields.background.value = respData.sys_id;
+    d.f._fields.background.displayValue = respData.name;
+    spUtil.addInfoMessage('New background selected!');
+  })
+
+  $scope.editImage = function () {
+    $scope.modalInstance = $uibModal.open({
+      animation: true,
+      templateUrl: 'goal_editor.html',
+      size: 'lg',
+      backdrop: false,
+      scope: $scope
+    });
+  };
+  $scope.closeEdit = function () {
+    $scope.modalInstance.close();
+    spUtil.update($scope);
+  }
+  $scope.saveRecord = function () {
+    d.action = "saveItem";
+    spUtil.update($scope).then(function (response) {
+      $scope.closeEdit();
+    });
+  }
+  $scope.getClass = function (block) {
+    return block.fitType;
+  }
 }]]></client_script>
         <controller_as>c</controller_as>
-        <css>.goals-wrapper {&#13;
-  margin: 15px;&#13;
-  height: 20em;&#13;
-  background-color: white;&#13;
+        <css>.rally-wrapper,&#13;
+.goals-wrapper {&#13;
+  margin: 0;&#13;
+  height: 17em;&#13;
+  background-color: #f3f3f4;&#13;
+  width: calc(50% - 1px);&#13;
 }&#13;
 .absolute {&#13;
-  position: absolute;&#13;
-  top: 0;&#13;
-  left: 0;&#13;
-  width: 100%;&#13;
-  height: 100%;&#13;
+  margin: auto;&#13;
   object-fit: cover;&#13;
 }&#13;
 .goals-img {&#13;
@@ -27,12 +93,42 @@
 .goals-content {&#13;
   z-index: 2;&#13;
 }&#13;
+.pictures-container {&#13;
+  margin: 5px 15px 5px 15px;&#13;
+  display: flex;&#13;
+  flex-wrap: nowrap;&#13;
+  justify-content: space-between;&#13;
+  gap: 1px;&#13;
+}&#13;
+.company-goals-header {&#13;
+  background-color: white;&#13;
+  position: relative;&#13;
+  text-align: center;&#13;
+  font-size: 24px;&#13;
+  margin: 0px 15px 0px 15px;&#13;
+  padding: 2rem 0;&#13;
+  line-height: 1;&#13;
+  text-transform: uppercase;&#13;
+  letter-spacing: 1.5px;&#13;
+  &amp;:after {&#13;
+    content: "";&#13;
+    position: absolute;&#13;
+    bottom: 14px;&#13;
+    left: 42%;&#13;
+    height: 2px;&#13;
+    width: 86px;&#13;
+    background: #91c712;&#13;
+  }&#13;
+}&#13;
 .by_height {&#13;
   height: 100%;&#13;
+  max-width: 100%;&#13;
+  object-fit: cover;&#13;
 }&#13;
 .by_width {&#13;
-  height: 100%;&#13;
+  max-height: 100%;&#13;
   width: 100%;&#13;
+  object-fit: cover;&#13;
 }&#13;
 </css>
         <data_table>sp_instance</data_table>
@@ -52,14 +148,30 @@
         <roles/>
         <script><![CDATA[(function () {
   /* populate the 'data' object */
-  /* e.g., data.table = $sp.getValue('table'); */
+  data.table = 'x_aaro2_teamonline_blocks_config';
+  data.imageLibrary = $sp.getWidget('image_library');
+
+  data.canEdit = gs.getUser().isMemberOf(gs.getProperty("x_aaro2_teamonline.teamonline_administration_group")) || gs.hasRole("admin");
   data.company_goals = {};
   data.rally_cry = {};
-  var blocksGr = new GlideRecord('x_aaro2_teamonline_blocks_config');
-  blocksGr.addQuery('type', 'rally_cry').addOrCondition('type', 'company_goals');
-  blocksGr.query();
-  while (blocksGr.next()) {
-    data[blocksGr.getValue('type')] = getBlockObject(blocksGr);
+
+  if (input && input.action === 'editItem') {
+    data.sys_id = input.sys_id;
+    data.f = $sp.getForm(data.table, input.sys_id, '', 'rallyCryCompanyGoals');
+  }
+  if (input && input.action === 'saveItem') {
+    $sp.saveRecord(input.table, input.sys_id, input.f._fields);
+  }
+
+  getBlocks();
+
+  function getBlocks() {
+    var blocksGr = new GlideRecord(data.table);
+    blocksGr.addQuery('type', 'rally_cry').addOrCondition('type', 'company_goals');
+    blocksGr.query();
+    while (blocksGr.next()) {
+      data[blocksGr.getValue('type')] = getBlockObject(blocksGr);
+    }
   }
   function getBlockObject(gr) {
     var block = {
@@ -76,7 +188,7 @@
         <sys_created_on>2020-06-04 09:50:27</sys_created_on>
         <sys_customer_update>false</sys_customer_update>
         <sys_id>2717fb73db4910908f26550a4896195d</sys_id>
-        <sys_mod_count>31</sys_mod_count>
+        <sys_mod_count>81</sys_mod_count>
         <sys_name>TeamOnline Comapny Goals</sys_name>
         <sys_package display_value="TEAMonline" source="x_aaro2_teamonline">a2dfc25fdb7244105f65ba03e29619fa</sys_package>
         <sys_policy/>
@@ -84,22 +196,26 @@
         <sys_scope display_value="TEAMonline">a2dfc25fdb7244105f65ba03e29619fa</sys_scope>
         <sys_update_name>sp_widget_2717fb73db4910908f26550a4896195d</sys_update_name>
         <sys_updated_by>andrey.mironyuk</sys_updated_by>
-        <sys_updated_on>2020-06-09 11:12:45</sys_updated_on>
-        <template><![CDATA[<div class="container company-goals-container">
+        <sys_updated_on>2020-06-10 13:03:12</sys_updated_on>
+        <template><![CDATA[<div class="company-goals-container">
   <div class="row">
-    <div class="col-md-5 col-xs-12 goals-wrapper">
-
-      <img ng-src={{::data.rally_cry.image}} alt="rally cry" class="absolute goals-img"
-        ng-class={{data.rally_cry.fitType}}>
-      <div class="absolute goals-content">
-        <h1> Rally Cry </h1>
+    <div class="col-12">
+      <div class="company-goals-header">
+        <span>COMPANY GOALS AND RALLY CRY</span>
       </div>
     </div>
-    <div class="col-md-5 col-xs-12 goals-wrapper">
-      <img ng-src={{::data.company_goals.image}} alt="rally cry" class="absolute goals-img"
-        ng-class={{data.company_goals.fitType}}>
-      <div class="absolute goals-content">
-        <h1>Company Goals</h1>
+    <div class="pictures-container col-12">
+      <div class="rally-wrapper">
+        <a context-menu="contextMenu(data.rally_cry.sys_id)" ng-href="" class="know-how post">
+          <img ng-src={{data.rally_cry.image}} alt="rally cry" class="absolute goals-img"
+            ng-class="getClass(data.rally_cry)">
+        </a>
+      </div>
+      <div class="goals-wrapper">
+        <a context-menu="contextMenu(data.company_goals.sys_id)" ng-href="" class="know-how post">
+          <img ng-src={{data.company_goals.image}} alt="company goals" class="absolute goals-img"
+            ng-class="getClass(data.company_goals)">
+        </a>
       </div>
     </div>
   </div>

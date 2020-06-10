@@ -401,11 +401,10 @@ small {&#13;
 		articles.orderBy('x_aaro2_teamonline_order');
 	}else{
 		articles[options.order_by](options.order_by_field);
-		if(data.kb_category) articles.addQuery('kb_category.value',data.kb_category);
 	}
 
 	if (data.category) articles.addQuery('meta', data.category);
-	if (data.kb_category_value) articles.addQuery('kb_category.value',data.kb_category_value);
+	if (data.kb_category) articles.addQuery('kb_category.value', data.kb_category);
 	articles.setLimit(options.limit_records);
 	articles.addActiveQuery();
 	if (!data.isHomePage) articles.chooseWindow(data.window_start, data.window_end);
@@ -437,6 +436,7 @@ function _glideAggregate (knowledgeBaseId, category, operator) {
 	articles.addQuery("kb_knowledge_base", "IN", knowledgeBaseId);
 	articles.addQuery("workflow_state", "published");
 	articles.addQuery('active', true);
+	if (data.kb_category) articles.addQuery('kb_category.value', data.kb_category);
 	if (category) articles.addQuery('meta', category);
 	articles[operator.agrFunction](operator.value);
 	articles.query();
@@ -476,7 +476,7 @@ function getCategories (knowledgeBaseId) {
         <sys_created_on>2020-02-12 15:25:13</sys_created_on>
         <sys_customer_update>false</sys_customer_update>
         <sys_id>b25843e7db7ac4105f65ba03e2961912</sys_id>
-        <sys_mod_count>418</sys_mod_count>
+        <sys_mod_count>428</sys_mod_count>
         <sys_name>Team Online All Base Articles</sys_name>
         <sys_package display_value="TEAMonline" source="x_aaro2_teamonline">a2dfc25fdb7244105f65ba03e29619fa</sys_package>
         <sys_policy/>
@@ -484,7 +484,7 @@ function getCategories (knowledgeBaseId) {
         <sys_scope display_value="TEAMonline">a2dfc25fdb7244105f65ba03e29619fa</sys_scope>
         <sys_update_name>sp_widget_b25843e7db7ac4105f65ba03e2961912</sys_update_name>
         <sys_updated_by>xxikochet</sys_updated_by>
-        <sys_updated_on>2020-06-09 13:57:59</sys_updated_on>
+        <sys_updated_on>2020-06-10 10:18:59</sys_updated_on>
         <template><![CDATA[<section class="section">
   <div class="row">
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -492,7 +492,7 @@ function getCategories (knowledgeBaseId) {
         <div ng-if="data.isHomePage" class="blog-top clearfix">
           <h4 class="pull-left">Recent Articles <i class="fa fa-rss"></i></h4>
         </div>
-        <div ng-if="data.kb_articles.length == 0">No new articles</div>
+        <div ng-if="data.kb_articles.length == 0">No articles in this category</div>
         <div class="blog-list clearfix" ui-sortable="dragControlListeners" ng-model="data.kb_articles">
           <div ng-repeat="article in data.kb_articles | filter:articleFilter track by $index" 
                context-menu="contextMenu()"

@@ -9,7 +9,7 @@
         <action_query>false</action_query>
         <action_run_at>server</action_run_at>
         <action_update>true</action_update>
-        <active>true</active>
+        <active>false</active>
         <add_message>false</add_message>
         <advanced>true</advanced>
         <application/>
@@ -58,7 +58,7 @@
         <sys_customer_update>false</sys_customer_update>
         <sys_domain>global</sys_domain>
         <sys_id>a27bd339db0b48505f65ba03e29619b6</sys_id>
-        <sys_mod_count>6</sys_mod_count>
+        <sys_mod_count>7</sys_mod_count>
         <sys_name>Replace oldest important article</sys_name>
         <sys_overrides/>
         <sys_package display_value="TEAMonline" source="x_aaro2_teamonline">a2dfc25fdb7244105f65ba03e29619fa</sys_package>
@@ -67,7 +67,7 @@
         <sys_scope display_value="TEAMonline">a2dfc25fdb7244105f65ba03e29619fa</sys_scope>
         <sys_update_name>sys_script_a27bd339db0b48505f65ba03e29619b6</sys_update_name>
         <sys_updated_by>xxikochet</sys_updated_by>
-        <sys_updated_on>2020-02-20 11:25:20</sys_updated_on>
+        <sys_updated_on>2020-06-10 09:52:41</sys_updated_on>
         <template/>
         <when>before</when>
     </sys_script>

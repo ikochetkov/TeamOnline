@@ -106,16 +106,15 @@
   }
 }
 
-.header__social {
-  list-style: none;
-  font-size: 23px;
-  margin: 0;
-  padding: 0;
-  grid-area: links;
-}
-
-.header__social a {
-  color: black;
+.header__contact-us {
+  font-size: 18px;
+  a {
+    filter: grayscale(1);
+    transition: ease-in-out 0.5s;
+    &amp;:hover {
+      filter: grayscale(0);
+    }
+  }
 }
 
 .header__social li {
@@ -379,7 +378,7 @@ if (data.menu && data.menu.data) {
         <sys_created_on>2020-02-11 17:58:33</sys_created_on>
         <sys_customer_update>false</sys_customer_update>
         <sys_id>47d12a1fdb7e04108f26550a48961944</sys_id>
-        <sys_mod_count>123</sys_mod_count>
+        <sys_mod_count>133</sys_mod_count>
         <sys_name>Team Online Header</sys_name>
         <sys_package display_value="TEAMonline" source="x_aaro2_teamonline">a2dfc25fdb7244105f65ba03e29619fa</sys_package>
         <sys_policy/>
@@ -387,7 +386,7 @@ if (data.menu && data.menu.data) {
         <sys_scope display_value="TEAMonline">a2dfc25fdb7244105f65ba03e29619fa</sys_scope>
         <sys_update_name>sp_header_footer_47d12a1fdb7e04108f26550a48961944</sys_update_name>
         <sys_updated_by>andrey.mironyuk</sys_updated_by>
-        <sys_updated_on>2020-06-04 08:59:40</sys_updated_on>
+        <sys_updated_on>2020-06-10 12:01:08</sys_updated_on>
         <template><![CDATA[<div class="container">
   <div class="quick-links-container">
     <div class="quick-link">
@@ -398,6 +397,11 @@ if (data.menu && data.menu.data) {
     <div class="quick-link">
       <a href="https://progleasing.com/ ">
         <img src="teamonline_progressive_logo.png" style="max-height: 35px" />
+      </a>
+    </div>
+    <div class="quick-link">
+      <a href="https://woodhaven.com/">
+        <img src="teamonline_woodhaven_logo.png" style="max-height: 35px" />
       </a>
     </div>
     <div class="quick-link">
@@ -415,31 +419,19 @@ if (data.menu && data.menu.data) {
         <span>TIMECLOCK</span>
       </a>
     </div>
-    <div class="quick-link">
-      <a href="https://www.teamwork.com">
-        <img src="teamonline_woodhaven_logo.png" style="max-height: 35px" />
-      </a>
-    </div>
+
   </div>
 </div>
 <div class="header navbar-inverse">
   <div class="container">
     <div class="header__content">
       <div class="header__content-item">
-        <ul class="header__social">
-          <li>
-            <a href="#0"><i class="fa fa-facebook" aria-hidden="true"></i></a>
-          </li>
-          <li>
-            <a href="#0"><i class="fa fa-twitter" aria-hidden="true"></i></a>
-          </li>
-          <li>
-            <a href="#0"><i class="fa fa-instagram" aria-hidden="true"></i></a>
-          </li>
-          <li>
-            <a href="#0"><i class="fa fa-pinterest" aria-hidden="true"></i></a>
-          </li>
-        </ul>
+        <div class="header__contact-us">
+          <a href="mailto:internalcommunications@Aarons.com">
+            <i class="fa fa-envelope" aria-hidden="true"></i>
+            <span> Contact Us </span>
+          </a>
+        </div>
       </div>
       <div class="header__logo header__content-item">
         <a href="?id={{::portal.homepage_dv}}"><img ng-src="{{::portal.logo}}"></a>
