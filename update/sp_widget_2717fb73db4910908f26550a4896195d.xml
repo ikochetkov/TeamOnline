@@ -45,7 +45,6 @@
       }]
     ]
   }
-
   $rootScope.$on('ImageLibrary.imageSelected', function (event, respData) {
     d.f._fields.background.value = respData.sys_id;
     d.f._fields.background.displayValue = respData.name;
@@ -74,12 +73,20 @@
   $scope.getClass = function (block) {
     return block.fitType;
   }
+  var gallery = document.getElementsByClassName('goal-gallery')[0];
+  $scope.openImage = function (img) {
+    $scope.data.selectedImg = img;
+    gallery.classList.add('active')
+  }
+  $scope.closeGallery = function () {
+    gallery.classList.remove('active')
+  }
 }]]></client_script>
         <controller_as>c</controller_as>
         <css>.rally-wrapper,&#13;
 .goals-wrapper {&#13;
   margin: 0;&#13;
-  height: 17em;&#13;
+  height: 25em;&#13;
   background-color: #f3f3f4;&#13;
   width: calc(50% - 1px);&#13;
 }&#13;
@@ -129,6 +136,34 @@
   max-height: 100%;&#13;
   width: 100%;&#13;
   object-fit: cover;&#13;
+}&#13;
+.goal-gallery {&#13;
+  z-index: 1000;&#13;
+  position: fixed;&#13;
+  top: 0;&#13;
+  left: 0;&#13;
+  width: 100vw;&#13;
+  height: 100vh;&#13;
+  visibility: hidden;&#13;
+  opacity: 0;&#13;
+  transition: 100ms ease-in-out;&#13;
+  background-color: rgba(0, 0, 0, 0.6);&#13;
+  &amp;.active {&#13;
+    visibility: visible;&#13;
+    opacity: 1;&#13;
+    transition: 300ms ease-in-out;&#13;
+  }&#13;
+  .image-preview {&#13;
+    display: flex;&#13;
+    transition: 300ms ease-in-out;&#13;
+    justify-content: center;&#13;
+    align-items: center;&#13;
+    height: 100%;&#13;
+    .image-container {&#13;
+      width: 70vw;&#13;
+      height: 70vh;&#13;
+    }&#13;
+  }&#13;
 }&#13;
 </css>
         <data_table>sp_instance</data_table>
@@ -188,7 +223,7 @@
         <sys_created_on>2020-06-04 09:50:27</sys_created_on>
         <sys_customer_update>false</sys_customer_update>
         <sys_id>2717fb73db4910908f26550a4896195d</sys_id>
-        <sys_mod_count>81</sys_mod_count>
+        <sys_mod_count>125</sys_mod_count>
         <sys_name>TeamOnline Comapny Goals</sys_name>
         <sys_package display_value="TEAMonline" source="x_aaro2_teamonline">a2dfc25fdb7244105f65ba03e29619fa</sys_package>
         <sys_policy/>
@@ -196,7 +231,7 @@
         <sys_scope display_value="TEAMonline">a2dfc25fdb7244105f65ba03e29619fa</sys_scope>
         <sys_update_name>sp_widget_2717fb73db4910908f26550a4896195d</sys_update_name>
         <sys_updated_by>andrey.mironyuk</sys_updated_by>
-        <sys_updated_on>2020-06-10 13:03:12</sys_updated_on>
+        <sys_updated_on>2020-06-23 11:35:35</sys_updated_on>
         <template><![CDATA[<div class="company-goals-container">
   <div class="row">
     <div class="col-12">
@@ -205,19 +240,27 @@
       </div>
     </div>
     <div class="pictures-container col-12">
-      <div class="rally-wrapper">
-        <a context-menu="contextMenu(data.rally_cry.sys_id)" ng-href="" class="know-how post">
+      <div class="rally-wrapper" ng-click="openImage(data.rally_cry.image)">
+        <a context-menu=" contextMenu(data.rally_cry.sys_id)" ng-href="" class="know-how post">
           <img ng-src={{data.rally_cry.image}} alt="rally cry" class="absolute goals-img"
             ng-class="getClass(data.rally_cry)">
         </a>
       </div>
-      <div class="goals-wrapper">
+      <div class="goals-wrapper" ng-click="openImage(data.company_goals.image)">
         <a context-menu="contextMenu(data.company_goals.sys_id)" ng-href="" class="know-how post">
           <img ng-src={{data.company_goals.image}} alt="company goals" class="absolute goals-img"
             ng-class="getClass(data.company_goals)">
         </a>
       </div>
     </div>
+  </div>
+</div>
+<div class="goal-gallery " ng-click="closeGallery()">
+  <div class="image-preview">
+    <div class="image-container"
+      ng-style="{'background': 'url('+data.selectedImg+')', 'background-position': '50% 50%', 'background-repeat': 'no-repeat','background-size': 'contain'}">
+    </div>
+
   </div>
 </div>]]></template>
     </sp_widget>

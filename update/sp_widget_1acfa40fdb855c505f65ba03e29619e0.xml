@@ -2,35 +2,9 @@
     <sp_widget action="INSERT_OR_UPDATE">
         <category>custom</category>
         <client_script><![CDATA[function($scope, $rootScope, $location, spUtil, $uibModal, glideFormFactory, spAriaUtil, spAriaFocusManager) {
-  /* widget controller */
-  var c = this;
-	
-	/* === collect g_form object of form fields === */
-	var flatFields = [];
-	angular.forEach($scope.data.f._fields, function (field) {
-		flatFields.push(field);
-	});
+	/* widget controller */
+	var c = this;
 
-	var g_form = glideFormFactory.create($scope, $scope.data.f.table, $scope.data.f.sys_id, flatFields, null, { uiMessageHandler: uiMessageHandler });
-
-	$scope.getGlideForm = function () {
-		return g_form;
-	}
-
-	var uiMessageHandler = function (g_form, type, message) {
-		switch (type) {
-			case 'addInfoMessage':
-				spUtil.addInfoMessage(message);
-				break;
-			case 'addErrorMessage':
-				spUtil.addErrorMessage(message);
-				break;
-			case 'clearMessages':
-				break;
-			default:
-		}
-	};
-	
 	/* context Menu */
 	$scope.contextMenu = function () {
 		if (!$scope.data.canEdit) { return [] }
@@ -46,7 +20,7 @@
 			}]
 		]
 	}
-	
+
 	/* Modal to add new/edit */
 	$scope.open = function () {
 		$scope.modalInstance = $uibModal.open({
@@ -57,25 +31,53 @@
 			scope: $scope
 		});
 	};
-	
+
 	$scope.closeEdit = function(){
 		$scope.modalInstance.close();
 	}
-	
+
 	$scope.editSlide = function(itemScope){
-		console.log(itemScope);
-		$scope.open();
+		$scope.data.sys_id = itemScope.sys_id;
+		spUtil.update($scope).then(function(){
+			/* === collect g_form object of form fields === */
+			var flatFields = [];
+			angular.forEach($scope.data.f._fields, function (field) {
+				flatFields.push(field);
+			});
+
+			var g_form = glideFormFactory.create($scope, $scope.data.f.table, $scope.data.f.sys_id, flatFields, null, { uiMessageHandler: uiMessageHandler });
+
+			$scope.getGlideForm = function () {
+				return g_form;
+			}
+
+			var uiMessageHandler = function (g_form, type, message) {
+				switch (type) {
+					case 'addInfoMessage':
+						spUtil.addInfoMessage(message);
+						break;
+					case 'addErrorMessage':
+						spUtil.addErrorMessage(message);
+						break;
+					case 'clearMessages':
+						break;
+					default:
+				}
+			};
+
+			$scope.open();
+		})
+
+
 	}
-	
+
 	$scope.deleteSlide = function(){
-		console.log();
 	}
-	
+
 	$scope.createSlide = function(){
-		console.log();
 	}
-	
-	
+
+
 }]]></client_script>
         <controller_as>c</controller_as>
         <css>.container{
@@ -191,12 +193,14 @@ while(slidesGr.next()){
 	})
 }
 
-console.log(data.slides);
 
 
 data.table = 'x_aaro2_teamonline_carousel_slide';
 
-data.f = $sp.getForm(data.table, data.sys_id, data.query, data.view);
+if(input){
+	data.sys_id = input.sys_id;
+	data.f = $sp.getForm(data.table, data.sys_id, data.query, data.view);
+}
 
 if (input && input.method === 'save'){
 	var result = {};
@@ -212,7 +216,7 @@ if (input && input.method === 'save'){
         <sys_created_on>2020-06-01 11:22:57</sys_created_on>
         <sys_customer_update>false</sys_customer_update>
         <sys_id>1acfa40fdb855c505f65ba03e29619e0</sys_id>
-        <sys_mod_count>215</sys_mod_count>
+        <sys_mod_count>219</sys_mod_count>
         <sys_name>TeamOnline Carousel</sys_name>
         <sys_package display_value="TEAMonline" source="x_aaro2_teamonline">a2dfc25fdb7244105f65ba03e29619fa</sys_package>
         <sys_policy/>
@@ -220,7 +224,7 @@ if (input && input.method === 'save'){
         <sys_scope display_value="TEAMonline">a2dfc25fdb7244105f65ba03e29619fa</sys_scope>
         <sys_update_name>sp_widget_1acfa40fdb855c505f65ba03e29619e0</sys_update_name>
         <sys_updated_by>xxikochet</sys_updated_by>
-        <sys_updated_on>2020-06-03 15:12:24</sys_updated_on>
+        <sys_updated_on>2020-06-11 12:10:49</sys_updated_on>
         <template><![CDATA[<div id="slider">
   <div class="pull-in">
     <uib-carousel interval="options.interval">

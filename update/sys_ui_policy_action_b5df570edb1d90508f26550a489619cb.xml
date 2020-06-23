@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_ui_policy_action">
+    <sys_ui_policy_action action="INSERT_OR_UPDATE">
+        <cleared>false</cleared>
+        <disabled>true</disabled>
+        <field>title</field>
+        <mandatory>ignore</mandatory>
+        <sys_class_name>sys_ui_policy_action</sys_class_name>
+        <sys_created_by>andrey.mironyuk</sys_created_by>
+        <sys_created_on>2020-06-11 07:54:06</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_id>b5df570edb1d90508f26550a489619cb</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>title</sys_name>
+        <sys_package display_value="TEAMonline" source="x_aaro2_teamonline">a2dfc25fdb7244105f65ba03e29619fa</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="TEAMonline">a2dfc25fdb7244105f65ba03e29619fa</sys_scope>
+        <sys_update_name>sys_ui_policy_action_b5df570edb1d90508f26550a489619cb</sys_update_name>
+        <sys_updated_by>andrey.mironyuk</sys_updated_by>
+        <sys_updated_on>2020-06-11 07:54:06</sys_updated_on>
+        <table>x_aaro2_teamonline_blocks_config</table>
+        <ui_policy display_value="Title readonly on Company goals and rally cry">1c9f138adb1d90508f26550a48961917</ui_policy>
+        <visible>ignore</visible>
+    </sys_ui_policy_action>
+</record_update>

@@ -100,6 +100,7 @@
         <controller_as>c</controller_as>
         <css>body{font-size:5px;}
 //@media (min-width: 544px) { /* Стили CSS ... */ }
+
 .each-article-content {
   display: -webkit-box;
   display: -moz-box;
@@ -114,6 +115,8 @@
 
 .big {
   width: 50%;
+  display: flex;
+  flex-wrap: wrap;
 }
 
 .each-article-content .small {
@@ -143,7 +146,7 @@
   position: relative;
   width: 100%;
   overflow: hidden;
-  padding-top: 114%;
+  padding-top: 57%;
 }
 
 .big .each-article-empty:before,
@@ -156,10 +159,6 @@
   height: 100%;
   z-index: 1;
   transition: all 0.5s cubic-bezier(0, 0.1, 0.58, 1);
-}
-
-.big .each-article:before {
-  background-color: rgba(0, 0, 0, .6);
 }
 
 .big .each-article-empty:after,
@@ -178,13 +177,19 @@
 
 
 
-big .each-article:hover:before {
+/*
+.big .each-article:before {
+  background-color: rgba(0, 0, 0, .6);
+}
+
+.big .each-article:hover:before {
   background-color: rgba(0, 0, 0, 0);
 }
 
 .big .each-article:hover:after {
   height: 50%;
 }
+*/
 .each-article-content .big.active .each-article-empty .each-article-img:before,
 .each-article-content .big.active .each-article .each-article-img:before, 
 .each-article-content .small.active .each-article .each-article-img:before {
@@ -356,6 +361,16 @@ h5, .h5 {
   padding-top: 57%;
 }
 
+/* */
+.each-article-content .small-left .each-article-empty,
+.each-article-content .small-left .each-article {
+  display: block;
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  padding-top: 57%;
+}
+
 .each-article-content .small .each-article-empty:before,
 .each-article-content .small .each-article:before {
   content: "";
@@ -366,10 +381,6 @@ h5, .h5 {
   height: 100%;
   transition: all 0.5s cubic-bezier(0, 0.1, 0.58, 1);
   z-index: 1;
-}
-
-.each-article-content .small .each-article:before {
-  background-color: rgba(0, 0, 0, .6);
 }
 
 .each-article-empty:after,
@@ -476,6 +487,10 @@ h5, .h5 {
   -ms-align-items: flex-start;
   align-items: flex-start;
 }
+/*
+.each-article-content .small .each-article:before {
+  background-color: rgba(0, 0, 0, .6);
+}
 
 .each-article-content  .small .each-article:hover:before {
   background-color: rgba(0, 0, 0, 0);
@@ -484,7 +499,7 @@ h5, .h5 {
 .each-article-content .small .each-article:hover:after {
   height: 53%;
 }
-
+*/
 .btn {
   z-index: 999;
 }
@@ -497,16 +512,11 @@ h5, .h5 {
   padding: 20px 20px 20px 0px;
   line-height: 1.2;
 }
-/*
 
-FIX HERE with media.
-
-*/
 .small .each-article .post-content .post-text {
-  font-size: 1.4rem;
-  //padding: 10px 12px 10px 0px;
+  font-size: 1.5rem;
+  padding: 10px 12px 10px 0px;
 }
-
 .big .each-article .post-content .post-text {
   font-size: 1.8rem;
 }
@@ -576,51 +586,64 @@ FIX HERE with media.
   }
 }
 
+.floating:before {
+  background-color: rgba(0, 0, 0, .6);
+}
+
+.floating:hover:before {
+  background-color: rgba(0, 0, 0, 0);
+}
+
+.floating:hover:after {
+  height: 50% !important;
+}
+
+
 /* media */
 
 @media (max-width: 1800px){
-  .small .each-article .post-content .post-text {
+  .post-content .post-text {
     font-size: 1.3rem;
   }
 }
 
 @media (max-width: 1600px){
-  .small .each-article .post-content .post-text {
+   .post-content .post-text {
     font-size: 1.19rem;
   }
 }
 
 @media (max-width: 1300px){
-  .small .each-article .post-content .post-text {
+  .post-content .post-text {
     font-size: 1rem;
   }
 }
 
 @media (max-width: 1150px){
-  .small .each-article .post-content .post-text {
+  .post-content .post-text {
     font-size: 0.8rem;
   }
 }
 
 @media (max-width: 991px){
-  .small .each-article .post-content .post-text {
+  .post-content .post-text {
     font-size: 1.2rem;
   }
 }
 
 @media (max-width: 850px){
-  .small .each-article .post-content .post-text {
+  .post-content .post-text {
     font-size: 1rem;
   }
 }
 @media (max-width: 800px){
-  .small .each-article .post-content .post-text {
+  .post-content .post-text {
     font-size: 0.8rem;
   }
 }
 
 @media (max-width: 630px){
-  .small .each-article .post-content .post-text {
+  .post-content .post-text {
     display:none;
   }
 }
@@ -681,13 +704,17 @@ FIX HERE with media.
 				author: blocksGr.getDisplayValue('author'),
 				created: blocksGr.getValue('sys_created_on'),
 				redirect_to_article: Number(blocksGr.getValue('redirect_to_article')),
-				article: blocksGr.getValue('article')
+				article: blocksGr.getValue('article'),
+				display_created_days_ago: Number(blocksGr.getValue('display_created_days_ago'))
 			})
 		}
 		data.largeBlock = blocks[0];
 		blocks.splice(0, 1);
+		data.leftBlocks = blocks.splice(0, 2);
 		data.blocks = blocks;
-		//console.log(blocks);
+		console.log(data.largeBlock);
+		console.log(data.leftBlocks);
+		console.log(data.blocks);
 	}
 
 })();
@@ -698,7 +725,7 @@ FIX HERE with media.
         <sys_created_on>2020-06-03 19:18:06</sys_created_on>
         <sys_customer_update>false</sys_customer_update>
         <sys_id>cebf68bbdbc5d0905f65ba03e2961959</sys_id>
-        <sys_mod_count>151</sys_mod_count>
+        <sys_mod_count>317</sys_mod_count>
         <sys_name>Team Online Blocks</sys_name>
         <sys_package display_value="TEAMonline" source="x_aaro2_teamonline">a2dfc25fdb7244105f65ba03e29619fa</sys_package>
         <sys_policy/>
@@ -706,14 +733,13 @@ FIX HERE with media.
         <sys_scope display_value="TEAMonline">a2dfc25fdb7244105f65ba03e29619fa</sys_scope>
         <sys_update_name>sp_widget_cebf68bbdbc5d0905f65ba03e2961959</sys_update_name>
         <sys_updated_by>xxikochet</sys_updated_by>
-        <sys_updated_on>2020-06-10 10:13:40</sys_updated_on>
+        <sys_updated_on>2020-06-18 10:52:17</sys_updated_on>
         <template><![CDATA[<div class="each-article-content ffffff" >
   <div class="big active">
-    <a
+    <a 
        context-menu="contextMenu(true, !data.largeBlock.sys_id)"
        ng-href="{{getUrl(data.largeBlock)}}"
-       class="know-how post"
-       ng-class="{'each-article-empty': !data.largeBlock.sys_id, 'each-article': data.largeBlock.sys_id}"
+       ng-class="{'each-article-empty': !data.largeBlock.sys_id, 'each-article': data.largeBlock.sys_id, 'floating': data.largeBlock.description}"
        >
       <div class="each-article-img">
         <img ng-if="data.largeBlock.background" ng-src="{{data.largeBlock.background}}" alt="">
@@ -724,29 +750,27 @@ FIX HERE with media.
           <p ng-if="data.largeBlock.display_author" class="h8 font-medium white">{{data.largeBlock.author}}</p>
         </div>
         <div class="post-description" ng-if="data.largeBlock.sys_id">
-          <h3 class="h5 font-bold white each-blog-title">{{data.largeBlock.title}}</h3>
+          <h3 ng-if="data.largeBlock.title" class="h5 font-bold white each-blog-title">{{data.largeBlock.title}}</h3>
           <h5 class="p font-regular white each-blog-excerpt"></h5>
-          <sn-day-ago date="data.largeBlock.created" class="h8 font-medium white each-blog-date" />
+          <sn-day-ago ng-if="data.largeBlock.display_created_days_ago" date="data.largeBlock.created" class="h8 font-medium white each-blog-date" />
         </div>
-        <div class="post-text" ng-if="data.largeBlock.sys_id">
+        <div class="post-text" ng-if="data.largeBlock.sys_id && data.largeBlock.description">
           {{data.largeBlock.description | limitTo:650 }} {{ data.largeBlock.description.length > 650 ? '...' : '' }}
         </div>
         <button 
-         class="plus-button" 
-         ng-if="!data.largeBlock.sys_id && data.canEdit" 
-         ng-click="changeArticleOnMainWidget($event, true)"
-         title="Add item to this place"
-        ></button>
+                class="plus-button" 
+                ng-if="!data.largeBlock.sys_id && data.canEdit" 
+                ng-click="changeArticleOnMainWidget($event, true)"
+                title="Add item to this place"
+                ></button>
       </div>
     </a>
-  </div>
-  <div class="small active">
-    <a 
+
+    <a style="width:50%"
        context-menu="contextMenu(false, !block.sys_id)"
-       ng-repeat="block in data.blocks track by $index"
+       ng-repeat="block in data.leftBlocks track by $index"
        ng-href="{{getUrl(block)}}"
-       class="know-how post"
-       ng-class="{'each-article-empty': !block.sys_id, 'each-article': block.sys_id}"
+       ng-class="{'each-article-empty': !block.sys_id, 'each-article': block.sys_id , 'floating': block.description}"
        >
       <div class="each-article-img">
         <img ng-if="block.background" ng-src="{{block.background}}" alt="Important Picture">
@@ -757,11 +781,45 @@ FIX HERE with media.
           <p ng-if="block.display_author" class="small-font font-medium white">{{block.author}}</p>
         </div>
         <div class="post-description" ng-if="block.sys_id">
-          <h3 class="h6 font-bold white each-blog-title">{{block.title}}</h3>
+          <h3 ng-if="block.title" class="h6 font-bold white each-blog-title">{{block.title}}</h3>
           <h5 class="p font-regular white each-blog-excerpt"></h5>
-          <sn-day-ago date="block.created" class="h8 font-medium white each-blog-date" />
+          <sn-day-ago ng-if="block.display_created_days_ago" date="block.created" class="h8 font-medium white each-blog-date" />
         </div>
-        <div class="post-text" ng-if="block.sys_id">
+        <div class="post-text" ng-if="block.sys_id && block.description">
+          {{block.description | limitTo:160 }} {{ block.description.length > 160 ? '...' : '' }}
+        </div>
+        <button 
+                class="plus-button" 
+                ng-if="!block.sys_id && data.canEdit" 
+                ng-click="changeArticleOnMainWidget(false, $index)"
+                title="Add important article to this place"
+                ></button>
+      </div>
+    </a>
+
+  </div>
+
+  <div class="small active">
+    <a 
+       context-menu="contextMenu(false, !block.sys_id)"
+       ng-repeat="block in data.blocks track by $index"
+       ng-href="{{getUrl(block)}}"
+       ng-class="{'each-article-empty': !block.sys_id, 'each-article': block.sys_id, 'floating': block.description}"
+       >
+      <div class="each-article-img">
+        <img ng-if="block.background" ng-src="{{block.background}}" alt="Important Picture">
+      </div>
+      <div class="post-content">
+        <div class="author-catname" ng-if="block.sys_id">
+          <p class="small-font font-medium green">{{block.meta}}</p>
+          <p ng-if="block.display_author" class="small-font font-medium white">{{block.author}}</p>
+        </div>
+        <div class="post-description" ng-if="block.sys_id">
+          <h3 ng-if="block.title" class="h6 font-bold white each-blog-title">{{block.title}}</h3>
+          <h5 class="p font-regular white each-blog-excerpt"></h5>
+          <sn-day-ago ng-if="block.display_created_days_ago" date="block.created" class="h8 font-medium white each-blog-date" />
+        </div>
+        <div class="post-text" ng-if="block.sys_id && block.description">
           {{block.description | limitTo:160 }} {{ block.description.length > 160 ? '...' : '' }}
         </div>
         <button 

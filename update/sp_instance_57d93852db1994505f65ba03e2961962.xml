@@ -10,25 +10,25 @@
         <roles/>
         <short_description/>
         <size>md</size>
-        <sp_column display_value="3">59543b3ddb4498105f65ba03e2961953</sp_column>
-        <sp_widget display_value="Team Online Aaron's Awards Feed">1eaabcf5dbff08d05f65ba03e296197b</sp_widget>
+        <sp_column display_value="1">25c9b452db1994505f65ba03e29619f9</sp_column>
+        <sp_widget display_value="Team Online Blocks">cebf68bbdbc5d0905f65ba03e2961959</sp_widget>
         <sys_class_name>sp_instance</sys_class_name>
-        <sys_created_by>xxabunko</sys_created_by>
-        <sys_created_on>2020-03-27 11:44:06</sys_created_on>
+        <sys_created_by>xxikochet</sys_created_by>
+        <sys_created_on>2020-06-11 14:27:15</sys_created_on>
         <sys_customer_update>false</sys_customer_update>
-        <sys_id>2cbb34b9dbff08d05f65ba03e2961932</sys_id>
-        <sys_mod_count>4</sys_mod_count>
+        <sys_id>57d93852db1994505f65ba03e2961962</sys_id>
+        <sys_mod_count>0</sys_mod_count>
         <sys_name/>
         <sys_package display_value="TEAMonline" source="x_aaro2_teamonline">a2dfc25fdb7244105f65ba03e29619fa</sys_package>
         <sys_policy/>
         <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
         <sys_scope display_value="TEAMonline">a2dfc25fdb7244105f65ba03e29619fa</sys_scope>
-        <sys_update_name>sp_instance_2cbb34b9dbff08d05f65ba03e2961932</sys_update_name>
+        <sys_update_name>sp_instance_57d93852db1994505f65ba03e2961962</sys_update_name>
         <sys_updated_by>xxikochet</sys_updated_by>
-        <sys_updated_on>2020-06-17 14:50:28</sys_updated_on>
+        <sys_updated_on>2020-06-11 14:27:15</sys_updated_on>
         <title/>
         <url/>
         <widget_parameters/>
     </sp_instance>
-    <sys_translated_text action="delete_multiple" query="documentkey=2cbb34b9dbff08d05f65ba03e2961932"/>
+    <sys_translated_text action="delete_multiple" query="documentkey=57d93852db1994505f65ba03e2961962"/>
 </record_update>

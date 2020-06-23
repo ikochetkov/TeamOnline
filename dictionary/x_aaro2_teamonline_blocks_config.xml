@@ -5,6 +5,7 @@
         <element calculation="(function calculatedFieldValue(current) {&#13;&#10;&#13;&#10;&#9;// Add your code here&#13;&#10;&#9;return '';  // return the calculated value&#13;&#10;&#13;&#10;})(current);" label="Background" max_length="40" name="background" reference="db_image" reference_qual="category=kb^EQ" reference_qual_condition="category=kb^EQ" type="reference"/>
         <element calculation="(function calculatedFieldValue(current) {&#13;&#10;&#13;&#10;&#9;// Add your code here&#13;&#10;&#9;return '';  // return the calculated value&#13;&#10;&#13;&#10;})(current);" label="Description" max_length="1000" name="description" type="string"/>
         <element calculation="(function calculatedFieldValue(current) {&#13;&#10;&#13;&#10;&#9;// Add your code here&#13;&#10;&#9;return '';  // return the calculated value&#13;&#10;&#13;&#10;})(current);" default="true" label="Display author" max_length="40" name="display_author" type="boolean"/>
+        <element calculation="(function calculatedFieldValue(current) {&#13;&#10;&#13;&#10;&#9;// Add your code here&#13;&#10;&#9;return '';  // return the calculated value&#13;&#10;&#13;&#10;})(current);" default="true" label="Display created days ago" max_length="40" name="display_created_days_ago" type="boolean"/>
         <element choice="3" default="by_width" label="Fit Type" max_length="40" name="fit_type" type="choice">
             <choice>
                 <element inactive_on_update="false" label="By Height" value="by_height"/>

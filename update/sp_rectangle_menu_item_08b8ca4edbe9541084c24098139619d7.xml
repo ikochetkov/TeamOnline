@@ -7,38 +7,38 @@
         <display_2/>
         <display_date/>
         <filter/>
-        <glyph/>
+        <glyph>calendar</glyph>
         <hint/>
         <kb_article/>
         <kb_category/>
         <kb_topic/>
-        <label>Aaron's Cares</label>
-        <order>100</order>
+        <label>Time Tracking</label>
+        <order>1</order>
         <record_script/>
         <sc_cat_item/>
         <sc_category/>
         <short_description/>
-        <sp_page display_value="home">ac605e9fdb7244105f65ba03e296196f</sp_page>
-        <sp_rectangle_menu display_value="Team Online Menu">c0561213db3e04108f26550a489619b7</sp_rectangle_menu>
-        <sp_rectangle_menu_item/>
+        <sp_page/>
+        <sp_rectangle_menu/>
+        <sp_rectangle_menu_item display_value="Quick Links">4ba7d6d3db3e04108f26550a48961934</sp_rectangle_menu_item>
         <sys_class_name>sp_rectangle_menu_item</sys_class_name>
-        <sys_created_by>xxabunko</sys_created_by>
-        <sys_created_on>2020-02-11 17:14:30</sys_created_on>
+        <sys_created_by>andrey.mironyuk</sys_created_by>
+        <sys_created_on>2020-06-23 11:48:51</sys_created_on>
         <sys_customer_update>false</sys_customer_update>
-        <sys_id>3dc71ed3db3e04108f26550a489619d8</sys_id>
-        <sys_mod_count>3</sys_mod_count>
-        <sys_name>Aaron's Cares</sys_name>
+        <sys_id>08b8ca4edbe9541084c24098139619d7</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>Time Tracking</sys_name>
         <sys_package display_value="TEAMonline" source="x_aaro2_teamonline">a2dfc25fdb7244105f65ba03e29619fa</sys_package>
         <sys_policy/>
         <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
         <sys_scope display_value="TEAMonline">a2dfc25fdb7244105f65ba03e29619fa</sys_scope>
-        <sys_update_name>sp_rectangle_menu_item_3dc71ed3db3e04108f26550a489619d8</sys_update_name>
+        <sys_update_name>sp_rectangle_menu_item_08b8ca4edbe9541084c24098139619d7</sys_update_name>
         <sys_updated_by>andrey.mironyuk</sys_updated_by>
-        <sys_updated_on>2020-06-15 11:00:17</sys_updated_on>
+        <sys_updated_on>2020-06-23 11:48:51</sys_updated_on>
         <table/>
-        <type>page</type>
-        <url/>
+        <type>url</type>
+        <url>https://www.teamwork.com</url>
         <url_target/>
     </sp_rectangle_menu_item>
-    <sys_translated_text action="delete_multiple" query="documentkey=3dc71ed3db3e04108f26550a489619d8"/>
+    <sys_translated_text action="delete_multiple" query="documentkey=08b8ca4edbe9541084c24098139619d7"/>
 </record_update>

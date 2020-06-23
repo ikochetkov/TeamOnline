@@ -99,23 +99,24 @@
 }
 .header__content {
   display: flex;
-  justify-content: space-between;
+  justify-content: space-evenly;
   padding: 15px 0 15px 0;
+  font-size: 20px;
+  line-height: 1.2em;
   .header__content-item {
     align-self: center;
   }
 }
 
-.header__social {
-  list-style: none;
-  font-size: 23px;
-  margin: 0;
-  padding: 0;
-  grid-area: links;
-}
-
-.header__social a {
-  color: black;
+.header__contact-us {
+  font-size: 18px;
+  a {
+    filter: grayscale(1);
+    transition: ease-in-out 0.5s;
+    &amp;:hover {
+      filter: grayscale(0);
+    }
+  }
 }
 
 .header__social li {
@@ -275,7 +276,7 @@ nav {
 .quick-links-container {
   display: flex;
   justify-content: space-evenly;
-  height: 66px;
+  /*height: 66px;*/
   .quick-link {
     margin: 0 10px 0 10px;
     align-self: center;
@@ -297,6 +298,51 @@ nav {
   }
 }
 
+.quick-access-links {
+  color: #0069c8;
+  &amp;:hover {
+    color: #00529e;
+    .quick-access-links-container {
+      visibility: visible;
+      opacity: 1;
+      transition: all 300ms ease-in-out;
+    }
+    i {
+      transform: rotate(90deg);
+    }
+  }
+  i {
+    transition: 300ms ease-in-out;
+  }
+}
+.quick-access-links-container {
+  position: absolute;
+  visibility: hidden;
+  opacity: 0;
+  transition: all 300ms ease-in-out;
+  display: flex;
+  justify-content: space-evenly;
+  flex-wrap: wrap;
+  background-color: white;
+  width: 30%;
+  right: 0;
+  z-index: 10;
+  box-shadow: 0px 1px 28px -13px rgba(0, 0, 0, 0.5);
+  padding: 10px;
+  margin-top: 10px;
+  .quick-link {
+    padding: inherit;
+    width: 10rem;
+    margin: 0 2rem 0 2rem;
+    align-self: center;
+    font-size: 1.8rem;
+    filter: grayscale(1);
+    transition: all ease-in-out 0.3s;
+    &amp;:hover {
+      filter: grayscale(0);
+    }
+  }
+}
 /* PRB923910: Fix for Service Portal - Header Poorly Aligned in Safari */
 @media screen and (min-width: 768px) {
   .navbar-right {
@@ -310,7 +356,7 @@ nav {
         <docs/>
         <field_list/>
         <has_preview>false</has_preview>
-        <id>team_online_heaer</id>
+        <id>teamonline_2_header</id>
         <internal>false</internal>
         <link><![CDATA[function(scope, element) {
 	$(document).keyup(function(event) {
@@ -349,7 +395,7 @@ nav {
 			$(this).removeClass('in').addClass('collapse');
 	});
 }]]></link>
-        <name>Team Online Header</name>
+        <name>Team Online 2 Header</name>
         <option_schema/>
         <public>true</public>
         <roles/>
@@ -375,36 +421,21 @@ if (data.menu && data.menu.data) {
 ]]></script>
         <servicenow>false</servicenow>
         <sys_class_name>sp_header_footer</sys_class_name>
-        <sys_created_by>xxabunko</sys_created_by>
-        <sys_created_on>2020-02-11 17:58:33</sys_created_on>
+        <sys_created_by>andrey.mironyuk</sys_created_by>
+        <sys_created_on>2020-06-15 11:03:14</sys_created_on>
         <sys_customer_update>false</sys_customer_update>
-        <sys_id>47d12a1fdb7e04108f26550a48961944</sys_id>
-        <sys_mod_count>134</sys_mod_count>
-        <sys_name>Team Online Header</sys_name>
+        <sys_id>468138afdb1d10d08f26550a489619c4</sys_id>
+        <sys_mod_count>50</sys_mod_count>
+        <sys_name>Team Online 2 Header</sys_name>
         <sys_package display_value="TEAMonline" source="x_aaro2_teamonline">a2dfc25fdb7244105f65ba03e29619fa</sys_package>
         <sys_policy/>
         <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
         <sys_scope display_value="TEAMonline">a2dfc25fdb7244105f65ba03e29619fa</sys_scope>
-        <sys_update_name>sp_header_footer_47d12a1fdb7e04108f26550a48961944</sys_update_name>
+        <sys_update_name>sp_header_footer_468138afdb1d10d08f26550a489619c4</sys_update_name>
         <sys_updated_by>andrey.mironyuk</sys_updated_by>
-        <sys_updated_on>2020-06-17 11:52:43</sys_updated_on>
-        <template><![CDATA[<div class="container">
-  <div class="quick-links-container">
-    <div class="quick-link">
-      <a href="https://www.aarons.com">
-        <img src="teamonline_aarons_logo.png" style="max-height: 25px;" />
-      </a>
-    </div>
-    <div class="quick-link">
-      <a href="https://progleasing.com/ ">
-        <img src="teamonline_progressive_logo.png" style="max-height: 35px" />
-      </a>
-    </div>
-    <div class="quick-link">
-      <a href="https://woodhaven.com/">
-        <img src="teamonline_woodhaven_logo.png" style="max-height: 35px" />
-      </a>
-    </div>
+        <sys_updated_on>2020-06-23 11:53:58</sys_updated_on>
+        <template><![CDATA[<!--<div class="container">
+ <div class="quick-links-container">
     <div class="quick-link">
       <a href="https://www.teamwork.com">
         <img src="https://www.teamwork.com/app/themes/teamwork-theme/dist/images/twork-slate.svg" />
@@ -420,25 +451,63 @@ if (data.menu && data.menu.data) {
         <span>TIMECLOCK</span>
       </a>
     </div>
-
   </div>
-</div>
+</div>-->
 <div class="header navbar-inverse">
-  <div class="container">
+  <div class="container-fluid">
     <div class="header__content">
-      <div class="header__content-item">
-        <div class="header__contact-us">
-          <a href="mailto:internalcommunications@Aarons.com">
-            <i class="fa fa-envelope" aria-hidden="true"></i>
-            <span> Contact Us </span>
-          </a>
-        </div>
+      <div class="header__content-item quick-link">
+        <a href="mailto:internalcommunications@Aarons.com">
+          <i class="fa fa-envelope" aria-hidden="true"></i>
+          <span> Contact Us </span>
+        </a>
       </div>
       <div class="header__logo header__content-item">
         <a href="?id={{::portal.homepage_dv}}"><img ng-src="{{::portal.logo}}"></a>
       </div>
+
       <div class="header__search header__content-item">
         <sp-widget widget="data.search"></sp-widget>
+      </div>
+
+      <div class="header__content-item">
+        <div class="quick-access-links">
+          <span> External Applications </span>
+          <i class="fa fa-chevron-circle-right"></i>
+          <div class="quick-access-links-container">
+            <div class="quick-link">
+              <a href="https://www.aarons.com">
+                <img src="teamonline_aarons_logo.png" style="max-height: 25px;" />
+              </a>
+            </div>
+            <div class="quick-link">
+              <a href="https://progleasing.com/ ">
+                <img src="teamonline_progressive_logo.png" style="max-height: 35px" />
+              </a>
+            </div>
+            <div class="quick-link">
+              <a href="https://woodhaven.com/">
+                <img src="teamonline_woodhaven_logo.png" style="max-height: 35px" />
+              </a>
+            </div>
+            <!--<div class="quick-link">
+              <a href="https://www.teamwork.com">
+                <img src="https://www.teamwork.com/app/themes/teamwork-theme/dist/images/twork-slate.svg" />
+              </a>
+            </div>
+            <div class="quick-link">
+              <a href="https://www.dayforcehcm.com/mydayforce/login.aspx">
+                <span>DAYFORCE</span>
+              </a>
+            </div>
+            <div class="quick-link">
+              <a href="https://www.dayforcehcm.com/clock/index.html">
+                <span>TIMECLOCK</span>
+              </a>
+            </div>-->
+          </div>
+        </div>
+
       </div>
     </div>
   </div>
