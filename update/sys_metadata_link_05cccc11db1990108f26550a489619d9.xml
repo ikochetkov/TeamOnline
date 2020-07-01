@@ -6,11 +6,11 @@
     <x_aaro2_teamonline_blocks_config action="INSERT_OR_UPDATE">
         <article/>
         <author display_value="Andrey Mironyuk">5a4f161fdbbf44145f65ba03e2961936</author>
-        <background display_value="fra22g4.png">872600dddb9190108f26550a489619ec</background>
+        <background display_value="ClubFinal.png">0d83e331dbd5dc105f65ba03e296196b</background>
         <description/>
         <display_author>false</display_author>
         <display_created_days_ago>true</display_created_days_ago>
-        <fit_type>by_height</fit_type>
+        <fit_type>by_width</fit_type>
         <link/>
         <meta/>
         <number/>
@@ -18,9 +18,9 @@
         <sys_created_by>andrey.mironyuk</sys_created_by>
         <sys_created_on>2020-06-05 10:59:04</sys_created_on>
         <sys_id>7fa09514db1dd4908f26550a48961929</sys_id>
-        <sys_mod_count>12</sys_mod_count>
-        <sys_updated_by>andrey.mironyuk</sys_updated_by>
-        <sys_updated_on>2020-06-23 11:34:33</sys_updated_on>
+        <sys_mod_count>16</sys_mod_count>
+        <sys_updated_by>igor.kochetkov</sys_updated_by>
+        <sys_updated_on>2020-06-29 17:18:29</sys_updated_on>
         <title>Company Goals</title>
         <type>company_goals</type>
         <widget/>
@@ -32,7 +32,7 @@
         <sys_created_on>2020-06-08 08:36:16</sys_created_on>
         <sys_customer_update>false</sys_customer_update>
         <sys_id>05cccc11db1990108f26550a489619d9</sys_id>
-        <sys_mod_count>2</sys_mod_count>
+        <sys_mod_count>3</sys_mod_count>
         <sys_name/>
         <sys_package display_value="TEAMonline" source="x_aaro2_teamonline">a2dfc25fdb7244105f65ba03e29619fa</sys_package>
         <sys_policy/>
@@ -40,7 +40,7 @@
         <sys_scope display_value="TEAMonline">a2dfc25fdb7244105f65ba03e29619fa</sys_scope>
         <sys_update_name>sys_metadata_link_05cccc11db1990108f26550a489619d9</sys_update_name>
         <sys_updated_by>xxikochet</sys_updated_by>
-        <sys_updated_on>2020-06-23 15:52:14</sys_updated_on>
+        <sys_updated_on>2020-07-01 14:19:10</sys_updated_on>
         <tablename>x_aaro2_teamonline_blocks_config</tablename>
     </sys_metadata_link>
 </record_update>

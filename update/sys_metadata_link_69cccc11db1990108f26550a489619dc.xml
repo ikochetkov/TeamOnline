@@ -6,7 +6,7 @@
     <x_aaro2_teamonline_blocks_config action="INSERT_OR_UPDATE">
         <article display_value="3138">2bb92110a1428100d38cf0151d39a49f</article>
         <author display_value="Igor Kochetkov - Admin">c02f26a91b7180d094c7caad1e4bcb4d</author>
-        <background display_value="Aarondds.png">23d7b70ddb5d50108f26550a4896193c</background>
+        <background display_value="">23d7b70ddb5d50108f26550a4896193c</background>
         <description>description....</description>
         <display_author>false</display_author>
         <display_created_days_ago>true</display_created_days_ago>
@@ -71,7 +71,7 @@
         <sys_created_on>2020-06-08 08:36:18</sys_created_on>
         <sys_customer_update>false</sys_customer_update>
         <sys_id>69cccc11db1990108f26550a489619dc</sys_id>
-        <sys_mod_count>2</sys_mod_count>
+        <sys_mod_count>3</sys_mod_count>
         <sys_name>2</sys_name>
         <sys_package display_value="TEAMonline" source="x_aaro2_teamonline">a2dfc25fdb7244105f65ba03e29619fa</sys_package>
         <sys_policy/>
@@ -79,7 +79,7 @@
         <sys_scope display_value="TEAMonline">a2dfc25fdb7244105f65ba03e29619fa</sys_scope>
         <sys_update_name>sys_metadata_link_69cccc11db1990108f26550a489619dc</sys_update_name>
         <sys_updated_by>xxikochet</sys_updated_by>
-        <sys_updated_on>2020-06-23 15:52:15</sys_updated_on>
+        <sys_updated_on>2020-07-01 14:19:11</sys_updated_on>
         <tablename>x_aaro2_teamonline_blocks_config</tablename>
     </sys_metadata_link>
 </record_update>

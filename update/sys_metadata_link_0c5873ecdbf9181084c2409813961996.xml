@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_metadata_link">
+    <sys_metadata_link action="INSERT_OR_UPDATE">
+        <directory>update</directory>
+        <documentkey>3d10efa4db39181084c240981396191c</documentkey>
+        <payload><![CDATA[<?xml version="1.0" encoding="UTF-8"?><record_update table="x_aaro2_teamonline_carousel_slide">
+    <x_aaro2_teamonline_carousel_slide action="INSERT_OR_UPDATE">
+        <background display_value="ezpay1.png">170b9f3ddb11dc105f65ba03e29619b4</background>
+        <carousel/>
+        <description>333</description>
+        <enable_link>true</enable_link>
+        <full_description>3333</full_description>
+        <header>hader3</header>
+        <link_title>LINK EXAMPLE</link_title>
+        <name>slide3</name>
+        <order>3</order>
+        <sys_created_by>igor.kochetkov</sys_created_by>
+        <sys_created_on>2020-07-01 12:35:31</sys_created_on>
+        <sys_id>3d10efa4db39181084c240981396191c</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_updated_by>igor.kochetkov</sys_updated_by>
+        <sys_updated_on>2020-07-01 12:35:31</sys_updated_on>
+        <url>asdasda</url>
+    </x_aaro2_teamonline_carousel_slide>
+</record_update>
+]]></payload>
+        <sys_class_name>sys_metadata_link</sys_class_name>
+        <sys_created_by>xxikochet</sys_created_by>
+        <sys_created_on>2020-07-01 14:21:21</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_id>0c5873ecdbf9181084c2409813961996</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>slide3</sys_name>
+        <sys_package display_value="TEAMonline" source="x_aaro2_teamonline">a2dfc25fdb7244105f65ba03e29619fa</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="TEAMonline">a2dfc25fdb7244105f65ba03e29619fa</sys_scope>
+        <sys_update_name>sys_metadata_link_0c5873ecdbf9181084c2409813961996</sys_update_name>
+        <sys_updated_by>xxikochet</sys_updated_by>
+        <sys_updated_on>2020-07-01 14:21:21</sys_updated_on>
+        <tablename>x_aaro2_teamonline_carousel_slide</tablename>
+    </sys_metadata_link>
+</record_update>

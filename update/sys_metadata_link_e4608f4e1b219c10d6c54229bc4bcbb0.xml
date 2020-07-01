@@ -6,7 +6,7 @@
     <x_aaro2_teamonline_blocks_config action="INSERT_OR_UPDATE">
         <article/>
         <author display_value="Igor Kochetkov - Admin">c02f26a91b7180d094c7caad1e4bcb4d</author>
-        <background display_value="Aarondds.png">23d7b70ddb5d50108f26550a4896193c</background>
+        <background display_value="unnamed.jpg">5a36700cdb9d94905f65ba03e2961982</background>
         <description/>
         <display_author>false</display_author>
         <display_created_days_ago>false</display_created_days_ago>
@@ -18,9 +18,9 @@
         <sys_created_by>xxikochet</sys_created_by>
         <sys_created_on>2020-06-15 14:28:43</sys_created_on>
         <sys_id>2e80e56fdb5590905f65ba03e2961913</sys_id>
-        <sys_mod_count>26</sys_mod_count>
-        <sys_updated_by>xxikochet</sys_updated_by>
-        <sys_updated_on>2020-06-23 15:24:03</sys_updated_on>
+        <sys_mod_count>27</sys_mod_count>
+        <sys_updated_by>igor.kochetkov</sys_updated_by>
+        <sys_updated_on>2020-06-30 11:55:32</sys_updated_on>
         <title/>
         <type/>
         <widget display_value="Team Online Blocks">cebf68bbdbc5d0905f65ba03e2961959</widget>
@@ -32,7 +32,7 @@
         <sys_created_on>2020-06-23 15:52:11</sys_created_on>
         <sys_customer_update>false</sys_customer_update>
         <sys_id>e4608f4e1b219c10d6c54229bc4bcbb0</sys_id>
-        <sys_mod_count>0</sys_mod_count>
+        <sys_mod_count>1</sys_mod_count>
         <sys_name>1</sys_name>
         <sys_package display_value="TEAMonline" source="x_aaro2_teamonline">a2dfc25fdb7244105f65ba03e29619fa</sys_package>
         <sys_policy/>
@@ -40,7 +40,7 @@
         <sys_scope display_value="TEAMonline">a2dfc25fdb7244105f65ba03e29619fa</sys_scope>
         <sys_update_name>sys_metadata_link_e4608f4e1b219c10d6c54229bc4bcbb0</sys_update_name>
         <sys_updated_by>xxikochet</sys_updated_by>
-        <sys_updated_on>2020-06-23 15:52:11</sys_updated_on>
+        <sys_updated_on>2020-07-01 14:19:05</sys_updated_on>
         <tablename>x_aaro2_teamonline_blocks_config</tablename>
     </sys_metadata_link>
 </record_update>

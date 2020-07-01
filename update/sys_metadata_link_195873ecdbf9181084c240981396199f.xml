@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_metadata_link">
+    <sys_metadata_link action="INSERT_OR_UPDATE">
+        <directory>update</directory>
+        <documentkey>eaea7f9cdbb5941084c24098139619ef</documentkey>
+        <payload><![CDATA[<?xml version="1.0" encoding="UTF-8"?><record_update table="x_aaro2_teamonline_carousel_slide">
+    <x_aaro2_teamonline_carousel_slide action="INSERT_OR_UPDATE">
+        <background/>
+        <carousel/>
+        <description>ddd</description>
+        <enable_link>false</enable_link>
+        <full_description>ffff</full_description>
+        <header>ddd</header>
+        <link_title/>
+        <name>new1</name>
+        <order/>
+        <sys_created_by>igor.kochetkov</sys_created_by>
+        <sys_created_on>2020-06-30 19:54:14</sys_created_on>
+        <sys_id>eaea7f9cdbb5941084c24098139619ef</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_updated_by>igor.kochetkov</sys_updated_by>
+        <sys_updated_on>2020-06-30 19:54:14</sys_updated_on>
+        <url/>
+    </x_aaro2_teamonline_carousel_slide>
+</record_update>
+]]></payload>
+        <sys_class_name>sys_metadata_link</sys_class_name>
+        <sys_created_by>xxikochet</sys_created_by>
+        <sys_created_on>2020-07-01 14:21:26</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_id>195873ecdbf9181084c240981396199f</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>new1</sys_name>
+        <sys_package display_value="TEAMonline" source="x_aaro2_teamonline">a2dfc25fdb7244105f65ba03e29619fa</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="TEAMonline">a2dfc25fdb7244105f65ba03e29619fa</sys_scope>
+        <sys_update_name>sys_metadata_link_195873ecdbf9181084c240981396199f</sys_update_name>
+        <sys_updated_by>xxikochet</sys_updated_by>
+        <sys_updated_on>2020-07-01 14:21:26</sys_updated_on>
+        <tablename>x_aaro2_teamonline_carousel_slide</tablename>
+    </sys_metadata_link>
+</record_update>
