@@ -3,84 +3,86 @@
         <category>custom</category>
         <client_script><![CDATA[function($scope, $rootScope, $location, $timeout, spUtil, glideFormFactory, spAriaUtil, spAriaFocusManager, $uibModal, spModal) {
 
-  var c = this;
-  var d = $scope.data
+	var c = this;
+	var d = $scope.data
 
-  $scope.contextMenu = function (sys_id) {
-    if (!d.canEdit) { return [] }
-    return [
-      ['Edit item', function ($itemScope) {
+	$scope.contextMenu = function (sys_id) {
+		if (!d.canEdit) { return [] }
+		return [
+			['Edit item', function ($itemScope) {
 
-        d.sys_id = sys_id;
-        d.action = 'editItem';
-        spUtil.update($scope).then(function () {
-          var flatFields = [];
-          angular.forEach(d.f._fields, function (field) {
-            flatFields.push(field);
-          });
+				d.sys_id = sys_id;
+				d.action = 'editItem';
+				spUtil.update($scope).then(function () {
+					var flatFields = [];
+					angular.forEach(d.f._fields, function (field) {
+						flatFields.push(field);
+					});
 
 
-          var g_form = glideFormFactory.create($scope, d.f.table, d.f.sys_id, flatFields, null, { uiMessageHandler: uiMessageHandler });
+					var g_form = glideFormFactory.create($scope, d.f.table, d.f.sys_id, flatFields, null, { uiMessageHandler: uiMessageHandler });
 
-          $scope.getGlideForm = function () {
-            return g_form;
-          }
+					$scope.getGlideForm = function () {
+						return g_form;
+					}
 
-          var uiMessageHandler = function (g_form, type, message) {
-            switch (type) {
-              case 'addInfoMessage':
-                spUtil.addInfoMessage(message);
-                break;
-              case 'addErrorMessage':
-                spUtil.addErrorMessage(message);
-                break;
-              case 'clearMessages':
-                break;
-              default:
-            }
-          };
-          $scope.editImage(d.sys_id);
+					var uiMessageHandler = function (g_form, type, message) {
+						switch (type) {
+							case 'addInfoMessage':
+								spUtil.addInfoMessage(message);
+								break;
+							case 'addErrorMessage':
+								spUtil.addErrorMessage(message);
+								break;
+							case 'clearMessages':
+								break;
+							default:
+						}
+					};
+					$scope.editImage(d.sys_id);
 
-        });
-      }]
-    ]
-  }
-  $rootScope.$on('ImageLibrary.imageSelected', function (event, respData) {
-    d.f._fields.background.value = respData.sys_id;
-    d.f._fields.background.displayValue = respData.name;
-    spUtil.addInfoMessage('New background selected!');
-  })
+				});
+			}]
+		]
+	}
+	$rootScope.$on('ImageLibrary.imageSelected', function (event, respData) {
+		if(d.f && d.f._fields){
+			d.f._fields.background.value = respData.sys_id;
+			d.f._fields.background.displayValue = respData.name;
+			spUtil.addInfoMessage('New background selected!');
+		}
+	})
 
-  $scope.editImage = function () {
-    $scope.modalInstance = $uibModal.open({
-      animation: true,
-      templateUrl: 'goal_editor.html',
-      size: 'lg',
-      backdrop: false,
-      scope: $scope
-    });
-  };
-  $scope.closeEdit = function () {
-    $scope.modalInstance.close();
-    spUtil.update($scope);
-  }
-  $scope.saveRecord = function () {
-    d.action = "saveItem";
-    spUtil.update($scope).then(function (response) {
-      $scope.closeEdit();
-    });
-  }
-  $scope.getClass = function (block) {
-    return block.fitType;
-  }
-  var gallery = document.getElementsByClassName('goal-gallery')[0];
-  $scope.openImage = function (img) {
-    $scope.data.selectedImg = img;
-    gallery.classList.add('active')
-  }
-  $scope.closeGallery = function () {
-    gallery.classList.remove('active')
-  }
+	$scope.editImage = function () {
+		$scope.modalInstance = $uibModal.open({
+			animation: true,
+			templateUrl: 'goal_editor.html',
+			size: 'lg',
+			backdrop: false,
+			scope: $scope
+		});
+	};
+	$scope.closeEdit = function () {
+		$scope.modalInstance.close();
+		spUtil.update($scope);
+	}
+	$scope.saveRecord = function () {
+		d.action = "saveItem";
+		spUtil.update($scope).then(function (response) {
+			$scope.closeEdit();
+		});
+	}
+	$scope.getClass = function (block) {
+		return block.fitType;
+	}
+	var gallery = document.getElementsByClassName('goal-gallery')[0];
+	$scope.openImage = function (img) {
+		$scope.data.selectedImg = img;
+		gallery.classList.add('active')
+	}
+	$scope.closeGallery = function () {
+		gallery.classList.remove('active')
+	}
 }]]></client_script>
         <controller_as>c</controller_as>
         <css>.rally-wrapper,&#13;
@@ -223,15 +225,15 @@
         <sys_created_on>2020-06-04 09:50:27</sys_created_on>
         <sys_customer_update>false</sys_customer_update>
         <sys_id>2717fb73db4910908f26550a4896195d</sys_id>
-        <sys_mod_count>125</sys_mod_count>
+        <sys_mod_count>127</sys_mod_count>
         <sys_name>TeamOnline Comapny Goals</sys_name>
         <sys_package display_value="TEAMonline" source="x_aaro2_teamonline">a2dfc25fdb7244105f65ba03e29619fa</sys_package>
         <sys_policy/>
         <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
         <sys_scope display_value="TEAMonline">a2dfc25fdb7244105f65ba03e29619fa</sys_scope>
         <sys_update_name>sp_widget_2717fb73db4910908f26550a4896195d</sys_update_name>
-        <sys_updated_by>andrey.mironyuk</sys_updated_by>
-        <sys_updated_on>2020-06-23 11:35:35</sys_updated_on>
+        <sys_updated_by>igor.kochetkov</sys_updated_by>
+        <sys_updated_on>2020-06-29 17:19:17</sys_updated_on>
         <template><![CDATA[<div class="company-goals-container">
   <div class="row">
     <div class="col-12">

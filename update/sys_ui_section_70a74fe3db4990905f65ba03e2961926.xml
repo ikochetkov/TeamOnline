@@ -3,170 +3,184 @@
         <sys_ui_element action="INSERT_OR_UPDATE">
             <element>.begin_split</element>
             <position>0</position>
-            <sys_created_by>xxikochet</sys_created_by>
-            <sys_created_on>2020-06-03 11:57:47</sys_created_on>
-            <sys_id>04fa83ebdb4990905f65ba03e296193d</sys_id>
+            <sys_created_by>igor.kochetkov</sys_created_by>
+            <sys_created_on>2020-07-01 09:40:41</sys_created_on>
+            <sys_id>a8183e2cdb71181084c2409813961943</sys_id>
             <sys_mod_count>0</sys_mod_count>
             <sys_ui_formatter/>
             <sys_ui_section caption="NULL" display_value="" name="x_aaro2_teamonline_carousel_slide" sys_domain="global" view="Default view">70a74fe3db4990905f65ba03e2961926</sys_ui_section>
-            <sys_updated_by>xxikochet</sys_updated_by>
-            <sys_updated_on>2020-06-03 11:57:47</sys_updated_on>
+            <sys_updated_by>igor.kochetkov</sys_updated_by>
+            <sys_updated_on>2020-07-01 09:40:41</sys_updated_on>
             <sys_user/>
             <type>.begin_split</type>
         </sys_ui_element>
         <sys_ui_element action="INSERT_OR_UPDATE">
             <element>name</element>
             <position>1</position>
-            <sys_created_by>xxikochet</sys_created_by>
-            <sys_created_on>2020-06-03 11:57:47</sys_created_on>
-            <sys_id>88fa83ebdb4990905f65ba03e296193d</sys_id>
+            <sys_created_by>igor.kochetkov</sys_created_by>
+            <sys_created_on>2020-07-01 09:40:41</sys_created_on>
+            <sys_id>64183e2cdb71181084c2409813961944</sys_id>
             <sys_mod_count>0</sys_mod_count>
             <sys_ui_formatter/>
             <sys_ui_section caption="NULL" display_value="" name="x_aaro2_teamonline_carousel_slide" sys_domain="global" view="Default view">70a74fe3db4990905f65ba03e2961926</sys_ui_section>
-            <sys_updated_by>xxikochet</sys_updated_by>
-            <sys_updated_on>2020-06-03 11:57:47</sys_updated_on>
+            <sys_updated_by>igor.kochetkov</sys_updated_by>
+            <sys_updated_on>2020-07-01 09:40:41</sys_updated_on>
             <sys_user/>
             <type/>
         </sys_ui_element>
         <sys_ui_element action="INSERT_OR_UPDATE">
             <element>header</element>
             <position>2</position>
-            <sys_created_by>xxikochet</sys_created_by>
-            <sys_created_on>2020-06-03 11:57:47</sys_created_on>
-            <sys_id>00fa83ebdb4990905f65ba03e296193e</sys_id>
+            <sys_created_by>igor.kochetkov</sys_created_by>
+            <sys_created_on>2020-07-01 09:40:41</sys_created_on>
+            <sys_id>e8183e2cdb71181084c2409813961944</sys_id>
             <sys_mod_count>0</sys_mod_count>
             <sys_ui_formatter/>
             <sys_ui_section caption="NULL" display_value="" name="x_aaro2_teamonline_carousel_slide" sys_domain="global" view="Default view">70a74fe3db4990905f65ba03e2961926</sys_ui_section>
-            <sys_updated_by>xxikochet</sys_updated_by>
-            <sys_updated_on>2020-06-03 11:57:47</sys_updated_on>
+            <sys_updated_by>igor.kochetkov</sys_updated_by>
+            <sys_updated_on>2020-07-01 09:40:41</sys_updated_on>
             <sys_user/>
             <type/>
         </sys_ui_element>
         <sys_ui_element action="INSERT_OR_UPDATE">
             <element>description</element>
             <position>3</position>
-            <sys_created_by>xxikochet</sys_created_by>
-            <sys_created_on>2020-06-03 11:57:47</sys_created_on>
-            <sys_id>84fa83ebdb4990905f65ba03e296193e</sys_id>
+            <sys_created_by>igor.kochetkov</sys_created_by>
+            <sys_created_on>2020-07-01 09:40:41</sys_created_on>
+            <sys_id>60183e2cdb71181084c2409813961945</sys_id>
             <sys_mod_count>0</sys_mod_count>
             <sys_ui_formatter/>
             <sys_ui_section caption="NULL" display_value="" name="x_aaro2_teamonline_carousel_slide" sys_domain="global" view="Default view">70a74fe3db4990905f65ba03e2961926</sys_ui_section>
-            <sys_updated_by>xxikochet</sys_updated_by>
-            <sys_updated_on>2020-06-03 11:57:47</sys_updated_on>
+            <sys_updated_by>igor.kochetkov</sys_updated_by>
+            <sys_updated_on>2020-07-01 09:40:41</sys_updated_on>
             <sys_user/>
             <type/>
         </sys_ui_element>
         <sys_ui_element action="INSERT_OR_UPDATE">
             <element>full_description</element>
             <position>4</position>
-            <sys_created_by>xxikochet</sys_created_by>
-            <sys_created_on>2020-06-03 11:57:47</sys_created_on>
-            <sys_id>0cfa83ebdb4990905f65ba03e296193e</sys_id>
+            <sys_created_by>igor.kochetkov</sys_created_by>
+            <sys_created_on>2020-07-01 09:40:41</sys_created_on>
+            <sys_id>e4183e2cdb71181084c2409813961945</sys_id>
             <sys_mod_count>0</sys_mod_count>
             <sys_ui_formatter/>
             <sys_ui_section caption="NULL" display_value="" name="x_aaro2_teamonline_carousel_slide" sys_domain="global" view="Default view">70a74fe3db4990905f65ba03e2961926</sys_ui_section>
-            <sys_updated_by>xxikochet</sys_updated_by>
-            <sys_updated_on>2020-06-03 11:57:47</sys_updated_on>
+            <sys_updated_by>igor.kochetkov</sys_updated_by>
+            <sys_updated_on>2020-07-01 09:40:41</sys_updated_on>
             <sys_user/>
             <type/>
         </sys_ui_element>
         <sys_ui_element action="INSERT_OR_UPDATE">
             <element>background</element>
             <position>5</position>
-            <sys_created_by>xxikochet</sys_created_by>
-            <sys_created_on>2020-06-03 11:57:47</sys_created_on>
-            <sys_id>80fa83ebdb4990905f65ba03e296193f</sys_id>
+            <sys_created_by>igor.kochetkov</sys_created_by>
+            <sys_created_on>2020-07-01 09:40:41</sys_created_on>
+            <sys_id>6c183e2cdb71181084c2409813961945</sys_id>
             <sys_mod_count>0</sys_mod_count>
             <sys_ui_formatter/>
             <sys_ui_section caption="NULL" display_value="" name="x_aaro2_teamonline_carousel_slide" sys_domain="global" view="Default view">70a74fe3db4990905f65ba03e2961926</sys_ui_section>
-            <sys_updated_by>xxikochet</sys_updated_by>
-            <sys_updated_on>2020-06-03 11:57:47</sys_updated_on>
+            <sys_updated_by>igor.kochetkov</sys_updated_by>
+            <sys_updated_on>2020-07-01 09:40:41</sys_updated_on>
             <sys_user/>
             <type/>
         </sys_ui_element>
         <sys_ui_element action="INSERT_OR_UPDATE">
             <element>.split</element>
             <position>6</position>
-            <sys_created_by>xxikochet</sys_created_by>
-            <sys_created_on>2020-06-03 11:57:47</sys_created_on>
-            <sys_id>08fa83ebdb4990905f65ba03e296193f</sys_id>
+            <sys_created_by>igor.kochetkov</sys_created_by>
+            <sys_created_on>2020-07-01 09:40:41</sys_created_on>
+            <sys_id>e0183e2cdb71181084c2409813961946</sys_id>
             <sys_mod_count>0</sys_mod_count>
             <sys_ui_formatter/>
             <sys_ui_section caption="NULL" display_value="" name="x_aaro2_teamonline_carousel_slide" sys_domain="global" view="Default view">70a74fe3db4990905f65ba03e2961926</sys_ui_section>
-            <sys_updated_by>xxikochet</sys_updated_by>
-            <sys_updated_on>2020-06-03 11:57:47</sys_updated_on>
+            <sys_updated_by>igor.kochetkov</sys_updated_by>
+            <sys_updated_on>2020-07-01 09:40:41</sys_updated_on>
             <sys_user/>
             <type>.split</type>
         </sys_ui_element>
         <sys_ui_element action="INSERT_OR_UPDATE">
             <element>order</element>
             <position>7</position>
-            <sys_created_by>xxikochet</sys_created_by>
-            <sys_created_on>2020-06-03 11:57:47</sys_created_on>
-            <sys_id>8cfa83ebdb4990905f65ba03e296193f</sys_id>
+            <sys_created_by>igor.kochetkov</sys_created_by>
+            <sys_created_on>2020-07-01 09:40:41</sys_created_on>
+            <sys_id>68183e2cdb71181084c2409813961946</sys_id>
             <sys_mod_count>0</sys_mod_count>
             <sys_ui_formatter/>
             <sys_ui_section caption="NULL" display_value="" name="x_aaro2_teamonline_carousel_slide" sys_domain="global" view="Default view">70a74fe3db4990905f65ba03e2961926</sys_ui_section>
-            <sys_updated_by>xxikochet</sys_updated_by>
-            <sys_updated_on>2020-06-03 11:57:47</sys_updated_on>
+            <sys_updated_by>igor.kochetkov</sys_updated_by>
+            <sys_updated_on>2020-07-01 09:40:41</sys_updated_on>
             <sys_user/>
             <type/>
         </sys_ui_element>
         <sys_ui_element action="INSERT_OR_UPDATE">
             <element>enable_link</element>
             <position>8</position>
-            <sys_created_by>xxikochet</sys_created_by>
-            <sys_created_on>2020-06-03 11:57:47</sys_created_on>
-            <sys_id>04fa83ebdb4990905f65ba03e2961940</sys_id>
+            <sys_created_by>igor.kochetkov</sys_created_by>
+            <sys_created_on>2020-07-01 09:40:41</sys_created_on>
+            <sys_id>ec183e2cdb71181084c2409813961946</sys_id>
             <sys_mod_count>0</sys_mod_count>
             <sys_ui_formatter/>
             <sys_ui_section caption="NULL" display_value="" name="x_aaro2_teamonline_carousel_slide" sys_domain="global" view="Default view">70a74fe3db4990905f65ba03e2961926</sys_ui_section>
-            <sys_updated_by>xxikochet</sys_updated_by>
-            <sys_updated_on>2020-06-03 11:57:47</sys_updated_on>
+            <sys_updated_by>igor.kochetkov</sys_updated_by>
+            <sys_updated_on>2020-07-01 09:40:41</sys_updated_on>
             <sys_user/>
             <type/>
         </sys_ui_element>
         <sys_ui_element action="INSERT_OR_UPDATE">
             <element>link_title</element>
             <position>9</position>
-            <sys_created_by>xxikochet</sys_created_by>
-            <sys_created_on>2020-06-03 11:57:47</sys_created_on>
-            <sys_id>88fa83ebdb4990905f65ba03e2961940</sys_id>
+            <sys_created_by>igor.kochetkov</sys_created_by>
+            <sys_created_on>2020-07-01 09:40:41</sys_created_on>
+            <sys_id>64183e2cdb71181084c2409813961947</sys_id>
             <sys_mod_count>0</sys_mod_count>
             <sys_ui_formatter/>
             <sys_ui_section caption="NULL" display_value="" name="x_aaro2_teamonline_carousel_slide" sys_domain="global" view="Default view">70a74fe3db4990905f65ba03e2961926</sys_ui_section>
-            <sys_updated_by>xxikochet</sys_updated_by>
-            <sys_updated_on>2020-06-03 11:57:47</sys_updated_on>
+            <sys_updated_by>igor.kochetkov</sys_updated_by>
+            <sys_updated_on>2020-07-01 09:40:41</sys_updated_on>
             <sys_user/>
             <type/>
         </sys_ui_element>
         <sys_ui_element action="INSERT_OR_UPDATE">
             <element>url</element>
             <position>10</position>
-            <sys_created_by>xxikochet</sys_created_by>
-            <sys_created_on>2020-06-03 11:57:47</sys_created_on>
-            <sys_id>00fa83ebdb4990905f65ba03e2961941</sys_id>
+            <sys_created_by>igor.kochetkov</sys_created_by>
+            <sys_created_on>2020-07-01 09:40:41</sys_created_on>
+            <sys_id>e8183e2cdb71181084c2409813961947</sys_id>
             <sys_mod_count>0</sys_mod_count>
             <sys_ui_formatter/>
             <sys_ui_section caption="NULL" display_value="" name="x_aaro2_teamonline_carousel_slide" sys_domain="global" view="Default view">70a74fe3db4990905f65ba03e2961926</sys_ui_section>
-            <sys_updated_by>xxikochet</sys_updated_by>
-            <sys_updated_on>2020-06-03 11:57:47</sys_updated_on>
+            <sys_updated_by>igor.kochetkov</sys_updated_by>
+            <sys_updated_on>2020-07-01 09:40:41</sys_updated_on>
             <sys_user/>
             <type/>
         </sys_ui_element>
         <sys_ui_element action="INSERT_OR_UPDATE">
             <element>.end_split</element>
             <position>11</position>
-            <sys_created_by>xxikochet</sys_created_by>
-            <sys_created_on>2020-06-03 11:57:47</sys_created_on>
-            <sys_id>84fa83ebdb4990905f65ba03e2961941</sys_id>
+            <sys_created_by>igor.kochetkov</sys_created_by>
+            <sys_created_on>2020-07-01 09:40:41</sys_created_on>
+            <sys_id>60183e2cdb71181084c2409813961948</sys_id>
             <sys_mod_count>0</sys_mod_count>
             <sys_ui_formatter/>
             <sys_ui_section caption="NULL" display_value="" name="x_aaro2_teamonline_carousel_slide" sys_domain="global" view="Default view">70a74fe3db4990905f65ba03e2961926</sys_ui_section>
-            <sys_updated_by>xxikochet</sys_updated_by>
-            <sys_updated_on>2020-06-03 11:57:47</sys_updated_on>
+            <sys_updated_by>igor.kochetkov</sys_updated_by>
+            <sys_updated_on>2020-07-01 09:40:41</sys_updated_on>
             <sys_user/>
             <type>.end_split</type>
+        </sys_ui_element>
+        <sys_ui_element action="INSERT_OR_UPDATE">
+            <element>carousel</element>
+            <position>12</position>
+            <sys_created_by>igor.kochetkov</sys_created_by>
+            <sys_created_on>2020-07-01 09:40:41</sys_created_on>
+            <sys_id>e4183e2cdb71181084c2409813961948</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_ui_formatter/>
+            <sys_ui_section caption="NULL" display_value="" name="x_aaro2_teamonline_carousel_slide" sys_domain="global" view="Default view">70a74fe3db4990905f65ba03e2961926</sys_ui_section>
+            <sys_updated_by>igor.kochetkov</sys_updated_by>
+            <sys_updated_on>2020-07-01 09:40:41</sys_updated_on>
+            <sys_user/>
+            <type/>
         </sys_ui_element>
         <sys_ui_section action="INSERT_OR_UPDATE">
             <caption/>

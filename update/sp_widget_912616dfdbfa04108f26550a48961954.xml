@@ -612,7 +612,7 @@ function prepareFormFields(fields, props) {
         <sys_created_on>2020-02-11 17:07:22</sys_created_on>
         <sys_customer_update>false</sys_customer_update>
         <sys_id>912616dfdbfa04108f26550a48961954</sys_id>
-        <sys_mod_count>315</sys_mod_count>
+        <sys_mod_count>316</sys_mod_count>
         <sys_name>Team Online Header Menu</sys_name>
         <sys_package display_value="TEAMonline" source="x_aaro2_teamonline">a2dfc25fdb7244105f65ba03e29619fa</sys_package>
         <sys_policy/>
@@ -620,58 +620,52 @@ function prepareFormFields(fields, props) {
         <sys_scope display_value="TEAMonline">a2dfc25fdb7244105f65ba03e29619fa</sys_scope>
         <sys_update_name>sp_widget_912616dfdbfa04108f26550a48961954</sys_update_name>
         <sys_updated_by>andrey.mironyuk</sys_updated_by>
-        <sys_updated_on>2020-06-25 11:40:24</sys_updated_on>
+        <sys_updated_on>2020-06-26 10:46:27</sys_updated_on>
         <template><![CDATA[<div class="menu-container">
 
   <nav class="header__nav-wrap" style="margin-top: 0">
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-      aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul ng-if="user.logged_in" class="header__nav" aria-label="${Header menu}" role="menubar">
-        <div class="header-loader" ng-class="{'invisible': !loadingIndicator}">
-          <div class="hidden-xs sp-loading-indicator la-sm">
-            <div></div>
-            <div></div>
-            <div></div>
-          </div>
+    <ul ng-if="user.logged_in" class="header__nav" aria-label="${Header menu}" role="menubar">
+      <div class="header-loader" ng-class="{'invisible': !loadingIndicator}">
+        <div class="hidden-xs sp-loading-indicator la-sm">
+          <div></div>
+          <div></div>
+          <div></div>
         </div>
+      </div>
 
-        <li ng-repeat="item in visibleItems" ng-class="{dropdown: item.items.length > 0, 'header-menu-item': true}"
-          ng-include="'teamOnlineMainMenu'" role="presentation"></li>
-        <li ng-if="data.canEdit">
-          <sp-widget widget="newArticle"></sp-widget>
-        </li>
-        <li ng-if="showAvatar" class="hidden-xs dropdown has-children avatar profile-menu-item" role="presentation">
-          <a href class="toggle-dropdown" data-toggle="dropdown" aria-expanded="false" title="{{::data.profileBtnMsg}}"
-            aria-label="{{::data.profileBtnMsg}}: {{::user.name}}" id="profile-dropdown" role="menuitem"
-            aria-haspopup="true">
-            <span aria-hidden="true">
-              <sn-avatar class="avatar-small-medium" primary="avatarProfile" /></span>
-            <span class="visible-lg-inline">{{::user.name}}</span>
-          </a>
-          <ul class="dropdown-menu sub-menu profile-dropdown" role="menu" aria-label="{{::data.profileBtnMsg}}">
-            <li role="presentation"><a tabindex="-1" ng-href="?id=user_profile&sys_id={{::user.sys_id}}"
-                role="menuitem">${Profile}</a></li>
-            <li ng-if="::!(isViewNative || isViewNativeTablet)" role="presentation"><a tabindex="-1"
-                href="{{::portal.logoutUrl}}" role="menuitem">${Logout}</a></li>
-          </ul>
-        </li>
-        <li ng-if="showXSAvatar" class="visible-xs-block" role="presentation"><a role="menuitem"
-            ng-href="?id=user_profile&sys_id={{::user.sys_id}}" ng-click="collapse()">
-            <span class="navbar-avatar">
-              <sn-avatar class="avatar-small-medium" primary="avatarProfile" /></span>{{::user.name}}</a>
-        </li>
-        <li ng-if="::!(isViewNative || isViewNativeTablet)" class="visible-xs-block" role="presentation"><a
-            role="menuitem" ng-href="{{::portal.logoutUrl}}" ng-click="collapse()">${Logout}</a></li>
-      </ul>
+      <li ng-repeat="item in visibleItems" ng-class="{dropdown: item.items.length > 0, 'header-menu-item': true}"
+        ng-include="'teamOnlineMainMenu'" role="presentation"></li>
+      <li ng-if="data.canEdit">
+        <sp-widget widget="newArticle"></sp-widget>
+      </li>
+      <li ng-if="showAvatar" class="hidden-xs dropdown has-children avatar profile-menu-item" role="presentation">
+        <a href class="toggle-dropdown" data-toggle="dropdown" aria-expanded="false" title="{{::data.profileBtnMsg}}"
+          aria-label="{{::data.profileBtnMsg}}: {{::user.name}}" id="profile-dropdown" role="menuitem"
+          aria-haspopup="true">
+          <span aria-hidden="true">
+            <sn-avatar class="avatar-small-medium" primary="avatarProfile" /></span>
+          <span class="visible-lg-inline">{{::user.name}}</span>
+        </a>
+        <ul class="dropdown-menu sub-menu profile-dropdown" role="menu" aria-label="{{::data.profileBtnMsg}}">
+          <li role="presentation"><a tabindex="-1" ng-href="?id=user_profile&sys_id={{::user.sys_id}}"
+              role="menuitem">${Profile}</a></li>
+          <li ng-if="::!(isViewNative || isViewNativeTablet)" role="presentation"><a tabindex="-1"
+              href="{{::portal.logoutUrl}}" role="menuitem">${Logout}</a></li>
+        </ul>
+      </li>
+      <li ng-if="showXSAvatar" class="visible-xs-block" role="presentation"><a role="menuitem"
+          ng-href="?id=user_profile&sys_id={{::user.sys_id}}" ng-click="collapse()">
+          <span class="navbar-avatar">
+            <sn-avatar class="avatar-small-medium" primary="avatarProfile" /></span>{{::user.name}}</a>
+      </li>
+      <li ng-if="::!(isViewNative || isViewNativeTablet)" class="visible-xs-block" role="presentation"><a
+          role="menuitem" ng-href="{{::portal.logoutUrl}}" ng-click="collapse()">${Logout}</a></li>
+    </ul>
 
-      <ul ng-if="(!user.logged_in && page.id != portal.login_page_dv && !data.hasLogin)" class="nav navbar-nav"
-        role="presentation">
-        <li role="presentation"><a href ng-click="::openLogin()">${Login}</a></li>
-      </ul>
-    </div>
+    <ul ng-if="(!user.logged_in && page.id != portal.login_page_dv && !data.hasLogin)" class="nav navbar-nav"
+      role="presentation">
+      <li role="presentation"><a href ng-click="::openLogin()">${Login}</a></li>
+    </ul>
   </nav>
 </div>]]></template>
     </sp_widget>

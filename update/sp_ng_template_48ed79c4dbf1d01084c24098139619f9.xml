@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sp_ng_template">
+    <sp_ng_template action="INSERT_OR_UPDATE">
+        <id>blocks_4_item_editor.html</id>
+        <sp_widget display_value="Team Online 4 Blocks">c1cafd00dbf1d01084c2409813961907</sp_widget>
+        <sys_class_name>sp_ng_template</sys_class_name>
+        <sys_created_by>igor.kochetkov</sys_created_by>
+        <sys_created_on>2020-06-29 16:09:38</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_id>48ed79c4dbf1d01084c24098139619f9</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>blocks_4_item_editor.html</sys_name>
+        <sys_package display_value="TEAMonline" source="x_aaro2_teamonline">a2dfc25fdb7244105f65ba03e29619fa</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="TEAMonline">a2dfc25fdb7244105f65ba03e29619fa</sys_scope>
+        <sys_update_name>sp_ng_template_48ed79c4dbf1d01084c24098139619f9</sys_update_name>
+        <sys_updated_by>igor.kochetkov</sys_updated_by>
+        <sys_updated_on>2020-06-29 16:09:38</sys_updated_on>
+        <template><![CDATA[<div class="panel panel-default" ng-init="initGForm()">
+  <div class="panel-heading clearfix">
+    <div class="col-md-6" style="padding-top:10px;">
+      <h4 class="panel-title">Edit Item</h4>
+    </div>
+  </div>
+  <div class="panel-body wrapper-xl">
+    <label class="field-label" tooltip-right="true">Image</label>
+    <img title="{{data.f._fields.background.displayValue}}" ng-src="{{data.f._fields.background.displayValue}}" style="margin-bottom:10px; max-height: 128px; max-width: 128px; display:block" role="presentation">
+    <!---widget image Library --->
+    <sp-widget widget="data.imageLibrary"></sp-widget> 
+    <sp-model container.captionDisplay="false" form_model="data.f" glide-form="getGlideForm()" mandatory="mandatory"></sp-model>
+  </div>
+  <div class="panel-footer">
+    <button class="btn btn-primary" ng-click="closeEdit()">${Close}</button>
+    <button style="float:right" class="btn btn-primary" ng-click="saveRecord()">${Save changes}</button>
+  </div>
+</div>]]></template>
+    </sp_ng_template>
+</record_update>

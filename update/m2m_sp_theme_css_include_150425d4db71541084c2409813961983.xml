@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="m2m_sp_theme_css_include">
+    <m2m_sp_theme_css_include action="INSERT_OR_UPDATE">
+        <order/>
+        <sp_css_include display_value="Montserrat">25f3a154db71541084c24098139619ac</sp_css_include>
+        <sp_theme display_value="Team Online Theme">9c999a1fdb3e04108f26550a48961949</sp_theme>
+        <sys_class_name>m2m_sp_theme_css_include</sys_class_name>
+        <sys_created_by>igor.kochetkov</sys_created_by>
+        <sys_created_on>2020-06-30 08:54:58</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_id>150425d4db71541084c2409813961983</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>Montserrat.Team Online Theme</sys_name>
+        <sys_package display_value="TEAMonline" source="x_aaro2_teamonline">a2dfc25fdb7244105f65ba03e29619fa</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="TEAMonline">a2dfc25fdb7244105f65ba03e29619fa</sys_scope>
+        <sys_update_name>m2m_sp_theme_css_include_150425d4db71541084c2409813961983</sys_update_name>
+        <sys_updated_by>igor.kochetkov</sys_updated_by>
+        <sys_updated_on>2020-06-30 08:54:58</sys_updated_on>
+    </m2m_sp_theme_css_include>
+</record_update>

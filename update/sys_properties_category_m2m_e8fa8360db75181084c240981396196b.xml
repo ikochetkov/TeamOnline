@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_properties_category_m2m">
+    <sys_properties_category_m2m action="INSERT_OR_UPDATE">
+        <category display_value="TeamOnline Portal">fd26f8a1dbc384505f65ba03e2961946</category>
+        <order>100</order>
+        <property display_value="x_aaro2_teamonline.agent_autoopen" name="x_aaro2_teamonline.agent_autoopen">88c69ad0dbb9541084c240981396195d</property>
+        <sys_class_name>sys_properties_category_m2m</sys_class_name>
+        <sys_created_by>andrey.mironyuk</sys_created_by>
+        <sys_created_on>2020-07-01 11:03:08</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_id>e8fa8360db75181084c240981396196b</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>x_aaro2_teamonline.agent_autoopen.TeamOnline Portal</sys_name>
+        <sys_package display_value="TEAMonline" source="x_aaro2_teamonline">a2dfc25fdb7244105f65ba03e29619fa</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="TEAMonline">a2dfc25fdb7244105f65ba03e29619fa</sys_scope>
+        <sys_update_name>sys_properties_category_m2m_e8fa8360db75181084c240981396196b</sys_update_name>
+        <sys_updated_by>andrey.mironyuk</sys_updated_by>
+        <sys_updated_on>2020-07-01 11:03:08</sys_updated_on>
+    </sys_properties_category_m2m>
+</record_update>

@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sp_header_footer">
+    <sp_header_footer action="INSERT_OR_UPDATE">
+        <category>custom</category>
+        <client_script><![CDATA[function() {
+  /* widget controller */
+  var c = this;
+}]]></client_script>
+        <controller_as>c</controller_as>
+        <css>$blue: #0069c8;&#13;
+#footer {&#13;
+  background-color: white;&#13;
+  color: $blue;&#13;
+  padding-top: 10px;&#13;
+  margin-top: 10px;&#13;
+  ul {&#13;
+    list-style: none;&#13;
+  }&#13;
+}&#13;
+.company-logo {&#13;
+  margin: 10px;&#13;
+}&#13;
+</css>
+        <data_table>sp_instance</data_table>
+        <demo_data/>
+        <description/>
+        <docs/>
+        <field_list/>
+        <has_preview>false</has_preview>
+        <id>teamonline_footer</id>
+        <internal>false</internal>
+        <link><![CDATA[function link(scope, element, attrs, controller) { 
+
+ }]]></link>
+        <name>Teamonline Footer</name>
+        <option_schema/>
+        <public>true</public>
+        <roles/>
+        <script><![CDATA[(function() {
+  /* populate the 'data' object */
+  /* e.g., data.table = $sp.getValue('table'); */
+
+})();]]></script>
+        <servicenow>false</servicenow>
+        <sys_class_name>sp_header_footer</sys_class_name>
+        <sys_created_by>andrey.mironyuk</sys_created_by>
+        <sys_created_on>2020-07-01 07:48:26</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_id>3f3e9a6cdb3dd41084c24098139619d1</sys_id>
+        <sys_mod_count>9</sys_mod_count>
+        <sys_name>Teamonline Footer</sys_name>
+        <sys_package display_value="TEAMonline" source="x_aaro2_teamonline">a2dfc25fdb7244105f65ba03e29619fa</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="TEAMonline">a2dfc25fdb7244105f65ba03e29619fa</sys_scope>
+        <sys_update_name>sp_header_footer_3f3e9a6cdb3dd41084c24098139619d1</sys_update_name>
+        <sys_updated_by>andrey.mironyuk</sys_updated_by>
+        <sys_updated_on>2020-07-01 12:40:07</sys_updated_on>
+        <template><![CDATA[<div id="footer">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-3">
+        <ul>
+          <li class="company-logo">
+            <a href="https://www.aarons.com">
+              <img src="teamonline_aarons_logo.png" style="max-height: 25px;" />
+            </a>
+          </li>
+          <li class="company-logo">
+            <a href="https://progleasing.com/ ">
+              <img src="teamonline_progressive_logo.png" style="max-height: 35px" />
+            </a>
+          </li>
+          <li class="company-logo">
+            <a href="https://woodhavenusa.com/">
+              <img src="teamonline_woodhaven_logo.png" style="max-height: 35px" />
+            </a>
+          </li>
+        </ul>
+      </div>
+      <div class="col-md-3">
+        <ul>
+          <li>id:1</li>
+          <li>id:2</li>
+          <li>id:3</li>
+        </ul>
+      </div>
+      <div class="col-md-3">
+        <ul>
+          <li>id:1</li>
+          <li>id:2</li>
+          <li>id:3</li>
+        </ul>
+      </div>
+      <div class="col-md-3">
+        <ul>
+          <li>id:1</li>
+          <li>id:2</li>
+          <li>id:3</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>]]></template>
+    </sp_header_footer>
+</record_update>

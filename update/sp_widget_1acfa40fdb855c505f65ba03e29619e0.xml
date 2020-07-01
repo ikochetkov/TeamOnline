@@ -1,22 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?><record_update table="sp_widget">
     <sp_widget action="INSERT_OR_UPDATE">
         <category>custom</category>
-        <client_script><![CDATA[function($scope, $rootScope, $location, spUtil, $uibModal, glideFormFactory, spAriaUtil, spAriaFocusManager) {
+        <client_script><![CDATA[function($scope, $rootScope, $location, spUtil, spModal ,$uibModal, glideFormFactory, spAriaUtil, spAriaFocusManager) {
 	/* widget controller */
-	var c = this;
+	var c = this; var d = $scope.data;
 
 	/* context Menu */
 	$scope.contextMenu = function () {
 		if (!$scope.data.canEdit) { return [] }
 		return [
 			['Edit Slide', function ($itemScope) {
-				$itemScope.$parent.$parent.editSlide($itemScope.$parent.$parent.slide);
+				//$itemScope.$parent.$parent.$parent.editSlide($itemScope.$parent.$parent.slide);
+				var currentScope = $itemScope; var i = 0;
+				while (!currentScope.hasOwnProperty('editSlide') && i<10){
+					currentScope = currentScope.$parent;i++;
+				} currentScope.editSlide($itemScope.slide);
 			}],
 			['Delete Slide', function ($itemScope) {
-				$itemScope.$parent.deleteSlide($itemScope.$index)
+				//$itemScope.$parent.$parent.$parent.deleteSlide($itemScope.$parent.$parent.slide)
+				var currentScope = $itemScope; var i = 0;
+				while (!currentScope.hasOwnProperty('deleteSlide') && i<10){
+					currentScope = currentScope.$parent;i++;
+				}	currentScope.deleteSlide($itemScope.slide);		
 			}],
 			['Add new Slide', function ($itemScope) {
-				$itemScope.$parent.createSlide($itemScope.$index)
+				//$itemScope.$parent.$parent.$parent.createSlide($itemScope.$parent.$parent.slide)
+				var currentScope = $itemScope; var i = 0;
+				while (!currentScope.hasOwnProperty('editSlide') && i<10){
+					currentScope = currentScope.$parent;i++;
+				}	currentScope.editSlide($itemScope.slide, true);	
 			}]
 		]
 	}
@@ -36,8 +48,9 @@
 		$scope.modalInstance.close();
 	}
 
-	$scope.editSlide = function(itemScope){
-		$scope.data.sys_id = itemScope.sys_id;
+	/* add or edit slide */
+	$scope.editSlide = function(itemScope, isNew){
+		if(isNew){d.sys_id = -1}else{d.sys_id = itemScope.sys_id;}
 		spUtil.update($scope).then(function(){
 			/* === collect g_form object of form fields === */
 			var flatFields = [];
@@ -67,16 +80,43 @@
 
 			$scope.open();
 		})
-
-
+	}
+	
+	/* delete slide */
+	$scope.deleteSlide = function(slide){
+		spModal.open({
+			title: 'Delete this slide?',
+			message: 'Slide will be deleted from system permanently',
+			buttons: [
+				{label:'✘ ${No}', cancel: true},
+				{label:'✔️ ${Yes}', primary: true}
+			]
+		}).then(function() {
+			d.slide_sysid = slide.sys_id;
+			d.action = "delete_slide";
+			spUtil.update($scope).then(function(){
+				d.action = d.f = undefined;
+			});
+		});
 	}
 
-	$scope.deleteSlide = function(){
-	}
+	/* update image from embedded widget */
+	$rootScope.$on('ImageLibrary.imageSelected', function (event, respData) {
+		if(d.f && d.f._fields){
+			$scope.data.f._fields.background.value = respData.sys_id;
+			$scope.data.f._fields.background.displayValue = respData.name;
+			spUtil.addInfoMessage('New background selected!');
+		}
+	})
 
-	$scope.createSlide = function(){
+	/*=== save current g_form object to table ===*/
+	$scope.saveRecord = function () {
+		d.action = "saveRecord";
+		spUtil.update($scope).then(function (response) {
+			$scope.closeEdit();
+			d.action = d.f = undefined;
+		});
 	}
-
 
 }]]></client_script>
         <controller_as>c</controller_as>
@@ -172,43 +212,59 @@ img{
         <public>false</public>
         <roles/>
         <script><![CDATA[//data.slides = $sp.getRelatedList('x_aaro2_teamonline_carousel_slide','carousel');
-data.canEdit = gs.getUser().isMemberOf(gs.getProperty("x_aaro2_teamonline.teamonline_administration_group")) || gs.hasRole("admin");
-data.slides = [];
-var widgetInstanceRecord = $sp.getInstanceRecord();
-var slidesGr = new GlideRecord('x_aaro2_teamonline_carousel_slide');
-slidesGr.addQuery('carousel', widgetInstanceRecord.getUniqueValue());
-slidesGr.query();
-while(slidesGr.next()){
-	data.slides.push({
-		sys_id: slidesGr.getUniqueValue(),
-		name : slidesGr.getValue('name'),
-		order : slidesGr.getValue('order'),
-		background: slidesGr.getDisplayValue('background'),
-		description: slidesGr.getValue('description'),
-		full_description : slidesGr.getValue('full_description'),
-		header : slidesGr.getValue('header'),
-		enable_link : slidesGr.getDisplayValue('enable_link'),
-		link_title : slidesGr.getValue('link_title'),
-		url : slidesGr.getValue('url')	
-	})
-}
-
-
-
 data.table = 'x_aaro2_teamonline_carousel_slide';
+data.canEdit = gs.getUser().isMemberOf(gs.getProperty("x_aaro2_teamonline.teamonline_administration_group")) || gs.hasRole("admin");
+data.imageLibrary = $sp.getWidget('image_library');
 
-if(input){
-	data.sys_id = input.sys_id;
-	data.f = $sp.getForm(data.table, data.sys_id, data.query, data.view);
-}
-
-if (input && input.method === 'save'){
+if (input && input.action == 'saveRecord'){
 	var result = {};
-	if (input._fields) {
-		result = $sp.saveRecord(input.table, input.sys_id, input._fields);
+	if (input.f._fields) {
+		result = $sp.saveRecord(input.table, input.sys_id, input.f._fields);
+		if(result){
+			collectSlides();
+			gs.addInfoMessage('Slide has been saved');
+		}
 	}
 	//data.result = result;
 	//data.sys_id = result.sys_id;
+} else if(input && input.action == 'delete_slide'){
+	var slideGr = new GlideRecord('x_aaro2_teamonline_carousel_slide');
+	if(slideGr.get(input.slide_sysid)){
+		slideGr.deleteRecord();
+		collectSlides();
+		gs.addInfoMessage('Slide has been deleted.');
+	}else{
+		gs.addErrorMessage('Slide not found, could not be deleted.');
+	}
+}
+else if(input){
+	data.sys_id = input.sys_id;
+	data.f = $sp.getForm(data.table, data.sys_id, data.query, data.view);
+} else {
+	collectSlides();
+}
+
+
+function collectSlides(){
+	data.slides = [];
+	var widgetInstanceRecord = $sp.getInstanceRecord();
+	var slidesGr = new GlideRecord('x_aaro2_teamonline_carousel_slide');
+	if(widgetInstanceRecord)slidesGr.addQuery('carousel', widgetInstanceRecord.getUniqueValue());
+	slidesGr.query();
+	while(slidesGr.next()){
+		data.slides.push({
+			sys_id: slidesGr.getUniqueValue(),
+			name : slidesGr.getValue('name'),
+			order : slidesGr.getValue('order'),
+			background: slidesGr.getDisplayValue('background'),
+			description: slidesGr.getValue('description'),
+			full_description : slidesGr.getValue('full_description'),
+			header : slidesGr.getValue('header'),
+			enable_link : slidesGr.getDisplayValue('enable_link'),
+			link_title : slidesGr.getValue('link_title'),
+			url : slidesGr.getValue('url')	
+		})
+	}
 }]]></script>
         <servicenow>false</servicenow>
         <sys_class_name>sp_widget</sys_class_name>
@@ -216,32 +272,32 @@ if (input && input.method === 'save'){
         <sys_created_on>2020-06-01 11:22:57</sys_created_on>
         <sys_customer_update>false</sys_customer_update>
         <sys_id>1acfa40fdb855c505f65ba03e29619e0</sys_id>
-        <sys_mod_count>219</sys_mod_count>
+        <sys_mod_count>275</sys_mod_count>
         <sys_name>TeamOnline Carousel</sys_name>
         <sys_package display_value="TEAMonline" source="x_aaro2_teamonline">a2dfc25fdb7244105f65ba03e29619fa</sys_package>
         <sys_policy/>
         <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
         <sys_scope display_value="TEAMonline">a2dfc25fdb7244105f65ba03e29619fa</sys_scope>
         <sys_update_name>sp_widget_1acfa40fdb855c505f65ba03e29619e0</sys_update_name>
-        <sys_updated_by>xxikochet</sys_updated_by>
-        <sys_updated_on>2020-06-11 12:10:49</sys_updated_on>
+        <sys_updated_by>igor.kochetkov</sys_updated_by>
+        <sys_updated_on>2020-06-30 20:10:33</sys_updated_on>
         <template><![CDATA[<div id="slider">
   <div class="pull-in">
     <uib-carousel interval="options.interval">
-      <uib-slide ng-repeat="slide in ::data.slides" active="slide.active">
-        <div class="container">
+      <uib-slide ng-repeat="slide in data.slides" active="slide.active">
+        <div context-menu="contextMenu()" class="container">
 
-          <img context-menu="contextMenu()" ng-src="{{::slide.background}}" style="margin:auto; width:100%;" role="presentation">
+          <img context-menu="contextMenu()" ng-src="{{slide.background}}" style="margin:auto; width:100%;" role="presentation">
 
           <div context-menu="contextMenu()" class="carousel-caption d-none d-md-block">
-            <h2 class="name">{{::slide.header}}</h2>
-            <h4 class="description">{{::slide.description}}</h4>
-            <p class="description">{{::slide.full_description}}</p>
+            <h2 class="name">{{slide.header}}</h2>
+            <h4 class="description">{{slide.description}}</h4>
+            <p class="description">{{slide.full_description}}</p>
             <div ng-if="slide.enable_link == 'true'" class="button-wrapper">
               <svg height="60" width="320" xmlns="http://www.w3.org/2000/svg">
                 <rect class="shape" height="60" width="320" />
                 <div class="button-text">
-                  <a style="color: #fff" href="{{::slide.url}}" title="Open link">{{::slide.link_title}}</a>
+                  <a style="color: #fff" href="{{slide.url}}" title="Open link">{{slide.link_title}}</a>
                 </div>
               </svg>
             </div>
