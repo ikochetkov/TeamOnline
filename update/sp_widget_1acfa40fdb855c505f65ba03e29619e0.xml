@@ -10,25 +10,26 @@
 		if (!$scope.data.canEdit) { return [] }
 		return [
 			['Edit Slide', function ($itemScope) {
-				//$itemScope.$parent.$parent.$parent.editSlide($itemScope.$parent.$parent.slide);
-				var currentScope = $itemScope; var i = 0;
-				while (!currentScope.hasOwnProperty('editSlide') && i<10){
-					currentScope = currentScope.$parent;i++;
-				} currentScope.editSlide($itemScope.slide);
+				var currentScope = getCurrentScopeByMethod($itemScope,'editSlide');
+				currentScope.editSlide($itemScope.slide);
 			}],
 			['Delete Slide', function ($itemScope) {
-				//$itemScope.$parent.$parent.$parent.deleteSlide($itemScope.$parent.$parent.slide)
-				var currentScope = $itemScope; var i = 0;
-				while (!currentScope.hasOwnProperty('deleteSlide') && i<10){
-					currentScope = currentScope.$parent;i++;
-				}	currentScope.deleteSlide($itemScope.slide);		
+				var currentScope = getCurrentScopeByMethod($itemScope,'deleteSlide');
+				currentScope.deleteSlide($itemScope.slide);		
 			}],
 			['Add new Slide', function ($itemScope) {
-				//$itemScope.$parent.$parent.$parent.createSlide($itemScope.$parent.$parent.slide)
-				var currentScope = $itemScope; var i = 0;
-				while (!currentScope.hasOwnProperty('editSlide') && i<10){
-					currentScope = currentScope.$parent;i++;
-				}	currentScope.editSlide($itemScope.slide, true);	
+				var currentScope = getCurrentScopeByMethod($itemScope,'editSlide');
+				currentScope.editSlide($itemScope.slide, true);	
+			}]
+		]
+	}
+
+	$scope.placeHolderContextMenu = function(){
+		if (!$scope.data.canEdit) { return [] }
+		return [
+			['Add new Slide', function ($itemScope) {
+				var currentScope = getCurrentScopeByMethod($itemScope,'editSlide');
+				currentScope.editSlide($itemScope.slide, true);	
 			}]
 		]
 	}
@@ -81,7 +82,7 @@
 			$scope.open();
 		})
 	}
-	
+
 	/* delete slide */
 	$scope.deleteSlide = function(slide){
 		spModal.open({
@@ -118,6 +119,18 @@
 		});
 	}
 
+	/* returs current scope */
+	function getCurrentScopeByMethod(scope,method){
+		var currentScope = scope; 
+		var i = 0;
+		while (!currentScope.hasOwnProperty(method) && i<10){
+			currentScope = currentScope.$parent;
+			i++;
+		}
+		return currentScope;
+	}
+
+
 }]]></client_script>
         <controller_as>c</controller_as>
         <css>.container{
@@ -127,6 +140,18 @@
   background-repeat: no-repeat;
   background-size:cover;
   background-color: #333;
+}
+
+.slide-placeholder{
+  width:100%;
+  height:300px;
+  background:#333;
+  color:white;
+  text-align:center;
+}
+
+.slide-placeholder span{
+	line-height: 300px;
 }
 
 #slider{
@@ -211,22 +236,20 @@ img{
         <option_schema/>
         <public>false</public>
         <roles/>
-        <script><![CDATA[//data.slides = $sp.getRelatedList('x_aaro2_teamonline_carousel_slide','carousel');
+        <script><![CDATA[var widgetInstanceRecordsysId = $sp.getInstanceRecord().getUniqueValue();
 data.table = 'x_aaro2_teamonline_carousel_slide';
 data.canEdit = gs.getUser().isMemberOf(gs.getProperty("x_aaro2_teamonline.teamonline_administration_group")) || gs.hasRole("admin");
 data.imageLibrary = $sp.getWidget('image_library');
-
 if (input && input.action == 'saveRecord'){
 	var result = {};
 	if (input.f._fields) {
+		input.f._fields.carousel.value = widgetInstanceRecordsysId;
 		result = $sp.saveRecord(input.table, input.sys_id, input.f._fields);
 		if(result){
 			collectSlides();
 			gs.addInfoMessage('Slide has been saved');
 		}
 	}
-	//data.result = result;
-	//data.sys_id = result.sys_id;
 } else if(input && input.action == 'delete_slide'){
 	var slideGr = new GlideRecord('x_aaro2_teamonline_carousel_slide');
 	if(slideGr.get(input.slide_sysid)){
@@ -247,9 +270,9 @@ else if(input){
 
 function collectSlides(){
 	data.slides = [];
-	var widgetInstanceRecord = $sp.getInstanceRecord();
+	
 	var slidesGr = new GlideRecord('x_aaro2_teamonline_carousel_slide');
-	if(widgetInstanceRecord)slidesGr.addQuery('carousel', widgetInstanceRecord.getUniqueValue());
+	slidesGr.addQuery('carousel', widgetInstanceRecordsysId);
 	slidesGr.query();
 	while(slidesGr.next()){
 		data.slides.push({
@@ -272,15 +295,15 @@ function collectSlides(){
         <sys_created_on>2020-06-01 11:22:57</sys_created_on>
         <sys_customer_update>false</sys_customer_update>
         <sys_id>1acfa40fdb855c505f65ba03e29619e0</sys_id>
-        <sys_mod_count>275</sys_mod_count>
+        <sys_mod_count>323</sys_mod_count>
         <sys_name>TeamOnline Carousel</sys_name>
         <sys_package display_value="TEAMonline" source="x_aaro2_teamonline">a2dfc25fdb7244105f65ba03e29619fa</sys_package>
         <sys_policy/>
         <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
         <sys_scope display_value="TEAMonline">a2dfc25fdb7244105f65ba03e29619fa</sys_scope>
         <sys_update_name>sp_widget_1acfa40fdb855c505f65ba03e29619e0</sys_update_name>
-        <sys_updated_by>igor.kochetkov</sys_updated_by>
-        <sys_updated_on>2020-06-30 20:10:33</sys_updated_on>
+        <sys_updated_by>xxikochet</sys_updated_by>
+        <sys_updated_on>2020-07-02 09:47:36</sys_updated_on>
         <template><![CDATA[<div id="slider">
   <div class="pull-in">
     <uib-carousel interval="options.interval">
@@ -305,6 +328,12 @@ function collectSlides(){
         </div>
 
       </uib-slide>
+
+
+      <div context-menu="placeHolderContextMenu()" ng-if="!!!data.slides.length" class="slide-placeholder">
+				<span>No slides found. Right-click to add slides</span>
+      </div>
+
     </uib-carousel>
   </div>
 </div>]]></template>

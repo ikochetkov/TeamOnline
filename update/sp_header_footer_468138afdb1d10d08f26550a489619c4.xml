@@ -425,7 +425,7 @@ if (data.menu && data.menu.data) {
         <sys_created_on>2020-06-15 11:03:14</sys_created_on>
         <sys_customer_update>false</sys_customer_update>
         <sys_id>468138afdb1d10d08f26550a489619c4</sys_id>
-        <sys_mod_count>50</sys_mod_count>
+        <sys_mod_count>51</sys_mod_count>
         <sys_name>Team Online 2 Header</sys_name>
         <sys_package display_value="TEAMonline" source="x_aaro2_teamonline">a2dfc25fdb7244105f65ba03e29619fa</sys_package>
         <sys_policy/>
@@ -433,7 +433,7 @@ if (data.menu && data.menu.data) {
         <sys_scope display_value="TEAMonline">a2dfc25fdb7244105f65ba03e29619fa</sys_scope>
         <sys_update_name>sp_header_footer_468138afdb1d10d08f26550a489619c4</sys_update_name>
         <sys_updated_by>andrey.mironyuk</sys_updated_by>
-        <sys_updated_on>2020-06-23 11:53:58</sys_updated_on>
+        <sys_updated_on>2020-07-02 12:43:56</sys_updated_on>
         <template><![CDATA[<!--<div class="container">
  <div class="quick-links-container">
     <div class="quick-link">
@@ -468,46 +468,6 @@ if (data.menu && data.menu.data) {
 
       <div class="header__search header__content-item">
         <sp-widget widget="data.search"></sp-widget>
-      </div>
-
-      <div class="header__content-item">
-        <div class="quick-access-links">
-          <span> External Applications </span>
-          <i class="fa fa-chevron-circle-right"></i>
-          <div class="quick-access-links-container">
-            <div class="quick-link">
-              <a href="https://www.aarons.com">
-                <img src="teamonline_aarons_logo.png" style="max-height: 25px;" />
-              </a>
-            </div>
-            <div class="quick-link">
-              <a href="https://progleasing.com/ ">
-                <img src="teamonline_progressive_logo.png" style="max-height: 35px" />
-              </a>
-            </div>
-            <div class="quick-link">
-              <a href="https://woodhaven.com/">
-                <img src="teamonline_woodhaven_logo.png" style="max-height: 35px" />
-              </a>
-            </div>
-            <!--<div class="quick-link">
-              <a href="https://www.teamwork.com">
-                <img src="https://www.teamwork.com/app/themes/teamwork-theme/dist/images/twork-slate.svg" />
-              </a>
-            </div>
-            <div class="quick-link">
-              <a href="https://www.dayforcehcm.com/mydayforce/login.aspx">
-                <span>DAYFORCE</span>
-              </a>
-            </div>
-            <div class="quick-link">
-              <a href="https://www.dayforcehcm.com/clock/index.html">
-                <span>TIMECLOCK</span>
-              </a>
-            </div>-->
-          </div>
-        </div>
-
       </div>
     </div>
   </div>

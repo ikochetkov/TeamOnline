@@ -7,46 +7,13 @@
 
 	/* === collect g_form object of form fields === */
 
-	$scope.contextMenu = function () {
-		if (!d.canEdit) { return [] }
+	$scope.contextMenu = function (blockId) {
+		if (!d.canEdit || !blockId) { return [] }
 		return [
 			['Edit item', function ($itemScope) {
+				
+				$scope.craftForm($itemScope.block.sys_id)
 
-				d.sys_id = $itemScope.block.sys_id;
-				d.action = 'editItem';
-				spUtil.update($scope).then(function(){
-					d.f._fields.article.attributes.ref_auto_completer = "AJAXTableCompleter";
-					d.f._fields.article.attributes.ref_ac_columns = "short_description";
-					d.f._fields.article.attributes.ref_ac_columns_search = "true";
-
-					var flatFields = [];
-					angular.forEach(d.f._fields, function (field) {
-						flatFields.push(field);
-					});
-
-
-					var g_form = glideFormFactory.create($scope, d.f.table, d.f.sys_id, flatFields, null, { uiMessageHandler: uiMessageHandler });
-
-					$scope.getGlideForm = function () {
-						return g_form;
-					}
-
-					var uiMessageHandler = function (g_form, type, message) {
-						switch (type) {
-							case 'addInfoMessage':
-								spUtil.addInfoMessage(message);
-								break;
-							case 'addErrorMessage':
-								spUtil.addErrorMessage(message);
-								break;
-							case 'clearMessages':
-								break;
-							default:
-						}
-					};
-					$scope.editItem(d.sys_id);
-
-				});
 			}]
 		]
 	}
@@ -72,7 +39,7 @@
 
 	$scope.closeEdit = function(){
 		$scope.modalInstance.close();
-		spUtil.update($scope);
+		//spUtil.update($scope);
 	}
 
 	$scope.getUrl = function (block) {
@@ -93,6 +60,42 @@
 		});
 	}
 
+	$scope.craftForm = function(block_sys_id){
+		d.sys_id = block_sys_id;
+		d.action = 'editItem';
+		spUtil.update($scope).then(function(){
+			d.f._fields.article.attributes.ref_auto_completer = "AJAXTableCompleter";
+			d.f._fields.article.attributes.ref_ac_columns = "short_description";
+			d.f._fields.article.attributes.ref_ac_columns_search = "true";
+
+			var flatFields = [];
+			angular.forEach(d.f._fields, function (field) {
+				flatFields.push(field);
+			});
+
+			var g_form = glideFormFactory.create($scope, d.f.table, d.f.sys_id, flatFields, null, { uiMessageHandler: uiMessageHandler });
+
+			$scope.getGlideForm = function () {
+				return g_form;
+			}
+
+			var uiMessageHandler = function (g_form, type, message) {
+				switch (type) {
+					case 'addInfoMessage':
+						spUtil.addInfoMessage(message);
+						break;
+					case 'addErrorMessage':
+						spUtil.addErrorMessage(message);
+						break;
+					case 'clearMessages':
+						break;
+					default:
+				}
+			};
+			$scope.editItem(d.sys_id);
+
+		});
+	}
 
 }]]></client_script>
         <controller_as>c</controller_as>
@@ -485,6 +488,50 @@ h5, .h5 {
 }
 
 
+.plus-button {
+  position: absolute;
+  border: 2px solid lightgrey;
+  background-color: #fff;
+  font-size: 2rem;
+  height: 2.5em;
+  width: 2.5em;
+  border-radius: 50%;
+  top: 50%;
+  left: 50%;
+  margin-left: -1.5em;
+  margin-top: -2rem;
+
+  &amp;:after,
+  &amp;:before {
+    content: "";
+    display: block;
+    background-color: grey;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  &amp;:before {
+    height: 1em;
+    width: 0.2em;
+  }
+
+  &amp;:after {
+    height: 0.2em;
+    width: 1em;
+  }
+}
+
+.plus-button:hover {
+  background-color: #0069C8;
+
+  &amp;:after,
+  &amp;:before {
+    background-color: #fff;
+  }
+}
+
 /* media */
 
 @media (max-width: 1800px){
@@ -567,8 +614,14 @@ h5, .h5 {
 		data.f = $sp.getForm(data.table, data.sys_id, data.query, 'Blocks');
 
 	} else if (input && input.action ==  'saveRecord'){
-		var res = $sp.saveRecord(input.table, input.sys_id, input.f._fields);
-		if(res)collectBlocks();
+		if(input.f._fields){
+			var widgetGr = new GlideRecord('sp_widget');
+			widgetGr.get('name','Team Online Blocks');
+			input.f._fields.widget.value = widgetGr.getUniqueValue();
+			var res = $sp.saveRecord(input.table, input.sys_id, input.f._fields);
+			if(res)collectBlocks();
+		}
+
 	}
 
 	function collectBlocks(){
@@ -595,8 +648,11 @@ h5, .h5 {
 				display_created_days_ago: Number(blocksGr.getValue('display_created_days_ago'))
 			})
 		}
+		while(blocks.length<4){
+			blocks.push({});
+		}
 		data.blocks = blocks;
-		//console.log(data.blocks);
+
 	}
 
 })();
@@ -607,21 +663,21 @@ h5, .h5 {
         <sys_created_on>2020-06-29 15:55:52</sys_created_on>
         <sys_customer_update>false</sys_customer_update>
         <sys_id>c1cafd00dbf1d01084c2409813961907</sys_id>
-        <sys_mod_count>36</sys_mod_count>
+        <sys_mod_count>65</sys_mod_count>
         <sys_name>Team Online 4 Blocks</sys_name>
         <sys_package display_value="TEAMonline" source="x_aaro2_teamonline">a2dfc25fdb7244105f65ba03e29619fa</sys_package>
         <sys_policy/>
         <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
         <sys_scope display_value="TEAMonline">a2dfc25fdb7244105f65ba03e29619fa</sys_scope>
         <sys_update_name>sp_widget_c1cafd00dbf1d01084c2409813961907</sys_update_name>
-        <sys_updated_by>igor.kochetkov</sys_updated_by>
-        <sys_updated_on>2020-06-29 17:19:04</sys_updated_on>
+        <sys_updated_by>xxikochet</sys_updated_by>
+        <sys_updated_on>2020-07-02 13:42:21</sys_updated_on>
         <template><![CDATA[<div class="each-article-content ffffff" >
   
 
   <div class="small active">
     <a 
-       context-menu="contextMenu(false, !block.sys_id)"
+       context-menu="contextMenu(block.sys_id)"
        ng-repeat="block in data.blocks track by $index"
        ng-href="{{getUrl(block)}}"
        ng-class="{'each-article-empty': !block.sys_id, 'each-article': block.sys_id, 'floating': block.description}"
@@ -645,7 +701,7 @@ h5, .h5 {
         <button 
                 class="plus-button" 
                 ng-if="!block.sys_id && data.canEdit" 
-                ng-click="changeArticleOnMainWidget(false, $index)"
+                ng-click="craftForm(-1)"
                 title="Add important article to this place"
                 ></button>
       </div>
