@@ -2,19 +2,7 @@
     <sp_header_footer action="INSERT_OR_UPDATE">
         <category>custom</category>
         <client_script><![CDATA[function($scope) {
-  /* widget controller */
-  var c = this;
 
-  setTimeout(function () {
-
-    var body = document.getElementsByClassName('body')[0];
-    console.log('body:: ', body);
-    $scope.margin = { 'margin-top': '0px' }
-    if (body.offsetHeight < 545) {
-      $scope.margin = { 'margin-top': (545 - body.offsetHeight) + 'px' };
-      console.log('margin:: ', body.offsetHeight);
-    }
-  }, 3000);
 }]]></client_script>
         <controller_as>c</controller_as>
         <css>$blue: #0069c8;&#13;
@@ -111,7 +99,7 @@ $green: #91c712;&#13;
         <sys_created_on>2020-07-01 07:48:26</sys_created_on>
         <sys_customer_update>false</sys_customer_update>
         <sys_id>3f3e9a6cdb3dd41084c24098139619d1</sys_id>
-        <sys_mod_count>92</sys_mod_count>
+        <sys_mod_count>115</sys_mod_count>
         <sys_name>Teamonline Footer</sys_name>
         <sys_package display_value="TEAMonline" source="x_aaro2_teamonline">a2dfc25fdb7244105f65ba03e29619fa</sys_package>
         <sys_policy/>
@@ -119,7 +107,7 @@ $green: #91c712;&#13;
         <sys_scope display_value="TEAMonline">a2dfc25fdb7244105f65ba03e29619fa</sys_scope>
         <sys_update_name>sp_header_footer_3f3e9a6cdb3dd41084c24098139619d1</sys_update_name>
         <sys_updated_by>andrey.mironyuk</sys_updated_by>
-        <sys_updated_on>2020-07-14 15:17:37</sys_updated_on>
+        <sys_updated_on>2020-07-15 13:46:23</sys_updated_on>
         <template><![CDATA[<div id="footer" ng-style={{margin}}>
   <div class="container-fluid">
     <div class="row">
