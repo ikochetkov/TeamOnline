@@ -581,6 +581,9 @@ h5, .h5 {
   }
 }
 
+
+
+
 </css>
         <data_table>sp_instance</data_table>
         <demo_data/>
@@ -594,7 +597,7 @@ h5, .h5 {
   
 }]]></link>
         <name>Team Online 4 Blocks</name>
-        <option_schema>[{"name":"max_count_important_articles","section":"other","default_value":"4","label":"Max count important articles","type":"integer"}]</option_schema>
+        <option_schema>[{"name":"number_of_blocks","section":"other","default_value":"4","label":"Number of blocks","type":"integer"}]</option_schema>
         <public>false</public>
         <roles/>
         <script><![CDATA[(function() {
@@ -625,14 +628,14 @@ h5, .h5 {
 	function collectBlocks(){
 		var blocks = [];
 		var blocksGr = new GlideRecord(data.table);
-		blocksGr.orderBy('number');
+		blocksGr.orderBy('order');
 		blocksGr.addQuery('type','block');
-		blocksGr.setLimit(4);
+		blocksGr.setLimit(options.number_of_blocks);
 		blocksGr.query();
 		while(blocksGr.next()){
 			blocks.push({
 				sys_id: blocksGr.getUniqueValue(),
-				number: blocksGr.getValue('number'),
+				order: blocksGr.getValue('order'),
 				title: blocksGr.getValue('title'),
 				description: blocksGr.getValue('description'),
 				meta: blocksGr.getValue('meta'),
@@ -646,7 +649,7 @@ h5, .h5 {
 				display_created_days_ago: Number(blocksGr.getValue('display_created_days_ago'))
 			})
 		}
-		while(blocks.length<4){
+		while(blocks.length<options.number_of_blocks){
 			blocks.push({});
 		}
 		data.blocks = blocks;
@@ -661,7 +664,7 @@ h5, .h5 {
         <sys_created_on>2020-06-29 15:55:52</sys_created_on>
         <sys_customer_update>false</sys_customer_update>
         <sys_id>c1cafd00dbf1d01084c2409813961907</sys_id>
-        <sys_mod_count>68</sys_mod_count>
+        <sys_mod_count>86</sys_mod_count>
         <sys_name>Team Online 4 Blocks</sys_name>
         <sys_package display_value="TEAMonline" source="x_aaro2_teamonline">a2dfc25fdb7244105f65ba03e29619fa</sys_package>
         <sys_policy/>
@@ -669,21 +672,24 @@ h5, .h5 {
         <sys_scope display_value="TEAMonline">a2dfc25fdb7244105f65ba03e29619fa</sys_scope>
         <sys_update_name>sp_widget_c1cafd00dbf1d01084c2409813961907</sys_update_name>
         <sys_updated_by>xxikochet</sys_updated_by>
-        <sys_updated_on>2020-07-03 10:41:01</sys_updated_on>
+        <sys_updated_on>2020-07-13 14:47:50</sys_updated_on>
         <template><![CDATA[<div class="each-article-content ffffff" >
   
 
   <div class="small active">
     <a 
+       target="_blank"
        context-menu="contextMenu(block.sys_id)"
        ng-repeat="block in data.blocks track by $index"
        ng-href="{{getUrl(block)}}"
        ng-class="{'each-article-empty': !block.sys_id, 'each-article': block.sys_id, 'floating': block.description}"
        >
       <div class="each-article-img">
-        <img ng-if="block.background" ng-src="{{block.background}}" alt="Important Picture">
+        <img ng-if="block.background" ng-src="{{block.background}}" alt="{{block.title}}">
       </div>
-      <div class="post-content">
+      <div class="post-content"
+           ng-class="{'opac': !block.title && !block.description}"
+           >
         <div class="author-catname" ng-if="block.sys_id">
           <p class="small-font font-medium green">{{block.meta}}</p>
           <p ng-if="block.display_author" class="small-font font-medium white">{{block.author}}</p>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="m2m_sp_dependency_js_include">
+    <m2m_sp_dependency_js_include action="INSERT_OR_UPDATE">
+        <order>100</order>
+        <sp_dependency display_value="dropzone">9f0870d2db7d545084c2409813961932</sp_dependency>
+        <sp_js_include display_value="dropzone">604838d2db7d545084c24098139619e4</sp_js_include>
+        <sys_class_name>m2m_sp_dependency_js_include</sys_class_name>
+        <sys_created_by>andrey.mironyuk</sys_created_by>
+        <sys_created_on>2020-07-06 10:53:33</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_id>34b8f816db7d545084c240981396193b</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>dropzone.dropzone</sys_name>
+        <sys_package display_value="TEAMonline" source="x_aaro2_teamonline">a2dfc25fdb7244105f65ba03e29619fa</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="TEAMonline">a2dfc25fdb7244105f65ba03e29619fa</sys_scope>
+        <sys_update_name>m2m_sp_dependency_js_include_34b8f816db7d545084c240981396193b</sys_update_name>
+        <sys_updated_by>andrey.mironyuk</sys_updated_by>
+        <sys_updated_on>2020-07-06 10:53:33</sys_updated_on>
+    </m2m_sp_dependency_js_include>
+</record_update>

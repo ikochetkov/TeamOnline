@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_script_include">
+    <sys_script_include action="INSERT_OR_UPDATE">
+        <access>public</access>
+        <active>true</active>
+        <api_name>x_aaro2_teamonline.CreateAttachment</api_name>
+        <caller_access/>
+        <client_callable>false</client_callable>
+        <description/>
+        <name>CreateAttachment</name>
+        <script><![CDATA[var CreateAttachment = Class.create();
+CreateAttachment.prototype = {
+	initialize: function(record,name,contentType, data) {
+		var attCreator = new GlideRecord('ecc_queue');
+		attCreator.agent = "AttachmentCreator";
+		attCreator.topic = "AttachmentCreator";
+		attCreator.name =   "image" + ":" + contentType;
+		attCreator.source = record.getTableName()+":"+record.sys_id;
+		attCreator.payload = data;
+		attCreator.insert();
+	},
+	type: 'CreateAttachment'
+};]]></script>
+        <sys_class_name>sys_script_include</sys_class_name>
+        <sys_created_by>andrey.mironyuk</sys_created_by>
+        <sys_created_on>2020-07-08 11:29:01</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_id>cab353fedb71d85084c24098139619c7</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>CreateAttachment</sys_name>
+        <sys_package display_value="TEAMonline" source="x_aaro2_teamonline">a2dfc25fdb7244105f65ba03e29619fa</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="TEAMonline">a2dfc25fdb7244105f65ba03e29619fa</sys_scope>
+        <sys_update_name>sys_script_include_cab353fedb71d85084c24098139619c7</sys_update_name>
+        <sys_updated_by>andrey.mironyuk</sys_updated_by>
+        <sys_updated_on>2020-07-08 11:29:01</sys_updated_on>
+    </sys_script_include>
+</record_update>

@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update sys_domain="global" table="sys_ui_action">
+    <sys_ui_action action="INSERT_OR_UPDATE">
+        <action_name/>
+        <active>true</active>
+        <client>false</client>
+        <client_script_v2><![CDATA[function onClick(g_form) {
+
+}]]></client_script_v2>
+        <comments/>
+        <condition/>
+        <form_action>false</form_action>
+        <form_button>false</form_button>
+        <form_button_v2>false</form_button_v2>
+        <form_context_menu>false</form_context_menu>
+        <form_link>false</form_link>
+        <form_menu_button_v2>false</form_menu_button_v2>
+        <form_style/>
+        <hint/>
+        <isolate_script>false</isolate_script>
+        <list_action>false</list_action>
+        <list_banner_button>false</list_banner_button>
+        <list_button>false</list_button>
+        <list_choice>false</list_choice>
+        <list_context_menu>false</list_context_menu>
+        <list_link>false</list_link>
+        <list_save_with_form_button>false</list_save_with_form_button>
+        <list_style/>
+        <name>TEST WF</name>
+        <onclick/>
+        <order>100</order>
+        <script><![CDATA[// Get Auth token from registration table
+var azureADUtil = new x_aaro2_azure_ad.AzureADAuthUtils();
+var token = azureADUtil.getAccessToken(gs.getProperty('x_aaro2_dir_shi.token_resource_create_po'));
+// Check that token exists
+if (token != 'Unable to find access token'){
+	var requestBody, responseBody, status, restMessage, response, requestBodyString,
+		responseObj;
+	var parser = new global.JSON();
+	var itemArray = [];
+	var itemGR = new GlideRecord('x_aaro2_dir_shi_po_req_items');
+	itemGR.addQuery('purchase_order', current.sys_id);
+	//	gs.info('Direct Ship Run Script Current sys_id :' + current.sys_id);
+	itemGR.query();
+	//	gs.info('Direct Ship Run Script itemGR.next() :' + itemGR.hasNext());
+	while(itemGR.next()){
+		itemArray.push({DetailLineNumber : parseInt(itemGR.seq), QuantityOrdered : parseInt(itemGR.quantity), UnitOfMeasureCode : "Each",
+						UnitPrice : itemGR.direct_cost.toString(), ManufacturerPartNumber : null, BuyerPartNumber : itemGR.sku.toString(),
+						ManufacturerProductDescription : itemGR.description.toString()});
+		//gs.info('Direct Ship Run Script itemArray :' + itemArray.toString());
+	}
+
+	var poTypeCode;
+	if (current.company.u_franchise == true){
+		poTypeCode = gs.getProperty('x_aaro2_dir_shi.franchise_po_type');
+	}else{
+		poTypeCode = gs.getProperty('x_aaro2_dir_shi.coporate_po_type');
+	}
+
+	requestBody = {PONumber : null, VendorNumber : current.vendor.id.toString(), POTypeCode : poTypeCode.toString() , ShipTo : current.company.name.toString(),
+				   Items: itemArray};
+	requestBodyString = parser.encode(requestBody);
+	//gs.info('Direct Ship Run Script requestBodyString:  ' + requestBodyString);
+	try {
+		restMessage = new sn_ws.RESTMessageV2();
+		restMessage.setHttpMethod('post');
+		restMessage.setMIDServer(gs.getProperty('mid.server.rba_default'));
+		restMessage.setEndpoint(gs.getProperty('x_aaro2_dir_shi.po_endpoint'));
+		restMessage.setRequestHeader('Content-Type', 'application/json');
+		restMessage.setRequestHeader('Accept', 'application/json');
+		restMessage.setRequestHeader('Authorization', 'Bearer ' + token);
+		restMessage.setRequestBody(requestBodyString); //Add Code here!
+		response = restMessage.executeAsync();
+		response.waitForResponse(120);
+		responseBody = response.haveError() ? response.getErrorMessage() : response.getBody();
+		status = response.getStatusCode();
+		//	gs.info('Direct Ship Run Script TRY responseBody:  ' + responseBody);
+	}catch(ex) {
+		responseBody = ex.getMessage();
+		//	gs.info('Direct Ship Run Script CATCH responseBody:  ' + responseBody);
+		gs.error('Error for Request {0}: {1}: {2}.', current.number, responseBody, requestBodyString);
+
+	}finally{
+		requestBody = restMessage ? restMessage.getRequestBody() : null;
+		//	gs.info('Direct Ship Run Script FINALLY responseBody:  ' + responseBody);		
+	}
+
+	if (status > 299){
+		gs.error("There is an error with the webservice: HTTP Response - {0}", status);
+		activity.result = 'error';
+	}
+
+
+	//gs.info("Response from PO Service on record {0}: {1}.", current.number, responseBody);
+	responseObj = parser.decode(responseBody);
+	current.po_number = responseObj.PONumber.toString();
+	activity.result = 'success'; 
+}else{
+	gs.error("Unable to find token for request {0} to create a PO.", current.number);
+	activity.result = 'error';
+}]]></script>
+        <show_insert>true</show_insert>
+        <show_multiple_update>false</show_multiple_update>
+        <show_query>false</show_query>
+        <show_update>true</show_update>
+        <sys_class_name>sys_ui_action</sys_class_name>
+        <sys_created_by>xxikochet</sys_created_by>
+        <sys_created_on>2020-07-13 16:18:39</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_domain>global</sys_domain>
+        <sys_id>332602641b469c90d6c54229bc4bcb05</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>TEST WF</sys_name>
+        <sys_overrides/>
+        <sys_package display_value="TEAMonline" source="x_aaro2_teamonline">a2dfc25fdb7244105f65ba03e29619fa</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="TEAMonline">a2dfc25fdb7244105f65ba03e29619fa</sys_scope>
+        <sys_update_name>sys_ui_action_332602641b469c90d6c54229bc4bcb05</sys_update_name>
+        <sys_updated_by>xxikochet</sys_updated_by>
+        <sys_updated_on>2020-07-13 16:18:39</sys_updated_on>
+        <table/>
+        <ui11_compatible>true</ui11_compatible>
+        <ui16_compatible>false</ui16_compatible>
+    </sys_ui_action>
+</record_update>

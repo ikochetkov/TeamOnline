@@ -1,9 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?><record_update table="sp_header_footer">
     <sp_header_footer action="INSERT_OR_UPDATE">
         <category>custom</category>
-        <client_script><![CDATA[function() {
+        <client_script><![CDATA[function($scope) {
   /* widget controller */
   var c = this;
+
+  setTimeout(function () {
+
+    var body = document.getElementsByClassName('body')[0];
+    console.log('body:: ', body);
+    $scope.margin = { 'margin-top': '0px' }
+    if (body.offsetHeight < 545) {
+      $scope.margin = { 'margin-top': (545 - body.offsetHeight) + 'px' };
+      console.log('margin:: ', body.offsetHeight);
+    }
+  }, 3000);
 }]]></client_script>
         <controller_as>c</controller_as>
         <css>$blue: #0069c8;&#13;
@@ -67,6 +78,10 @@ $green: #91c712;&#13;
 .logo {&#13;
   img {&#13;
     filter: brightness(0) invert(1);&#13;
+    transition: 0.3s all ease-in-out;&#13;
+    &amp;:hover {&#13;
+      filter: brightness(1) invert(0);&#13;
+    }&#13;
   }&#13;
 }&#13;
 </css>
@@ -96,7 +111,7 @@ $green: #91c712;&#13;
         <sys_created_on>2020-07-01 07:48:26</sys_created_on>
         <sys_customer_update>false</sys_customer_update>
         <sys_id>3f3e9a6cdb3dd41084c24098139619d1</sys_id>
-        <sys_mod_count>66</sys_mod_count>
+        <sys_mod_count>92</sys_mod_count>
         <sys_name>Teamonline Footer</sys_name>
         <sys_package display_value="TEAMonline" source="x_aaro2_teamonline">a2dfc25fdb7244105f65ba03e29619fa</sys_package>
         <sys_policy/>
@@ -104,13 +119,13 @@ $green: #91c712;&#13;
         <sys_scope display_value="TEAMonline">a2dfc25fdb7244105f65ba03e29619fa</sys_scope>
         <sys_update_name>sp_header_footer_3f3e9a6cdb3dd41084c24098139619d1</sys_update_name>
         <sys_updated_by>andrey.mironyuk</sys_updated_by>
-        <sys_updated_on>2020-07-02 12:21:24</sys_updated_on>
-        <template><![CDATA[<div id="footer">
+        <sys_updated_on>2020-07-14 15:17:37</sys_updated_on>
+        <template><![CDATA[<div id="footer" ng-style={{margin}}>
   <div class="container-fluid">
     <div class="row">
       <div class="col-md-3">
         <div class="logo">
-          <a href="https://www.aarons.com">
+          <a href="https://www.aarons.com" target="_blank">
             <img src="2b9bbabddbc348505f65ba03e29619e5.iix" style="max-height: 25px;" />
           </a>
         </div>
@@ -118,26 +133,26 @@ $green: #91c712;&#13;
           Lorem, ipsum dolor sit amet consectetur adipisicing elit. Laboriosam nam, vero in beatae voluptatibus alias
           ipsam persp Cumque perferendis voluptas enim minus labore rem possimus ducimus distinctio aperiam?
         </div>
-        <p><a href="">Find a mistake?</a> | <a href="">Contact Us</a></p>
+        <p><a href="" target="_blank">Find a mistake?</a> | <a href="" target="_blank">Contact Us</a></p>
 
       </div>
       <div class="col-md-6 col-md-offset-2">
         <div class="heading">More info</div>
         <ul>
-          <li><a href="">Link here</a></li>
-          <li><a href="">Terms of Policy</a></li>
-          <li><a href="">Legal information</a></li>
-          <li><a href="">Team Rules</a></li>
+          <li><a href="" target="_blank">Link here</a></li>
+          <li><a href="" target="_blank">Terms of Policy</a></li>
+          <li><a href="" target="_blank">Legal information</a></li>
+          <li><a href="" target="_blank">Team Rules</a></li>
         </ul>
         <div class="heading">Internal resources</div>
         <ul>
-          <li><a href="">Photo Stories</a></li>
-          <li><a href="">Knowledge Base</a></li>
-          <li><a href="">Articles</a></li>
-          <li><a href="">Intranet</a></li>
-          <li><a href="">Departments</a></li>
-          <li><a href="">Phone directory</a></li>
-          <li><a href="">Aaron's Cares</a></li>
+          <li><a href="" target="_blank">Photo Stories</a></li>
+          <li><a href="" target="_blank">Knowledge Base</a></li>
+          <li><a href="" target="_blank">Articles</a></li>
+          <li><a href="" target="_blank">Intranet</a></li>
+          <li><a href="" target="_blank">Departments</a></li>
+          <li><a href="" target="_blank">Phone directory</a></li>
+          <li><a href="" target="_blank">Aaron's Cares</a></li>
         </ul>
 
       </div>
@@ -151,17 +166,17 @@ $green: #91c712;&#13;
       <div class="col-md-3">
         <div class="external-links">
           <div class="logo">
-            <a href="https://www.aarons.com">
+            <a href="https://www.aarons.com" target="_blank">
               <img src="teamonline_aarons_logo.png" style="max-height: 25px;" />
             </a>
           </div>
           <div class="logo">
-            <a href="https://progleasing.com/ ">
+            <a href="https://progleasing.com/" target="_blank">
               <img src="teamonline_progressive_logo.png" style="max-height: 35px" />
             </a>
           </div>
           <div class="logo">
-            <a href="https://woodhaven.com/">
+            <a href="https://woodhaven.com/" target="_blank">
               <img src="teamonline_woodhaven_logo.png" style="max-height: 35px" />
             </a>
           </div>
@@ -170,12 +185,12 @@ $green: #91c712;&#13;
       <div class="col-md-3 col-md-offset-2">
         <div class="heading">Socials</div>
         <ul class="socials">
-          <li><a href=""><i class="fa fa-twitter"></i></a></li>
-          <li><a href=""><i class="fa fa-facebook-f"></i></a></li>
-          <li><a href=""><i class="fa fa-linkedin"></i></a></li>
-          <li><a href=""><i class="fa fa-instagram"></i></a></li>
-          <li><a href=""><i class="fa fa-youtube-play"></i></a></li>
-          <li><a href=""><i class="fa fa-telegram"></i></a></li>
+          <li><a href="" target="_blank" target="_blank"><i class="fa fa-twitter"></i></a></li>
+          <li><a href="" target="_blank" target="_blank"><i class="fa fa-facebook-f"></i></a></li>
+          <li><a href="" target="_blank"><i class="fa fa-linkedin"></i></a></li>
+          <li><a href="" target="_blank"><i class="fa fa-instagram"></i></a></li>
+          <li><a href="" target="_blank"><i class="fa fa-youtube-play"></i></a></li>
+          <li><a href="" target="_blank"><i class="fa fa-telegram"></i></a></li>
         </ul>
       </div>
       <div class="col-md-3">

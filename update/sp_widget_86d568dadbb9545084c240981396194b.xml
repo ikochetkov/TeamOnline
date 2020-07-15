@@ -1,0 +1,364 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sp_widget">
+    <sp_widget action="INSERT_OR_UPDATE">
+        <category>custom</category>
+        <client_script><![CDATA[function ($scope, $rootScope, spUtil) {
+	/* widget controller */
+	var c = this;
+	$scope.dropzone = {}
+	$scope.data.base64 = ''
+	var dropzone = new Dropzone("#moments-dropzone", {
+		url: "/file/post",
+		acceptedFiles: 'image/*',
+		maxFiles: 5,
+		addRemoveLinks: true,
+
+	})
+	$scope.data.caption = '';
+	$scope.submit = function () {
+		window.dz = dropzone;
+
+		$scope.data.files = [];
+		dropzone.files.forEach(file => {
+			$scope.data.files.push({
+				name: file.name,
+				type: file.type,
+				dataURL: file.dataURL.split(',')[1]
+			})
+		})
+		$scope.data.action = 'insert'
+		spUtil.update($scope).then(function () {
+			dropzone.files = []
+		})
+	}
+
+	$scope.approve = function (sys_id) {
+		approveAction(sys_id, 'approved')
+	}
+	$scope.reject = function (sys_id) {
+		approveAction(sys_id, 'rejected')
+	}
+	function approveAction(sys_id, state) {
+		$scope.data.approval = sys_id
+		$scope.data.action = 'approval'
+		$scope.data.approveState = state;
+		spUtil.update($scope)
+	}
+
+
+	var gallery = document.getElementsByClassName('moment-gallery')[0];
+	$scope.openImage = function (img) {
+		$scope.data.selectedImg = img;
+		gallery.classList.add('active')
+	}
+	$scope.closeGallery = function () {
+		gallery.classList.remove('active')
+	}
+}
+]]></client_script>
+        <controller_as>c</controller_as>
+        <css>$blue: #0069c8;&#13;
+#moments-container {&#13;
+  margin: 10px 0;&#13;
+}&#13;
+#moments-dropzone {&#13;
+  height: 100%;&#13;
+  margin-bottom: 5px;&#13;
+}&#13;
+.moments-header {&#13;
+  background-color: white;&#13;
+  margin: 10px 0 5px 0;&#13;
+  text-align: center;&#13;
+  font-size: 24px;&#13;
+  padding: 2rem 0;&#13;
+  line-height: 1;&#13;
+  text-transform: uppercase;&#13;
+  letter-spacing: 1.5px;&#13;
+}&#13;
+/*.moments-header:after {&#13;
+  content: "";&#13;
+  position: absolute;&#13;
+  bottom: 14px;&#13;
+  left: 42%;&#13;
+  height: 2px;&#13;
+  width: 86px;&#13;
+  background: #91c712;&#13;
+}*/&#13;
+.dropzone {&#13;
+  border: 2px dashed $blue;&#13;
+  &amp;.dz-drag-hover {&#13;
+    border: 2px solid $blue;&#13;
+  }&#13;
+}&#13;
+.submit-memory-btn {&#13;
+  width: 100%;&#13;
+}&#13;
+.to-approve-moments,&#13;
+.approved-container {&#13;
+  max-height: 300px;&#13;
+  overflow-y: auto;&#13;
+  overflow-x: hidden;&#13;
+  margin-top: 5px;&#13;
+}&#13;
+.moment {&#13;
+  background-color: white;&#13;
+  margin-top: 5px;&#13;
+  padding: 20px;&#13;
+  .info-wrapper {&#13;
+    display: flex;&#13;
+    justify-content: end;&#13;
+  }&#13;
+  .author {&#13;
+    font-size: 12pt;&#13;
+    font-weight: 900;&#13;
+  }&#13;
+  .caption {&#13;
+    padding: 10px;&#13;
+    background-color: #eceff1;&#13;
+    font-weight: bold;&#13;
+    font-size: 14pt;&#13;
+  }&#13;
+  .created-on {&#13;
+    font-size: 10pt;&#13;
+  }&#13;
+  .block {&#13;
+    display: block;&#13;
+  }&#13;
+  .avatar-timeago-container {&#13;
+    display: flex;&#13;
+    justify-content: center;&#13;
+    flex-direction: column;&#13;
+  }&#13;
+  .moment-images {&#13;
+    display: flex;&#13;
+    overflow-x: auto;&#13;
+    justify-content: space-evenly;&#13;
+    margin: 10px 0;&#13;
+  }&#13;
+  .moment-image {&#13;
+    img {&#13;
+      max-width: 90%;&#13;
+    }&#13;
+  }&#13;
+}&#13;
+.moment-gallery {&#13;
+  z-index: 1000;&#13;
+  position: fixed;&#13;
+  top: 0;&#13;
+  left: 0;&#13;
+  width: 100vw;&#13;
+  height: 100vh;&#13;
+  visibility: hidden;&#13;
+  opacity: 0;&#13;
+  transition: 100ms ease-in-out;&#13;
+  background-color: rgba(0, 0, 0, 0.6);&#13;
+  &amp;.active {&#13;
+    visibility: visible;&#13;
+    opacity: 1;&#13;
+    transition: 300ms ease-in-out;&#13;
+  }&#13;
+  .image-preview {&#13;
+    display: flex;&#13;
+    transition: 300ms ease-in-out;&#13;
+    justify-content: center;&#13;
+    align-items: center;&#13;
+    height: 100%;&#13;
+    .image-container {&#13;
+      width: 70vw;&#13;
+      height: 70vh;&#13;
+    }&#13;
+  }&#13;
+}&#13;
+</css>
+        <data_table>sp_instance</data_table>
+        <demo_data/>
+        <description/>
+        <docs/>
+        <field_list/>
+        <has_preview>false</has_preview>
+        <id>teamonline_memories</id>
+        <internal>false</internal>
+        <link><![CDATA[function link(scope, element, attrs, controller) {  }]]></link>
+        <name>Teamonline Memories</name>
+        <option_schema/>
+        <public>false</public>
+        <roles/>
+        <script><![CDATA[(function () {
+  /* populate the 'data' object */
+  /* e.g., data.table = $sp.getValue('table'); */
+  data.canEdit = gs.getUser().isMemberOf(gs.getProperty("x_aaro2_teamonline.teamonline_administration_group")) || gs.hasRole("admin");
+  data.momentsTable = "x_aaro2_teamonline_moment";
+
+  data.approvedMoments = [];
+  data.notApprovedMoments = [];
+
+  if (input && input.action === 'insert') {
+    var newMomentGr = new GlideRecord(data.momentsTable);
+    newMomentGr.initialize();
+    newMomentGr.caption = input.caption;
+    data.memorySysId = newMomentGr.insert();
+    input.files.forEach(function (file) {
+      var gsa = new GlideSysAttachment();
+      gsa.writeBase64(newMomentGr, file.name, file.type, file.dataURL);
+    })
+  }
+  if (input && input.action === 'approval') {
+    approveAction(input.approval, input.approveState)
+  }
+
+  getMoments();
+
+  function getMoments() {
+    var momentGr = new GlideRecord(data.momentsTable);
+    momentGr.addEncodedQuery('approval!=rejected')
+    momentGr.orderByDesc('sys_created_on');
+    momentGr.query();
+    data.approvedMoments = [];
+    data.notApprovedMoments = [];
+
+
+    while (momentGr.next()) {
+      var moment = {};
+      moment.attachments = getAttachments(momentGr.getUniqueValue())
+      moment.data = {
+        sys_id: momentGr.getUniqueValue(),
+        caption: momentGr.getValue('caption'),
+        approval: momentGr.getValue('approval'),
+        opened_by: {
+          id: momentGr.getValue('opened_by'),
+          name: momentGr.getDisplayValue('opened_by')
+        },
+        created_on: momentGr.getValue('sys_created_on')
+      };
+      if (momentGr.getValue('approval') === 'approved')
+        data.approvedMoments.push(moment);
+      else data.notApprovedMoments.push(moment);
+
+    }
+  }
+  function getAttachments(record_sys_id) {
+    var ga = new GlideSysAttachment();
+    var attGr = new GlideRecord('sys_attachment');
+    attGr.addQuery('table_name', data.momentsTable);
+    attGr.addQuery('table_sys_id', record_sys_id);
+    attGr.query();
+    var attachments = []
+    while (attGr.next()) {
+      attachments.push({
+        name: attGr.getValue('file_name'),
+        content_type: attGr.getValue('content_type'),
+        dataURL: "data:" + attGr.getValue('content_type') + ";base64," + ga.getContentBase64(attGr)
+
+      });
+    }
+    return attachments
+  }
+  function approveAction(record_sys_id, approveState) {
+    var apprGr = new GlideRecord('sysapproval_approver');
+    apprGr.addQuery('sysapproval', record_sys_id);
+    apprGr.addQuery('state', 'requested');
+    apprGr.query();
+    if (apprGr.next()) {
+      apprGr.state = approveState;
+      apprGr.update();
+    }
+  }
+})();
+]]></script>
+        <servicenow>false</servicenow>
+        <sys_class_name>sp_widget</sys_class_name>
+        <sys_created_by>andrey.mironyuk</sys_created_by>
+        <sys_created_on>2020-07-06 09:31:10</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_id>86d568dadbb9545084c240981396194b</sys_id>
+        <sys_mod_count>188</sys_mod_count>
+        <sys_name>Teamonline Memories</sys_name>
+        <sys_package display_value="TEAMonline" source="x_aaro2_teamonline">a2dfc25fdb7244105f65ba03e29619fa</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="TEAMonline">a2dfc25fdb7244105f65ba03e29619fa</sys_scope>
+        <sys_update_name>sp_widget_86d568dadbb9545084c240981396194b</sys_update_name>
+        <sys_updated_by>andrey.mironyuk</sys_updated_by>
+        <sys_updated_on>2020-07-13 13:25:46</sys_updated_on>
+        <template><![CDATA[<div id="moments-container">
+  <div class="moments-header">
+    <span> TEAMONLINE Moments</span>
+  </div>
+  <form action="file" enctype="multipart/form-data" class="dropzone needsclick" id="moments-dropzone">
+  </form>
+
+  <div class="form-group">
+    <label for="memoryCaption">Leave pitch caption here</label>
+    <textarea class="form-control" id="memoryCaption" rows="2" ng-model="data.caption"></textarea>
+  </div>
+
+  <div class="submit-area">
+    <input type="button" value="Submit" class="btn btn-primary submit-memory-btn"
+      ng-disabled="dropzone.files.length==0||!data.caption" ng-click="submit()">
+  </div>
+
+  <div class="approved-container">
+    <div class="approved-moments" ng-repeat="moment in data.approvedMoments">
+      <div class="moment row">
+        <div class="col-md-2 col-xs-12">
+          <div class="avatar-timeago-container">
+            <sn-avatar class="avatar-large" primary="moment.data.opened_by.id" />
+            <sn-time-ago timestamp="moment.data.created_on" class="block" />
+          </div>
+        </div>
+        <div class="col-md-10 col-xs-12">
+          <div class="author">{{moment.data.opened_by.name}}</div>
+          <div class="caption"><i>"{{moment.data.caption}}"</i></div>
+          <div class="moment-images">
+            <div class="moment-image" ng-repeat="image in moment.attachments" ng-click="openImage(image.dataURL)">
+              <img ng-src="{{image.dataURL}}" alt="" srcset="">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="to-approve-container" ng-if="data.canEdit">
+    <div class="moments-header">
+      <span> waiting for approval ({{data.notApprovedMoments.length}})</span>
+    </div>
+    <div class="to-approve-moments">
+      <div class="no-approvals" ng-if="data.notApprovedMoments.length==0">
+        There is no moments for approval yet
+      </div>
+      <div class="to-approve-moment" ng-repeat="moment in data.notApprovedMoments">
+        <div class="moment row">
+          <div class="col-md-2 col-xs-12">
+            <div class="avatar-timeago-container">
+              <sn-avatar class="avatar-large" primary="moment.data.opened_by.id" />
+              <sn-time-ago timestamp="moment.data.created_on" class="block" />
+            </div>
+          </div>
+          <div class="col-md-10 col-xs-12">
+            <div class="author">{{moment.data.opened_by.name}}</div>
+            <div class="caption"><i>"{{moment.data.caption}}"</i></div>
+            <div class="moment-images">
+              <div class="moment-image" ng-repeat="image in moment.attachments" ng-click="openImage(image.dataURL)">
+                <img ng-src="{{image.dataURL}}" alt="" srcset="">
+              </div>
+            </div>
+
+            <input type="button" value="Approve" class="btn btn-success" ng-click="approve(moment.data.sys_id)">
+            <input type="button" value="Reject" class="btn btn-danger" ng-click="reject(moment.data.sys_id)">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+<div class="moment-gallery " ng-click="closeGallery()">
+  <div class="image-preview">
+    <div class="image-container"
+      ng-style="{'background': 'url('+data.selectedImg+')', 'background-position': '50% 50%', 'background-repeat': 'no-repeat','background-size': 'contain'}">
+    </div>
+
+  </div>
+</div>]]></template>
+    </sp_widget>
+</record_update>

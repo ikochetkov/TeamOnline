@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_package_dependency_m2m">
+    <sys_package_dependency_m2m action="INSERT_OR_UPDATE">
+        <dependency display_value="Execution Plan Plugin" source="com.glide.execution_plan">694d6d81bc3030003d782407ef4fb2b6</dependency>
+        <min_version/>
+        <sys_created_by>andrey.mironyuk</sys_created_by>
+        <sys_created_on>2020-07-07 14:59:21</sys_created_on>
+        <sys_id>0b8af22edb7d185084c240981396194d</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_package display_value="TEAMonline" source="x_aaro2_teamonline">a2dfc25fdb7244105f65ba03e29619fa</sys_package>
+        <sys_updated_by>andrey.mironyuk</sys_updated_by>
+        <sys_updated_on>2020-07-07 14:59:21</sys_updated_on>
+    </sys_package_dependency_m2m>
+</record_update>
