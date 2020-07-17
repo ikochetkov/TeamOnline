@@ -13,9 +13,25 @@
 		initials: $window.NOW.user_initials
 	};
 
+	$scope.openLogin = function () {
+		$scope.modalInstance = $uibModal.open({
+			templateUrl: 'modalLogin',
+			scope: $scope
+		});
+	};
 	if ($window.NOW.user_avatar) {
 		$scope.avatarProfile.userImage = $window.NOW.user_avatar;
 	}
+
+
+	$rootScope.$on('sp.avatar_changed', function (evt, obj) {
+		$scope.userID = "";
+		$scope.newAvatarId = obj.newAvatarId;
+		$timeout(function () {
+			$scope.userID = $scope.user.sys_id;
+			$(".sub-avatar").css("background-image", 'url("' + $scope.newAvatarId + '.iix?t=small")');
+		});
+	});
 
 	if (cabrillo.isNative()) {
 		if ($window.innerWidth < 767) {
@@ -24,6 +40,7 @@
 			$scope.isViewNativeTablet = true;
 		}
 	}
+
 
 
 	$scope.openPopUp = function () {
@@ -75,7 +92,7 @@
 		return false;
 	};
 
-console.log();
+
 }
 ]]></client_script>
         <controller_as>c</controller_as>
@@ -155,7 +172,7 @@ console.log();
   justify-content: center;
   margin-top: 15px;
   border-top: 1px solid rgba(255, 255, 255, 0.04);
-  padding-top: 15px;
+  padding: 20px 0;
   background-color: #0069c8;
 }
 
@@ -190,7 +207,13 @@ console.log();
 .navbar-inverse .navbar-toggle {
   border-color: rgba(255, 255, 255, 0.25);
 }
-
+.header__content {
+  ul {
+    margin: 0;
+    font-size: 11pt;
+    font-weight: 500;
+  }
+}
 header[role="banner"],
 .nav &gt; li &gt; a {
   max-height: 60px;
@@ -400,6 +423,10 @@ nav {
         <public>true</public>
         <roles/>
         <script><![CDATA[data.search = $sp.getWidget('typeahead-search');
+data.isLoggedIn = gs.getSession().isLoggedIn();
+
+data.login_page = $sp.getValue('login_page');
+data.profileBtnMsg = gs.getMessage("User options");
 // Defines the support queue ID that will be linked to by the Live Chat link in header
 data.connect_support_queue_id = $sp.getValue('sp_chat_queue');
 data.profileBtnMsg = gs.getMessage("User options");
@@ -410,7 +437,7 @@ if (data.menu && data.menu.data) {
 	// Hide login if menu already has link to login
 	data.hasLogin = false;
 	if (data.menu.data.menu.items) {
-		for(var i in data.menu.data.menu.items) {
+		for (var i in data.menu.data.menu.items) {
 			var item = data.menu.data.menu.items[i];
 			if (item.type == 'page' && item.sp_page == data.login_page)
 				data.hasLogin = true;
@@ -425,7 +452,7 @@ if (data.menu && data.menu.data) {
         <sys_created_on>2020-06-15 11:03:14</sys_created_on>
         <sys_customer_update>false</sys_customer_update>
         <sys_id>468138afdb1d10d08f26550a489619c4</sys_id>
-        <sys_mod_count>52</sys_mod_count>
+        <sys_mod_count>65</sys_mod_count>
         <sys_name>Team Online 2 Header</sys_name>
         <sys_package display_value="TEAMonline" source="x_aaro2_teamonline">a2dfc25fdb7244105f65ba03e29619fa</sys_package>
         <sys_policy/>
@@ -433,7 +460,7 @@ if (data.menu && data.menu.data) {
         <sys_scope display_value="TEAMonline">a2dfc25fdb7244105f65ba03e29619fa</sys_scope>
         <sys_update_name>sp_header_footer_468138afdb1d10d08f26550a489619c4</sys_update_name>
         <sys_updated_by>andrey.mironyuk</sys_updated_by>
-        <sys_updated_on>2020-07-06 09:29:43</sys_updated_on>
+        <sys_updated_on>2020-07-16 14:16:22</sys_updated_on>
         <template><![CDATA[<!--<div class="container">
  <div class="quick-links-container">
     <div class="quick-link">
@@ -469,7 +496,37 @@ if (data.menu && data.menu.data) {
       <div class="header__search header__content-item">
         <sp-widget widget="data.search"></sp-widget>
       </div>
+      <ul>
+        <li ng-if="showAvatar" class="hidden-xs dropdown has-children avatar profile-menu-item" role="presentation">
+          <a href class="toggle-dropdown" data-toggle="dropdown" aria-expanded="false" title="{{::data.profileBtnMsg}}"
+            aria-label="{{::data.profileBtnMsg}}: {{::user.name}}" id="profile-dropdown" role="menuitem"
+            aria-haspopup="true">
+            <span aria-hidden="true">
+              <sn-avatar class="avatar-small-medium" primary="avatarProfile" /></span>
+            <span class="visible-lg-inline">{{::user.name}}</span>
+          </a>
+          <ul class="dropdown-menu sub-menu profile-dropdown" role="menu" aria-label="{{::data.profileBtnMsg}}">
+            <li role="presentation"><a tabindex="-1" ng-href="?id=user_profile&sys_id={{::user.sys_id}}"
+                role="menuitem">${Profile}</a></li>
+            <li ng-if="::!(isViewNative || isViewNativeTablet)" role="presentation"><a tabindex="-1"
+                href="{{::portal.logoutUrl}}" role="menuitem">${Logout}</a></li>
+          </ul>
+        </li>
+        <li ng-if="showXSAvatar" class="visible-xs-block" role="presentation"><a role="menuitem"
+            ng-href="?id=user_profile&sys_id={{::user.sys_id}}" ng-click="collapse()">
+            <span class="navbar-avatar">
+              <sn-avatar class="avatar-small-medium" primary="avatarProfile" /></span>{{::user.name}}</a>
+        </li>
+        <li ng-if="::!(isViewNative || isViewNativeTablet)" class="visible-xs-block" role="presentation"><a
+            role="menuitem" ng-href="{{::portal.logoutUrl}}" ng-click="collapse()">${Logout}</a></li>
+      </ul>
+
+      <ul ng-if="(!user.logged_in && page.id != portal.login_page_dv && !data.hasLogin)" class="nav navbar-nav"
+        role="presentation">
+        <li role="presentation"><a href ng-click="::openLogin()">${Login}</a></li>
+      </ul>
     </div>
+
   </div>
 </div>
 <sp-widget widget="::data.menu"></sp-widget>]]></template>

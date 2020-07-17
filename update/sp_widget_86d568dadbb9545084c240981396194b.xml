@@ -11,12 +11,22 @@
 		acceptedFiles: 'image/*',
 		maxFiles: 5,
 		addRemoveLinks: true,
-
+		maxFilesize: 4
 	})
+	$scope.uploading = false
 	$scope.data.caption = '';
-	$scope.submit = function () {
-		window.dz = dropzone;
+	$scope.data.store = { displayValue: '', value: '', name: '' };
+	spUtil.recordWatch($scope, $scope.data.momentsTable, "", function (name) {
+		if (~name.data.changes.indexOf('approval')) {
+			console.log('$scope.data.action', $scope.data.action)
+			$scope.data.action = ''
+			spUtil.update($scope);
+		}
+	})
 
+
+	$scope.submit = function () {
+		$scope.uploading = true
 		$scope.data.files = [];
 		dropzone.files.forEach(file => {
 			$scope.data.files.push({
@@ -26,22 +36,41 @@
 			})
 		})
 		$scope.data.action = 'insert'
+		dropzone.disable()
 		spUtil.update($scope).then(function () {
-			dropzone.files = []
+			dropzone.removeAllFiles();
+			$scope.data.caption = '';
+			$scope.uploading = false;
+			$scope.data.store = { displayValue: '', value: '', name: '' };
+			dropzone.enable()
+			spUtil.addInfoMessage('Your moment was successfully submitted for approval')
 		})
 	}
 
-	$scope.approve = function (sys_id) {
-		approveAction(sys_id, 'approved')
+	$scope.approve = function (moment) {
+		moment.approving = true;
+		approveAction(moment.data.sys_id, 'approved')
 	}
-	$scope.reject = function (sys_id) {
-		approveAction(sys_id, 'rejected')
+	$scope.reject = function (moment) {
+		moment.approving = true;
+		approveAction(moment.data.sys_id, 'rejected')
+	}
+	$scope.approvedFilter = function (item) {
+		return item.data.approval == 'approved';
+	};
+	$scope.notApprovedFilter = function (item) {
+		return item.data.approval == 'requested';
+	};
+	$scope.getNotApprovedCount = function () {
+		return $scope.data.moments.filter((x) => { return x.data.approval == 'requested' }).length
 	}
 	function approveAction(sys_id, state) {
 		$scope.data.approval = sys_id
 		$scope.data.action = 'approval'
 		$scope.data.approveState = state;
-		spUtil.update($scope)
+		spUtil.update($scope).then(() => {
+			spUtil.addInfoMessage('Moment successfully ' + state)
+		})
 	}
 
 
@@ -53,6 +82,23 @@
 	$scope.closeGallery = function () {
 		gallery.classList.remove('active')
 	}
+
+	angular.element(document).ready(function () {
+		getNextRecord()
+	});
+	function getNextRecord() {
+		var record = $scope.data.moments.filter(x => { return x.attachments.length == 0 })[0]
+
+		if (record)
+			loadImages(record.data.sys_id);
+	}
+	function loadImages(recordSysId) {
+		$scope.data.action = 'imageLoading';
+		$scope.data.recordSysId = recordSysId
+		spUtil.update($scope).then(() => {
+			getNextRecord()
+		})
+	}
 }
 ]]></client_script>
         <controller_as>c</controller_as>
@@ -63,6 +109,10 @@
 #moments-dropzone {&#13;
   height: 100%;&#13;
   margin-bottom: 5px;&#13;
+}&#13;
+.moment-form-container {&#13;
+  background-color: white;&#13;
+  padding: 10px;&#13;
 }&#13;
 .moments-header {&#13;
   background-color: white;&#13;
@@ -94,28 +144,41 @@
 }&#13;
 .to-approve-moments,&#13;
 .approved-container {&#13;
-  max-height: 300px;&#13;
+  max-height: 600px;&#13;
   overflow-y: auto;&#13;
   overflow-x: hidden;&#13;
   margin-top: 5px;&#13;
+  &amp;::-webkit-scrollbar {&#13;
+    width: 0.5em;&#13;
+  }&#13;
+&#13;
+  &amp;::-webkit-scrollbar-thumb {&#13;
+    background-color: darkgrey;&#13;
+    outline: 1px solid slategrey;&#13;
+  }&#13;
 }&#13;
 .moment {&#13;
   background-color: white;&#13;
-  margin-top: 5px;&#13;
+  margin-bottom: 5px;&#13;
   padding: 20px;&#13;
+  opacity: 0.8;&#13;
+  transition: all 0.3s ease-in-out;&#13;
+  &amp;:hover {&#13;
+    opacity: 1;&#13;
+  }&#13;
   .info-wrapper {&#13;
     display: flex;&#13;
     justify-content: end;&#13;
   }&#13;
   .author {&#13;
-    font-size: 12pt;&#13;
+    font-size: 11pt;&#13;
     font-weight: 900;&#13;
   }&#13;
   .caption {&#13;
     padding: 10px;&#13;
     background-color: #eceff1;&#13;
     font-weight: bold;&#13;
-    font-size: 14pt;&#13;
+    font-size: 12pt;&#13;
   }&#13;
   .created-on {&#13;
     font-size: 10pt;&#13;
@@ -127,16 +190,19 @@
     display: flex;&#13;
     justify-content: center;&#13;
     flex-direction: column;&#13;
+    align-items: center;&#13;
   }&#13;
   .moment-images {&#13;
     display: flex;&#13;
     overflow-x: auto;&#13;
-    justify-content: space-evenly;&#13;
+    justify-content: start;&#13;
     margin: 10px 0;&#13;
   }&#13;
   .moment-image {&#13;
+    margin-right: 10px;&#13;
+    width: 33%;&#13;
     img {&#13;
-      max-width: 90%;&#13;
+      width: 100%;&#13;
     }&#13;
   }&#13;
 }&#13;
@@ -168,6 +234,38 @@
     }&#13;
   }&#13;
 }&#13;
+.lds-ripple {&#13;
+  display: inline-block;&#13;
+  position: relative;&#13;
+  width: 80px;&#13;
+  height: 80px;&#13;
+}&#13;
+.lds-ripple div {&#13;
+  position: absolute;&#13;
+  border: 4px solid rgb(0, 0, 0);&#13;
+  opacity: 1;&#13;
+  border-radius: 50%;&#13;
+  animation: lds-ripple 1s cubic-bezier(0, 0.2, 0.8, 1) infinite;&#13;
+}&#13;
+.lds-ripple div:nth-child(2) {&#13;
+  animation-delay: -0.5s;&#13;
+}&#13;
+@keyframes lds-ripple {&#13;
+  0% {&#13;
+    top: 36px;&#13;
+    left: 36px;&#13;
+    width: 0;&#13;
+    height: 0;&#13;
+    opacity: 1;&#13;
+  }&#13;
+  100% {&#13;
+    top: 0px;&#13;
+    left: 0px;&#13;
+    width: 72px;&#13;
+    height: 72px;&#13;
+    opacity: 0;&#13;
+  }&#13;
+}&#13;
 </css>
         <data_table>sp_instance</data_table>
         <demo_data/>
@@ -188,34 +286,43 @@
   data.canEdit = gs.getUser().isMemberOf(gs.getProperty("x_aaro2_teamonline.teamonline_administration_group")) || gs.hasRole("admin");
   data.momentsTable = "x_aaro2_teamonline_moment";
 
-  data.approvedMoments = [];
-  data.notApprovedMoments = [];
-
   if (input && input.action === 'insert') {
     var newMomentGr = new GlideRecord(data.momentsTable);
     newMomentGr.initialize();
     newMomentGr.caption = input.caption;
+    newMomentGr.store = input.store.value;
     data.memorySysId = newMomentGr.insert();
     input.files.forEach(function (file) {
       var gsa = new GlideSysAttachment();
       gsa.writeBase64(newMomentGr, file.name, file.type, file.dataURL);
     })
+    getMoments();
   }
   if (input && input.action === 'approval') {
     approveAction(input.approval, input.approveState)
+    getMoments();
   }
 
-  getMoments();
+  if (input && input.action === 'imageLoading') {
+    if (input.recordSysId) {
+      var moments = input.moments;
+      var atts = getAttachments(input.recordSysId);
+      moments.filter(function (x) { return x.data.sys_id == input.recordSysId })[0].attachments = atts
+      data.moments = moments
+    }
+  }
+
+  if (!input || !input.action)
+    getMoments()
+
+  data.action = ''
 
   function getMoments() {
     var momentGr = new GlideRecord(data.momentsTable);
     momentGr.addEncodedQuery('approval!=rejected')
     momentGr.orderByDesc('sys_created_on');
     momentGr.query();
-    data.approvedMoments = [];
-    data.notApprovedMoments = [];
-
-
+    moments = []
     while (momentGr.next()) {
       var moment = {};
       moment.attachments = getAttachments(momentGr.getUniqueValue())
@@ -223,19 +330,25 @@
         sys_id: momentGr.getUniqueValue(),
         caption: momentGr.getValue('caption'),
         approval: momentGr.getValue('approval'),
+        store: momentGr.getDisplayValue('store'),
         opened_by: {
           id: momentGr.getValue('opened_by'),
           name: momentGr.getDisplayValue('opened_by')
         },
         created_on: momentGr.getValue('sys_created_on')
       };
-      if (momentGr.getValue('approval') === 'approved')
-        data.approvedMoments.push(moment);
-      else data.notApprovedMoments.push(moment);
-
+      moments.push(moment)
     }
+    data.moments = moments;
   }
   function getAttachments(record_sys_id) {
+    if (!input) return []
+
+    var moment = input.moments.filter(function (x) { return x.data.sys_id == record_sys_id })[0]
+
+    if (moment && moment.attachments.length > 0)
+      return moment.attachments;
+
     var ga = new GlideSysAttachment();
     var attGr = new GlideRecord('sys_attachment');
     attGr.addQuery('table_name', data.momentsTable);
@@ -261,6 +374,10 @@
       apprGr.state = approveState;
       apprGr.update();
     }
+    var momGr = new GlideRecord(data.momentsTable);
+    momGr.get(record_sys_id);
+    momGr.approval = approveState;
+    momGr.update()
   }
 })();
 ]]></script>
@@ -270,7 +387,7 @@
         <sys_created_on>2020-07-06 09:31:10</sys_created_on>
         <sys_customer_update>false</sys_customer_update>
         <sys_id>86d568dadbb9545084c240981396194b</sys_id>
-        <sys_mod_count>188</sys_mod_count>
+        <sys_mod_count>280</sys_mod_count>
         <sys_name>Teamonline Memories</sys_name>
         <sys_package display_value="TEAMonline" source="x_aaro2_teamonline">a2dfc25fdb7244105f65ba03e29619fa</sys_package>
         <sys_policy/>
@@ -278,26 +395,31 @@
         <sys_scope display_value="TEAMonline">a2dfc25fdb7244105f65ba03e29619fa</sys_scope>
         <sys_update_name>sp_widget_86d568dadbb9545084c240981396194b</sys_update_name>
         <sys_updated_by>andrey.mironyuk</sys_updated_by>
-        <sys_updated_on>2020-07-13 13:25:46</sys_updated_on>
+        <sys_updated_on>2020-07-17 14:41:04</sys_updated_on>
         <template><![CDATA[<div id="moments-container">
   <div class="moments-header">
     <span> TEAMONLINE Moments</span>
   </div>
-  <form action="file" enctype="multipart/form-data" class="dropzone needsclick" id="moments-dropzone">
-  </form>
+  <div class="moment-form-container">
+    <form action="file" enctype="multipart/form-data" class="dropzone needsclick" id="moments-dropzone">
+    </form>
 
-  <div class="form-group">
-    <label for="memoryCaption">Leave pitch caption here</label>
-    <textarea class="form-control" id="memoryCaption" rows="2" ng-model="data.caption"></textarea>
+    <div class="form-group">
+      <label for="memoryCaption">Leave pitch caption here</label>
+      <textarea class="form-control" id="memoryCaption" rows="2" ng-model="data.caption"
+        ng-disabled="uploading"></textarea>
+      <label for="storeNumber">Select your store</label>
+      <sn-record-picker id="storeNumber" field="data.store" table="'core_company'" display-field="'name'"
+        value-field="'sys_id'" search-fields="'name'" page-size="100"></sn-record-picker>
+    </div>
+
+    <div class="submit-area">
+      <input type="button" value="Submit" class="btn btn-primary submit-memory-btn"
+        ng-disabled="dropzone.files.length==0||!data.caption||!data.store.value||uploading" ng-click="submit()">
+    </div>
   </div>
-
-  <div class="submit-area">
-    <input type="button" value="Submit" class="btn btn-primary submit-memory-btn"
-      ng-disabled="dropzone.files.length==0||!data.caption" ng-click="submit()">
-  </div>
-
   <div class="approved-container">
-    <div class="approved-moments" ng-repeat="moment in data.approvedMoments">
+    <div class="approved-moments" ng-repeat="moment in data.moments | filter:approvedFilter">
       <div class="moment row">
         <div class="col-md-2 col-xs-12">
           <div class="avatar-timeago-container">
@@ -306,10 +428,15 @@
           </div>
         </div>
         <div class="col-md-10 col-xs-12">
-          <div class="author">{{moment.data.opened_by.name}}</div>
+          <div class="author">{{moment.data.opened_by.name}} from store {{moment.data.store}}</div>
           <div class="caption"><i>"{{moment.data.caption}}"</i></div>
           <div class="moment-images">
-            <div class="moment-image" ng-repeat="image in moment.attachments" ng-click="openImage(image.dataURL)">
+            <div class="lds-ripple" ng-if="moment.attachments.length==0">
+              <div></div>
+              <div></div>
+            </div>
+            <div ng-if="moment.attachments.length > 0" class="moment-image" ng-repeat="image in moment.attachments"
+              ng-click="openImage(image.dataURL)">
               <img ng-src="{{image.dataURL}}" alt="" srcset="">
             </div>
           </div>
@@ -320,13 +447,10 @@
 
   <div class="to-approve-container" ng-if="data.canEdit">
     <div class="moments-header">
-      <span> waiting for approval ({{data.notApprovedMoments.length}})</span>
+      <span> waiting for approval ({{getNotApprovedCount()}})</span>
     </div>
     <div class="to-approve-moments">
-      <div class="no-approvals" ng-if="data.notApprovedMoments.length==0">
-        There is no moments for approval yet
-      </div>
-      <div class="to-approve-moment" ng-repeat="moment in data.notApprovedMoments">
+      <div class="to-approve-moment" ng-repeat="moment in data.moments | filter:notApprovedFilter">
         <div class="moment row">
           <div class="col-md-2 col-xs-12">
             <div class="avatar-timeago-container">
@@ -338,13 +462,20 @@
             <div class="author">{{moment.data.opened_by.name}}</div>
             <div class="caption"><i>"{{moment.data.caption}}"</i></div>
             <div class="moment-images">
-              <div class="moment-image" ng-repeat="image in moment.attachments" ng-click="openImage(image.dataURL)">
+              <div class="lds-ripple" ng-if="moment.attachments.length==0">
+                <div></div>
+                <div></div>
+              </div>
+              <div ng-if="moment.attachments.length > 0" class="moment-image" ng-repeat="image in moment.attachments"
+                ng-click="openImage(image.dataURL)">
                 <img ng-src="{{image.dataURL}}" alt="" srcset="">
               </div>
             </div>
 
-            <input type="button" value="Approve" class="btn btn-success" ng-click="approve(moment.data.sys_id)">
-            <input type="button" value="Reject" class="btn btn-danger" ng-click="reject(moment.data.sys_id)">
+            <input type="button" value="Approve" class="btn btn-success" ng-click="approve(moment)"
+              ng-disabled="moment.approving">
+            <input type="button" value="Reject" class="btn btn-danger" ng-click="reject(moment)"
+              ng-disabled="moment.approving">
           </div>
         </div>
       </div>
