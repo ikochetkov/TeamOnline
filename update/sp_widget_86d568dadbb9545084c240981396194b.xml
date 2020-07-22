@@ -6,6 +6,11 @@
 	var c = this;
 	$scope.dropzone = {}
 	$scope.data.base64 = ''
+	$scope.limit = 10;
+	$scope.loadMore = function (last, inview) {
+		if (last && inview)
+			$scope.limit += 3;
+	}
 	var dropzone = new Dropzone("#moments-dropzone", {
 		url: "/file/post",
 		acceptedFiles: 'image/*',
@@ -15,7 +20,6 @@
 	})
 	$scope.uploading = false
 	$scope.data.caption = '';
-	$scope.data.store = { displayValue: '', value: '', name: '' };
 	spUtil.recordWatch($scope, $scope.data.momentsTable, "", function (name) {
 		if (~name.data.changes.indexOf('approval')) {
 			console.log('$scope.data.action', $scope.data.action)
@@ -49,6 +53,7 @@
 
 	$scope.approve = function (moment) {
 		moment.approving = true;
+		$scope.data.approvalMoment = moment
 		approveAction(moment.data.sys_id, 'approved')
 	}
 	$scope.reject = function (moment) {
@@ -82,29 +87,12 @@
 	$scope.closeGallery = function () {
 		gallery.classList.remove('active')
 	}
-
-	angular.element(document).ready(function () {
-		getNextRecord()
-	});
-	function getNextRecord() {
-		var record = $scope.data.moments.filter(x => { return x.attachments.length == 0 })[0]
-
-		if (record)
-			loadImages(record.data.sys_id);
-	}
-	function loadImages(recordSysId) {
-		$scope.data.action = 'imageLoading';
-		$scope.data.recordSysId = recordSysId
-		spUtil.update($scope).then(() => {
-			getNextRecord()
-		})
-	}
 }
 ]]></client_script>
         <controller_as>c</controller_as>
         <css>$blue: #0069c8;&#13;
 #moments-container {&#13;
-  margin: 10px 0;&#13;
+  margin-bottom: 10px;&#13;
 }&#13;
 #moments-dropzone {&#13;
   height: 100%;&#13;
@@ -116,7 +104,7 @@
 }&#13;
 .moments-header {&#13;
   background-color: white;&#13;
-  margin: 10px 0 5px 0;&#13;
+  margin-bottom: 5px;&#13;
   text-align: center;&#13;
   font-size: 24px;&#13;
   padding: 2rem 0;&#13;
@@ -272,7 +260,7 @@
         <description/>
         <docs/>
         <field_list/>
-        <has_preview>false</has_preview>
+        <has_preview>true</has_preview>
         <id>teamonline_memories</id>
         <internal>false</internal>
         <link><![CDATA[function link(scope, element, attrs, controller) {  }]]></link>
@@ -285,7 +273,7 @@
   /* e.g., data.table = $sp.getValue('table'); */
   data.canEdit = gs.getUser().isMemberOf(gs.getProperty("x_aaro2_teamonline.teamonline_administration_group")) || gs.hasRole("admin");
   data.momentsTable = "x_aaro2_teamonline_moment";
-
+  data.store = getStore(gs.getUser().getCompanyID())
   if (input && input.action === 'insert') {
     var newMomentGr = new GlideRecord(data.momentsTable);
     newMomentGr.initialize();
@@ -302,14 +290,9 @@
     approveAction(input.approval, input.approveState)
     getMoments();
   }
-
-  if (input && input.action === 'imageLoading') {
-    if (input.recordSysId) {
-      var moments = input.moments;
-      var atts = getAttachments(input.recordSysId);
-      moments.filter(function (x) { return x.data.sys_id == input.recordSysId })[0].attachments = atts
-      data.moments = moments
-    }
+  if (input && input.action === 'loadMore') {
+    var datetime = input.last.sys_created_on.split(' ')
+    var query = "sys_created_on>javascript:gs.dateGenerate(" + datetime[0] + ", " + datetime[1] + ")";
   }
 
   if (!input || !input.action)
@@ -317,10 +300,12 @@
 
   data.action = ''
 
-  function getMoments() {
+  function getMoments(additionalQuery) {
     var momentGr = new GlideRecord(data.momentsTable);
     momentGr.addEncodedQuery('approval!=rejected')
+    momentGr.addEncodedQuery(additionalQuery)
     momentGr.orderByDesc('sys_created_on');
+    momentGr.setLimit(20);
     momentGr.query();
     moments = []
     while (momentGr.next()) {
@@ -342,12 +327,6 @@
     data.moments = moments;
   }
   function getAttachments(record_sys_id) {
-    if (!input) return []
-
-    var moment = input.moments.filter(function (x) { return x.data.sys_id == record_sys_id })[0]
-
-    if (moment && moment.attachments.length > 0)
-      return moment.attachments;
 
     var ga = new GlideSysAttachment();
     var attGr = new GlideRecord('sys_attachment');
@@ -359,7 +338,7 @@
       attachments.push({
         name: attGr.getValue('file_name'),
         content_type: attGr.getValue('content_type'),
-        dataURL: "data:" + attGr.getValue('content_type') + ";base64," + ga.getContentBase64(attGr)
+        dataURL: "/sys_attachment.do?view=true&sys_id=" + attGr.getUniqueValue()
 
       });
     }
@@ -376,8 +355,14 @@
     }
     var momGr = new GlideRecord(data.momentsTable);
     momGr.get(record_sys_id);
+    momGr.caption = input.approvalMoment.data.caption
     momGr.approval = approveState;
     momGr.update()
+  }
+  function getStore(sys_id) {
+    var storeGr = new GlideRecord('core_company');
+    storeGr.get(sys_id);
+    return { name: '', displayValue: storeGr.getValue('name'), value: sys_id }
   }
 })();
 ]]></script>
@@ -387,7 +372,7 @@
         <sys_created_on>2020-07-06 09:31:10</sys_created_on>
         <sys_customer_update>false</sys_customer_update>
         <sys_id>86d568dadbb9545084c240981396194b</sys_id>
-        <sys_mod_count>280</sys_mod_count>
+        <sys_mod_count>319</sys_mod_count>
         <sys_name>Teamonline Memories</sys_name>
         <sys_package display_value="TEAMonline" source="x_aaro2_teamonline">a2dfc25fdb7244105f65ba03e29619fa</sys_package>
         <sys_policy/>
@@ -395,7 +380,7 @@
         <sys_scope display_value="TEAMonline">a2dfc25fdb7244105f65ba03e29619fa</sys_scope>
         <sys_update_name>sp_widget_86d568dadbb9545084c240981396194b</sys_update_name>
         <sys_updated_by>andrey.mironyuk</sys_updated_by>
-        <sys_updated_on>2020-07-17 14:41:04</sys_updated_on>
+        <sys_updated_on>2020-07-22 09:51:45</sys_updated_on>
         <template><![CDATA[<div id="moments-container">
   <div class="moments-header">
     <span> TEAMONLINE Moments</span>
@@ -410,7 +395,7 @@
         ng-disabled="uploading"></textarea>
       <label for="storeNumber">Select your store</label>
       <sn-record-picker id="storeNumber" field="data.store" table="'core_company'" display-field="'name'"
-        value-field="'sys_id'" search-fields="'name'" page-size="100"></sn-record-picker>
+        value-field="'sys_id'" search-fields="'name'" page-size="100" value="data.userCompany"></sn-record-picker>
     </div>
 
     <div class="submit-area">
@@ -418,8 +403,9 @@
         ng-disabled="dropzone.files.length==0||!data.caption||!data.store.value||uploading" ng-click="submit()">
     </div>
   </div>
-  <div class="approved-container">
-    <div class="approved-moments" ng-repeat="moment in data.moments | filter:approvedFilter">
+  <div class="approved-container" in-view-container>
+    <div class="approved-moments" ng-repeat="moment in data.moments | filter:approvedFilter | limitTo: limit"
+      in-view="loadMore($last, $inview)">
       <div class="moment row">
         <div class="col-md-2 col-xs-12">
           <div class="avatar-timeago-container">
@@ -428,13 +414,9 @@
           </div>
         </div>
         <div class="col-md-10 col-xs-12">
-          <div class="author">{{moment.data.opened_by.name}} from store {{moment.data.store}}</div>
+          <div class="author">{{moment.data.opened_by.name}} from store {{moment.data.store}}:</div>
           <div class="caption"><i>"{{moment.data.caption}}"</i></div>
           <div class="moment-images">
-            <div class="lds-ripple" ng-if="moment.attachments.length==0">
-              <div></div>
-              <div></div>
-            </div>
             <div ng-if="moment.attachments.length > 0" class="moment-image" ng-repeat="image in moment.attachments"
               ng-click="openImage(image.dataURL)">
               <img ng-src="{{image.dataURL}}" alt="" srcset="">
@@ -459,13 +441,10 @@
             </div>
           </div>
           <div class="col-md-10 col-xs-12">
-            <div class="author">{{moment.data.opened_by.name}}</div>
-            <div class="caption"><i>"{{moment.data.caption}}"</i></div>
+            <div class="author">{{moment.data.opened_by.name}} from store {{moment.data.store}}:</div>
+            <textarea class="form-control" id="apprmemoryCaption" rows="2" ng-model="moment.data.caption"
+              ng-disabled="uploading"></textarea>
             <div class="moment-images">
-              <div class="lds-ripple" ng-if="moment.attachments.length==0">
-                <div></div>
-                <div></div>
-              </div>
               <div ng-if="moment.attachments.length > 0" class="moment-image" ng-repeat="image in moment.attachments"
                 ng-click="openImage(image.dataURL)">
                 <img ng-src="{{image.dataURL}}" alt="" srcset="">

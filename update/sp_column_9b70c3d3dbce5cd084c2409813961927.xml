@@ -2,24 +2,24 @@
     <sp_column action="INSERT_OR_UPDATE">
         <class_name/>
         <order>1</order>
-        <size>7</size>
+        <size>12</size>
         <size_lg/>
         <size_sm/>
         <size_xs/>
-        <sp_row display_value="1">9dc9b452db1994505f65ba03e29619f6</sp_row>
+        <sp_row display_value="2">1770cf53dbce5cd084c24098139619b6</sp_row>
         <sys_class_name>sp_column</sys_class_name>
-        <sys_created_by>xxikochet</sys_created_by>
-        <sys_created_on>2020-06-11 14:26:50</sys_created_on>
+        <sys_created_by>andrey.mironyuk</sys_created_by>
+        <sys_created_on>2020-07-22 09:36:27</sys_created_on>
         <sys_customer_update>false</sys_customer_update>
-        <sys_id>25c9b452db1994505f65ba03e29619f9</sys_id>
-        <sys_mod_count>1</sys_mod_count>
+        <sys_id>9b70c3d3dbce5cd084c2409813961927</sys_id>
+        <sys_mod_count>0</sys_mod_count>
         <sys_name>1</sys_name>
         <sys_package display_value="TEAMonline" source="x_aaro2_teamonline">a2dfc25fdb7244105f65ba03e29619fa</sys_package>
         <sys_policy/>
         <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
         <sys_scope display_value="TEAMonline">a2dfc25fdb7244105f65ba03e29619fa</sys_scope>
-        <sys_update_name>sp_column_25c9b452db1994505f65ba03e29619f9</sys_update_name>
-        <sys_updated_by>xxikochet</sys_updated_by>
-        <sys_updated_on>2020-06-11 14:26:59</sys_updated_on>
+        <sys_update_name>sp_column_9b70c3d3dbce5cd084c2409813961927</sys_update_name>
+        <sys_updated_by>andrey.mironyuk</sys_updated_by>
+        <sys_updated_on>2020-07-22 09:36:27</sys_updated_on>
     </sp_column>
 </record_update>
