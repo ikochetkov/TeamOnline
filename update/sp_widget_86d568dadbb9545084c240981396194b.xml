@@ -5,6 +5,7 @@
 	/* widget controller */
 	var c = this;
 	$scope.dropzone = {}
+	$scope.formCollapsed = true;
 	$scope.data.base64 = ''
 	$scope.limit = 10;
 	$scope.loadMore = function (last, inview) {
@@ -130,6 +131,9 @@
 .submit-memory-btn {&#13;
   width: 100%;&#13;
 }&#13;
+.to-approve-container {&#13;
+  margin-top: 10px;&#13;
+}&#13;
 .to-approve-moments,&#13;
 .approved-container {&#13;
   max-height: 600px;&#13;
@@ -161,6 +165,9 @@
   .author {&#13;
     font-size: 11pt;&#13;
     font-weight: 900;&#13;
+    display: flex;&#13;
+    margin-bottom: 5px;&#13;
+    justify-content: space-between;&#13;
   }&#13;
   .caption {&#13;
     padding: 10px;&#13;
@@ -274,6 +281,7 @@
   data.canEdit = gs.getUser().isMemberOf(gs.getProperty("x_aaro2_teamonline.teamonline_administration_group")) || gs.hasRole("admin");
   data.momentsTable = "x_aaro2_teamonline_moment";
   data.store = getStore(gs.getUser().getCompanyID())
+
   if (input && input.action === 'insert') {
     var newMomentGr = new GlideRecord(data.momentsTable);
     newMomentGr.initialize();
@@ -372,7 +380,7 @@
         <sys_created_on>2020-07-06 09:31:10</sys_created_on>
         <sys_customer_update>false</sys_customer_update>
         <sys_id>86d568dadbb9545084c240981396194b</sys_id>
-        <sys_mod_count>319</sys_mod_count>
+        <sys_mod_count>342</sys_mod_count>
         <sys_name>Teamonline Memories</sys_name>
         <sys_package display_value="TEAMonline" source="x_aaro2_teamonline">a2dfc25fdb7244105f65ba03e29619fa</sys_package>
         <sys_policy/>
@@ -380,27 +388,33 @@
         <sys_scope display_value="TEAMonline">a2dfc25fdb7244105f65ba03e29619fa</sys_scope>
         <sys_update_name>sp_widget_86d568dadbb9545084c240981396194b</sys_update_name>
         <sys_updated_by>andrey.mironyuk</sys_updated_by>
-        <sys_updated_on>2020-07-22 09:51:45</sys_updated_on>
+        <sys_updated_on>2020-07-24 12:04:40</sys_updated_on>
         <template><![CDATA[<div id="moments-container">
   <div class="moments-header">
     <span> TEAMONLINE Moments</span>
   </div>
-  <div class="moment-form-container">
-    <form action="file" enctype="multipart/form-data" class="dropzone needsclick" id="moments-dropzone">
-    </form>
+  <div class="submit-area">
+    <button type="button" class="btn btn-primary submit-memory-btn"
+      ng-click="formCollapsed = !formCollapsed">{{formCollapsed?'Add moment':'Collapse form'}}</button>
+  </div>
+  <div uib-collapse="formCollapsed">
+    <div class="moment-form-container">
+      <form action="file" enctype="multipart/form-data" class="dropzone needsclick" id="moments-dropzone">
+      </form>
 
-    <div class="form-group">
-      <label for="memoryCaption">Leave pitch caption here</label>
-      <textarea class="form-control" id="memoryCaption" rows="2" ng-model="data.caption"
-        ng-disabled="uploading"></textarea>
-      <label for="storeNumber">Select your store</label>
-      <sn-record-picker id="storeNumber" field="data.store" table="'core_company'" display-field="'name'"
-        value-field="'sys_id'" search-fields="'name'" page-size="100" value="data.userCompany"></sn-record-picker>
-    </div>
+      <div class="form-group">
+        <label for="memoryCaption">Leave pitch caption here</label>
+        <textarea class="form-control" id="memoryCaption" rows="2" ng-model="data.caption"
+          ng-disabled="uploading"></textarea>
+        <label for="storeNumber">Select your location</label>
+        <sn-record-picker id="storeNumber" field="data.store" table="'core_company'" display-field="'name'"
+          value-field="'sys_id'" search-fields="'name'" page-size="100" value="data.userCompany"></sn-record-picker>
+      </div>
 
-    <div class="submit-area">
-      <input type="button" value="Submit" class="btn btn-primary submit-memory-btn"
-        ng-disabled="dropzone.files.length==0||!data.caption||!data.store.value||uploading" ng-click="submit()">
+      <div class="submit-area">
+        <input type="button" value="Submit" class="btn btn-primary submit-memory-btn"
+          ng-disabled="dropzone.files.length==0||!data.caption||!data.store.value||uploading" ng-click="submit()">
+      </div>
     </div>
   </div>
   <div class="approved-container" in-view-container>
@@ -414,7 +428,10 @@
           </div>
         </div>
         <div class="col-md-10 col-xs-12">
-          <div class="author">{{moment.data.opened_by.name}} from store {{moment.data.store}}:</div>
+          <div class="author">{{moment.data.opened_by.name}} from store {{moment.data.store}}:
+            <input ng-if="data.canEdit" type="button" value="Archive" class="btn btn-danger btn-xs"
+              ng-click="reject(moment)">
+          </div>
           <div class="caption"><i>"{{moment.data.caption}}"</i></div>
           <div class="moment-images">
             <div ng-if="moment.attachments.length > 0" class="moment-image" ng-repeat="image in moment.attachments"
@@ -427,7 +444,7 @@
     </div>
   </div>
 
-  <div class="to-approve-container" ng-if="data.canEdit">
+  <div class="to-approve-container" ng-if="data.canEdit && getNotApprovedCount()>0">
     <div class="moments-header">
       <span> waiting for approval ({{getNotApprovedCount()}})</span>
     </div>
