@@ -32,6 +32,8 @@
 
 
 	$scope.submit = function () {
+		if(dropzone.files.length> maxFiles)
+			spUtil.addInfoMessage('You tried to submit ' + dropzone.files.length + ' files. Only first '+ maxFiles + ' will be uploaded')
 		$scope.uploading = true
 		$scope.data.files = [];
 		for(var i = 0; i < maxFiles; i++){
@@ -282,7 +284,7 @@
   data.canEdit = gs.getUser().isMemberOf(gs.getProperty("x_aaro2_teamonline.teamonline_administration_group")) || gs.hasRole("admin");
   data.momentsTable = "x_aaro2_teamonline_moment";
   data.store = getStore(gs.getUser().getCompanyID())
-
+  data.storesQuery = 'notes!=NULL'
   if (input && input.action === 'insert') {
     var newMomentGr = new GlideRecord(data.momentsTable);
     newMomentGr.initialize();
@@ -364,7 +366,7 @@
     }
     var momGr = new GlideRecord(data.momentsTable);
     momGr.get(record_sys_id);
-    momGr.caption = input.approvalMoment.data.caption
+    momGr.caption = input.approvalMoment?input.approvalMoment.data.caption:momGr.caption
     momGr.approval = approveState;
     momGr.update()
   }
@@ -381,7 +383,7 @@
         <sys_created_on>2020-07-06 09:31:10</sys_created_on>
         <sys_customer_update>false</sys_customer_update>
         <sys_id>86d568dadbb9545084c240981396194b</sys_id>
-        <sys_mod_count>343</sys_mod_count>
+        <sys_mod_count>354</sys_mod_count>
         <sys_name>Teamonline Memories</sys_name>
         <sys_package display_value="TEAMonline" source="x_aaro2_teamonline">a2dfc25fdb7244105f65ba03e29619fa</sys_package>
         <sys_policy/>
@@ -389,7 +391,7 @@
         <sys_scope display_value="TEAMonline">a2dfc25fdb7244105f65ba03e29619fa</sys_scope>
         <sys_update_name>sp_widget_86d568dadbb9545084c240981396194b</sys_update_name>
         <sys_updated_by>andrey.mironyuk</sys_updated_by>
-        <sys_updated_on>2020-07-31 15:53:02</sys_updated_on>
+        <sys_updated_on>2020-08-03 11:01:39</sys_updated_on>
         <template><![CDATA[<div id="moments-container">
   <div class="moments-header">
     <span> TEAMONLINE Moments</span>
@@ -409,7 +411,7 @@
           ng-disabled="uploading"></textarea>
         <label for="storeNumber">Select your location</label>
         <sn-record-picker id="storeNumber" field="data.store" table="'core_company'" display-field="'name'"
-          value-field="'sys_id'" search-fields="'name'" page-size="100" value="data.userCompany"></sn-record-picker>
+          value-field="'sys_id'" search-fields="'name'" page-size="100" value="data.userCompany" default-query="data.storesQuery"></sn-record-picker>
       </div>
 
       <div class="submit-area">
