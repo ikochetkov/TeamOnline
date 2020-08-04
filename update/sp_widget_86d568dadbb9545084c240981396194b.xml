@@ -32,11 +32,13 @@
 
 
 	$scope.submit = function () {
-		if(dropzone.files.length> maxFiles)
-			spUtil.addInfoMessage('You tried to submit ' + dropzone.files.length + ' files. Only first '+ maxFiles + ' will be uploaded')
+		if (dropzone.files.length > maxFiles) {
+			spUtil.addInfoMessage('You tried to submit ' + dropzone.files.length + ' files. Only first ' + maxFiles + ' will be uploaded')
+		}
+		console.log(' dropzone.files',  dropzone.files)
 		$scope.uploading = true
 		$scope.data.files = [];
-		for(var i = 0; i < maxFiles; i++){
+		for (var i = 0; i < maxFiles && i < dropzone.files.length; i++) {
 			$scope.data.files.push({
 				name: dropzone.files[i].name,
 				type: dropzone.files[i].type,
@@ -383,7 +385,7 @@
         <sys_created_on>2020-07-06 09:31:10</sys_created_on>
         <sys_customer_update>false</sys_customer_update>
         <sys_id>86d568dadbb9545084c240981396194b</sys_id>
-        <sys_mod_count>354</sys_mod_count>
+        <sys_mod_count>359</sys_mod_count>
         <sys_name>Teamonline Memories</sys_name>
         <sys_package display_value="TEAMonline" source="x_aaro2_teamonline">a2dfc25fdb7244105f65ba03e29619fa</sys_package>
         <sys_policy/>
@@ -391,7 +393,7 @@
         <sys_scope display_value="TEAMonline">a2dfc25fdb7244105f65ba03e29619fa</sys_scope>
         <sys_update_name>sp_widget_86d568dadbb9545084c240981396194b</sys_update_name>
         <sys_updated_by>andrey.mironyuk</sys_updated_by>
-        <sys_updated_on>2020-08-03 11:01:39</sys_updated_on>
+        <sys_updated_on>2020-08-04 13:58:21</sys_updated_on>
         <template><![CDATA[<div id="moments-container">
   <div class="moments-header">
     <span> TEAMONLINE Moments</span>
