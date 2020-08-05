@@ -27,6 +27,7 @@
 		d.action = 'checkName';
 		d.imgName = g_form.getValue('name');
 		spUtil.update($scope).then(function(){
+			d.action = undefined;
 			if(d.nameAlreadyExists){
 				spUtil.addErrorMessage(d.nameExistsErr);
 				return;
@@ -44,6 +45,8 @@
 						sys_id: response.data.sys_id
 					});
 					$scope.modalUploader.close();
+					spUtil.update($scope);
+					spUtil.addInfoMessage('New background selected!');
 				});
 			}
 		});
@@ -178,7 +181,7 @@
         <sys_created_on>2020-02-15 10:26:28</sys_created_on>
         <sys_customer_update>false</sys_customer_update>
         <sys_id>b3b06124db07cc105f65ba03e296192c</sys_id>
-        <sys_mod_count>225</sys_mod_count>
+        <sys_mod_count>238</sys_mod_count>
         <sys_name>Team Online Image Uploader</sys_name>
         <sys_package display_value="TEAMonline" source="x_aaro2_teamonline">a2dfc25fdb7244105f65ba03e29619fa</sys_package>
         <sys_policy/>
@@ -186,7 +189,7 @@
         <sys_scope display_value="TEAMonline">a2dfc25fdb7244105f65ba03e29619fa</sys_scope>
         <sys_update_name>sp_widget_b3b06124db07cc105f65ba03e296192c</sys_update_name>
         <sys_updated_by>xxikochet</sys_updated_by>
-        <sys_updated_on>2020-06-08 08:08:41</sys_updated_on>
+        <sys_updated_on>2020-08-05 14:24:26</sys_updated_on>
         <template><![CDATA[<button ng-click="openUploader()" class="btn btn-primary" style='float:right'><span class="glyphicon glyphicon-upload" char="upload"></span><span class="ng-binding"> Load new image from PC</span></button>
 ]]></template>
     </sp_widget>

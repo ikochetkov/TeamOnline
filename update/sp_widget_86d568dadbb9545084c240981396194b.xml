@@ -24,7 +24,7 @@
 	$scope.data.caption = '';
 	spUtil.recordWatch($scope, $scope.data.momentsTable, "", function (name) {
 		if (~name.data.changes.indexOf('approval')) {
-			console.log('$scope.data.action', $scope.data.action)
+			//console.log('$scope.data.action', $scope.data.action)
 			$scope.data.action = ''
 			spUtil.update($scope);
 		}
@@ -35,7 +35,7 @@
 		if (dropzone.files.length > maxFiles) {
 			spUtil.addInfoMessage('You tried to submit ' + dropzone.files.length + ' files. Only first ' + maxFiles + ' will be uploaded')
 		}
-		console.log(' dropzone.files',  dropzone.files)
+		//console.log(' dropzone.files',  dropzone.files)
 		$scope.uploading = true
 		$scope.data.files = [];
 		for (var i = 0; i < maxFiles && i < dropzone.files.length; i++) {
@@ -66,6 +66,10 @@
 		moment.approving = true;
 		approveAction(moment.data.sys_id, 'rejected')
 	}
+	$scope.archive = function (moment) {
+		moment.approving = true;
+		approveAction(moment.data.sys_id, 'rejected', true)
+	}
 	$scope.approvedFilter = function (item) {
 		return item.data.approval == 'approved';
 	};
@@ -75,12 +79,12 @@
 	$scope.getNotApprovedCount = function () {
 		return $scope.data.moments.filter((x) => { return x.data.approval == 'requested' }).length
 	}
-	function approveAction(sys_id, state) {
+	function approveAction(sys_id, state, isArchive) {
 		$scope.data.approval = sys_id
 		$scope.data.action = 'approval'
 		$scope.data.approveState = state;
 		spUtil.update($scope).then(() => {
-			spUtil.addInfoMessage('Moment successfully ' + state)
+			spUtil.addInfoMessage('Moment successfully ' + (isArchive ? 'archived' : state))
 		})
 	}
 
@@ -92,6 +96,28 @@
 	}
 	$scope.closeGallery = function () {
 		gallery.classList.remove('active')
+	}
+	
+	/* context Menu */
+	$scope.contextMenu = function (moment) {
+		if (!$scope.data.canEdit) { return [] }
+		return [
+			['Archive', function ($itemScope) {
+				var currentScope = getCurrentScopeByMethod($itemScope,'archive');
+				currentScope.archive(moment);	
+			}]
+		]
+	}
+	
+	/* returs current scope */
+	function getCurrentScopeByMethod(scope,method){
+		var currentScope = scope; 
+		var i = 0;
+		while (!currentScope.hasOwnProperty(method) && i<10){
+			currentScope = currentScope.$parent;
+			i++;
+		}
+		return currentScope;
 	}
 }
 ]]></client_script>
@@ -385,7 +411,7 @@
         <sys_created_on>2020-07-06 09:31:10</sys_created_on>
         <sys_customer_update>false</sys_customer_update>
         <sys_id>86d568dadbb9545084c240981396194b</sys_id>
-        <sys_mod_count>359</sys_mod_count>
+        <sys_mod_count>366</sys_mod_count>
         <sys_name>Teamonline Memories</sys_name>
         <sys_package display_value="TEAMonline" source="x_aaro2_teamonline">a2dfc25fdb7244105f65ba03e29619fa</sys_package>
         <sys_policy/>
@@ -393,7 +419,7 @@
         <sys_scope display_value="TEAMonline">a2dfc25fdb7244105f65ba03e29619fa</sys_scope>
         <sys_update_name>sp_widget_86d568dadbb9545084c240981396194b</sys_update_name>
         <sys_updated_by>andrey.mironyuk</sys_updated_by>
-        <sys_updated_on>2020-08-04 13:58:21</sys_updated_on>
+        <sys_updated_on>2020-08-05 12:59:30</sys_updated_on>
         <template><![CDATA[<div id="moments-container">
   <div class="moments-header">
     <span> TEAMONLINE Moments</span>
@@ -425,7 +451,7 @@
   <div class="approved-container" in-view-container>
     <div class="approved-moments" ng-repeat="moment in data.moments | filter:approvedFilter | limitTo: limit"
       in-view="loadMore($last, $inview)">
-      <div class="moment row">
+      <div context-menu="contextMenu(moment)" class="moment row">
         <div class="col-md-2 col-xs-12">
           <div class="avatar-timeago-container">
             <sn-avatar class="avatar-large" primary="moment.data.opened_by.id" />
@@ -434,8 +460,8 @@
         </div>
         <div class="col-md-10 col-xs-12">
           <div class="author">{{moment.data.opened_by.name}} from store {{moment.data.store}}:
-            <input ng-if="data.canEdit" type="button" value="Archive" class="btn btn-danger btn-xs"
-              ng-click="reject(moment)">
+            <!----<input ng-if="data.canEdit" type="button" value="Archive" class="btn btn-danger btn-xs"
+              ng-click="archive(moment)">--->
           </div>
           <div class="caption"><i>"{{moment.data.caption}}"</i></div>
           <div class="moment-images">
