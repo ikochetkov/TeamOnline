@@ -133,95 +133,87 @@
 
 }]]></client_script>
         <controller_as>c</controller_as>
-        <css>.container{
-  padding:0px;
-  width:100%; 
-  height:300px;
-  background-repeat: no-repeat;
-  background-size:cover;
-  background-color: #333;
-}
-
-.slide-placeholder{
-  width:100%;
-  height:300px;
-  background:#333;
-  color:white;
-  text-align:center;
-}
-
-.slide-placeholder span{
-	line-height: 300px;
-}
-
-#slider{
-  padding:0px 15px 0px 15px
-}
-.carousel-control {
-  width:5%;
-  background-image:none;
-}
-
-
-/* dark picture */
-
-img{ 
-  opacity:0.6;
-  -moz-opacity:0.6;
-  filter: alpha(opacity=60) black;
-  -khtml-opacity: 0.6;
-  background-color:rgba(0, 0, 0, .6);
-}
-
-/* button */
-
-.button-wrapper {
-  position: relative;
-  //transform: translateY(120%);
-  margin: 0 auto;
-  width: 320px;
-}
-.shape {
-  stroke-dasharray: 140 540;
-  stroke-dashoffset: -474;
-  stroke-width: 8px;
-  fill: transparent;
-  stroke: #19f6e8;
-  border-bottom: 5px solid black;
-  transition: stroke-width 1s, stroke-dashoffset 1s, stroke-dasharray 1s;
-}
-.button-text {
-  font-family: 'Roboto Condensed';
-  font-size: 22px;
-  line-height: 32px;
-  letter-spacing: 8px;
-  color: #fff;
-  top: -48px;
-  position: relative;
-}
-.button-wrapper:hover .shape {
-  stroke-width: 4px;
-  stroke-dashoffset: 0;
-  stroke-dasharray: 760;
-}
-
-/* indicators */
-.carousel-indicators li {
-  position: relative;
-  -webkit-box-flex: 0;
-  -ms-flex: 0 1 auto;
-  flex: 0 1 auto;
-  width: 30px;
-  height: 3px;
-  margin-right: 3px;
-  margin-left: 3px;
-  text-indent: -999px;
-  background-color: rgba(255,255,255,.5);
-}
-
-.carousel-indicators .active {
-  background-color: #fff;
-}
+        <css>.container{&#13;
+  padding:0px;&#13;
+  width:100%; &#13;
+  height:300px;&#13;
+  background-repeat: no-repeat;&#13;
+  background-size:cover;&#13;
+  background-color: #333;&#13;
+}&#13;
+&#13;
+.slide-placeholder{&#13;
+  width:100%;&#13;
+  height:300px;&#13;
+  background:#333;&#13;
+  color:white;&#13;
+  text-align:center;&#13;
+}&#13;
+&#13;
+.slide-placeholder span{&#13;
+	line-height: 300px;&#13;
+}&#13;
+&#13;
+#slider{&#13;
+  padding:0px 15px 0px 15px&#13;
+}&#13;
+.carousel-control {&#13;
+  width:5%;&#13;
+  background-image:none;&#13;
+}&#13;
+&#13;
+&#13;
+/* dark picture */&#13;
+&#13;
+/* button */&#13;
+&#13;
+.button-wrapper {&#13;
+  position: relative;&#13;
+  //transform: translateY(120%);&#13;
+  margin: 0 auto;&#13;
+  width: 320px;&#13;
+}&#13;
+.shape {&#13;
+  stroke-dasharray: 140 540;&#13;
+  stroke-dashoffset: -474;&#13;
+  stroke-width: 8px;&#13;
+  fill: transparent;&#13;
+  stroke: #19f6e8;&#13;
+  border-bottom: 5px solid black;&#13;
+  transition: stroke-width 1s, stroke-dashoffset 1s, stroke-dasharray 1s;&#13;
+}&#13;
+.button-text {&#13;
+  font-family: 'Roboto Condensed';&#13;
+  font-size: 22px;&#13;
+  line-height: 32px;&#13;
+  letter-spacing: 8px;&#13;
+  color: #fff;&#13;
+  top: -48px;&#13;
+  position: relative;&#13;
+}&#13;
+.button-wrapper:hover .shape {&#13;
+  stroke-width: 4px;&#13;
+  stroke-dashoffset: 0;&#13;
+  stroke-dasharray: 760;&#13;
+}&#13;
+&#13;
+/* indicators */&#13;
+.carousel-indicators li {&#13;
+  position: relative;&#13;
+  -webkit-box-flex: 0;&#13;
+  -ms-flex: 0 1 auto;&#13;
+  flex: 0 1 auto;&#13;
+  width: 30px;&#13;
+  height: 3px;&#13;
+  margin-right: 3px;&#13;
+  margin-left: 3px;&#13;
+  text-indent: -999px;&#13;
+  background-color: rgba(255,255,255,.5);&#13;
+}&#13;
+&#13;
+.carousel-indicators .active {&#13;
+  background-color: #fff;&#13;
+}&#13;
 </css>
         <data_table>x_aaro2_teamonline_instance_of_teamonline_carousel</data_table>
         <demo_data/>
@@ -234,7 +226,7 @@ img{
         <link><![CDATA[function link(scope, element, attrs, controller) {  }]]></link>
         <name>TeamOnline Carousel</name>
         <option_schema>[{"name":"interval","section":"other","default_value":"5000","label":"Interval","type":"integer"}]</option_schema>
-        <public>false</public>
+        <public>true</public>
         <roles/>
         <script><![CDATA[var widgetInstanceRecordsysId = $sp.getInstanceRecord().getUniqueValue();
 data.table = 'x_aaro2_teamonline_carousel_slide';
@@ -295,15 +287,15 @@ function collectSlides(){
         <sys_created_on>2020-06-01 11:22:57</sys_created_on>
         <sys_customer_update>false</sys_customer_update>
         <sys_id>1acfa40fdb855c505f65ba03e29619e0</sys_id>
-        <sys_mod_count>337</sys_mod_count>
+        <sys_mod_count>340</sys_mod_count>
         <sys_name>TeamOnline Carousel</sys_name>
         <sys_package display_value="TEAMonline" source="x_aaro2_teamonline">a2dfc25fdb7244105f65ba03e29619fa</sys_package>
         <sys_policy/>
         <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
         <sys_scope display_value="TEAMonline">a2dfc25fdb7244105f65ba03e29619fa</sys_scope>
         <sys_update_name>sp_widget_1acfa40fdb855c505f65ba03e29619e0</sys_update_name>
-        <sys_updated_by>xxikochet</sys_updated_by>
-        <sys_updated_on>2020-08-05 12:37:38</sys_updated_on>
+        <sys_updated_by>andrey.mironyuk</sys_updated_by>
+        <sys_updated_on>2020-08-25 11:37:53</sys_updated_on>
         <template><![CDATA[<div id="slider">
   <div class="pull-in">
     <uib-carousel interval="options.interval">
@@ -313,9 +305,9 @@ function collectSlides(){
           <img context-menu="contextMenu()" ng-src="{{slide.background}}" style="margin:auto; width:100%;" role="presentation">
 
           <div context-menu="contextMenu()" class="carousel-caption d-none d-md-block">
-            <h2 class="name">{{slide.header}}</h2>
+            <!--<h2 class="name">{{slide.header}}</h2>
             <h4 class="description">{{slide.description}}</h4>
-            <p class="description">{{slide.full_description}}</p>
+            <p class="description">{{slide.full_description}}</p>-->
             <div ng-if="slide.enable_link == 'true'" class="button-wrapper">
               <svg height="60" width="320" xmlns="http://www.w3.org/2000/svg">
                 <rect class="shape" height="60" width="320" />

@@ -212,7 +212,7 @@
         <link><![CDATA[function link(scope, element, attrs, controller) {  }]]></link>
         <name>Team Online Article Editor</name>
         <option_schema>[{"name":"modal","section":"Data","default_value":"true","label":"Modal","type":"boolean"},{"name":"operation","section":"other","default_value":"New","label":"Operation","type":"choice","choices":[{"label":"New,Edit","value":"New,Edit"}]},{"name":"max_count_important_articles","section":"other","default_value":"4","label":"Max count important articles","type":"integer"},{"name":"photos_in_modal","section":"other","default_value":"12","label":"Photos in modal","type":"integer"},{"name":"photos_in_window","section":"other","default_value":"15","label":"Photos in window","type":"integer"},{"name":"table","section":"Data","default_value":"kb_knowledge","label":"Table","type":"string"},{"name":"view","section":"Data","default_value":"teamonline_kb","label":"View","type":"string"}]</option_schema>
-        <public>false</public>
+        <public>true</public>
         <roles/>
         <script><![CDATA[(function() {
 
@@ -330,15 +330,15 @@
         <sys_created_on>2020-02-12 06:22:55</sys_created_on>
         <sys_customer_update>false</sys_customer_update>
         <sys_id>f63cc5a3db3a84105f65ba03e29619f7</sys_id>
-        <sys_mod_count>678</sys_mod_count>
+        <sys_mod_count>679</sys_mod_count>
         <sys_name>Team Online Article Editor</sys_name>
         <sys_package display_value="TEAMonline" source="x_aaro2_teamonline">a2dfc25fdb7244105f65ba03e29619fa</sys_package>
         <sys_policy/>
         <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
         <sys_scope display_value="TEAMonline">a2dfc25fdb7244105f65ba03e29619fa</sys_scope>
         <sys_update_name>sp_widget_f63cc5a3db3a84105f65ba03e29619f7</sys_update_name>
-        <sys_updated_by>andrey.mironyuk</sys_updated_by>
-        <sys_updated_on>2020-06-17 12:00:37</sys_updated_on>
+        <sys_updated_by>xxikochet</sys_updated_by>
+        <sys_updated_on>2020-08-25 11:34:23</sys_updated_on>
         <template><![CDATA[<span class="label-button" ng-if="options.operation === 'New'" ng-click="open()">
   Create New Article
 </span>

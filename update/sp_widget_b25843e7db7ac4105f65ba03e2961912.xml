@@ -346,7 +346,7 @@ small {&#13;
         <link><![CDATA[function link(scope, element, attrs, controller) {  }]]></link>
         <name>Team Online All Base Articles</name>
         <option_schema>[{"name":"limit_records","section":"Data","default_value":"10","label":"Limit records","type":"integer"},{"hint":"As need order artciles by sys_created_on","name":"order_by","section":"Data","default_value":"orderByDesc","label":"Order By","type":"choice","choices":[{"label":"orderBy","value":"orderBy"},{"label":"orderByDesc","value":"orderByDesc"}]},{"hint":"system name of field (sys_creted_on, x_aaro2_teamonline_order)","name":"order_by_field","section":"Data","default_value":"sys_created_on","label":"Order by field","type":"string","choices":[{"label":"sys_created_on","value":"sys_created_on"},{"label":"order","value":"order"}]},{"name":"count_of_records_on_page","section":"other","default_value":"20","label":"Count of records on page","type":"integer"}]</option_schema>
-        <public>false</public>
+        <public>true</public>
         <roles/>
         <script><![CDATA[(function() {
 	data.kb_category = $sp.getParameter('kb_category');
@@ -476,7 +476,7 @@ function getCategories (knowledgeBaseId) {
         <sys_created_on>2020-02-12 15:25:13</sys_created_on>
         <sys_customer_update>false</sys_customer_update>
         <sys_id>b25843e7db7ac4105f65ba03e2961912</sys_id>
-        <sys_mod_count>428</sys_mod_count>
+        <sys_mod_count>429</sys_mod_count>
         <sys_name>Team Online All Base Articles</sys_name>
         <sys_package display_value="TEAMonline" source="x_aaro2_teamonline">a2dfc25fdb7244105f65ba03e29619fa</sys_package>
         <sys_policy/>
@@ -484,7 +484,7 @@ function getCategories (knowledgeBaseId) {
         <sys_scope display_value="TEAMonline">a2dfc25fdb7244105f65ba03e29619fa</sys_scope>
         <sys_update_name>sp_widget_b25843e7db7ac4105f65ba03e2961912</sys_update_name>
         <sys_updated_by>xxikochet</sys_updated_by>
-        <sys_updated_on>2020-06-10 10:18:59</sys_updated_on>
+        <sys_updated_on>2020-08-25 11:34:24</sys_updated_on>
         <template><![CDATA[<section class="section">
   <div class="row">
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">

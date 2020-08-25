@@ -15,7 +15,7 @@
         <link><![CDATA[function link(scope, element, attrs, controller) {  }]]></link>
         <name>Team Online Links Line</name>
         <option_schema/>
-        <public>false</public>
+        <public>true</public>
         <roles/>
         <script><![CDATA[(function() {  /* populate the 'data' object */  /* e.g., data.table = $sp.getValue('table'); */})();]]></script>
         <servicenow>false</servicenow>
@@ -24,7 +24,7 @@
         <sys_created_on>2020-07-13 12:58:21</sys_created_on>
         <sys_customer_update>false</sys_customer_update>
         <sys_id>4568d128dbced49084c2409813961913</sys_id>
-        <sys_mod_count>0</sys_mod_count>
+        <sys_mod_count>1</sys_mod_count>
         <sys_name>Team Online Links Line</sys_name>
         <sys_package display_value="TEAMonline" source="x_aaro2_teamonline">a2dfc25fdb7244105f65ba03e29619fa</sys_package>
         <sys_policy/>
@@ -32,7 +32,7 @@
         <sys_scope display_value="TEAMonline">a2dfc25fdb7244105f65ba03e29619fa</sys_scope>
         <sys_update_name>sp_widget_4568d128dbced49084c2409813961913</sys_update_name>
         <sys_updated_by>xxikochet</sys_updated_by>
-        <sys_updated_on>2020-07-13 12:58:21</sys_updated_on>
+        <sys_updated_on>2020-08-25 11:34:23</sys_updated_on>
         <template><![CDATA[<div><!-- your widget template --></div>]]></template>
     </sp_widget>
 </record_update>
