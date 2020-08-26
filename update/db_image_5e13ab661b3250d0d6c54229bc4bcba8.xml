@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="db_image">
+    <db_image action="INSERT_OR_UPDATE">
+        <active>true</active>
+        <category/>
+        <format>JPEG</format>
+        <height>225</height>
+        <image>c4436fe21b3250d0d6c54229bc4bcbac</image>
+        <name>unknwn_avatar.png</name>
+        <size_bytes>2591</size_bytes>
+        <sys_class_name>db_image</sys_class_name>
+        <sys_created_by>xxikochet</sys_created_by>
+        <sys_created_on>2020-08-26 10:59:40</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_id>5e13ab661b3250d0d6c54229bc4bcba8</sys_id>
+        <sys_mod_count>2</sys_mod_count>
+        <sys_name>unknwn_avatar.png</sys_name>
+        <sys_package display_value="TEAMonline" source="x_aaro2_teamonline">a2dfc25fdb7244105f65ba03e29619fa</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="TEAMonline">a2dfc25fdb7244105f65ba03e29619fa</sys_scope>
+        <sys_update_name>db_image_5e13ab661b3250d0d6c54229bc4bcba8</sys_update_name>
+        <sys_updated_by>xxikochet</sys_updated_by>
+        <sys_updated_on>2020-08-26 10:59:58</sys_updated_on>
+        <thumbnail/>
+        <width>225</width>
+    </db_image>
+    <sys_attachment action="INSERT_OR_UPDATE">
+        <average_image_color>#818287</average_image_color>
+        <chunk_size_bytes>700000</chunk_size_bytes>
+        <compressed>true</compressed>
+        <content_type>image/jpeg</content_type>
+        <file_name>image</file_name>
+        <hash>f98231bdeb8978af715b69ed53a3e08a12aebe9c4f17691198e5c234023c8891</hash>
+        <image_height>225</image_height>
+        <image_width>225</image_width>
+        <size_bytes>2591</size_bytes>
+        <size_compressed>2427</size_compressed>
+        <state>available</state>
+        <sys_created_by>xxikochet</sys_created_by>
+        <sys_created_on>2020-08-26 10:59:58</sys_created_on>
+        <sys_id>c4436fe21b3250d0d6c54229bc4bcbac</sys_id>
+        <sys_mod_count>5</sys_mod_count>
+        <sys_updated_by>xxikochet</sys_updated_by>
+        <sys_updated_on>2020-08-26 10:59:58</sys_updated_on>
+        <table_name>ZZ_YYdb_image</table_name>
+        <table_sys_id>5e13ab661b3250d0d6c54229bc4bcba8</table_sys_id>
+    </sys_attachment>
+    <sys_attachment_doc action="INSERT_OR_UPDATE">
+        <data>H4sIAAAAAAAAAA==</data>
+        <length>16</length>
+        <position>0</position>
+        <sys_attachment display_value="image" sys_id="c4436fe21b3250d0d6c54229bc4bcbac">c4436fe21b3250d0d6c54229bc4bcbac</sys_attachment>
+        <sys_created_by>xxikochet</sys_created_by>
+        <sys_created_on>2020-08-26 10:59:58</sys_created_on>
+        <sys_id>08436fe21b3250d0d6c54229bc4bcbac</sys_id>
+    </sys_attachment_doc>
+    <sys_attachment_doc action="INSERT_OR_UPDATE">
+        <data>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</data>
+        <length>3224</length>
+        <position>1</position>
+        <sys_attachment display_value="image" sys_id="c4436fe21b3250d0d6c54229bc4bcbac">c4436fe21b3250d0d6c54229bc4bcbac</sys_attachment>
+        <sys_created_by>xxikochet</sys_created_by>
+        <sys_created_on>2020-08-26 10:59:58</sys_created_on>
+        <sys_id>88436fe21b3250d0d6c54229bc4bcbac</sys_id>
+    </sys_attachment_doc>
+</record_update>

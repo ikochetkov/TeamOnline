@@ -350,6 +350,8 @@
         <public>true</public>
         <roles/>
         <script><![CDATA[(function() {
+	
+		data.isLoggedIn = gs.getSession().isLoggedIn();
 		var teamOnlineUtil = new TeamOnlineUtils();
 		var r = new sn_ws.RESTMessageV2('x_aaro2_teamonline.Team Award RSS', 'Default GET');
 		var response = r.execute();
@@ -388,15 +390,15 @@ function generateRandomColor () {
         <sys_created_on>2020-03-27 11:39:34</sys_created_on>
         <sys_customer_update>false</sys_customer_update>
         <sys_id>1eaabcf5dbff08d05f65ba03e296197b</sys_id>
-        <sys_mod_count>441</sys_mod_count>
+        <sys_mod_count>466</sys_mod_count>
         <sys_name>Team Online Aaron's Awards Feed</sys_name>
         <sys_package display_value="TEAMonline" source="x_aaro2_teamonline">a2dfc25fdb7244105f65ba03e29619fa</sys_package>
         <sys_policy/>
         <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
         <sys_scope display_value="TEAMonline">a2dfc25fdb7244105f65ba03e29619fa</sys_scope>
         <sys_update_name>sp_widget_1eaabcf5dbff08d05f65ba03e296197b</sys_update_name>
-        <sys_updated_by>andrey.mironyuk</sys_updated_by>
-        <sys_updated_on>2020-08-21 15:05:25</sys_updated_on>
+        <sys_updated_by>xxikochet</sys_updated_by>
+        <sys_updated_on>2020-08-26 11:39:22</sys_updated_on>
         <template><![CDATA[<div class="comments">
   <h2 class="comments-title">
     Aaron's Applause
@@ -404,8 +406,14 @@ function generateRandomColor () {
   <div class="comments-thread">
     <div class="comments-thread--text" ng-repeat="award in data.company_awards track by $index">
       <div class="text--user-information">
-        <sn-avatar class="avatar-small-medium" primary="award.award_information.user"
-          style="background: {{ award.user_color }}" />
+        <!--GUEST PLACEHOLDER-->
+        <div ng-if="!data.isLoggedIn"class="avatar-large avatar-container">
+          <div class="avatar soloAvatar">
+            <div class="sub-avatar" style="background-image: url(c4436fe21b3250d0d6c54229bc4bcbac.iix)" />
+          </div>
+        </div>
+        <sn-avatar ng-if="data.isLoggedIn"class="avatar-small-medium" primary="award.award_information.user"
+                   style="background: {{ award.user_color }}" />
         <sn-time-ago timestamp="award.award_information.date" />
       </div>
       <div class="text--award-information">
@@ -415,9 +423,9 @@ function generateRandomColor () {
           <span><strong ng-bind-html='trustedHTML(award.award_information.message)'></strong></span>
         </div>
         <a class="text--show-comments icon-up" ng-class="{'icon-down': showComments, 'icon-up': !showComments}"
-          ng-click="showComments = !showComments" ng-show="isHasComments(award.award_information.comments)">
+           ng-click="showComments = !showComments" ng-show="isHasComments(award.award_information.comments)">
           Show Comments <span class="badge"
-            style="background: #0069C8 ">{{award.award_information.comments.length}}</span>
+                              style="background: #0069C8 ">{{award.award_information.comments.length}}</span>
         </a>
         <ul class="award-congratulations" ng-class="{'show': showComments, 'hide': !showComments}">
           <li class="left clearfix" ng-repeat="comment in award.award_information.comments track by $index">
@@ -427,8 +435,8 @@ function generateRandomColor () {
             <div class="chat-body clearfix">
               <div class="header">
                 <strong class="primary-font">{{ comment.user }}</strong> <small class="pull-right text-muted">
-                  <span class="glyphicon glyphicon-time"></span>
-                  <sn-time-ago timestamp="comment.date" /></small>
+                <span class="glyphicon glyphicon-time"></span>
+                <sn-time-ago timestamp="comment.date" /></small>
               </div>
               <p ng-bind-html="trustedHTML(comment.message)"></p>
             </div>
