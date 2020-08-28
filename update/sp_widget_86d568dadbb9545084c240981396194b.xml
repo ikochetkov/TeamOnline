@@ -90,9 +90,11 @@
 
 
 	var gallery = document.getElementsByClassName('moment-gallery')[0];
-	$scope.openImage = function (moment, index) {
-		$scope.selectedMoment = moment;
-		$scope.selectedImageIndex = index;
+	$scope.openImage = function (momentIndex, imageIndex) {
+		console.log(momentIndex,imageIndex)
+		$scope.selectedMomentIndex = momentIndex;
+		$scope.selectedMoment = $scope.data.moments[momentIndex]
+		$scope.selectedImageIndex = imageIndex;
 		gallery.classList.add('active')
 	}
 	$(document).keydown(function(e) {
@@ -110,10 +112,18 @@
 		$scope.selectedImageIndex = index
 	}
 	$scope.iterateImage = function(amount){
-		var length = $scope.selectedMoment.attachments.length
+		var length = $scope.data.moments[$scope.selectedMomentIndex].attachments.length
 		if($scope.selectedImageIndex + amount > length - 1 ) $scope.selectedImageIndex = 0;
 		else if($scope.selectedImageIndex + amount < 0) $scope.selectedImageIndex = length - 1;
 		else $scope.selectedImageIndex += amount;
+	}
+	$scope.iterateMoment = function(amount){
+		var length = $scope.data.moments.length
+		if($scope.selectedMomentIndex + amount > length - 1 ) $scope.selectedMomentIndex = 0;
+		else if($scope.selectedMomentIndex + amount < 0) $scope.selectedMomentIndex = length - 1;
+		else $scope.selectedMomentIndex += amount;
+		$scope.selectedMoment = $scope.data.moments[$scope.selectedMomentIndex]
+		$scope.selectedImageIndex = 0;
 	}
 	
 	/* context Menu */
@@ -137,6 +147,7 @@
 		}
 		return currentScope;
 	}
+	
 }
 ]]></client_script>
         <controller_as>c</controller_as>
@@ -241,12 +252,21 @@
     overflow-x: auto;&#13;
     justify-content: start;&#13;
     margin: 10px 0;&#13;
+    &amp;::-webkit-scrollbar {&#13;
+      height: 0.5em;&#13;
+    }&#13;
+  &#13;
+    &amp;::-webkit-scrollbar-thumb {&#13;
+      background-color: darkgrey;&#13;
+      outline: 1px solid slategrey;&#13;
+    }&#13;
   }&#13;
   .moment-image {&#13;
+    display: flex;&#13;
     margin-right: 10px;&#13;
-    width: 33%;&#13;
     img {&#13;
-      width: 100%;&#13;
+      max-height: 100px;&#13;
+      object-fit: contain;&#13;
     }&#13;
   }&#13;
 }&#13;
@@ -261,19 +281,22 @@
   opacity: 0;&#13;
   transition: 300ms ease-in-out;&#13;
   background-color: rgba(0, 0, 0, 0.6);&#13;
+  cursor: initial;&#13;
   &amp;.active {&#13;
     visibility: visible;&#13;
     opacity: 1;&#13;
     transition: 300ms ease-in-out;&#13;
   }&#13;
   .image-preview {&#13;
+    position: relative;&#13;
     height: 80%;&#13;
     display: flex;&#13;
     transition: 300ms ease-in-out;&#13;
     place-items: center;&#13;
-    justify-content: space-between;&#13;
+    justify-content: center;&#13;
 &#13;
     .image-container {&#13;
+      position: relative;&#13;
       display: flex;&#13;
       place-content: center;&#13;
       img {&#13;
@@ -293,10 +316,22 @@
     font-size: 14pt;&#13;
     font-weight: 900;&#13;
   }&#13;
+  .controls-container{&#13;
+    position: absolute;&#13;
+    width: 100%;&#13;
+    height: 100%;&#13;
+    display: flex;&#13;
+    place-content: center;&#13;
+    justify-content: space-between;&#13;
+  }&#13;
   .mini-gallery {&#13;
     display: flex;&#13;
     place-content: center;&#13;
+    &#13;
     .mini-gallery-image {&#13;
+      &amp;.ng-leave{&#13;
+        display: none&#13;
+    }&#13;
       margin: 5px 5px;&#13;
       display: flex;&#13;
       transition: 300ms ease-in-out;&#13;
@@ -308,21 +343,49 @@
     }&#13;
     img {&#13;
       max-height: 100px;&#13;
+      object-fit: contain;&#13;
     }&#13;
   }&#13;
 }&#13;
 .image-control {&#13;
   display: flex;&#13;
+  width: 7%;&#13;
+  height: 100%;&#13;
+  place-items: center;&#13;
+  color: rgb(255, 255, 255);&#13;
+  justify-content: center;&#13;
+  cursor: pointer;&#13;
+  font-size: 16pt;&#13;
+  opacity: 0;&#13;
+  &amp;.left{&#13;
+    transform: translateX(-15px);&#13;
+  }&#13;
+  &amp;.right{&#13;
+    transform: translateX(15px);&#13;
+  }&#13;
+  transition: 100ms ease-in-out;&#13;
+  &amp;:hover {&#13;
+    opacity: 1;&#13;
+    transform: translateX(0);&#13;
+    transition: 100ms ease-in-out;&#13;
+  }&#13;
+}&#13;
+.moment-control {&#13;
+  display: flex;&#13;
   width: 5%;&#13;
   height: 100%;&#13;
   place-items: center;&#13;
-  color: rgb(212, 212, 212);&#13;
+  color: rgb(185, 185, 185);&#13;
   justify-content: center;&#13;
   cursor: pointer;&#13;
+  font-size: 16pt;&#13;
+  transition: 100ms ease-in-out;&#13;
   &amp;:hover {&#13;
     color: white;&#13;
+    transition: 100ms ease-in-out;&#13;
   }&#13;
 }&#13;
+&#13;
 .lds-ripple {&#13;
   display: inline-block;&#13;
   position: relative;&#13;
@@ -376,7 +439,7 @@
   data.canEdit = gs.getUser().isMemberOf(gs.getProperty("x_aaro2_teamonline.teamonline_administration_group")) || gs.hasRole("admin");
   data.momentsTable = "x_aaro2_teamonline_moment";
   data.store = getStore(gs.getUser().getCompanyID())
-  data.storesQuery = 'notes!=NULL'
+  data.storesQuery = 'u_is_store=true'
   if (input && input.action === 'insert') {
     var newMomentGr = new GlideRecord(data.momentsTable);
     newMomentGr.initialize();
@@ -475,7 +538,7 @@
         <sys_created_on>2020-07-06 09:31:10</sys_created_on>
         <sys_customer_update>false</sys_customer_update>
         <sys_id>86d568dadbb9545084c240981396194b</sys_id>
-        <sys_mod_count>411</sys_mod_count>
+        <sys_mod_count>458</sys_mod_count>
         <sys_name>Teamonline Memories</sys_name>
         <sys_package display_value="TEAMonline" source="x_aaro2_teamonline">a2dfc25fdb7244105f65ba03e29619fa</sys_package>
         <sys_policy/>
@@ -483,7 +546,7 @@
         <sys_scope display_value="TEAMonline">a2dfc25fdb7244105f65ba03e29619fa</sys_scope>
         <sys_update_name>sp_widget_86d568dadbb9545084c240981396194b</sys_update_name>
         <sys_updated_by>andrey.mironyuk</sys_updated_by>
-        <sys_updated_on>2020-08-26 15:28:55</sys_updated_on>
+        <sys_updated_on>2020-08-27 15:56:13</sys_updated_on>
         <template><![CDATA[<div id="moments-container">
   <div class="moments-header">
     <span> TEAMONLINE Moments</span>
@@ -537,7 +600,7 @@ ng-click="archive(moment)">--->
           <div class="caption"><i>"{{moment.data.caption}}"</i></div>
           <div class="moment-images">
             <div ng-if="moment.attachments.length > 0" class="moment-image" ng-repeat="image in moment.attachments"
-                 ng-click="openImage(moment, $index)">
+                 ng-click="openImage($parent.$parent.$index, $index)">
               <img ng-src="{{image.dataURL}}" alt="" srcset="">
             </div>
           </div>
@@ -565,7 +628,7 @@ ng-click="archive(moment)">--->
                       ng-disabled="uploading"></textarea>
             <div class="moment-images">
               <div ng-if="moment.attachments.length > 0" class="moment-image" ng-repeat="image in moment.attachments"
-                   ng-click="openImage(moment, $index)">
+                   ng-click="openImage($parent.$parent.$index, $index)">
                 <img ng-src="{{image.dataURL}}" alt="" srcset="">
               </div>
 
@@ -584,17 +647,26 @@ ng-click="archive(moment)">--->
 </div>
 <div class="moment-gallery" ng-click="closeGallery()">
   <div class="image-preview">
-    <div class="image-control" ng-click="iterateImage(-1); $event.stopPropagation();"><i class="fa fa-chevron-left"></i></div>
-    <div class="image-container" >
+    <div class="controls-container">
+      <div class="moment-control" ng-click="iterateMoment(-1); $event.stopPropagation();"><i class="fa fa-chevron-left"></i></div>
+      <div class="moment-control" ng-click="iterateMoment(1); $event.stopPropagation();"><i class="fa fa-chevron-right"></i></div>
+    </div>
+    <div class="image-container">
+      <div class="controls-container" ng-if="selectedMoment.attachments.length>1">
+        <div class="image-control left" ng-click="iterateImage(-1); $event.stopPropagation();"><i class="fa fa-chevron-circle-left"></i></div>
+        <div class="image-control right" ng-click="iterateImage(1); $event.stopPropagation();"><i class="fa fa-chevron-circle-right"></i></div>
+      </div>
       <img ng-src="{{image.dataURL}}" alt="" srcset="" ng-repeat="image in selectedMoment.attachments"
       ng-class="{'active': $index==selectedImageIndex}">
     </div>
-    <div class="image-control" ng-click="iterateImage(1); $event.stopPropagation();"><i class="fa fa-chevron-right"></i></div>
+    
   </div>
   <div class="caption-container">
-    <span><i>"{{selectedMoment.data.caption}}"</i></span>
+    <div class="author">{{selectedMoment.data.opened_by.name}} from store {{selectedMoment.data.store}}:
+    </div>
+    <div class="caption"><i>"{{selectedMoment.data.caption}}"</i></div>
   </div>
-  <div class="mini-gallery">
+  <div class="mini-gallery" ng-if="selectedMoment.attachments.length>1">
     <div class="mini-gallery-image" 
       ng-repeat="image in selectedMoment.attachments" 
       ng-click="selectImage($index); $event.stopPropagation();" 
