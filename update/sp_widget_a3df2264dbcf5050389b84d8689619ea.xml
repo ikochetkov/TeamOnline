@@ -100,6 +100,8 @@
   line-height: 1;&#13;
   text-transform: uppercase;&#13;
   letter-spacing: 1.5px;&#13;
+  background-color: $blue;&#13;
+  color: white&#13;
 }&#13;
 &#13;
 &#13;
@@ -190,7 +192,23 @@
 &#13;
   flex-wrap: wrap;&#13;
 }&#13;
-&#13;
+.close-gallery-button {&#13;
+  z-index: 1001;&#13;
+  position: absolute;&#13;
+  color: #999;&#13;
+  top: 0;&#13;
+  right: 0;&#13;
+  width: 100px;&#13;
+  height: 100px;&#13;
+  display: flex;&#13;
+  place-items: center;&#13;
+  justify-content: center;&#13;
+  font-size: 3rem;&#13;
+  transition: 300ms ease-in-out;&#13;
+  &amp;:hover{&#13;
+    color: white;&#13;
+  }&#13;
+}&#13;
 .moment-gallery {&#13;
   z-index: 1000;&#13;
   position: fixed;&#13;
@@ -213,14 +231,15 @@
   }&#13;
 &#13;
   .gallery-left-container {&#13;
-    width: 70%;&#13;
+    width: 75%;&#13;
     height: 100%;&#13;
     border-right: solid 1px #e5e5e5;&#13;
     display: flex;&#13;
     flex-direction: column;&#13;
+    background-color: #2f2f2f;&#13;
   }&#13;
   .gallery-right-container {&#13;
-    width: 30%;&#13;
+    width: 25%;&#13;
     height: 100%;&#13;
     border-right: solid 1px #e5e5e5;&#13;
     display: flex;&#13;
@@ -233,7 +252,7 @@
   .gallery-container {&#13;
     position: relative;&#13;
     height: 90%;&#13;
-    width: 90%;&#13;
+    width: 85%;&#13;
     background-color: white;&#13;
     display: flex;&#13;
     transition: 300ms ease-in-out;&#13;
@@ -430,7 +449,7 @@
         <sys_created_on>2020-09-01 12:24:24</sys_created_on>
         <sys_customer_update>false</sys_customer_update>
         <sys_id>a3df2264dbcf5050389b84d8689619ea</sys_id>
-        <sys_mod_count>15</sys_mod_count>
+        <sys_mod_count>20</sys_mod_count>
         <sys_name>Teamonline Moment Approvals</sys_name>
         <sys_package display_value="TEAMonline" source="x_aaro2_teamonline">a2dfc25fdb7244105f65ba03e29619fa</sys_package>
         <sys_policy/>
@@ -438,7 +457,7 @@
         <sys_scope display_value="TEAMonline">a2dfc25fdb7244105f65ba03e29619fa</sys_scope>
         <sys_update_name>sp_widget_a3df2264dbcf5050389b84d8689619ea</sys_update_name>
         <sys_updated_by>andrey.mironyuk</sys_updated_by>
-        <sys_updated_on>2020-09-02 13:28:28</sys_updated_on>
+        <sys_updated_on>2020-09-03 16:08:25</sys_updated_on>
         <template><![CDATA[<div>
   <div class="to-approve-container" ng-if="data.canEdit && data.moments.length>0">
     <div class="moments-header">
@@ -490,6 +509,9 @@
 </div>
 
 <div class="moment-gallery">
+  <div class="close-gallery-button">
+    <i class="fa fa-times"></i>
+  </div>
   <div class="controls-container">
     <div class="image-control left" ng-click="iterateMoment(-1)"><i class="fa fa-chevron-left"></i></div>
     <div class="image-control right" ng-click="iterateMoment(1)"><i class="fa fa-chevron-right"></i></div>
@@ -538,8 +560,8 @@
     <div class="carousel">
      <div class="carousel-inner" ng-transclude></div>
      <div class="carousel-controls">
-       <div class="carousel-control left">
-        <div role="button" href class="chevron-circle-left" ng-click="prev()" ng-class="{ disabled: isPrevDisabled() }" ng-show="slides.length > 1">
+       <div class="carousel-control left" ng-click="prev()" ng-class="{ disabled: isPrevDisabled() }" ng-show="slides.length > 1">
+        <div role="button" href class="chevron-circle-left" >
           <i class="fa fa-chevron-circle-left"></i>
         </div>
        </div>
@@ -549,8 +571,8 @@
           </li>
          </ol>
        </div>
-       <div class="carousel-control right" >
-         <div role="button" href class="chevron-circle-right" ng-click="next()" ng-class="{ disabled: isNextDisabled() }" ng-show="slides.length > 1">
+       <div class="carousel-control right" ng-click="next()" ng-class="{ disabled: isNextDisabled() }" ng-show="slides.length > 1">
+         <div role="button" href class="chevron-circle-right" >
            <i class="fa fa-chevron-circle-right"></i>
          </div>
        </div>

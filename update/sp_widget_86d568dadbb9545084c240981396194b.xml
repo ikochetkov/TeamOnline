@@ -181,7 +181,23 @@
 &#13;
   flex-wrap: wrap;&#13;
 }&#13;
-&#13;
+.close-gallery-button {&#13;
+  z-index: 1001;&#13;
+  position: absolute;&#13;
+  color: #999;&#13;
+  top: 0;&#13;
+  right: 0;&#13;
+  width: 100px;&#13;
+  height: 100px;&#13;
+  display: flex;&#13;
+  place-items: center;&#13;
+  justify-content: center;&#13;
+  font-size: 3rem;&#13;
+  transition: 100ms ease-in-out;&#13;
+  &amp;:hover{&#13;
+    color: white;&#13;
+  }&#13;
+}&#13;
 .moment-gallery {&#13;
   z-index: 1000;&#13;
   position: fixed;&#13;
@@ -204,14 +220,15 @@
   }&#13;
 &#13;
   .gallery-left-container {&#13;
-    width: 70%;&#13;
+    width: 75%;&#13;
     height: 100%;&#13;
     border-right: solid 1px #e5e5e5;&#13;
     display: flex;&#13;
     flex-direction: column;&#13;
+    background-color: #2f2f2f;&#13;
   }&#13;
   .gallery-right-container {&#13;
-    width: 30%;&#13;
+    width: 25%;&#13;
     height: 100%;&#13;
     border-right: solid 1px #e5e5e5;&#13;
     display: flex;&#13;
@@ -224,7 +241,7 @@
   .gallery-container {&#13;
     position: relative;&#13;
     height: 90%;&#13;
-    width: 90%;&#13;
+    width: 85%;&#13;
     background-color: white;&#13;
     display: flex;&#13;
     transition: 300ms ease-in-out;&#13;
@@ -419,7 +436,7 @@
         <sys_created_on>2020-07-06 09:31:10</sys_created_on>
         <sys_customer_update>false</sys_customer_update>
         <sys_id>86d568dadbb9545084c240981396194b</sys_id>
-        <sys_mod_count>595</sys_mod_count>
+        <sys_mod_count>600</sys_mod_count>
         <sys_name>Teamonline Memories</sys_name>
         <sys_package display_value="TEAMonline" source="x_aaro2_teamonline">a2dfc25fdb7244105f65ba03e29619fa</sys_package>
         <sys_policy/>
@@ -427,7 +444,7 @@
         <sys_scope display_value="TEAMonline">a2dfc25fdb7244105f65ba03e29619fa</sys_scope>
         <sys_update_name>sp_widget_86d568dadbb9545084c240981396194b</sys_update_name>
         <sys_updated_by>andrey.mironyuk</sys_updated_by>
-        <sys_updated_on>2020-09-03 11:54:50</sys_updated_on>
+        <sys_updated_on>2020-09-03 16:07:47</sys_updated_on>
         <template><![CDATA[<div>
   <div id="moments-container">
     <div class="moments-header">
@@ -476,6 +493,11 @@
     
   </div>
   <div class="moment-gallery">
+
+    <div class="close-gallery-button" ng-click="closeGallery();stopPropagation();">
+      <i class="fa fa-times"></i>
+    </div>
+
     <div class="controls-container">
       <div class="image-control left" ng-click="iterateMoment(-1)"><i class="fa fa-chevron-left"></i></div>
       <div class="image-control right" ng-click="iterateMoment(1)"><i class="fa fa-chevron-right"></i></div>
