@@ -90,6 +90,9 @@
   line-height: 1;&#13;
   text-transform: uppercase;&#13;
   letter-spacing: 1.5px;&#13;
+  font-weight: 500;&#13;
+  background-color: $blue;&#13;
+  color: white&#13;
 }&#13;
 &#13;
 .to-approve-container {&#13;
@@ -97,7 +100,7 @@
 }&#13;
 .to-approve-moments,&#13;
 .approved-container {&#13;
-  max-height: 600px;&#13;
+  max-height: 500px;&#13;
   overflow-y: auto;&#13;
   overflow-x: hidden;&#13;
   &amp;::-webkit-scrollbar {&#13;
@@ -318,7 +321,7 @@
 }&#13;
 .moment-image-container {&#13;
   width: 100%;&#13;
-  height: 400px;&#13;
+  height: 380px;&#13;
   display: flex;&#13;
   place-content: center;&#13;
   justify-content: center;&#13;
@@ -416,7 +419,7 @@
         <sys_created_on>2020-07-06 09:31:10</sys_created_on>
         <sys_customer_update>false</sys_customer_update>
         <sys_id>86d568dadbb9545084c240981396194b</sys_id>
-        <sys_mod_count>587</sys_mod_count>
+        <sys_mod_count>595</sys_mod_count>
         <sys_name>Teamonline Memories</sys_name>
         <sys_package display_value="TEAMonline" source="x_aaro2_teamonline">a2dfc25fdb7244105f65ba03e29619fa</sys_package>
         <sys_policy/>
@@ -424,10 +427,13 @@
         <sys_scope display_value="TEAMonline">a2dfc25fdb7244105f65ba03e29619fa</sys_scope>
         <sys_update_name>sp_widget_86d568dadbb9545084c240981396194b</sys_update_name>
         <sys_updated_by>andrey.mironyuk</sys_updated_by>
-        <sys_updated_on>2020-09-02 14:56:10</sys_updated_on>
+        <sys_updated_on>2020-09-03 11:54:50</sys_updated_on>
         <template><![CDATA[<div>
   <div id="moments-container">
-
+    <div class="moments-header">
+      <span>Teamonline Moments</span>
+    </div>
+    <div class="no-moments" ng-if="data.moments.length==0"> There are no moments yet. Add new one!</div>
     <div class="approved-container" in-view-container>
       <div class="approved-moments" ng-repeat="(key,moment) in data.moments | limitTo: limit"
         in-view="loadMore($last, $inview)">
@@ -458,7 +464,7 @@
           </uib-carousel>
           <div class="caption-container">
 
-            <div class="caption"><b>{{moment.data.opened_by.name}}:</b> "{{moment.data.caption}}"</div>
+            <div class="caption"><b>{{moment.data.opened_by.name}}:</b> <span></span> "{{moment.data.caption}}"</div>
             <div class="timeago">
               <i class="fa fa-clock-o"></i>
               <sn-time-ago timestamp="moment.data.created_on" />

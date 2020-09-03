@@ -17,324 +17,325 @@
 	}
 }]]></client_script>
         <controller_as>c</controller_as>
-        <css>$primary: #0069C8;
-
-.comments {
-  background: white;
-}
-
-.comments-thread {
-  display: flex;
-  flex-direction: column;
-  max-height: 600px;
-  overflow-y: scroll;
-  overflow-x: hidden;
-
-  &amp;::-webkit-scrollbar {
-    width: .5em;
-  }
-
-  &amp;::-webkit-scrollbar-thumb {
-    background-color: darkgrey;
-    outline: 1px solid slategrey;
-  }
-}
-
-.comments-title {
-  position: relative;
-  text-align: center;
-  font-size: 24px;
-  margin: 0;
-  padding: 2rem 0;
-  line-height: 1;
-  text-transform: uppercase;
-  letter-spacing: 1.5px;
-
-  &amp;:after {
-    content: "";
-    position: absolute;
-    bottom: 14px;
-    left: 42%;
-    height: 2px;
-    width: 86px;
-    background: #91C712;
-  }
-}
-
-.comments-thread--text {
-  display: flex;
-  flex-direction: row;
-  position: relative;
-  align-items: flex-start;
-  padding: 20px 20px 10px 20px;
-  cursor: pointer;
-  border-top: 5px solid #eceff1;
-  opacity: .7;
-  transition: opacity .2s ease-out;
-
-  &amp;:hover {
-    opacity: 1;
-  }
-
-  .text--user-information,
-  .text--award-information {
-    display: flex;
-    flex-direction: column;
-  }
-
-  .text--user-information {
-    justify-content: center;
-
-    .avatar-container {
-      height: 5.2rem;
-      width: 5.2rem;
-    }
-
-    .avatar-container .avatar.soloAvatar .sub-avatar {
-      width: 100%;
-      height: 100%;
-      border-radius: 0;
-      font-size: 2rem;
-      line-height: 5.2rem;
-    }
-
-    sn-time-ago {
-      margin: 0;
-      padding: 0;
-      width: 55px;
-      text-align: center;
-    }
-  }
-
-  .text--award-information {
-    margin-left: 10px;
-    min-height: 150px;
-    .text--award-more-information {
-      overflow: hidden;
-      padding: 10px;
-      background: #eceff1;
-      transition: all .3s;
-    }
-
-    .text--show-comments {
-      padding-top: 5px;
-    }
-
-    .congratulate-award {
-      font-size: 2rem;
-      color: #007bff;
-      border: 1px solid transparent;
-      cursor: pointer;
-      height: 45px;
-      line-height: 50px;
-      text-align: center;
-      padding: 0;
-      border-radius: 50%;
-
-      &amp;:hover {
-        border-color:#007bff;
-      }
-    }
-    .comment-award {
-      padding: 10px 0 0 0;
-      margin-top: auto;
-    }
-  }
-}
-
-.award-congratulations
-{
-  list-style: none;
-  margin: 0;
-  padding: 10px;
-}
-
-.award-congratulations li
-{
-  margin-bottom: 10px;
-  padding-bottom: 5px;
-  border-bottom: 1px dotted #B3A9A9;
-}
-
-.award-congratulations li.left .chat-body
-{
-  margin-left: 40px;
-}
-
-.award-congratulations li .chat-body p
-{
-  margin: 0;
-  color: #777777;
-}
-
-.icon-up,
-.icon-down {
-  &amp;:after {
-    position: absolute;
-    right: 30px;
-    font-family: 'Glyphicons Halflings';
-  }
-}
-
-.show {
-  display: none;
-}
-
-.hide {
-  display: block;
-}
-
-.icon-up {
-  &amp;:after {
-    content: "\e259";
-  }
-}
-
-.icon-down {
-  &amp;:after {
-    content: "\e260";
-  }
-}
-
-
-@mixin transition($property: all, $duration: 0.45s, $ease: cubic-bezier(0.65,0,.076,1)) {
-  transition: $property $duration $ease;
-}
-
-.circle-button {
-  position: relative;
-  display: inline-block;
-  cursor: pointer;
-  outline: none;
-  border: 0;
-  vertical-align: middle;
-  text-decoration: none;
-  background: transparent;
-  padding: 0;
-  font-size: inherit;
-  font-family: inherit;
-
-  &amp;.learn-more {
-    width: 24rem;
-    height: auto;
-    .circle {
-      @include transition(all, 0.45s, cubic-bezier(0.65,0,.076,1));
-      position: relative;
-      display: block;
-      margin: 0;
-      width: 3rem;
-      height: 3rem;
-      background: $primary;
-      border-radius: 1.625rem;
-      .icon {
-        @include transition(all, 0.45s, cubic-bezier(0.65,0,.076,1));
-        position: absolute;
-        top: 0;
-        bottom: 0;
-        margin: auto;
-        background: white;
-        &amp;.arrow {
-          @include transition(all, 0.45s, cubic-bezier(0.65,0,.076,1));
-          left: 0.625rem;
-          width: 1.125rem;
-          height: 0.125rem;
-          background: none;
-          &amp;::before {
-            position: absolute;
-            content: '';
-            top: -0.25rem;
-            right: 0.0625rem;
-            width: 0.625rem;
-            height: 0.625rem;
-            border-top: 0.125rem solid #fff;
-            border-right: 0.125rem solid #fff;
-            transform: rotate(45deg);
-          }
-        }
-      }
-    }
-    .button-text {
-      @include transition(all, 0.45s, cubic-bezier(0.65,0,.076,1));
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      padding: 0.4rem 0;
-      margin: 0 0 0 2rem;
-      color: gray;
-      font-weight: 500;
-      line-height: 1.6;
-      text-align: center;
-      text-transform: uppercase;
-      font-size:1.25rem;
-    }
-  }
-  &amp;:hover {
-    .circle {
-      width: 100%;
-      .icon {
-        &amp;.arrow {
-          background: white;
-          transform: translate(1rem, 0);
-        }
-      }
-    }
-    .button-text {
-      color: white;
-      font-weight: 700;
-    }
-  }
-}
-
-.see-more {
-  border-top: 10px solid #eceff1;
-
-  a {
-    width: 100%
-  }
-}
-
-.badge {
-  padding: 3px 6px;
-  font-size: 10px;
-}
-
-.lds-ring {
-  display: inline-block;
-  position: relative;
-  width: 80px;
-  height: 80px;
-}
-.lds-ring div {
-  box-sizing: border-box;
-  display: block;
-  position: absolute;
-  width: 64px;
-  height: 64px;
-  margin: 8px;
-  border: 8px solid $primary;
-  border-radius: 50%;
-  animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
-  border-color: $primary transparent transparent transparent;
-}
-.lds-ring div:nth-child(1) {
-  animation-delay: -0.45s;
-}
-.lds-ring div:nth-child(2) {
-  animation-delay: -0.3s;
-}
-.lds-ring div:nth-child(3) {
-  animation-delay: -0.15s;
-}
-@keyframes lds-ring {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
-}
+        <css>$primary: #0069C8;&#13;
+&#13;
+.comments {&#13;
+  background: white;&#13;
+}&#13;
+&#13;
+.comments-thread {&#13;
+  display: flex;&#13;
+  flex-direction: column;&#13;
+  max-height: 600px;&#13;
+  overflow-y: scroll;&#13;
+  overflow-x: hidden;&#13;
+&#13;
+  &amp;::-webkit-scrollbar {&#13;
+    width: .5em;&#13;
+  }&#13;
+&#13;
+  &amp;::-webkit-scrollbar-thumb {&#13;
+    background-color: darkgrey;&#13;
+    outline: 1px solid slategrey;&#13;
+  }&#13;
+}&#13;
+&#13;
+.comments-title {&#13;
+  position: relative;&#13;
+  text-align: center;&#13;
+  font-size: 24px;&#13;
+  margin: 0;&#13;
+  padding: 2rem 0;&#13;
+  line-height: 1;&#13;
+  text-transform: uppercase;&#13;
+  letter-spacing: 1.5px;&#13;
+  background-color: $primary;&#13;
+  color: white;&#13;
+  &amp;:after {&#13;
+    content: "";&#13;
+    position: absolute;&#13;
+    bottom: 14px;&#13;
+    left: 42%;&#13;
+    height: 2px;&#13;
+    width: 86px;&#13;
+    background: #91C712;&#13;
+  }&#13;
+}&#13;
+&#13;
+.comments-thread--text {&#13;
+  display: flex;&#13;
+  flex-direction: row;&#13;
+  position: relative;&#13;
+  align-items: flex-start;&#13;
+  padding: 20px 20px 10px 20px;&#13;
+  cursor: pointer;&#13;
+  border-top: 5px solid #eceff1;&#13;
+  opacity: .7;&#13;
+  transition: opacity .2s ease-out;&#13;
+&#13;
+  &amp;:hover {&#13;
+    opacity: 1;&#13;
+  }&#13;
+&#13;
+  .text--user-information,&#13;
+  .text--award-information {&#13;
+    display: flex;&#13;
+    flex-direction: column;&#13;
+  }&#13;
+&#13;
+  .text--user-information {&#13;
+    justify-content: center;&#13;
+&#13;
+    .avatar-container {&#13;
+      height: 5.2rem;&#13;
+      width: 5.2rem;&#13;
+    }&#13;
+&#13;
+    .avatar-container .avatar.soloAvatar .sub-avatar {&#13;
+      width: 100%;&#13;
+      height: 100%;&#13;
+      border-radius: 0;&#13;
+      font-size: 2rem;&#13;
+      line-height: 5.2rem;&#13;
+    }&#13;
+&#13;
+    sn-time-ago {&#13;
+      margin: 0;&#13;
+      padding: 0;&#13;
+      width: 55px;&#13;
+      text-align: center;&#13;
+    }&#13;
+  }&#13;
+&#13;
+  .text--award-information {&#13;
+    margin-left: 10px;&#13;
+    min-height: 150px;&#13;
+    .text--award-more-information {&#13;
+      overflow: hidden;&#13;
+      padding: 10px;&#13;
+      background: #eceff1;&#13;
+      transition: all .3s;&#13;
+    }&#13;
+&#13;
+    .text--show-comments {&#13;
+      padding-top: 5px;&#13;
+    }&#13;
+&#13;
+    .congratulate-award {&#13;
+      font-size: 2rem;&#13;
+      color: #007bff;&#13;
+      border: 1px solid transparent;&#13;
+      cursor: pointer;&#13;
+      height: 45px;&#13;
+      line-height: 50px;&#13;
+      text-align: center;&#13;
+      padding: 0;&#13;
+      border-radius: 50%;&#13;
+&#13;
+      &amp;:hover {&#13;
+        border-color:#007bff;&#13;
+      }&#13;
+    }&#13;
+    .comment-award {&#13;
+      padding: 10px 0 0 0;&#13;
+      margin-top: auto;&#13;
+    }&#13;
+  }&#13;
+}&#13;
+&#13;
+.award-congratulations&#13;
+{&#13;
+  list-style: none;&#13;
+  margin: 0;&#13;
+  padding: 10px;&#13;
+}&#13;
+&#13;
+.award-congratulations li&#13;
+{&#13;
+  margin-bottom: 10px;&#13;
+  padding-bottom: 5px;&#13;
+  border-bottom: 1px dotted #B3A9A9;&#13;
+}&#13;
+&#13;
+.award-congratulations li.left .chat-body&#13;
+{&#13;
+  margin-left: 40px;&#13;
+}&#13;
+&#13;
+.award-congratulations li .chat-body p&#13;
+{&#13;
+  margin: 0;&#13;
+  color: #777777;&#13;
+}&#13;
+&#13;
+.icon-up,&#13;
+.icon-down {&#13;
+  &amp;:after {&#13;
+    position: absolute;&#13;
+    right: 30px;&#13;
+    font-family: 'Glyphicons Halflings';&#13;
+  }&#13;
+}&#13;
+&#13;
+.show {&#13;
+  display: none;&#13;
+}&#13;
+&#13;
+.hide {&#13;
+  display: block;&#13;
+}&#13;
+&#13;
+.icon-up {&#13;
+  &amp;:after {&#13;
+    content: "\e259";&#13;
+  }&#13;
+}&#13;
+&#13;
+.icon-down {&#13;
+  &amp;:after {&#13;
+    content: "\e260";&#13;
+  }&#13;
+}&#13;
+&#13;
+&#13;
+@mixin transition($property: all, $duration: 0.45s, $ease: cubic-bezier(0.65,0,.076,1)) {&#13;
+  transition: $property $duration $ease;&#13;
+}&#13;
+&#13;
+.circle-button {&#13;
+  position: relative;&#13;
+  display: inline-block;&#13;
+  cursor: pointer;&#13;
+  outline: none;&#13;
+  border: 0;&#13;
+  vertical-align: middle;&#13;
+  text-decoration: none;&#13;
+  background: transparent;&#13;
+  padding: 0;&#13;
+  font-size: inherit;&#13;
+  font-family: inherit;&#13;
+&#13;
+  &amp;.learn-more {&#13;
+    width: 24rem;&#13;
+    height: auto;&#13;
+    .circle {&#13;
+      @include transition(all, 0.45s, cubic-bezier(0.65,0,.076,1));&#13;
+      position: relative;&#13;
+      display: block;&#13;
+      margin: 0;&#13;
+      width: 3rem;&#13;
+      height: 3rem;&#13;
+      background: $primary;&#13;
+      border-radius: 1.625rem;&#13;
+      .icon {&#13;
+        @include transition(all, 0.45s, cubic-bezier(0.65,0,.076,1));&#13;
+        position: absolute;&#13;
+        top: 0;&#13;
+        bottom: 0;&#13;
+        margin: auto;&#13;
+        background: white;&#13;
+        &amp;.arrow {&#13;
+          @include transition(all, 0.45s, cubic-bezier(0.65,0,.076,1));&#13;
+          left: 0.625rem;&#13;
+          width: 1.125rem;&#13;
+          height: 0.125rem;&#13;
+          background: none;&#13;
+          &amp;::before {&#13;
+            position: absolute;&#13;
+            content: '';&#13;
+            top: -0.25rem;&#13;
+            right: 0.0625rem;&#13;
+            width: 0.625rem;&#13;
+            height: 0.625rem;&#13;
+            border-top: 0.125rem solid #fff;&#13;
+            border-right: 0.125rem solid #fff;&#13;
+            transform: rotate(45deg);&#13;
+          }&#13;
+        }&#13;
+      }&#13;
+    }&#13;
+    .button-text {&#13;
+      @include transition(all, 0.45s, cubic-bezier(0.65,0,.076,1));&#13;
+      position: absolute;&#13;
+      top: 0;&#13;
+      left: 0;&#13;
+      right: 0;&#13;
+      bottom: 0;&#13;
+      padding: 0.4rem 0;&#13;
+      margin: 0 0 0 2rem;&#13;
+      color: gray;&#13;
+      font-weight: 500;&#13;
+      line-height: 1.6;&#13;
+      text-align: center;&#13;
+      text-transform: uppercase;&#13;
+      font-size:1.25rem;&#13;
+    }&#13;
+  }&#13;
+  &amp;:hover {&#13;
+    .circle {&#13;
+      width: 100%;&#13;
+      .icon {&#13;
+        &amp;.arrow {&#13;
+          background: white;&#13;
+          transform: translate(1rem, 0);&#13;
+        }&#13;
+      }&#13;
+    }&#13;
+    .button-text {&#13;
+      color: white;&#13;
+      font-weight: 700;&#13;
+    }&#13;
+  }&#13;
+}&#13;
+&#13;
+.see-more {&#13;
+  border-top: 10px solid #eceff1;&#13;
+&#13;
+  a {&#13;
+    width: 100%&#13;
+  }&#13;
+}&#13;
+&#13;
+.badge {&#13;
+  padding: 3px 6px;&#13;
+  font-size: 10px;&#13;
+}&#13;
+&#13;
+.lds-ring {&#13;
+  display: inline-block;&#13;
+  position: relative;&#13;
+  width: 80px;&#13;
+  height: 80px;&#13;
+}&#13;
+.lds-ring div {&#13;
+  box-sizing: border-box;&#13;
+  display: block;&#13;
+  position: absolute;&#13;
+  width: 64px;&#13;
+  height: 64px;&#13;
+  margin: 8px;&#13;
+  border: 8px solid $primary;&#13;
+  border-radius: 50%;&#13;
+  animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;&#13;
+  border-color: $primary transparent transparent transparent;&#13;
+}&#13;
+.lds-ring div:nth-child(1) {&#13;
+  animation-delay: -0.45s;&#13;
+}&#13;
+.lds-ring div:nth-child(2) {&#13;
+  animation-delay: -0.3s;&#13;
+}&#13;
+.lds-ring div:nth-child(3) {&#13;
+  animation-delay: -0.15s;&#13;
+}&#13;
+@keyframes lds-ring {&#13;
+  0% {&#13;
+    transform: rotate(0deg);&#13;
+  }&#13;
+  100% {&#13;
+    transform: rotate(360deg);&#13;
+  }&#13;
+}&#13;
 </css>
         <data_table>sp_instance</data_table>
         <demo_data/>
@@ -390,15 +391,15 @@ function generateRandomColor () {
         <sys_created_on>2020-03-27 11:39:34</sys_created_on>
         <sys_customer_update>false</sys_customer_update>
         <sys_id>1eaabcf5dbff08d05f65ba03e296197b</sys_id>
-        <sys_mod_count>466</sys_mod_count>
+        <sys_mod_count>469</sys_mod_count>
         <sys_name>Team Online Aaron's Awards Feed</sys_name>
         <sys_package display_value="TEAMonline" source="x_aaro2_teamonline">a2dfc25fdb7244105f65ba03e29619fa</sys_package>
         <sys_policy/>
         <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
         <sys_scope display_value="TEAMonline">a2dfc25fdb7244105f65ba03e29619fa</sys_scope>
         <sys_update_name>sp_widget_1eaabcf5dbff08d05f65ba03e296197b</sys_update_name>
-        <sys_updated_by>xxikochet</sys_updated_by>
-        <sys_updated_on>2020-08-26 11:39:22</sys_updated_on>
+        <sys_updated_by>andrey.mironyuk</sys_updated_by>
+        <sys_updated_on>2020-09-03 11:56:11</sys_updated_on>
         <template><![CDATA[<div class="comments">
   <h2 class="comments-title">
     Aaron's Applause
