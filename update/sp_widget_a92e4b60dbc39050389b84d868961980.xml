@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sp_widget">
+    <sp_widget action="INSERT_OR_UPDATE">
+        <category>custom</category>
+        <client_script><![CDATA[function($scope, spUtil) {
+	/* widget controller */
+	var c = this;
+	var maxFiles = 5
+	$scope.formCollapsed = true;
+	$scope.data.base64 = ''
+	var dropzone = new Dropzone("#moments-dropzone", {
+		timeout: 30000,
+		acceptedFiles: 'image/*',
+		maxFiles: maxFiles,
+		addRemoveLinks: true,
+		maxFilesize: 2,
+		autoProcessQueue: false
+	})
+	window.dz = dropzone;
+	$scope.uploading = false
+	$scope.data.caption = '';
+
+
+
+	$scope.submit = async function () {
+		//$scope.uploading = true
+		//$scope.data.files = [];
+
+		if (dropzone.files.length > maxFiles) {
+			spUtil.saddInfoMessage('You tried to submit ' + dropzone.files.length + ' files. Only first ' + maxFiles + ' will be uploaded')
+		}
+		//console.log(' dropzone.files',  dropzone.files)
+
+		let files = [];
+		
+		for (let file of dropzone.files) {
+			const newfile = await processfile(file)
+			files.push(newfile)
+		}
+
+		submitFiles(files)
+	}
+	function submitFiles(files) {
+		
+		$scope.data.action = 'insert'
+		$scope.data.thumbnails = files.map( file => file.thumbnail);
+		$scope.data.compressedImages = files.map( file => file.compressedImage);
+		console.log($scope.data)
+		spUtil.update($scope).then(function () {
+			dropzone.removeAllFiles();
+			$scope.data.caption = '';
+			$scope.uploading = false;
+			$scope.data.store = { displayValue: '', value: '', name: '' };
+			dropzone.enable()
+			spUtil.addInfoMessage('Your moment was successfully submitted for approval')
+		})
+	}
+	var thumbnailMaxWidth = 600;
+	var thumbnailMaxHeight = 400;
+	var largeMaxWidth = 1920;
+	var largeMaxHeight = 1080;
+	async function processfile(source) {
+		let file = await urlToFile(source.dataURL, source.name, source.type);
+		
+		if (!(/image/i).test(file.type)) {
+			alert("File " + file.name + " is not an image.");
+			return false;
+		}
+
+		const bufferArray = await readFileAsync(file);
+		var blob = new Blob([bufferArray]); // create blob...
+		
+		window.URL = window.URL || window.webkitURL;
+		var blobURL = window.URL.createObjectURL(blob); // and get it's URL
+		
+		const image = await readImageAsync(blobURL);
+		
+		return resize(image, file);
+
+	}
+	async function urlToFile(url, filename, mimeType) {
+		const res = await fetch(url);
+		const arrBuf = await res.arrayBuffer();
+		return new File([arrBuf], filename, { type: mimeType });
+		
+	}
+	async function readFileAsync(file) {
+		return new Promise((resolve, reject) => {
+			let reader = new FileReader();
+			reader.onload = () => {
+				resolve(reader.result);
+			}
+			reader.onerror = reject;
+			reader.readAsArrayBuffer(file)
+		})
+	}
+	async function readImageAsync(blobURL) {
+		return new Promise((resolve, reject) => {
+			let image = new Image();
+			image.src = blobURL;
+			image.onload = () => {
+				resolve(image);
+			}
+			image.onerror = reject;
+		})
+	}
+	function resize(image, file) {
+		var thumbnail = resizeMe(image, thumbnailMaxWidth, thumbnailMaxHeight);
+		var compressedImage = resizeMe(image, largeMaxWidth, largeMaxHeight);
+		return {
+			thumbnail:{ name: file.name, type: 'image/jpeg', dataURL: thumbnail },
+			compressedImage:{ name: file.name, type: 'image/jpeg', dataURL: compressedImage }
+		}
+	}
+	// === RESIZE ====
+
+	function resizeMe(img, max_width, max_height) {
+
+		var canvas = document.createElement('canvas');
+
+		var width = img.width;
+		var height = img.height;
+
+		// calculate the width and height, constraining the proportions
+		if (width > height) {
+			if (width > max_width) {
+				//height *= max_width / width;
+				height = Math.round(height *= max_width / width);
+				width = max_width;
+			}
+		} else {
+			if (height > max_height) {
+				//width *= max_height / height;
+				width = Math.round(width *= max_height / height);
+				height = max_height;
+			}
+		}
+
+		// resize the canvas and draw the image data into it
+		canvas.width = width;
+		canvas.height = height;
+		var ctx = canvas.getContext("2d");
+		ctx.drawImage(img, 0, 0, width, height);
+
+		return canvas.toDataURL("image/jpeg", 0.7).split(',')[1]; // get the data from canvas as 70% JPG (can be also PNG, etc.)
+
+	}
+}]]></client_script>
+        <controller_as>c</controller_as>
+        <css>$blue: #0069c8;&#13;
+.moment-form-container {&#13;
+    background-color: white;&#13;
+    padding: 10px;&#13;
+}&#13;
+#moments-dropzone {&#13;
+    height: 100%;&#13;
+    margin-bottom: 5px;&#13;
+}&#13;
+.dropzone {&#13;
+    border: 2px dashed $blue;&#13;
+    &amp;.dz-drag-hover {&#13;
+        border: 2px solid $blue;&#13;
+    }&#13;
+}&#13;
+.submit-memory-btn {&#13;
+    width: 100%;&#13;
+}&#13;
+.form-group{&#13;
+    label{&#13;
+        font-size: 9pt;&#13;
+    }&#13;
+}&#13;
+.dz-progress{&#13;
+    visibility: hidden;&#13;
+}&#13;
+</css>
+        <data_table>sp_instance</data_table>
+        <demo_data/>
+        <description/>
+        <docs/>
+        <field_list/>
+        <has_preview>false</has_preview>
+        <id>teamonline_moment_submit_form</id>
+        <internal>false</internal>
+        <link><![CDATA[function link(scope, element, attrs, controller) { 
+
+ }]]></link>
+        <name>Teamonline Moment Submit Form</name>
+        <option_schema/>
+        <public>false</public>
+        <roles/>
+        <script><![CDATA[(function() {
+  var m_Util = new MomentsUtil(); 
+  data.store = getStore(gs.getUser().getCompanyID())
+  data.storesQuery = 'u_is_store=true'
+  data.isLoggedIn = gs.getSession().isLoggedIn();
+  
+  if (input && input.action === 'insert') {
+    m_Util.create(input)
+  }
+  
+  function getStore(sys_id) {
+    var storeGr = new GlideRecord('core_company'); 
+    storeGr.get(sys_id);
+    return { name: '', displayValue: storeGr.getValue('name'), value: sys_id }
+  }
+})();]]></script>
+        <servicenow>false</servicenow>
+        <sys_class_name>sp_widget</sys_class_name>
+        <sys_created_by>andrey.mironyuk</sys_created_by>
+        <sys_created_on>2020-09-01 14:36:26</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_id>a92e4b60dbc39050389b84d868961980</sys_id>
+        <sys_mod_count>68</sys_mod_count>
+        <sys_name>Teamonline Moment Submit Form</sys_name>
+        <sys_package display_value="TEAMonline" source="x_aaro2_teamonline">a2dfc25fdb7244105f65ba03e29619fa</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="TEAMonline">a2dfc25fdb7244105f65ba03e29619fa</sys_scope>
+        <sys_update_name>sp_widget_a92e4b60dbc39050389b84d868961980</sys_update_name>
+        <sys_updated_by>andrey.mironyuk</sys_updated_by>
+        <sys_updated_on>2020-09-02 14:42:10</sys_updated_on>
+        <template><![CDATA[<div>
+  <div class="submit-area">
+    <button type="button" class="btn btn-primary submit-memory-btn"
+      ng-click="formCollapsed = !formCollapsed">{{formCollapsed?'Add moment':'Collapse form'}}</button>
+  </div>
+  <div uib-collapse="formCollapsed" >
+    <div class="moment-form-container" ng-show="data.isLoggedIn">
+      <form action="file" enctype="multipart/form-data" class="dropzone needsclick" id="moments-dropzone">
+      </form>
+
+      <div class="form-group">
+        <label for="memoryCaption">Leave pitch caption here</label>
+        <textarea class="form-control" id="memoryCaption" rows="2" ng-model="data.caption"
+          ng-disabled="uploading"></textarea>
+        <label for="storeNumber">Select your location</label>
+        <sn-record-picker id="storeNumber" field="data.store" table="'core_company'" display-field="'name'"
+          value-field="'sys_id'" search-fields="'name'" page-size="100" value="data.userCompany"
+          default-query="data.storesQuery"></sn-record-picker>
+      </div>
+
+      <div class="submit-area">
+        <input type="button" value="Submit" class="btn btn-primary submit-memory-btn"
+          ng-disabled="dropzone.files.length==0||!data.caption||!data.store.value||uploading" ng-click="submit()">
+      </div>
+    </div>
+    <div class="login-warning" ng-if="!data.isLoggedIn">
+      You need to be logged in to submit your moment
+    </div>
+  </div>
+</div>]]></template>
+    </sp_widget>
+</record_update>

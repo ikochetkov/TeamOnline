@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_script_include">
+    <sys_script_include action="INSERT_OR_UPDATE">
+        <access>package_private</access>
+        <active>true</active>
+        <api_name>x_aaro2_teamonline.MomentsUtil</api_name>
+        <caller_access/>
+        <client_callable>false</client_callable>
+        <description/>
+        <name>MomentsUtil</name>
+        <script><![CDATA[var MomentsUtil = Class.create();
+MomentsUtil.prototype = {
+  initialize: function () {
+    this.MOMENTS_TABLE = "x_aaro2_teamonline_moment"
+  },
+  getApproved: function (limit) {
+    return this._getMoments('approval=approved', 5)
+  },
+  getNotApproved: function () {
+    return this._getMoments('approval=requested')
+  },
+  _getMoments: function (query, limit) {
+    var momentGr = new GlideRecord(this.MOMENTS_TABLE);
+    momentGr.addEncodedQuery(query);
+    momentGr.orderByDesc('sys_created_on');
+    if (limit) momentGr.setLimit(limit);
+    momentGr.query();
+    moments = []
+    while (momentGr.next()) {
+      var moment = {};
+      moment.attachments = this._getAttachments(momentGr.getUniqueValue())
+      moment.data = {
+        sys_id: momentGr.getUniqueValue(),
+        caption: momentGr.getValue('caption'),
+        approval: momentGr.getValue('approval'),
+        store: momentGr.getDisplayValue('store'),
+        opened_by: {
+          id: momentGr.getValue('opened_by'),
+          name: momentGr.getDisplayValue('opened_by')
+        },
+        created_on: momentGr.getValue('sys_created_on')
+      };
+      moments.push(moment)
+    }
+    return moments;
+  },
+  _getAttachments: function (record_sys_id) {
+    var attGr = new GlideRecord('x_aaro2_teamonline_moment_image');
+    attGr.addQuery('moment', record_sys_id);
+    attGr.query();
+    var attachments = []
+    while (attGr.next()) {
+      attachments.push({
+        name: attGr.getValue('image_name'),
+        image_url: "/" + attGr.getValue('image_name'),
+        thumbnail_url: "/" + attGr.getValue('thumbnail_name')
+      });
+    }
+    return attachments
+  },
+  approveAction: function (input, record_sys_id, approveState) {
+    var apprGr = new GlideRecord('sysapproval_approver');
+    apprGr.addQuery('sysapproval', record_sys_id);
+    apprGr.addQuery('state', 'requested');
+    apprGr.query();
+    if (apprGr.next()) {
+      apprGr.state = approveState;
+      apprGr.update();
+    }
+    var momGr = new GlideRecord(this.MOMENTS_TABLE);
+    momGr.get(record_sys_id);
+    momGr.caption = input.approvalMoment ? input.approvalMoment.data.caption : momGr.caption
+    momGr.approval = approveState;
+    momGr.update()
+  },
+  create: function (input) {
+    var newMomentGr = new GlideRecord(this.MOMENTS_TABLE);
+    newMomentGr.initialize();
+    newMomentGr.caption = input.caption;
+    newMomentGr.store = input.store.value;
+    momentSysId = newMomentGr.insert();
+    this._createMomentImages(input.thumbnails, input.compressedImages, momentSysId)
+  },
+  _createMomentImages: function (thumbnails, images, momentSysId) {
+    for (var i = 0; i < thumbnails.length; i++) {
+      var thumbnailName = this._createDbImage(thumbnails[i],true);
+      var imageName = this._createDbImage(images[i]);
+      this._createMomentImage(momentSysId, thumbnailName, imageName);
+    }
+
+
+  },
+  _createDbImage: function (file, isThumbnail) {
+    var dbiGr = new GlideRecord('db_image');
+    dbiGr.newRecord()
+    var fileName = (isThumbnail ? 'thumbnail' : '') + '_' + dbiGr.sys_id + '_' + file.name;
+    dbiGr.name = fileName;
+    dbiGr.category = 'teamonline';
+    dbiGr.insert();
+    var gsa = new GlideSysAttachment();
+    var sysid = gsa.writeBase64(dbiGr, fileName, file.type, file.dataURL);
+    dbiGr.image = sysid;
+    dbiGr.update();
+    return fileName;
+  },
+  _createMomentImage: function (momentSysId, thumbnailName, imageName) {
+    var momentImageGr = new GlideRecord('x_aaro2_teamonline_moment_image');
+    momentImageGr.initialize();
+    momentImageGr.moment = momentSysId;
+    momentImageGr.image_name = imageName;
+    momentImageGr.thumbnail_name = thumbnailName
+    momentImageGr.insert();
+  },
+  type: 'MomentsUtil'
+};]]></script>
+        <sys_class_name>sys_script_include</sys_class_name>
+        <sys_created_by>andrey.mironyuk</sys_created_by>
+        <sys_created_on>2020-09-01 12:37:42</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_id>a213faa8dbcf5050389b84d8689619dd</sys_id>
+        <sys_mod_count>5</sys_mod_count>
+        <sys_name>MomentsUtil</sys_name>
+        <sys_package display_value="TEAMonline" source="x_aaro2_teamonline">a2dfc25fdb7244105f65ba03e29619fa</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="TEAMonline">a2dfc25fdb7244105f65ba03e29619fa</sys_scope>
+        <sys_update_name>sys_script_include_a213faa8dbcf5050389b84d8689619dd</sys_update_name>
+        <sys_updated_by>andrey.mironyuk</sys_updated_by>
+        <sys_updated_on>2020-09-02 13:27:14</sys_updated_on>
+    </sys_script_include>
+</record_update>
