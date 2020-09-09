@@ -15,7 +15,7 @@
 		maxFilesize: 5,
 		autoProcessQueue: false
 	})
-	window.dz = dropzone;
+	$scope.dropzone = dropzone;
 	$scope.uploading = false
 	$scope.data.caption = '';
 
@@ -31,7 +31,7 @@
 		//console.log(' dropzone.files',  dropzone.files)
 
 		let files = [];
-		
+
 		for (let file of dropzone.files) {
 			const newfile = await processfile(file)
 			files.push(newfile)
@@ -40,10 +40,10 @@
 		submitFiles(files)
 	}
 	function submitFiles(files) {
-		
+
 		$scope.data.action = 'insert'
-		$scope.data.thumbnails = files.map( file => file.thumbnail);
-		$scope.data.compressedImages = files.map( file => file.compressedImage);
+		$scope.data.thumbnails = files.map(file => file.thumbnail);
+		$scope.data.compressedImages = files.map(file => file.compressedImage);
 		console.log($scope.data)
 		spUtil.update($scope).then(function () {
 			dropzone.removeAllFiles();
@@ -62,7 +62,7 @@
 	var fullsizeCompressionRatio = $scope.data.fullsize_compression_ratio
 	async function processfile(source) {
 		let file = await urlToFile(source.dataURL, source.name, source.type);
-		
+
 		if (!(/image/i).test(file.type)) {
 			alert("File " + file.name + " is not an image.");
 			return false;
@@ -70,12 +70,12 @@
 
 		const bufferArray = await readFileAsync(file);
 		var blob = new Blob([bufferArray]); // create blob...
-		
+
 		window.URL = window.URL || window.webkitURL;
 		var blobURL = window.URL.createObjectURL(blob); // and get it's URL
-		
+
 		const image = await readImageAsync(blobURL);
-		
+
 		return resize(image, file);
 
 	}
@@ -83,7 +83,7 @@
 		const res = await fetch(url);
 		const arrBuf = await res.arrayBuffer();
 		return new File([arrBuf], filename, { type: mimeType });
-		
+
 	}
 	async function readFileAsync(file) {
 		return new Promise((resolve, reject) => {
@@ -109,8 +109,8 @@
 		var thumbnail = resizeMe(image, thumbnailMaxWidth, thumbnailMaxHeight, thumbnailCompressionRatio);
 		var compressedImage = resizeMe(image, fullsizeMaxWidth, fullsizeMaxHeight, fullsizeCompressionRatio);
 		return {
-			thumbnail:{ name: file.name, type: 'image/jpeg', dataURL: thumbnail },
-			compressedImage:{ name: file.name, type: 'image/jpeg', dataURL: compressedImage }
+			thumbnail: { name: file.name, type: 'image/jpeg', dataURL: thumbnail },
+			compressedImage: { name: file.name, type: 'image/jpeg', dataURL: compressedImage }
 		}
 	}
 	// === RESIZE ====
@@ -227,7 +227,7 @@
         <sys_created_on>2020-09-01 14:36:26</sys_created_on>
         <sys_customer_update>false</sys_customer_update>
         <sys_id>a92e4b60dbc39050389b84d868961980</sys_id>
-        <sys_mod_count>91</sys_mod_count>
+        <sys_mod_count>92</sys_mod_count>
         <sys_name>Teamonline Moment Submit Form</sys_name>
         <sys_package display_value="TEAMonline" source="x_aaro2_teamonline">a2dfc25fdb7244105f65ba03e29619fa</sys_package>
         <sys_policy/>
@@ -235,7 +235,7 @@
         <sys_scope display_value="TEAMonline">a2dfc25fdb7244105f65ba03e29619fa</sys_scope>
         <sys_update_name>sp_widget_a92e4b60dbc39050389b84d868961980</sys_update_name>
         <sys_updated_by>andrey.mironyuk</sys_updated_by>
-        <sys_updated_on>2020-09-09 15:31:44</sys_updated_on>
+        <sys_updated_on>2020-09-09 19:34:15</sys_updated_on>
         <template><![CDATA[<div style="margin: 5px 0">
   <div class="submit-area">
     <button type="button" class="btn btn-primary submit-memory-btn"
