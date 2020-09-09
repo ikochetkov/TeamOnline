@@ -89,324 +89,12 @@
 
 }]]></client_script>
         <controller_as>c</controller_as>
-        <css>$blue: #0069c8;&#13;
-&#13;
-.moments-header {&#13;
-  background-color: white;&#13;
-  margin-bottom: 5px;&#13;
-  text-align: center;&#13;
-  font-size: 24px;&#13;
-  padding: 2rem 0;&#13;
-  line-height: 1;&#13;
-  text-transform: uppercase;&#13;
-  letter-spacing: 1.5px;&#13;
-  background-color: $blue;&#13;
-  color: white&#13;
-}&#13;
-&#13;
-&#13;
-.to-approve-container {&#13;
-  margin-top: 10px;&#13;
-}&#13;
-.to-approve-moments,&#13;
-.approved-container {&#13;
-  max-height: 600px;&#13;
-  overflow-y: auto;&#13;
-  overflow-x: hidden;&#13;
-  margin-top: 5px;&#13;
-  &amp;::-webkit-scrollbar {&#13;
-    width: 0.5em;&#13;
-  }&#13;
-&#13;
-  &amp;::-webkit-scrollbar-thumb {&#13;
-    background-color: darkgrey;&#13;
-    outline: 1px solid slategrey;&#13;
-  }&#13;
-}&#13;
-.moment {&#13;
-  background-color: white;&#13;
-  margin-bottom: 5px;&#13;
-  transition: all 0.3s ease-in-out;&#13;
-  .avatar-timeago-container {&#13;
-    border-bottom: 1px #f3f3f4 solid;&#13;
-  }&#13;
-  .caption-container {&#13;
-    border-top: 1px #f3f3f4 solid;&#13;
-  }&#13;
-  .moment-image {&#13;
-    cursor: zoom-in;&#13;
-  }&#13;
-}&#13;
-.info-wrapper {&#13;
+        <css>/*all styles moved to shared css include moments.css*/&#13;
+.approve-buttons-container{&#13;
   display: flex;&#13;
-  justify-content: end;&#13;
-}&#13;
-.author {&#13;
-  font-size: 11pt;&#13;
-  font-weight: 900;&#13;
-  display: flex;&#13;
-  margin-bottom: 5px;&#13;
   justify-content: space-between;&#13;
-  margin: 2px 0;&#13;
-  font-size: 9pt;&#13;
-  font-weight: 900;&#13;
-  color: rgb(38, 38, 38);&#13;
-}&#13;
-.caption {&#13;
-  font-size: 9pt;&#13;
-  color: rgb(38, 38, 38);&#13;
-}&#13;
-.created-on {&#13;
-  font-size: 10pt;&#13;
-}&#13;
-.block {&#13;
-  display: block;&#13;
-}&#13;
-.autror-container {&#13;
-  margin: 0 10px;&#13;
-  display: flex;&#13;
-  flex-direction: column;&#13;
-}&#13;
-.location {&#13;
-  font-size: 8pt;&#13;
-  color: #a7a7a7;&#13;
-}&#13;
-.caption-container {&#13;
-  display: flex;&#13;
-  justify-content: start;&#13;
-  padding: 9px;&#13;
-&#13;
-  flex-wrap: wrap;&#13;
-}&#13;
-.timeago {&#13;
-  font-size: 8pt;&#13;
-  color: #a7a7a7;&#13;
-  flex-basis: 100%;&#13;
-  text-align: right;&#13;
-}&#13;
-.avatar-timeago-container {&#13;
-  display: flex;&#13;
-  justify-content: start;&#13;
-  align-items: center;&#13;
-  padding: 10px;&#13;
-&#13;
-  flex-wrap: wrap;&#13;
-}&#13;
-.close-gallery-button {&#13;
-  z-index: 1001;&#13;
-  position: absolute;&#13;
-  color: #999;&#13;
-  top: 0;&#13;
-  right: 0;&#13;
-  width: 100px;&#13;
-  height: 100px;&#13;
-  display: flex;&#13;
-  place-items: center;&#13;
-  justify-content: center;&#13;
-  font-size: 3rem;&#13;
-  transition: 300ms ease-in-out;&#13;
-  &amp;:hover{&#13;
-    color: white;&#13;
-  }&#13;
-}&#13;
-.moment-gallery {&#13;
-  z-index: 1000;&#13;
-  position: fixed;&#13;
-  top: 0;&#13;
-  left: 0;&#13;
-  width: 100vw;&#13;
-  height: 100vh;&#13;
-  visibility: hidden;&#13;
-  opacity: 0;&#13;
-  transition: 300ms ease-in-out;&#13;
-  background-color: rgba(0, 0, 0, 0.6);&#13;
-  justify-content: center;&#13;
-  cursor: initial;&#13;
-  display: flex;&#13;
-  place-items: center;&#13;
-  &amp;.active {&#13;
-    visibility: visible;&#13;
-    opacity: 1;&#13;
-    transition: 300ms ease-in-out;&#13;
-  }&#13;
-&#13;
-  .gallery-left-container {&#13;
-    width: 75%;&#13;
-    height: 100%;&#13;
-    border-right: solid 1px #e5e5e5;&#13;
-    display: flex;&#13;
-    flex-direction: column;&#13;
-    background-color: #2f2f2f;&#13;
-  }&#13;
-  .gallery-right-container {&#13;
-    width: 25%;&#13;
-    height: 100%;&#13;
-    border-right: solid 1px #e5e5e5;&#13;
-    display: flex;&#13;
-    flex-direction: column;&#13;
-    .avatar-timeago-container {&#13;
-      border-bottom: 1px #e5e5e5 solid;&#13;
-    }&#13;
-    &#13;
-  }&#13;
-  .gallery-container {&#13;
-    position: relative;&#13;
-    height: 90%;&#13;
-    width: 85%;&#13;
-    background-color: white;&#13;
-    display: flex;&#13;
-    transition: 300ms ease-in-out;&#13;
-    place-items: center;&#13;
-    justify-content: start;&#13;
-  }&#13;
-  .gallery-carousel-container {&#13;
-    width: 100%;&#13;
-    height: 100%;&#13;
-    display: flex;&#13;
-    place-items: center;&#13;
-    justify-content: center;&#13;
-    .carousel,&#13;
-    .carousel-inner,&#13;
-    .gallery-image-container,&#13;
-    .carousel-inner &gt; .active,&#13;
-    .item {&#13;
-      width: 100%;&#13;
-      height: 100%;&#13;
-    }&#13;
-    .gallery-image-container {&#13;
-      display: flex;&#13;
-      justify-content: center;&#13;
-    }&#13;
-    img {&#13;
-      max-height: 100%;&#13;
-      max-width: 100%;&#13;
-      object-fit: contain;&#13;
-    }&#13;
-  }&#13;
-  .controls-container {&#13;
-    position: absolute;&#13;
-    width: 100%;&#13;
-    height: 100%;&#13;
-    display: flex;&#13;
-    place-content: center;&#13;
-    justify-content: space-between;&#13;
-  }&#13;
-  .mini-gallery {&#13;
-    display: flex;&#13;
-    place-content: center;&#13;
-&#13;
-    .mini-gallery-image {&#13;
-      &amp;.ng-leave {&#13;
-        display: none;&#13;
-      }&#13;
-      margin: 5px 5px;&#13;
-      display: flex;&#13;
-      transition: 300ms ease-in-out;&#13;
-      filter: brightness(0.5);&#13;
-      &amp;.active {&#13;
-        transition: 300ms ease-in-out;&#13;
-        filter: brightness(1);&#13;
-      }&#13;
-    }&#13;
-    img {&#13;
-      max-height: 100px;&#13;
-      object-fit: contain;&#13;
-    }&#13;
-  }&#13;
-}&#13;
-.image-control {&#13;
-  display: flex;&#13;
-  width: 7%;&#13;
-  height: 100%;&#13;
-  place-items: center;&#13;
-  color: rgb(255, 255, 255);&#13;
-  justify-content: center;&#13;
-  cursor: pointer;&#13;
-  font-size: 16pt;&#13;
-  opacity: 0.8;&#13;
-  transition: 100ms ease-in-out;&#13;
-  &amp;:hover {&#13;
-    opacity: 1;&#13;
-    transform: translateX(0);&#13;
-    transition: 100ms ease-in-out;&#13;
-  }&#13;
-}&#13;
-.moment-control, .carousel-control {&#13;
-  display: flex;&#13;
-  width: 5%;&#13;
-  height: 100%;&#13;
-  place-items: center;&#13;
-  color: rgb(226, 226, 226);&#13;
-  justify-content: center;&#13;
-  background-image: none;&#13;
-  cursor: pointer;&#13;
-  font-size: 16pt;&#13;
-  transition: 100ms ease-in-out;&#13;
-  &amp;:hover {&#13;
-    color: rgb(145, 145, 145);;&#13;
-    transition: 100ms ease-in-out;&#13;
-  }&#13;
-}&#13;
-.moment-image-container {&#13;
-  width: 100%;&#13;
-  height: 400px;&#13;
-  display: flex;&#13;
-  place-content: center;&#13;
-  justify-content: center;&#13;
-  img {&#13;
-    max-height: 100%;&#13;
-    max-width: 100%;&#13;
-    object-fit: contain;&#13;
-  }&#13;
 }&#13;
 &#13;
-.carousel-indicators {&#13;
-  bottom: -1px;&#13;
-  border: none;&#13;
-  .active {&#13;
-    width: 6px;&#13;
-    height: 6px;&#13;
-    background-color: $blue;&#13;
-  }&#13;
-  li {&#13;
-    margin: 2px;&#13;
-    width: 6px;&#13;
-    height: 6px;&#13;
-    background-color: #999;&#13;
-  }&#13;
-}&#13;
-.lds-ripple {&#13;
-  display: inline-block;&#13;
-  position: relative;&#13;
-  width: 80px;&#13;
-  height: 80px;&#13;
-}&#13;
-.lds-ripple div {&#13;
-  position: absolute;&#13;
-  border: 4px solid rgb(0, 0, 0);&#13;
-  opacity: 1;&#13;
-  border-radius: 50%;&#13;
-  animation: lds-ripple 1s cubic-bezier(0, 0.2, 0.8, 1) infinite;&#13;
-}&#13;
-.lds-ripple div:nth-child(2) {&#13;
-  animation-delay: -0.5s;&#13;
-}&#13;
-@keyframes lds-ripple {&#13;
-  0% {&#13;
-    top: 36px;&#13;
-    left: 36px;&#13;
-    width: 0;&#13;
-    height: 0;&#13;
-    opacity: 1;&#13;
-  }&#13;
-  100% {&#13;
-    top: 0px;&#13;
-    left: 0px;&#13;
-    width: 72px;&#13;
-    height: 72px;&#13;
-    opacity: 0;&#13;
-  }&#13;
-}&#13;
 </css>
         <data_table>sp_instance</data_table>
         <demo_data/>
@@ -449,7 +137,7 @@
         <sys_created_on>2020-09-01 12:24:24</sys_created_on>
         <sys_customer_update>false</sys_customer_update>
         <sys_id>a3df2264dbcf5050389b84d8689619ea</sys_id>
-        <sys_mod_count>20</sys_mod_count>
+        <sys_mod_count>28</sys_mod_count>
         <sys_name>Teamonline Moment Approvals</sys_name>
         <sys_package display_value="TEAMonline" source="x_aaro2_teamonline">a2dfc25fdb7244105f65ba03e29619fa</sys_package>
         <sys_policy/>
@@ -457,7 +145,7 @@
         <sys_scope display_value="TEAMonline">a2dfc25fdb7244105f65ba03e29619fa</sys_scope>
         <sys_update_name>sp_widget_a3df2264dbcf5050389b84d8689619ea</sys_update_name>
         <sys_updated_by>andrey.mironyuk</sys_updated_by>
-        <sys_updated_on>2020-09-03 16:08:25</sys_updated_on>
+        <sys_updated_on>2020-09-07 14:51:16</sys_updated_on>
         <template><![CDATA[<div>
   <div class="to-approve-container" ng-if="data.canEdit && data.moments.length>0">
     <div class="moments-header">
@@ -498,10 +186,12 @@
               <sn-time-ago timestamp="moment.data.created_on" />
             </div>
           </div>
-          <input type="button" value="Approve" class="btn btn-success" ng-click="approve(moment)"
-            ng-disabled="moment.approving">
-          <input type="button" value="Reject" class="btn btn-danger" ng-click="reject(moment)"
-            ng-disabled="moment.approving">
+          <div class="approve-buttons-container">
+            <input type="button" value="Approve" class="btn btn-success" ng-click="approve(moment)"
+              ng-disabled="moment.approving">
+            <input type="button" value="Reject" class="btn btn-danger" ng-click="reject(moment)"
+              ng-disabled="moment.approving">
+          </div>
         </div>
       </div>
     </div>

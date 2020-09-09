@@ -20,16 +20,15 @@
         <css>$primary: #0069C8;&#13;
 &#13;
 .comments {&#13;
-  background: white;&#13;
 }&#13;
 &#13;
 .comments-thread {&#13;
   display: flex;&#13;
   flex-direction: column;&#13;
-  max-height: 600px;&#13;
+  max-height: 29.7rem;&#13;
   overflow-y: scroll;&#13;
   overflow-x: hidden;&#13;
-&#13;
+  font-size: 1.2rem;&#13;
   &amp;::-webkit-scrollbar {&#13;
     width: .5em;&#13;
   }&#13;
@@ -39,19 +38,22 @@
     outline: 1px solid slategrey;&#13;
   }&#13;
 }&#13;
-&#13;
+.avatar-container {&#13;
+  height: 3.2rem;&#13;
+  width: 3.2rem;&#13;
+}&#13;
 .comments-title {&#13;
   position: relative;&#13;
   text-align: center;&#13;
-  font-size: 24px;&#13;
+  font-size: 1.4rem;&#13;
   margin: 0;&#13;
-  padding: 2rem 0;&#13;
+  padding: 1.3rem 0;&#13;
   line-height: 1;&#13;
   text-transform: uppercase;&#13;
   letter-spacing: 1.5px;&#13;
   background-color: $primary;&#13;
   color: white;&#13;
-  &amp;:after {&#13;
+  /*&amp;:after {&#13;
     content: "";&#13;
     position: absolute;&#13;
     bottom: 14px;&#13;
@@ -59,7 +61,7 @@
     height: 2px;&#13;
     width: 86px;&#13;
     background: #91C712;&#13;
-  }&#13;
+  }*/&#13;
 }&#13;
 &#13;
 .comments-thread--text {&#13;
@@ -69,10 +71,11 @@
   align-items: flex-start;&#13;
   padding: 20px 20px 10px 20px;&#13;
   cursor: pointer;&#13;
-  border-top: 5px solid #eceff1;&#13;
   opacity: .7;&#13;
   transition: opacity .2s ease-out;&#13;
-&#13;
+  background: white;&#13;
+  border: 1px solid #eee;&#13;
+  margin: 2px 0;&#13;
   &amp;:hover {&#13;
     opacity: 1;&#13;
   }&#13;
@@ -289,7 +292,7 @@
 }&#13;
 &#13;
 .see-more {&#13;
-  border-top: 10px solid #eceff1;&#13;
+  margin-top: 5px;&#13;
 &#13;
   a {&#13;
     width: 100%&#13;
@@ -391,7 +394,7 @@ function generateRandomColor () {
         <sys_created_on>2020-03-27 11:39:34</sys_created_on>
         <sys_customer_update>false</sys_customer_update>
         <sys_id>1eaabcf5dbff08d05f65ba03e296197b</sys_id>
-        <sys_mod_count>469</sys_mod_count>
+        <sys_mod_count>473</sys_mod_count>
         <sys_name>Team Online Aaron's Awards Feed</sys_name>
         <sys_package display_value="TEAMonline" source="x_aaro2_teamonline">a2dfc25fdb7244105f65ba03e29619fa</sys_package>
         <sys_policy/>
@@ -399,7 +402,7 @@ function generateRandomColor () {
         <sys_scope display_value="TEAMonline">a2dfc25fdb7244105f65ba03e29619fa</sys_scope>
         <sys_update_name>sp_widget_1eaabcf5dbff08d05f65ba03e296197b</sys_update_name>
         <sys_updated_by>andrey.mironyuk</sys_updated_by>
-        <sys_updated_on>2020-09-03 11:56:11</sys_updated_on>
+        <sys_updated_on>2020-09-07 12:20:06</sys_updated_on>
         <template><![CDATA[<div class="comments">
   <h2 class="comments-title">
     Aaron's Applause

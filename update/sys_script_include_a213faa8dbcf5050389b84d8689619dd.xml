@@ -15,6 +15,10 @@ MomentsUtil.prototype = {
   getApproved: function (limit) {
     return this._getMoments('approval=approved', 5)
   },
+  getApprovedNext: function(lastDateTime, count){
+    var query = 'approval=approved' + (lastDateTime?'^sys_created_on<'+lastDateTime: '');
+    return this._getMoments(query, count);
+  },
   getNotApproved: function () {
     return this._getMoments('approval=requested')
   },
@@ -117,7 +121,7 @@ MomentsUtil.prototype = {
         <sys_created_on>2020-09-01 12:37:42</sys_created_on>
         <sys_customer_update>false</sys_customer_update>
         <sys_id>a213faa8dbcf5050389b84d8689619dd</sys_id>
-        <sys_mod_count>5</sys_mod_count>
+        <sys_mod_count>11</sys_mod_count>
         <sys_name>MomentsUtil</sys_name>
         <sys_package display_value="TEAMonline" source="x_aaro2_teamonline">a2dfc25fdb7244105f65ba03e29619fa</sys_package>
         <sys_policy/>
@@ -125,6 +129,6 @@ MomentsUtil.prototype = {
         <sys_scope display_value="TEAMonline">a2dfc25fdb7244105f65ba03e29619fa</sys_scope>
         <sys_update_name>sys_script_include_a213faa8dbcf5050389b84d8689619dd</sys_update_name>
         <sys_updated_by>andrey.mironyuk</sys_updated_by>
-        <sys_updated_on>2020-09-02 13:27:14</sys_updated_on>
+        <sys_updated_on>2020-09-09 13:17:10</sys_updated_on>
     </sys_script_include>
 </record_update>

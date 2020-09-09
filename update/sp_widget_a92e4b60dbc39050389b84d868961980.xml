@@ -54,10 +54,12 @@
 			spUtil.addInfoMessage('Your moment was successfully submitted for approval')
 		})
 	}
-	var thumbnailMaxWidth = 600;
-	var thumbnailMaxHeight = 400;
-	var largeMaxWidth = 1920;
-	var largeMaxHeight = 1080;
+	var thumbnailMaxWidth = $scope.data.thumbnail_max_width;
+	var thumbnailMaxHeight = $scope.data.thumbnail_max_width;
+	var thumbnailCompressionRatio = $scope.data.thumbnail_compression_ratio
+	var fullsizeMaxWidth = $scope.data.fullsize_max_width;
+	var fullsizeMaxHeight = $scope.data.fullsize_max_height;
+	var fullsizeCompressionRatio = $scope.data.fullsize_compression_ratio
 	async function processfile(source) {
 		let file = await urlToFile(source.dataURL, source.name, source.type);
 		
@@ -104,8 +106,8 @@
 		})
 	}
 	function resize(image, file) {
-		var thumbnail = resizeMe(image, thumbnailMaxWidth, thumbnailMaxHeight);
-		var compressedImage = resizeMe(image, largeMaxWidth, largeMaxHeight);
+		var thumbnail = resizeMe(image, thumbnailMaxWidth, thumbnailMaxHeight, thumbnailCompressionRatio);
+		var compressedImage = resizeMe(image, fullsizeMaxWidth, fullsizeMaxHeight, fullsizeCompressionRatio);
 		return {
 			thumbnail:{ name: file.name, type: 'image/jpeg', dataURL: thumbnail },
 			compressedImage:{ name: file.name, type: 'image/jpeg', dataURL: compressedImage }
@@ -113,7 +115,7 @@
 	}
 	// === RESIZE ====
 
-	function resizeMe(img, max_width, max_height) {
+	function resizeMe(img, max_width, max_height, compression_ratio) {
 
 		var canvas = document.createElement('canvas');
 
@@ -141,7 +143,7 @@
 		var ctx = canvas.getContext("2d");
 		ctx.drawImage(img, 0, 0, width, height);
 
-		return canvas.toDataURL("image/jpeg", 0.7).split(',')[1]; // get the data from canvas as 70% JPG (can be also PNG, etc.)
+		return canvas.toDataURL("image/jpeg", compression_ratio).split(',')[1]; // get the data from canvas as 70% JPG (can be also PNG, etc.)
 
 	}
 }]]></client_script>
@@ -160,6 +162,13 @@
     &amp;.dz-drag-hover {&#13;
         border: 2px solid $blue;&#13;
     }&#13;
+    .dz-preview{&#13;
+        .dz-image{&#13;
+            width: 110px;&#13;
+            height: 110px;&#13;
+        }&#13;
+    }&#13;
+    &#13;
 }&#13;
 .submit-memory-btn {&#13;
     width: 100%;&#13;
@@ -172,6 +181,7 @@
 .dz-progress{&#13;
     visibility: hidden;&#13;
 }&#13;
+&#13;
 </css>
         <data_table>sp_instance</data_table>
         <demo_data/>
@@ -190,18 +200,25 @@
         <roles/>
         <script><![CDATA[(function() {
   var m_Util = new MomentsUtil(); 
-  data.store = getStore(gs.getUser().getCompanyID())
-  data.storesQuery = 'u_is_store=true'
+  data.store =  getStore(gs.getUserID());
+  data.storesQuery = 'u_is_store=true^ORu_is_store_support_center=true^u_state=GA';
   data.isLoggedIn = gs.getSession().isLoggedIn();
-  
+  data.thumbnail_compression_ratio = parseFloat(gs.getProperty('x_aaro2_teamonline.moments_thumbnail_compression_ratio', "0.7"));
+  data.thumbnail_max_width = parseInt(gs.getProperty("x_aaro2_teamonline.moments_thumbnail_max_width","600"));
+  data.thumbnail_max_height = parseInt(gs.getProperty("x_aaro2_teamonline.moments_thumbnail_max_height","400"));
+  data.fullsize_compression_ratio = parseFloat(gs.getProperty('x_aaro2_teamonline.moments_fullsize_compression_ratio', "0.7"));
+  data.fullsize_max_width = parseInt(gs.getProperty("x_aaro2_teamonline.moments_fullsize_max_width","1920"));
+  data.fullsize_max_height = parseInt(gs.getProperty("x_aaro2_teamonline.moments_fullsize_max_height","1080"));
+
   if (input && input.action === 'insert') {
     m_Util.create(input)
   }
   
   function getStore(sys_id) {
-    var storeGr = new GlideRecord('core_company'); 
-    storeGr.get(sys_id);
-    return { name: '', displayValue: storeGr.getValue('name'), value: sys_id }
+    var userGr = new GlideRecord('sys_user');
+    userGr.get(sys_id)
+    var dept = userGr.department.getRefRecord()
+    return { name: '', displayValue: dept.getValue('name'), value: dept.getUniqueValue() }
   }
 })();]]></script>
         <servicenow>false</servicenow>
@@ -210,7 +227,7 @@
         <sys_created_on>2020-09-01 14:36:26</sys_created_on>
         <sys_customer_update>false</sys_customer_update>
         <sys_id>a92e4b60dbc39050389b84d868961980</sys_id>
-        <sys_mod_count>73</sys_mod_count>
+        <sys_mod_count>91</sys_mod_count>
         <sys_name>Teamonline Moment Submit Form</sys_name>
         <sys_package display_value="TEAMonline" source="x_aaro2_teamonline">a2dfc25fdb7244105f65ba03e29619fa</sys_package>
         <sys_policy/>
@@ -218,8 +235,8 @@
         <sys_scope display_value="TEAMonline">a2dfc25fdb7244105f65ba03e29619fa</sys_scope>
         <sys_update_name>sp_widget_a92e4b60dbc39050389b84d868961980</sys_update_name>
         <sys_updated_by>andrey.mironyuk</sys_updated_by>
-        <sys_updated_on>2020-09-03 15:23:30</sys_updated_on>
-        <template><![CDATA[<div style="margin-bottom: 5px">
+        <sys_updated_on>2020-09-09 15:31:44</sys_updated_on>
+        <template><![CDATA[<div style="margin: 5px 0">
   <div class="submit-area">
     <button type="button" class="btn btn-primary submit-memory-btn"
       ng-click="formCollapsed = !formCollapsed">{{formCollapsed?'Add moment':'Collapse form'}}</button>
@@ -234,7 +251,7 @@
         <textarea class="form-control" id="memoryCaption" rows="2" ng-model="data.caption"
           ng-disabled="uploading" maxlength="128"></textarea>
         <label for="storeNumber">Select your location</label>
-        <sn-record-picker id="storeNumber" field="data.store" table="'core_company'" display-field="'name'"
+        <sn-record-picker id="storeNumber" field="data.store" table="'u_aarons_department'" display-field="'name'"
           value-field="'sys_id'" search-fields="'name'" page-size="100" value="data.userCompany"
           default-query="data.storesQuery"></sn-record-picker>
       </div>

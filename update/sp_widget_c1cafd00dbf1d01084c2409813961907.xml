@@ -135,6 +135,43 @@
   align-content: flex-start;
 }
 
+//styles for blocks without description
+.black{ 
+  background:black;
+  opacity:0.5;
+  -webkit-transition: all 0.5s ease;
+  -moz-transition: all 0.5s ease;
+  -o-transition: all 0.5s ease;
+  -ms-transition: all 0.5s ease;
+  transition: all 0.5s ease; 
+}
+.opac{
+  -webkit-transition: all 0.5s ease;
+  -moz-transition: all 0.5s ease;
+  -o-transition: all 0.5s ease;
+  -ms-transition: all 0.5s ease;
+  transition: all 0.5s ease; 
+}
+
+.opac .each-article-img img {
+  -webkit-transition: all 0.5s ease;
+  -moz-transition: all 0.5s ease;
+  -o-transition: all 0.5s ease;
+  -ms-transition: all 0.5s ease;
+  transition: all 0.5s ease; 
+}
+.opac:hover {
+  .black{opacity:0.1}
+  .each-article-img img{
+    -webkit-filter: contrast(185%);
+    transform: scale(1.1);
+  }
+}
+
+
+
+
+
 
 
 .each-article-content .big.active .each-article-empty .each-article-img:before,
@@ -541,7 +578,7 @@ h5, .h5 {
 }
 
 @media (max-width: 1600px){
-   .post-content .post-text {
+  .post-content .post-text {
     font-size: 1.19rem;
   }
 }
@@ -664,7 +701,7 @@ h5, .h5 {
         <sys_created_on>2020-06-29 15:55:52</sys_created_on>
         <sys_customer_update>false</sys_customer_update>
         <sys_id>c1cafd00dbf1d01084c2409813961907</sys_id>
-        <sys_mod_count>89</sys_mod_count>
+        <sys_mod_count>143</sys_mod_count>
         <sys_name>Team Online 4 Blocks</sys_name>
         <sys_package display_value="TEAMonline" source="x_aaro2_teamonline">a2dfc25fdb7244105f65ba03e29619fa</sys_package>
         <sys_policy/>
@@ -672,7 +709,7 @@ h5, .h5 {
         <sys_scope display_value="TEAMonline">a2dfc25fdb7244105f65ba03e29619fa</sys_scope>
         <sys_update_name>sp_widget_c1cafd00dbf1d01084c2409813961907</sys_update_name>
         <sys_updated_by>xxikochet</sys_updated_by>
-        <sys_updated_on>2020-08-25 11:34:23</sys_updated_on>
+        <sys_updated_on>2020-09-03 20:46:49</sys_updated_on>
         <template><![CDATA[<div class="each-article-content ffffff" >
   
 
@@ -682,14 +719,12 @@ h5, .h5 {
        context-menu="contextMenu(block.sys_id)"
        ng-repeat="block in data.blocks track by $index"
        ng-href="{{getUrl(block)}}"
-       ng-class="{'each-article-empty': !block.sys_id, 'each-article': block.sys_id, 'floating': block.description}"
+       ng-class="{'each-article-empty': !block.sys_id, 'each-article': block.sys_id, 'floating': block.description, 'opac': !block.title && !block.description}"
        >
       <div class="each-article-img">
         <img ng-if="block.background" ng-src="{{block.background}}" alt="{{block.title}}">
       </div>
-      <div class="post-content"
-           ng-class="{'opac': !block.title && !block.description}"
-           >
+      <div ng-class="{'black': !block.title && !block.description}" class="post-content">
         <div class="author-catname" ng-if="block.sys_id">
           <p class="small-font font-medium green">{{block.meta}}</p>
           <p ng-if="block.display_author" class="small-font font-medium white">{{block.author}}</p>
