@@ -140,18 +140,19 @@
   background-repeat: no-repeat;&#13;
   background-size:cover;&#13;
   background-color: #333;&#13;
+  display: flex;&#13;
 }&#13;
 &#13;
 .slide-placeholder{&#13;
   width:100%;&#13;
-  height:300px;&#13;
+  height:40.6rem;&#13;
   background:#333;&#13;
   color:white;&#13;
   text-align:center;&#13;
 }&#13;
 &#13;
 .slide-placeholder span{&#13;
-	line-height: 300px;&#13;
+	line-height: 40.6rem;&#13;
 }&#13;
 &#13;
 #slider{&#13;
@@ -287,7 +288,7 @@ function collectSlides(){
         <sys_created_on>2020-06-01 11:22:57</sys_created_on>
         <sys_customer_update>false</sys_customer_update>
         <sys_id>1acfa40fdb855c505f65ba03e29619e0</sys_id>
-        <sys_mod_count>342</sys_mod_count>
+        <sys_mod_count>343</sys_mod_count>
         <sys_name>TeamOnline Carousel</sys_name>
         <sys_package display_value="TEAMonline" source="x_aaro2_teamonline">a2dfc25fdb7244105f65ba03e29619fa</sys_package>
         <sys_policy/>
@@ -295,7 +296,7 @@ function collectSlides(){
         <sys_scope display_value="TEAMonline">a2dfc25fdb7244105f65ba03e29619fa</sys_scope>
         <sys_update_name>sp_widget_1acfa40fdb855c505f65ba03e29619e0</sys_update_name>
         <sys_updated_by>andrey.mironyuk</sys_updated_by>
-        <sys_updated_on>2020-09-04 14:08:27</sys_updated_on>
+        <sys_updated_on>2020-09-10 14:52:17</sys_updated_on>
         <template><![CDATA[<div id="slider">
   <div class="pull-in">
     <uib-carousel interval="options.interval">

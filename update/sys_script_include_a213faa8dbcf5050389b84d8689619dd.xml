@@ -12,15 +12,15 @@ MomentsUtil.prototype = {
   initialize: function () {
     this.MOMENTS_TABLE = "x_aaro2_teamonline_moment"
   },
-  getApproved: function (limit) {
-    return this._getMoments('approval=approved', 5)
+  getFilteredNext:function(filter, lastDateTime, limit){
+    var query = filter+(lastDateTime?'^sys_created_on<'+lastDateTime: '');
+    return this._getMoments(query,limit)
   },
-  getApprovedNext: function(lastDateTime, count){
-    var query = 'approval=approved' + (lastDateTime?'^sys_created_on<'+lastDateTime: '');
-    return this._getMoments(query, count);
-  },
-  getNotApproved: function () {
-    return this._getMoments('approval=requested')
+  getUserStore: function (user_sys_id) {
+    var userGr = new GlideRecord('sys_user');
+    userGr.get(user_sys_id)
+    var dept = userGr.department.getRefRecord()
+    return { name: '', displayValue: dept.getValue('name'), value: dept.getUniqueValue() }
   },
   _getMoments: function (query, limit) {
     var momentGr = new GlideRecord(this.MOMENTS_TABLE);
@@ -36,7 +36,7 @@ MomentsUtil.prototype = {
         sys_id: momentGr.getUniqueValue(),
         caption: momentGr.getValue('caption'),
         approval: momentGr.getValue('approval'),
-        store: momentGr.getDisplayValue('store'),
+        store: this._getStore(momentGr.store.getRefRecord()),
         opened_by: {
           id: momentGr.getValue('opened_by'),
           name: momentGr.getDisplayValue('opened_by')
@@ -60,6 +60,13 @@ MomentsUtil.prototype = {
       });
     }
     return attachments
+  },
+  _getStore: function(record){
+    return {
+      sys_id: record.getUniqueValue(),
+      name: record.getValue('name'),
+      description: record.getValue('description') 
+    }
   },
   approveAction: function (input, record_sys_id, approveState) {
     var apprGr = new GlideRecord('sysapproval_approver');
@@ -121,7 +128,7 @@ MomentsUtil.prototype = {
         <sys_created_on>2020-09-01 12:37:42</sys_created_on>
         <sys_customer_update>false</sys_customer_update>
         <sys_id>a213faa8dbcf5050389b84d8689619dd</sys_id>
-        <sys_mod_count>11</sys_mod_count>
+        <sys_mod_count>15</sys_mod_count>
         <sys_name>MomentsUtil</sys_name>
         <sys_package display_value="TEAMonline" source="x_aaro2_teamonline">a2dfc25fdb7244105f65ba03e29619fa</sys_package>
         <sys_policy/>
@@ -129,6 +136,6 @@ MomentsUtil.prototype = {
         <sys_scope display_value="TEAMonline">a2dfc25fdb7244105f65ba03e29619fa</sys_scope>
         <sys_update_name>sys_script_include_a213faa8dbcf5050389b84d8689619dd</sys_update_name>
         <sys_updated_by>andrey.mironyuk</sys_updated_by>
-        <sys_updated_on>2020-09-09 13:17:10</sys_updated_on>
+        <sys_updated_on>2020-09-11 13:01:27</sys_updated_on>
     </sys_script_include>
 </record_update>

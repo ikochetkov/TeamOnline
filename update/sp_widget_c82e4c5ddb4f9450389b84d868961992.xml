@@ -5,81 +5,100 @@
   /* widget controller */
   var c = this;
   c.loading = false;
-  c.lastPage = false
-  c.loadMore = (last, inview) =>{
-    if(!(last&&inview)|| c.lastPage)return;
+  c.lastPage = false;
+  c.filter = 'all'
+
+  c.loadMore = (last, inview) => {
+    
+    if (!(last && inview) || c.lastPage) return;
+    
     c.loading = true;
-    console.log('last', last, 'inview', inview);
-    //console.log('old_data::', c.data)
-    let lastDateTime = c.data.moments[c.data.moments.length-1].data.created_on
-    console.log('lastDateTime', lastDateTime)
-    c.server.get({lastDateTime}).then(resp =>{
-      if(resp.data.nextMoments.length == 0)c.lastPage = true;
+    
+    const lastDateTime = c.data.moments[c.data.moments.length - 1].data.created_on
+    const filter = c.filter;
+    const count = 3
+    c.server.get({ lastDateTime, filter, count }).then(resp => {
+
+      if (resp.data.nextMoments.length == 0)
+        c.lastPage = true;
+
       c.data.moments = [...c.data.moments, ...resp.data.nextMoments]
       c.loading = false;
-      //console.log('new_data::', c.data)
-      //console.log('resp::', resp)
     })
   }
 
-
+  $scope.setFilter = (filter) => {
+    c.lastPage = false;
+    scrollTop()
+    c.filter = filter;
+    c.loading = true;
+    const count = 6;
+    c.server.get({filter, count}).then(resp =>{
+      c.data.moments = resp.data.nextMoments;
+      c.loading = false;
+      c.loadMore(true, true)
+    })
+  }
   var gallery = document.getElementsByClassName('moment-gallery')[0];
-	$scope.openImage = function (momentIndex, imageIndex) {
-		$scope.selectedMomentIndex = momentIndex;
-		$scope.selectedMoment = $scope.data.moments[momentIndex]
-		$scope.selectedImageIndex = imageIndex;
-		gallery.classList.add('active')
-	}
-	$(document).keydown(function(e) {
-		// ESCAPE key pressed
-		if (e.keyCode == 27) {
-			$scope.closeGallery()
-		}
-	});
-	$scope.closeGallery = function () {
-		$scope.selectedMoment = {}
-		gallery.classList.remove('active');
-		
-	}
-	$scope.selectImage = function (index) {
-		$scope.selectedImageIndex = index
-	}
-	$scope.iterateImage = function(amount){
-		var length = $scope.data.moments[$scope.selectedMomentIndex].attachments.length
-		if($scope.selectedImageIndex + amount > length - 1 ) $scope.selectedImageIndex = 0;
-		else if($scope.selectedImageIndex + amount < 0) $scope.selectedImageIndex = length - 1;
-		else $scope.selectedImageIndex += amount;
-	}
-	$scope.iterateMoment = function(amount){
-		var length = $scope.data.moments.length
-		if($scope.selectedMomentIndex + amount > length - 1 ) $scope.selectedMomentIndex = 0;
-		else if($scope.selectedMomentIndex + amount < 0) $scope.selectedMomentIndex = length - 1;
-		else $scope.selectedMomentIndex += amount;
-		$scope.selectedMoment = $scope.data.moments[$scope.selectedMomentIndex]
-		$scope.selectedImageIndex = 0;
-	}
-	
-	/* context Menu */
-	$scope.contextMenu = function (moment) {
-		if (!$scope.data.canEdit) { return [] }
-		return [
-			['Archive', function ($itemScope) {
-				var currentScope = getCurrentScopeByMethod($itemScope,'archive');
-				currentScope.archive(moment);	
-			}]
-		]
-	}
-	
-	/* returs current scope */
-	function getCurrentScopeByMethod(scope,method){
-		var currentScope = scope; 
-		var i = 0;
-		while (!currentScope.hasOwnProperty(method) && i<10){
-			currentScope = currentScope.$parent;
-			i++;
-		}
-		return currentScope;
-	}
+  $scope.openImage = function (momentIndex, imageIndex) {
+    $scope.selectedMomentIndex = momentIndex;
+    $scope.selectedMoment = $scope.data.moments[momentIndex]
+    $scope.selectedImageIndex = imageIndex;
+    gallery.classList.add('active')
+  }
+  $(document).keydown(function (e) {
+    // ESCAPE key pressed
+    if (e.keyCode == 27) {
+      $scope.closeGallery()
+    }
+  });
+  function scrollTop(){
+    document.getElementsByClassName('moments-grid-container')[0].scrollTop = 0;
+  }
+  $scope.closeGallery = function () {
+    $scope.selectedMoment = {}
+    gallery.classList.remove('active');
+
+  }
+  $scope.selectImage = function (index) {
+    $scope.selectedImageIndex = index
+  }
+  $scope.iterateImage = function (amount) {
+    var length = $scope.data.moments[$scope.selectedMomentIndex].attachments.length
+    if ($scope.selectedImageIndex + amount > length - 1) $scope.selectedImageIndex = 0;
+    else if ($scope.selectedImageIndex + amount < 0) $scope.selectedImageIndex = length - 1;
+    else $scope.selectedImageIndex += amount;
+  }
+  $scope.iterateMoment = function (amount) {
+    var length = $scope.data.moments.length
+    if ($scope.selectedMomentIndex + amount > length - 1) $scope.selectedMomentIndex = 0;
+    else if ($scope.selectedMomentIndex + amount < 0) $scope.selectedMomentIndex = length - 1;
+    else $scope.selectedMomentIndex += amount;
+    $scope.selectedMoment = $scope.data.moments[$scope.selectedMomentIndex]
+    $scope.selectedImageIndex = 0;
+  }
+
+  /* context Menu */
+  $scope.contextMenu = function (moment) {
+    if (!$scope.data.canEdit) { return [] }
+    return [
+      ['Archive', function ($itemScope) {
+        var currentScope = getCurrentScopeByMethod($itemScope, 'archive');
+        currentScope.archive(moment);
+      }]
+    ]
+  }
+
+  /* returs current scope */
+  function getCurrentScopeByMethod(scope, method) {
+    var currentScope = scope;
+    var i = 0;
+    while (!currentScope.hasOwnProperty(method) && i < 10) {
+      currentScope = currentScope.$parent;
+      i++;
+    }
+    return currentScope;
+  }
 }]]></client_script>
         <controller_as>c</controller_as>
         <css>$blue: #0069c8;&#13;
@@ -87,6 +106,7 @@ $darkgrey: #2f2f2f;&#13;
 .filters-container,&#13;
 .moments-grid-container {&#13;
   display: flex;&#13;
+  transition: all 300ms ease-in-out;&#13;
 }&#13;
 .filters-container {&#13;
   margin: 5px 0;&#13;
@@ -119,13 +139,13 @@ $darkgrey: #2f2f2f;&#13;
   flex-flow: row wrap;&#13;
   justify-content: flex-start;&#13;
   max-height: 81vh;&#13;
+  min-height: 81vh;&#13;
   overflow-y: auto;&#13;
-  &amp;::-webkit-scrollbar{&#13;
+  &amp;::-webkit-scrollbar {&#13;
     width: 0.5em;&#13;
   }&#13;
-  &amp;::-webkit-scrollbar-thumb{&#13;
+  &amp;::-webkit-scrollbar-thumb {&#13;
     background-color: darkgrey;&#13;
-    &#13;
   }&#13;
 }&#13;
 &#13;
@@ -137,6 +157,30 @@ $blue: #0069c8;&#13;
 .moment {&#13;
   width: 36.4rem;&#13;
   margin: 5px;&#13;
+  transition: all 300ms ease-in-out;&#13;
+  &amp;.ng-enter,&#13;
+  &amp;.ng-leave,&#13;
+  &amp;.ng-move {&#13;
+    transition: 0.5s linear all;&#13;
+  }&#13;
+&#13;
+  &amp;.ng-enter,&#13;
+  &amp;.ng-move {&#13;
+    opacity: 0;&#13;
+  }&#13;
+&#13;
+  &amp;.ng-enter.ng-enter-active,&#13;
+  &amp;.ng-move.ng-move-active {&#13;
+    opacity: 1;&#13;
+  }&#13;
+&#13;
+  &amp;.ng-leave {&#13;
+    opacity: 1;&#13;
+  }&#13;
+&#13;
+  &amp;.ng-leave.ng-leave-active {&#13;
+    opacity: 0;&#13;
+  }&#13;
 }&#13;
 .moment-image-container {&#13;
   width: 100%;&#13;
@@ -144,6 +188,13 @@ $blue: #0069c8;&#13;
   display: flex;&#13;
   place-content: center;&#13;
   justify-content: center;&#13;
+}&#13;
+.loader-container {&#13;
+  width: 100%;&#13;
+  height: 100%;&#13;
+  display: flex;&#13;
+  justify-content: center;&#13;
+  transition: all 300ms ease-in-out;&#13;
 }&#13;
 </css>
         <data_table>sp_instance</data_table>
@@ -163,14 +214,24 @@ $blue: #0069c8;&#13;
         <roles/>
         <script><![CDATA[(function() {
   var m_Util = new MomentsUtil();
+  var filters = {
+    all: 'approval=approved',
+    my: 'sys_created_by='+gs.getUserName(),
+    store: 'store='+m_Util.getUserStore(gs.getUserID()).value,
+    approvals: 'approval=not_approved'
+  }
   if(!input){
-    data.moments = m_Util.getApprovedNext('', 6)
+    data.moments = m_Util.getFilteredNext(filters.all, '', 6);
     data.isLoggedIn = gs.getSession().isLoggedIn();
     data.canEdit = gs.getUser().isMemberOf(gs.getProperty("x_aaro2_teamonline.teamonline_administration_group")) || gs.hasRole("admin");
   }
-  if(input && input.lastDateTime){
-    data.nextMoments = m_Util.getApprovedNext(input.lastDateTime, 3);
+  if(input){
+    console.log(input)
+    console.log(filters[input.filter])
+    data.nextMoments = m_Util.getFilteredNext(filters[input.filter], input.lastDateTime, input.count);
   }
+  
+
 })();]]></script>
         <servicenow>false</servicenow>
         <sys_class_name>sp_widget</sys_class_name>
@@ -178,7 +239,7 @@ $blue: #0069c8;&#13;
         <sys_created_on>2020-09-03 08:33:18</sys_created_on>
         <sys_customer_update>false</sys_customer_update>
         <sys_id>c82e4c5ddb4f9450389b84d868961992</sys_id>
-        <sys_mod_count>86</sys_mod_count>
+        <sys_mod_count>126</sys_mod_count>
         <sys_name>Teamonline Moments Grid</sys_name>
         <sys_package display_value="TEAMonline" source="x_aaro2_teamonline">a2dfc25fdb7244105f65ba03e29619fa</sys_package>
         <sys_policy/>
@@ -186,22 +247,22 @@ $blue: #0069c8;&#13;
         <sys_scope display_value="TEAMonline">a2dfc25fdb7244105f65ba03e29619fa</sys_scope>
         <sys_update_name>sp_widget_c82e4c5ddb4f9450389b84d868961992</sys_update_name>
         <sys_updated_by>andrey.mironyuk</sys_updated_by>
-        <sys_updated_on>2020-09-09 14:39:24</sys_updated_on>
+        <sys_updated_on>2020-09-11 13:04:15</sys_updated_on>
         <template><![CDATA[<div>
   <div class="filters-container">
-    <div class="filter-button active">
+    <div class="filter-button" ng-class="{active: c.filter=='all'}" ng-click="setFilter('all')">
       <i class="fa fa-th"></i>
       <span> All Moments </span>
     </div>
-    <div class="filter-button">
+    <div class="filter-button" ng-class="{active: c.filter=='my'}" ng-click="setFilter('my')">
       <i class="fa fa-user"></i>
       <span> My Moments </span>
     </div>
-    <div class="filter-button">
+    <div class="filter-button" ng-class="{active: c.filter=='store'}" ng-click="setFilter('store')">
       <i class="fa fa-location-arrow"></i>
       <span> My Store Moments </span>
     </div>
-    <div class="filter-button">
+    <div class="filter-button" ng-class="{active: c.filter=='approvals'}" ng-click="setFilter('approvals')">
       <i class="fa fa-check-circle-o"></i>
       <span> My Approvals </span>
       <div class="counter">2</div>
@@ -219,7 +280,7 @@ $blue: #0069c8;&#13;
         <div class="autror-container">
           <div class="author">{{moment.data.opened_by.name}} </div>
           <div class="location">
-            <i class="fa fa-location-arrow"></i> {{moment.data.store}}
+            <i class="fa fa-location-arrow"></i> {{moment.data.store.name}} ({{moment.data.store.description}}) 
           </div>
         </div>
 
@@ -243,11 +304,14 @@ $blue: #0069c8;&#13;
         </div>
       </div>
     </div>
-    <div class="lds-ripple" ng-if="c.loading">
-      <div></div>
-      <div></div>
-      <div></div>
+    <div class="loader-container" ng-show="c.loading">
+      <div class="lds-ripple">
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
     </div>
+    
   </div>
   <div class="moment-gallery">
 
@@ -283,7 +347,7 @@ $blue: #0069c8;&#13;
           <div class="autror-container">
             <div class="author"> {{selectedMoment.data.opened_by.name}} </div>
             <div class="location">
-              <i class="fa fa-location-arrow"></i> {{selectedMoment.data.store}}
+              <i class="fa fa-location-arrow"></i> {{selectedMoment.data.store.name}}({{selectedMoment.data.store.description}})
             </div>
           </div>
         </div>
