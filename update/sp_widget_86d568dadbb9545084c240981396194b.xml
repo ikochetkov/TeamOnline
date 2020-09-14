@@ -122,7 +122,7 @@ $blue: #0069c8;&#13;
         <sys_created_on>2020-07-06 09:31:10</sys_created_on>
         <sys_customer_update>false</sys_customer_update>
         <sys_id>86d568dadbb9545084c240981396194b</sys_id>
-        <sys_mod_count>612</sys_mod_count>
+        <sys_mod_count>613</sys_mod_count>
         <sys_name>Teamonline Memories</sys_name>
         <sys_package display_value="TEAMonline" source="x_aaro2_teamonline">a2dfc25fdb7244105f65ba03e29619fa</sys_package>
         <sys_policy/>
@@ -130,7 +130,7 @@ $blue: #0069c8;&#13;
         <sys_scope display_value="TEAMonline">a2dfc25fdb7244105f65ba03e29619fa</sys_scope>
         <sys_update_name>sp_widget_86d568dadbb9545084c240981396194b</sys_update_name>
         <sys_updated_by>andrey.mironyuk</sys_updated_by>
-        <sys_updated_on>2020-09-11 13:02:55</sys_updated_on>
+        <sys_updated_on>2020-09-11 13:09:48</sys_updated_on>
         <template><![CDATA[<div>
   <div id="moments-container">
     <div class="moments-header">
@@ -157,7 +157,7 @@ $blue: #0069c8;&#13;
 
           </div>
 
-          <uib-carousel interval="0">
+          <uib-carousel interval="0" template-url="/tpl.html">
             <uib-slide ng-repeat="slide in moment.attachments" active="slide.active">
               <div class="moment-image-container">
                 <img class="moment-image" ng-src="{{slide.thumbnail_url}}" role="presentation"

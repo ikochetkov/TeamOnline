@@ -136,7 +136,7 @@
 }
 
 //styles for blocks without description
-.black{ 
+/*.black{ 
   background:black;
   opacity:0.5;
   -webkit-transition: all 0.5s ease;
@@ -144,7 +144,7 @@
   -o-transition: all 0.5s ease;
   -ms-transition: all 0.5s ease;
   transition: all 0.5s ease; 
-}
+}*/
 .opac{
   -webkit-transition: all 0.5s ease;
   -moz-transition: all 0.5s ease;
@@ -161,9 +161,9 @@
   transition: all 0.5s ease; 
 }
 .opac:hover {
-  .black{opacity:0.1}
+  /*.black{opacity:0.1}*/
   .each-article-img img{
-    -webkit-filter: contrast(185%);
+    /*-webkit-filter: contrast(185%);*/
     transform: scale(1.1);
   }
 }
@@ -355,6 +355,9 @@ h5, .h5 {
   padding-top: 25%;
 }
 
+.each-article{
+  border: 1px solid #eee
+}
 .each-article-content .small .each-article-empty:before,
 .each-article-content .small .each-article:before {
   content: "";
@@ -516,9 +519,9 @@ h5, .h5 {
   background-color: rgba(0, 0, 0, .6);
 }
 
-.floating:hover:before {
+/*.floating:hover:before {
   background-color: rgba(0, 0, 0, 0);
-}
+}*/
 
 .floating:hover:after {
   height: 50% !important;
@@ -701,15 +704,15 @@ h5, .h5 {
         <sys_created_on>2020-06-29 15:55:52</sys_created_on>
         <sys_customer_update>false</sys_customer_update>
         <sys_id>c1cafd00dbf1d01084c2409813961907</sys_id>
-        <sys_mod_count>143</sys_mod_count>
+        <sys_mod_count>148</sys_mod_count>
         <sys_name>Team Online 4 Blocks</sys_name>
         <sys_package display_value="TEAMonline" source="x_aaro2_teamonline">a2dfc25fdb7244105f65ba03e29619fa</sys_package>
         <sys_policy/>
         <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
         <sys_scope display_value="TEAMonline">a2dfc25fdb7244105f65ba03e29619fa</sys_scope>
         <sys_update_name>sp_widget_c1cafd00dbf1d01084c2409813961907</sys_update_name>
-        <sys_updated_by>xxikochet</sys_updated_by>
-        <sys_updated_on>2020-09-03 20:46:49</sys_updated_on>
+        <sys_updated_by>andrey.mironyuk</sys_updated_by>
+        <sys_updated_on>2020-09-14 13:19:46</sys_updated_on>
         <template><![CDATA[<div class="each-article-content ffffff" >
   
 

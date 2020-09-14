@@ -7,13 +7,16 @@
   c.loading = false;
   c.lastPage = false;
   c.filter = 'all'
-
+  c.customFilterCollapsed = true;
+  $scope.storeFilter = { name: 'storeFilter', displayValue: '', value: '' }
+  $scope.userFilter = { name: 'userFilter', displayValue: '', value: '' }
+  $scope.captionFilter = ''
   c.loadMore = (last, inview) => {
-    
+
     if (!(last && inview) || c.lastPage) return;
-    
+
     c.loading = true;
-    
+
     const lastDateTime = c.data.moments[c.data.moments.length - 1].data.created_on
     const filter = c.filter;
     const count = 3
@@ -27,17 +30,36 @@
     })
   }
 
+  $scope.$on("field.change", function (evt, parms) {
+    if (parms.field.name === 'storeFilter') {
+      c.store = parms.newValue;
+    }
+    if(parms.field.name === 'userFilter'){
+      c.user = parms.newValue
+    }
+  });
   $scope.setFilter = (filter) => {
+    c.customFilterCollapsed = true;
     c.lastPage = false;
     scrollTop()
     c.filter = filter;
     c.loading = true;
     const count = 6;
-    c.server.get({filter, count}).then(resp =>{
+    c.server.get({ filter, count, user: c.user, store: c.store, caption: c.caption }).then(resp => {
+      if (resp.data.nextMoments.length === 0) {
+        c.data.moments = [];
+        c.data.loading = false;
+        return;
+
+      }
       c.data.moments = resp.data.nextMoments;
       c.loading = false;
       c.loadMore(true, true)
     })
+  }
+  $scope.openCustomFilter = () => {
+    c.customFilterCollapsed = !c.customFilterCollapsed;
+    c.filter = 'custom'
   }
   var gallery = document.getElementsByClassName('moment-gallery')[0];
   $scope.openImage = function (momentIndex, imageIndex) {
@@ -52,7 +74,7 @@
       $scope.closeGallery()
     }
   });
-  function scrollTop(){
+  function scrollTop() {
     document.getElementsByClassName('moments-grid-container')[0].scrollTop = 0;
   }
   $scope.closeGallery = function () {
@@ -107,18 +129,22 @@ $darkgrey: #2f2f2f;&#13;
 .moments-grid-container {&#13;
   display: flex;&#13;
   transition: all 300ms ease-in-out;&#13;
+&#13;
 }&#13;
 .filters-container {&#13;
   margin: 5px 0;&#13;
-  height: 4rem;&#13;
+  height: 100%;&#13;
   background-color: white;&#13;
   justify-content: center;&#13;
+  flex-wrap: wrap;&#13;
   border: 1px solid #eee;&#13;
+&#13;
 }&#13;
 .filter-button {&#13;
   border-bottom: 1px solid #999;&#13;
   width: 16rem;&#13;
   display: flex;&#13;
+  height: 4rem;&#13;
   place-items: center;&#13;
   justify-content: center;&#13;
   color: #999;&#13;
@@ -135,6 +161,16 @@ $darkgrey: #2f2f2f;&#13;
     color: $darkgrey;&#13;
   }&#13;
 }&#13;
+.custom-filter-form{&#13;
+  width: 100%&#13;
+}&#13;
+.custom-filter{&#13;
+  display: flex;&#13;
+  .form-group{&#13;
+    width: 100%;&#13;
+    margin: 10px;&#13;
+  }&#13;
+}&#13;
 .moments-grid-container {&#13;
   flex-flow: row wrap;&#13;
   justify-content: flex-start;&#13;
@@ -148,7 +184,11 @@ $darkgrey: #2f2f2f;&#13;
     background-color: darkgrey;&#13;
   }&#13;
 }&#13;
-&#13;
+label.filter-label{&#13;
+  font-size: 1.3rem;&#13;
+  font-weight: 500;&#13;
+  color: #262626;&#13;
+}&#13;
 $blue: #0069c8;&#13;
 #moments-container {&#13;
   margin-bottom: 10px;&#13;
@@ -239,7 +279,7 @@ $blue: #0069c8;&#13;
         <sys_created_on>2020-09-03 08:33:18</sys_created_on>
         <sys_customer_update>false</sys_customer_update>
         <sys_id>c82e4c5ddb4f9450389b84d868961992</sys_id>
-        <sys_mod_count>126</sys_mod_count>
+        <sys_mod_count>170</sys_mod_count>
         <sys_name>Teamonline Moments Grid</sys_name>
         <sys_package display_value="TEAMonline" source="x_aaro2_teamonline">a2dfc25fdb7244105f65ba03e29619fa</sys_package>
         <sys_policy/>
@@ -247,7 +287,7 @@ $blue: #0069c8;&#13;
         <sys_scope display_value="TEAMonline">a2dfc25fdb7244105f65ba03e29619fa</sys_scope>
         <sys_update_name>sp_widget_c82e4c5ddb4f9450389b84d868961992</sys_update_name>
         <sys_updated_by>andrey.mironyuk</sys_updated_by>
-        <sys_updated_on>2020-09-11 13:04:15</sys_updated_on>
+        <sys_updated_on>2020-09-14 12:38:18</sys_updated_on>
         <template><![CDATA[<div>
   <div class="filters-container">
     <div class="filter-button" ng-class="{active: c.filter=='all'}" ng-click="setFilter('all')">
@@ -267,8 +307,42 @@ $blue: #0069c8;&#13;
       <span> My Approvals </span>
       <div class="counter">2</div>
     </div>
+    <div class="filter-button" ng-class="{active: c.filter=='custom'}" ng-click="openCustomFilter()">
+      <i class="fa fa-filter"></i>
+      <span> Filter </span>
+
+    </div>
+    <div uib-collapse="c.customFilterCollapsed" class="custom-filter-form">
+      <div class="custom-filter">
+        <div class="form-group">
+          <label for="storeFilter" class="filter-label">Store</label>
+          <sn-record-picker id="storeFilter" field="storeFilter" table="'u_aarons_department'" display-field="'name'"
+            display-fields="'name,description'" value-field="'sys_id'" search-fields="'name,description'"
+            page-size="100" value="data.userCompany"></sn-record-picker>
+        </div>
+        <div class="form-group">
+          <label for="userFilter" class="filter-label">User</label>
+          <sn-record-picker id="userFilter" field="userFilter" table="'sys_user'" display-field="'name'" display-fields="'name,user_name'"
+            value-field="'sys_id'" page-size="100" value="data.userCompany" search-fields="'name,user_name'"></sn-record-picker>
+        </div>
+        <div class="form-group">
+          <label for="captionFilter" class="filter-label">Caption</label>
+          <input type="text" class="form-control" id="captionFilter" placeholder="Type caption here"
+            ng-model="captionFilter">
+        </div>
+      </div>
+      <div class="search-button-container">
+        <div class="btn btn-primary">
+          <i class="fa fa-search"></i>
+          Search
+        </div>
+      </div>
+    </div>
   </div>
   <div class="moments-grid-container" in-view-container>
+    <div class="no-moments-message" ng-if="data.moments.length==0">
+      There are no moments here yet
+    </div>
     <div class="moment" ng-repeat="(key,moment) in data.moments" in-view="c.loadMore($last, $inview)">
       <div class="avatar-timeago-container">
         <div ng-if="!data.isLoggedIn" class="avatar-large avatar-container">
@@ -280,7 +354,7 @@ $blue: #0069c8;&#13;
         <div class="autror-container">
           <div class="author">{{moment.data.opened_by.name}} </div>
           <div class="location">
-            <i class="fa fa-location-arrow"></i> {{moment.data.store.name}} ({{moment.data.store.description}}) 
+            <i class="fa fa-location-arrow"></i> {{moment.data.store.name}} ({{moment.data.store.description}})
           </div>
         </div>
 
@@ -304,14 +378,14 @@ $blue: #0069c8;&#13;
         </div>
       </div>
     </div>
-    <div class="loader-container" ng-show="c.loading">
+    <div class="loader-container" ng-show="loading">
       <div class="lds-ripple">
         <div></div>
         <div></div>
         <div></div>
       </div>
     </div>
-    
+
   </div>
   <div class="moment-gallery">
 
@@ -347,7 +421,8 @@ $blue: #0069c8;&#13;
           <div class="autror-container">
             <div class="author"> {{selectedMoment.data.opened_by.name}} </div>
             <div class="location">
-              <i class="fa fa-location-arrow"></i> {{selectedMoment.data.store.name}}({{selectedMoment.data.store.description}})
+              <i class="fa fa-location-arrow"></i>
+              {{selectedMoment.data.store.name}}({{selectedMoment.data.store.description}})
             </div>
           </div>
         </div>
