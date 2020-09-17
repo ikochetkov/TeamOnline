@@ -4,8 +4,7 @@
         <client_script><![CDATA[function($scope, spUtil) {
 	/* widget controller */
 	var c = this;
-	var maxFiles = 5
-	$scope.formCollapsed = true;
+	var maxFiles = c.data.maxFiles;
 	$scope.data.base64 = ''
 	var dropzone = new Dropzone("#moments-dropzone", {
 		timeout: 30000,
@@ -13,7 +12,8 @@
 		maxFiles: maxFiles,
 		addRemoveLinks: true,
 		maxFilesize: 5,
-		autoProcessQueue: false
+		autoProcessQueue: false,
+		dictDefaultMessage: "Drop images here or click to upload. \nYou can submit up to "+maxFiles+" files."
 	})
 	$scope.dropzone = dropzone;
 	$scope.uploading = false
@@ -22,16 +22,17 @@
 
 
 	$scope.submit = async function () {
+		//dropzone.disable();
 		$scope.uploading = true
 		$scope.data.files = [];
 
 		if (dropzone.files.length > maxFiles) {
 			spUtil.saddInfoMessage('You tried to submit ' + dropzone.files.length + ' files. Only first ' + maxFiles + ' will be uploaded')
+			dropzone.files = dropzone.files.slice(0, maxFiles)
 		}
-		//console.log(' dropzone.files',  dropzone.files)
 
 		let files = [];
-
+		
 		for (let file of dropzone.files) {
 			const newfile = await processfile(file)
 			files.push(newfile)
@@ -40,16 +41,16 @@
 		submitFiles(files)
 	}
 	function submitFiles(files) {
-
-		$scope.data.action = 'insert'
-		$scope.data.thumbnails = files.map(file => file.thumbnail);
-		$scope.data.compressedImages = files.map(file => file.compressedImage);
-		console.log($scope.data)
-		spUtil.update($scope).then(function () {
+		const payload = {
+			thumbnails: files.map( file => file.thumbnail),
+			compressedImages: files.map( file => file.compressedImage),
+			caption: $scope.data.caption,
+			store: $scope.data.store
+		}
+		c.server.get(payload).then(resp =>{
 			dropzone.removeAllFiles();
 			$scope.data.caption = '';
 			$scope.uploading = false;
-			//$scope.data.store = { displayValue: '', value: '', name: '' };
 			dropzone.enable()
 			spUtil.addInfoMessage('Your moment was successfully submitted for approval')
 		})
@@ -62,7 +63,6 @@
 	var fullsizeCompressionRatio = $scope.data.fullsize_compression_ratio
 	async function processfile(source) {
 		let file = await urlToFile(source.dataURL, source.name, source.type);
-
 		if (!(/image/i).test(file.type)) {
 			alert("File " + file.name + " is not an image.");
 			return false;
@@ -70,12 +70,12 @@
 
 		const bufferArray = await readFileAsync(file);
 		var blob = new Blob([bufferArray]); // create blob...
-
+		
 		window.URL = window.URL || window.webkitURL;
 		var blobURL = window.URL.createObjectURL(blob); // and get it's URL
-
+		
 		const image = await readImageAsync(blobURL);
-
+		
 		return resize(image, file);
 
 	}
@@ -83,7 +83,7 @@
 		const res = await fetch(url);
 		const arrBuf = await res.arrayBuffer();
 		return new File([arrBuf], filename, { type: mimeType });
-
+		
 	}
 	async function readFileAsync(file) {
 		return new Promise((resolve, reject) => {
@@ -106,16 +106,16 @@
 		})
 	}
 	function resize(image, file) {
-		var thumbnail = resizeMe(image, thumbnailMaxWidth, thumbnailMaxHeight, thumbnailCompressionRatio);
-		var compressedImage = resizeMe(image, fullsizeMaxWidth, fullsizeMaxHeight, fullsizeCompressionRatio);
+		var thumbnail = resizeMe(image, thumbnailMaxWidth, thumbnailMaxHeight, thumbnailCompressionRatio, file.type);
+		var compressedImage = resizeMe(image, fullsizeMaxWidth, fullsizeMaxHeight, fullsizeCompressionRatio, file.type);
 		return {
-			thumbnail: { name: file.name, type: 'image/jpeg', dataURL: thumbnail },
-			compressedImage: { name: file.name, type: 'image/jpeg', dataURL: compressedImage }
+			thumbnail:{ name: file.name, type: file.type, dataURL: thumbnail },
+			compressedImage:{ name: file.name, type: file.type, dataURL: compressedImage }
 		}
 	}
 	// === RESIZE ====
 
-	function resizeMe(img, max_width, max_height, compression_ratio) {
+	function resizeMe(img, max_width, max_height, compression_ratio, mimeType) {
 
 		var canvas = document.createElement('canvas');
 
@@ -143,7 +143,7 @@
 		var ctx = canvas.getContext("2d");
 		ctx.drawImage(img, 0, 0, width, height);
 
-		return canvas.toDataURL("image/jpeg", compression_ratio).split(',')[1]; // get the data from canvas as 70% JPG (can be also PNG, etc.)
+		return canvas.toDataURL(mimeType, compression_ratio).split(',')[1]; // get the data from canvas as 70% JPG (can be also PNG, etc.)
 
 	}
 }]]></client_script>
@@ -168,9 +168,14 @@
             height: 110px;&#13;
         }&#13;
     }&#13;
+    .dz-message .dz-button{&#13;
+        font-size: 1.6rem;&#13;
+        font-weight: 500;&#13;
+    }&#13;
     &#13;
 }&#13;
 .submit-memory-btn {&#13;
+    z-index: 17;&#13;
     width: 100%;&#13;
 }&#13;
 .form-group{&#13;
@@ -181,7 +186,6 @@
 .dz-progress{&#13;
     visibility: hidden;&#13;
 }&#13;
-&#13;
 </css>
         <data_table>sp_instance</data_table>
         <demo_data/>
@@ -200,17 +204,21 @@
         <roles/>
         <script><![CDATA[(function() {
   var m_Util = new MomentsUtil(); 
-  data.store =  getStore(gs.getUserID());
-  data.storesQuery = 'u_is_store=true^ORu_is_store_support_center=true^u_state=GA';
-  data.isLoggedIn = gs.getSession().isLoggedIn();
-  data.thumbnail_compression_ratio = parseFloat(gs.getProperty('x_aaro2_teamonline.moments_thumbnail_compression_ratio', "0.7"));
-  data.thumbnail_max_width = parseInt(gs.getProperty("x_aaro2_teamonline.moments_thumbnail_max_width","600"));
-  data.thumbnail_max_height = parseInt(gs.getProperty("x_aaro2_teamonline.moments_thumbnail_max_height","400"));
-  data.fullsize_compression_ratio = parseFloat(gs.getProperty('x_aaro2_teamonline.moments_fullsize_compression_ratio', "0.7"));
-  data.fullsize_max_width = parseInt(gs.getProperty("x_aaro2_teamonline.moments_fullsize_max_width","1920"));
-  data.fullsize_max_height = parseInt(gs.getProperty("x_aaro2_teamonline.moments_fullsize_max_height","1080"));
-
-  if (input && input.action === 'insert') {
+  if(!input||input.source==='grid'){
+    data.store =  getStore(gs.getUserID());
+    data.storesQuery = 'u_is_store=true^ORu_is_store_support_center=true^u_state=GA';
+    data.isLoggedIn = gs.getSession().isLoggedIn();
+    data.maxFiles = parseInt(gs.getProperty('x_aaro2_teamonline.moment_max_files',5))
+    data.thumbnail_compression_ratio = parseFloat(gs.getProperty('x_aaro2_teamonline.moments_thumbnail_compression_ratio', "0.7"));
+    data.thumbnail_max_width = parseInt(gs.getProperty("x_aaro2_teamonline.moments_thumbnail_max_width","600"));
+    data.thumbnail_max_height = parseInt(gs.getProperty("x_aaro2_teamonline.moments_thumbnail_max_height","400"));
+    data.fullsize_compression_ratio = parseFloat(gs.getProperty('x_aaro2_teamonline.moments_fullsize_compression_ratio', "0.7"));
+    data.fullsize_max_width = parseInt(gs.getProperty("x_aaro2_teamonline.moments_fullsize_max_width","1920"));
+    data.fullsize_max_height = parseInt(gs.getProperty("x_aaro2_teamonline.moments_fullsize_max_height","1080"));
+    data.collapsed = input?input.collapsed:true;
+    data.showButton = input?input.showButton:true;
+  }
+  if (input && !input.source) {
     m_Util.create(input)
   }
   
@@ -227,7 +235,7 @@
         <sys_created_on>2020-09-01 14:36:26</sys_created_on>
         <sys_customer_update>false</sys_customer_update>
         <sys_id>a92e4b60dbc39050389b84d868961980</sys_id>
-        <sys_mod_count>95</sys_mod_count>
+        <sys_mod_count>114</sys_mod_count>
         <sys_name>Teamonline Moment Submit Form</sys_name>
         <sys_package display_value="TEAMonline" source="x_aaro2_teamonline">a2dfc25fdb7244105f65ba03e29619fa</sys_package>
         <sys_policy/>
@@ -235,13 +243,13 @@
         <sys_scope display_value="TEAMonline">a2dfc25fdb7244105f65ba03e29619fa</sys_scope>
         <sys_update_name>sp_widget_a92e4b60dbc39050389b84d868961980</sys_update_name>
         <sys_updated_by>andrey.mironyuk</sys_updated_by>
-        <sys_updated_on>2020-09-10 15:04:38</sys_updated_on>
+        <sys_updated_on>2020-09-17 14:56:53</sys_updated_on>
         <template><![CDATA[<div style="margin: 5px 0">
   <div class="submit-area">
-    <button type="button" class="btn btn-primary submit-memory-btn"
-      ng-click="formCollapsed = !formCollapsed">{{formCollapsed?'Add moment':'Collapse form'}}</button>
+    <button type="button" class="btn btn-primary submit-memory-btn" ng-if="data.showButton"
+      ng-click="data.collapsed = !data.collapsed">{{data.collapsed?'Add moment':'Collapse form'}}</button>
   </div>
-  <div uib-collapse="formCollapsed" >
+  <div uib-collapse="data.collapsed" >
     <div class="moment-form-container" ng-show="data.isLoggedIn">
       <form action="file" enctype="multipart/form-data" class="dropzone needsclick" id="moments-dropzone">
       </form>

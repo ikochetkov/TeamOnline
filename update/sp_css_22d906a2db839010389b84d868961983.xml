@@ -12,15 +12,18 @@
     background-color: #0069c8;&#13;
     color: white;&#13;
 }&#13;
-.to-approve-moments, .approved-container {&#13;
+.to-approve-moments,&#13;
+.approved-container {&#13;
     max-height: 36.3rem;&#13;
     overflow-y: auto;&#13;
     overflow-x: hidden;&#13;
 }&#13;
-.to-approve-moments::-webkit-scrollbar, .approved-container::-webkit-scrollbar {&#13;
+.to-approve-moments::-webkit-scrollbar,&#13;
+.approved-container::-webkit-scrollbar {&#13;
     width: 0.5em;&#13;
 }&#13;
-.to-approve-moments::-webkit-scrollbar-thumb, .approved-container::-webkit-scrollbar-thumb {&#13;
+.to-approve-moments::-webkit-scrollbar-thumb,&#13;
+.approved-container::-webkit-scrollbar-thumb {&#13;
     background-color: darkgrey;&#13;
 }&#13;
 .moment {&#13;
@@ -55,6 +58,11 @@
 .moment .avatar-large {&#13;
     width: 3.2rem;&#13;
     height: 3.2rem;&#13;
+}&#13;
+&#13;
+.avatar-container.avatar-large .avatar.soloAvatar .sub-avatar {&#13;
+    font-size: 1.5rem;&#13;
+    line-height: 3.2rem;&#13;
 }&#13;
 .info-wrapper {&#13;
     display: flex;&#13;
@@ -186,7 +194,11 @@
     place-items: center;&#13;
     justify-content: center;&#13;
 }&#13;
-.moment-gallery .gallery-carousel-container .carousel, .moment-gallery .gallery-carousel-container .carousel-inner, .moment-gallery .gallery-carousel-container .gallery-image-container, .moment-gallery .gallery-carousel-container .carousel-inner &gt; .active, .moment-gallery .gallery-carousel-container .item {&#13;
+.moment-gallery .gallery-carousel-container .carousel,&#13;
+.moment-gallery .gallery-carousel-container .carousel-inner,&#13;
+.moment-gallery .gallery-carousel-container .gallery-image-container,&#13;
+.moment-gallery .gallery-carousel-container .carousel-inner &gt; .active,&#13;
+.moment-gallery .gallery-carousel-container .item {&#13;
     width: 100%;&#13;
     height: 100%;&#13;
 }&#13;
@@ -224,8 +236,8 @@
     transform: translateX(0);&#13;
     transition: 100ms ease-in-out;&#13;
 }&#13;
-.moment .moment-control, &#13;
-.moment .carousel-control, &#13;
+.moment .moment-control,&#13;
+.moment .carousel-control,&#13;
 .moment-gallery .carousel-control {&#13;
     display: flex;&#13;
     width: 10%;&#13;
@@ -238,10 +250,12 @@
     font-size: 16pt;&#13;
     transition: 100ms ease-in-out;&#13;
 }&#13;
-.moment .carousel-control.right, .moment .carousel-control.left{&#13;
+.moment .carousel-control.right,&#13;
+.moment .carousel-control.left {&#13;
     background-image: none;&#13;
 }&#13;
-.moment-control:hover, .carousel-control:hover {&#13;
+.moment-control:hover,&#13;
+.carousel-control:hover {&#13;
     color: #919191;&#13;
     transition: 100ms ease-in-out;&#13;
 }&#13;
@@ -284,14 +298,14 @@
         width: 0;&#13;
         height: 0;&#13;
         opacity: 1;&#13;
-   }&#13;
+    }&#13;
     100% {&#13;
         top: 0px;&#13;
         left: 0px;&#13;
         width: 72px;&#13;
         height: 72px;&#13;
         opacity: 0;&#13;
-   }&#13;
+    }&#13;
 }&#13;
 </css>
         <name>moments.css</name>
@@ -300,7 +314,7 @@
         <sys_created_on>2020-09-07 14:45:19</sys_created_on>
         <sys_customer_update>false</sys_customer_update>
         <sys_id>22d906a2db839010389b84d868961983</sys_id>
-        <sys_mod_count>19</sys_mod_count>
+        <sys_mod_count>24</sys_mod_count>
         <sys_name>moments.css</sys_name>
         <sys_package display_value="TEAMonline" source="x_aaro2_teamonline">a2dfc25fdb7244105f65ba03e29619fa</sys_package>
         <sys_policy/>
@@ -308,6 +322,6 @@
         <sys_scope display_value="TEAMonline">a2dfc25fdb7244105f65ba03e29619fa</sys_scope>
         <sys_update_name>sp_css_22d906a2db839010389b84d868961983</sys_update_name>
         <sys_updated_by>andrey.mironyuk</sys_updated_by>
-        <sys_updated_on>2020-09-10 15:24:31</sys_updated_on>
+        <sys_updated_on>2020-09-16 13:10:40</sys_updated_on>
     </sp_css>
 </record_update>

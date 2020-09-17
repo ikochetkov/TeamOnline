@@ -1,32 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?><record_update table="sp_widget">
     <sp_widget action="INSERT_OR_UPDATE">
         <category>custom</category>
-        <client_script><![CDATA[function($scope) {
+        <client_script><![CDATA[function($scope, spModal, spUtil) {
   /* widget controller */
   var c = this;
-  c.loading = false;
+  $scope.loading = false;
   c.lastPage = false;
   c.filter = 'all'
   c.customFilterCollapsed = true;
   $scope.storeFilter = { name: 'storeFilter', displayValue: '', value: '' }
   $scope.userFilter = { name: 'userFilter', displayValue: '', value: '' }
   $scope.captionFilter = ''
+  $scope.previousDateTime = '';
+
   c.loadMore = (last, inview) => {
 
     if (!(last && inview) || c.lastPage) return;
 
-    c.loading = true;
+    const payload = {
+      lastDateTime: c.data.moments[c.data.moments.length - 1].data.created_on,
+      filter: c.filter,
+      count: 3,
+      user: c.user,
+      store: c.store,
+      caption: $scope.captionFilter, 
+      action: 'loading'
+    }
+    if ($scope.previousDateTime === payload.lastDateTime) return;
 
-    const lastDateTime = c.data.moments[c.data.moments.length - 1].data.created_on
-    const filter = c.filter;
-    const count = 3
-    c.server.get({ lastDateTime, filter, count }).then(resp => {
-
+    c.server.get(payload).then(resp => {
+      $scope.previousDateTime = payload.lastDateTime;
       if (resp.data.nextMoments.length == 0)
         c.lastPage = true;
 
       c.data.moments = [...c.data.moments, ...resp.data.nextMoments]
-      c.loading = false;
     })
   }
 
@@ -34,26 +41,36 @@
     if (parms.field.name === 'storeFilter') {
       c.store = parms.newValue;
     }
-    if(parms.field.name === 'userFilter'){
+    if (parms.field.name === 'userFilter') {
       c.user = parms.newValue
     }
   });
   $scope.setFilter = (filter) => {
-    c.customFilterCollapsed = true;
+    c.customFilterCollapsed = filter != 'custom';
     c.lastPage = false;
     scrollTop()
     c.filter = filter;
-    c.loading = true;
-    const count = 6;
-    c.server.get({ filter, count, user: c.user, store: c.store, caption: c.caption }).then(resp => {
-      if (resp.data.nextMoments.length === 0) {
-        c.data.moments = [];
-        c.data.loading = false;
-        return;
+    $scope.loading = true;
 
+    const payload = {
+      filter: c.filter,
+      count: 9,
+      user: c.user,
+      store: c.store,
+      caption: $scope.captionFilter,
+      action: 'loading',
+    }
+    c.server.get(payload).then(resp => {
+      console.log(resp.data)
+      console.log(resp.data.nextMoments.length)
+      if (resp.data.nextMoments.length == 0) {
+        c.data.moments = [];
+        $scope.loading = false;
+        return;
       }
       c.data.moments = resp.data.nextMoments;
-      c.loading = false;
+      $scope.loading = false;
+
       c.loadMore(true, true)
     })
   }
@@ -61,6 +78,49 @@
     c.customFilterCollapsed = !c.customFilterCollapsed;
     c.filter = 'custom'
   }
+  $scope.openSubmitForm = () => {
+    spModal.open({
+      title: 'New moment',
+      widget: c.data.submitFormWidget,
+      widgetInput: { collapsed: false, showButton: false, source: 'grid' },
+      buttons: [
+        { label: 'Close', cancel: true }
+      ]
+    })
+  }
+  $scope.approve = (moment) => {
+    approveAction(moment.data.sys_id, 'approved')
+  }
+  $scope.reject = (moment) => {
+    
+    approveAction(moment.data.sys_id, 'rejected')
+  }
+  $scope.archive = (moment)=>{
+   approveAction(moment.sys_id, 'rejected', true)
+  }
+  function approveAction(sys_id, state, isArchive) {
+    $scope.approving = true;
+    const payload = {
+      approval: sys_id,
+      approveState: state,
+      action: 'approval'
+    }
+    c.server.get(payload).then((resp) =>{
+      $scope.approving = false;
+      spUtil.addInfoMessage('Moment successfully ' + (isArchive ? 'archived' : state))
+      $scope.data.moments = resp.data.moments
+      $scope.data.approvalsCount = resp.data.approvalsCount
+    })
+  }
+if($scope.data.canEdit)
+spUtil.recordWatch($scope, $scope.data.momentsTable, "approval=requested", () => {
+    c.server.get({action: 'getApprovalsCount'}).then(resp => {
+      if(resp.data.approvalsCount > $scope.data.approvalsCount){
+        spUtil.addInfoMessage('New moment has been added and is awaiting for approval')
+      }
+      $scope.data.approvalsCount = resp.data.approvalsCount;
+  })
+})
   var gallery = document.getElementsByClassName('moment-gallery')[0];
   $scope.openImage = function (momentIndex, imageIndex) {
     $scope.selectedMomentIndex = momentIndex;
@@ -69,13 +129,15 @@
     gallery.classList.add('active')
   }
   $(document).keydown(function (e) {
-    // ESCAPE key pressed
     if (e.keyCode == 27) {
       $scope.closeGallery()
     }
   });
   function scrollTop() {
-    document.getElementsByClassName('moments-grid-container')[0].scrollTop = 0;
+    var container = document.getElementsByClassName('moments-grid-container')[0];
+    if (container)
+      container.scrollTop = 0;
+
   }
   $scope.closeGallery = function () {
     $scope.selectedMoment = {}
@@ -84,12 +146,6 @@
   }
   $scope.selectImage = function (index) {
     $scope.selectedImageIndex = index
-  }
-  $scope.iterateImage = function (amount) {
-    var length = $scope.data.moments[$scope.selectedMomentIndex].attachments.length
-    if ($scope.selectedImageIndex + amount > length - 1) $scope.selectedImageIndex = 0;
-    else if ($scope.selectedImageIndex + amount < 0) $scope.selectedImageIndex = length - 1;
-    else $scope.selectedImageIndex += amount;
   }
   $scope.iterateMoment = function (amount) {
     var length = $scope.data.moments.length
@@ -129,7 +185,6 @@ $darkgrey: #2f2f2f;&#13;
 .moments-grid-container {&#13;
   display: flex;&#13;
   transition: all 300ms ease-in-out;&#13;
-&#13;
 }&#13;
 .filters-container {&#13;
   margin: 5px 0;&#13;
@@ -138,7 +193,6 @@ $darkgrey: #2f2f2f;&#13;
   justify-content: center;&#13;
   flex-wrap: wrap;&#13;
   border: 1px solid #eee;&#13;
-&#13;
 }&#13;
 .filter-button {&#13;
   border-bottom: 1px solid #999;&#13;
@@ -149,27 +203,67 @@ $darkgrey: #2f2f2f;&#13;
   justify-content: center;&#13;
   color: #999;&#13;
   font-size: 1.2rem;&#13;
+  position: relative;&#13;
   i {&#13;
     margin-right: 1rem;&#13;
   }&#13;
   cursor: pointer;&#13;
   &amp;:hover {&#13;
     color: $darkgrey;&#13;
+    .counter {&#13;
+      background-color: #da4141;&#13;
+    }&#13;
   }&#13;
   &amp;.active {&#13;
     border-bottom-color: $darkgrey;&#13;
     color: $darkgrey;&#13;
+    .counter {&#13;
+      background-color: #da4141;&#13;
+    }&#13;
+  }&#13;
+  &amp;.add-button {&#13;
+    background-color: #0069c8;&#13;
+    color: white;&#13;
+    border-bottom: none;&#13;
+  }&#13;
+  .counter {&#13;
+    position: absolute;&#13;
+    top: 0;&#13;
+    right: 0;&#13;
+    border-radius: 50%;&#13;
+    width: 2rem;&#13;
+    height: 2rem;&#13;
+    background-color: #999;&#13;
+    color: white;&#13;
+    font-size: 1.1rem;&#13;
+    line-height: 2rem;&#13;
+    text-align: center;&#13;
+    font-weight: 900;&#13;
   }&#13;
 }&#13;
-.custom-filter-form{&#13;
-  width: 100%&#13;
+.custom-filter-form {&#13;
+  width: 100%;&#13;
 }&#13;
-.custom-filter{&#13;
+.custom-filter {&#13;
   display: flex;&#13;
-  .form-group{&#13;
+  .form-group {&#13;
     width: 100%;&#13;
     margin: 10px;&#13;
   }&#13;
+}&#13;
+.search-button-container {&#13;
+  display: flex;&#13;
+  justify-content: flex-end;&#13;
+  padding-bottom: 1rem;&#13;
+  padding-right: 1rem;&#13;
+}&#13;
+.no-moments-message{&#13;
+  width: 100%;&#13;
+  background-color: white;&#13;
+  display: flex;&#13;
+  place-content: center;&#13;
+  place-items: center;&#13;
+  font-size: 3rem;&#13;
 }&#13;
 .moments-grid-container {&#13;
   flex-flow: row wrap;&#13;
@@ -177,6 +271,8 @@ $darkgrey: #2f2f2f;&#13;
   max-height: 81vh;&#13;
   min-height: 81vh;&#13;
   overflow-y: auto;&#13;
+  position: relative;&#13;
+  transition: all .3s ease-in-out;&#13;
   &amp;::-webkit-scrollbar {&#13;
     width: 0.5em;&#13;
   }&#13;
@@ -184,7 +280,7 @@ $darkgrey: #2f2f2f;&#13;
     background-color: darkgrey;&#13;
   }&#13;
 }&#13;
-label.filter-label{&#13;
+label.filter-label {&#13;
   font-size: 1.3rem;&#13;
   font-weight: 500;&#13;
   color: #262626;&#13;
@@ -198,6 +294,9 @@ $blue: #0069c8;&#13;
   width: 36.4rem;&#13;
   margin: 5px;&#13;
   transition: all 300ms ease-in-out;&#13;
+  &amp;.inactive {&#13;
+    filter: grayscale(1);&#13;
+  }&#13;
   &amp;.ng-enter,&#13;
   &amp;.ng-leave,&#13;
   &amp;.ng-move {&#13;
@@ -222,6 +321,48 @@ $blue: #0069c8;&#13;
     opacity: 0;&#13;
   }&#13;
 }&#13;
+.approve-buttons-container {&#13;
+  .btn {&#13;
+    transition: all 0.3s ease-in-out;&#13;
+    background: none;&#13;
+    font-weight: 100;&#13;
+  }&#13;
+  .approve {&#13;
+    color: green;&#13;
+    &amp;:hover {&#13;
+      background-color: #eee;&#13;
+    }&#13;
+  }&#13;
+  .reject {&#13;
+    color: red;&#13;
+    &amp;:hover {&#13;
+      background-color: #eee;&#13;
+    }&#13;
+  }&#13;
+}&#13;
+.comment-input-container {&#13;
+  .input-group {&#13;
+    border-top: 1px solid #eee;&#13;
+  }&#13;
+  input {&#13;
+    border: none;&#13;
+  }&#13;
+}&#13;
+.gallery-container {&#13;
+  .caption-container {&#13;
+    display: flex;&#13;
+    justify-content: flex-start;&#13;
+    align-content: flex-start;&#13;
+    padding: 9px;&#13;
+    flex-wrap: wrap;&#13;
+    flex-grow: 1;&#13;
+  }&#13;
+}&#13;
+.approval-state {&#13;
+  font-size: 1rem;&#13;
+  text-align: right;&#13;
+  flex-grow: 1;&#13;
+}&#13;
 .moment-image-container {&#13;
   width: 100%;&#13;
   height: 27.2rem;&#13;
@@ -230,11 +371,24 @@ $blue: #0069c8;&#13;
   justify-content: center;&#13;
 }&#13;
 .loader-container {&#13;
+  position: absolute;&#13;
+  top: 0;&#13;
+  left: 0;&#13;
   width: 100%;&#13;
   height: 100%;&#13;
   display: flex;&#13;
   justify-content: center;&#13;
-  transition: all 300ms ease-in-out;&#13;
+  transition: all .3s ease-in-out;&#13;
+  background-color: white;&#13;
+  z-index: 16;&#13;
+  opacity: 1;&#13;
+  &amp;.ng-hide-add,&#13;
+  &amp;.ng-hide-remove {&#13;
+    transition: all .3s linear ;&#13;
+  }&#13;
+  &amp;.ng-hide {&#13;
+    opacity: 0;&#13;
+  }&#13;
 }&#13;
 </css>
         <data_table>sp_instance</data_table>
@@ -252,26 +406,45 @@ $blue: #0069c8;&#13;
         <option_schema/>
         <public>true</public>
         <roles/>
-        <script><![CDATA[(function() {
+        <script><![CDATA[(function () {
   var m_Util = new MomentsUtil();
+  data.momentsTable = 'x_aaro2_teamonline_moment'
+ 
   var filters = {
-    all: 'approval=approved',
-    my: 'sys_created_by='+gs.getUserName(),
-    store: 'store='+m_Util.getUserStore(gs.getUserID()).value,
-    approvals: 'approval=not_approved'
+    all: function () { return 'approval=approved' },
+    my: function () { return 'opened_by=' + gs.getUserID() },
+    store: function () { return 'approval=approved^store=' + m_Util.getUserStore(gs.getUserID()).value },
+    approvals: function () { return 'approval=requested' },
+    custom: function () { return getCustomFilter() }
   }
-  if(!input){
-    data.moments = m_Util.getFilteredNext(filters.all, '', 6);
+  if (!input) {
+    data.moments = m_Util.getFilteredNext(filters.all(), '', 6);
     data.isLoggedIn = gs.getSession().isLoggedIn();
     data.canEdit = gs.getUser().isMemberOf(gs.getProperty("x_aaro2_teamonline.teamonline_administration_group")) || gs.hasRole("admin");
+    data.submitFormWidget = 'teamonline_moment_submit_form';
+    data.approvalsCount = m_Util.getApprovalsCount();
+    data.commentsEnabled = gs.getProperty('x_aaro2_teamonline.moment_comments_enabled', "false") === "true"
   }
-  if(input){
-    console.log(input)
-    console.log(filters[input.filter])
-    data.nextMoments = m_Util.getFilteredNext(filters[input.filter], input.lastDateTime, input.count);
+  if (input && input.action==='loading') {
+    data.nextMoments = m_Util.getFilteredNext(filters[input.filter](), input.lastDateTime, input.count);
   }
-  
+  if(input&& input.action === 'approval'){
+    m_Util.approveAction(input, input.approval, input.approveState);
+    data.moments = m_Util.getFilteredNext(filters.approvals())
+    data.approvalsCount = m_Util.getApprovalsCount();
+  }
 
+  if(input && input.action === 'getApprovalsCount'){
+    data.approvalsCount = m_Util.getApprovalsCount();
+  }
+  function getCustomFilter() {
+    var filterString = filters.all() +
+      (input.store ? '^store=' + input.store : '') +
+      (input.user ? '^opened_by=' + input.user : '') +
+      (input.caption ? '^captionLIKE' + input.caption : '')
+
+    return filterString;
+  }
 })();]]></script>
         <servicenow>false</servicenow>
         <sys_class_name>sp_widget</sys_class_name>
@@ -279,7 +452,7 @@ $blue: #0069c8;&#13;
         <sys_created_on>2020-09-03 08:33:18</sys_created_on>
         <sys_customer_update>false</sys_customer_update>
         <sys_id>c82e4c5ddb4f9450389b84d868961992</sys_id>
-        <sys_mod_count>170</sys_mod_count>
+        <sys_mod_count>304</sys_mod_count>
         <sys_name>Teamonline Moments Grid</sys_name>
         <sys_package display_value="TEAMonline" source="x_aaro2_teamonline">a2dfc25fdb7244105f65ba03e29619fa</sys_package>
         <sys_policy/>
@@ -287,63 +460,72 @@ $blue: #0069c8;&#13;
         <sys_scope display_value="TEAMonline">a2dfc25fdb7244105f65ba03e29619fa</sys_scope>
         <sys_update_name>sp_widget_c82e4c5ddb4f9450389b84d868961992</sys_update_name>
         <sys_updated_by>andrey.mironyuk</sys_updated_by>
-        <sys_updated_on>2020-09-14 12:38:18</sys_updated_on>
+        <sys_updated_on>2020-09-17 15:04:04</sys_updated_on>
         <template><![CDATA[<div>
   <div class="filters-container">
+    <div class="filter-button add-button" ng-class="{active: c.filter=='submit'}" ng-click="openSubmitForm()"
+      ng-if="data.isLoggedIn">
+      <i class="fa fa-plus-circle"></i>
+      <span> Add moment </span>
+    </div>
     <div class="filter-button" ng-class="{active: c.filter=='all'}" ng-click="setFilter('all')">
       <i class="fa fa-th"></i>
       <span> All Moments </span>
     </div>
-    <div class="filter-button" ng-class="{active: c.filter=='my'}" ng-click="setFilter('my')">
+    <div class="filter-button" ng-class="{active: c.filter=='my'}" ng-click="setFilter('my')" ng-if="data.isLoggedIn">
       <i class="fa fa-user"></i>
       <span> My Moments </span>
     </div>
-    <div class="filter-button" ng-class="{active: c.filter=='store'}" ng-click="setFilter('store')">
+    <div class="filter-button" ng-class="{active: c.filter=='store'}" ng-click="setFilter('store')"
+      ng-if="data.isLoggedIn">
       <i class="fa fa-location-arrow"></i>
       <span> My Store Moments </span>
-    </div>
-    <div class="filter-button" ng-class="{active: c.filter=='approvals'}" ng-click="setFilter('approvals')">
-      <i class="fa fa-check-circle-o"></i>
-      <span> My Approvals </span>
-      <div class="counter">2</div>
     </div>
     <div class="filter-button" ng-class="{active: c.filter=='custom'}" ng-click="openCustomFilter()">
       <i class="fa fa-filter"></i>
       <span> Filter </span>
-
     </div>
+    <div class="filter-button" ng-class="{active: c.filter=='approvals'}" ng-click="setFilter('approvals')"
+      ng-if="data.canEdit">
+      <i class="fa fa-check-circle-o"></i>
+      <span> My Approvals </span>
+      <div class="counter">{{data.approvalsCount}}</div>
+    </div>
+
     <div uib-collapse="c.customFilterCollapsed" class="custom-filter-form">
-      <div class="custom-filter">
-        <div class="form-group">
-          <label for="storeFilter" class="filter-label">Store</label>
-          <sn-record-picker id="storeFilter" field="storeFilter" table="'u_aarons_department'" display-field="'name'"
-            display-fields="'name,description'" value-field="'sys_id'" search-fields="'name,description'"
-            page-size="100" value="data.userCompany"></sn-record-picker>
+      <form>
+        <div class="custom-filter">
+
+          <div class="form-group">
+            <label for="storeFilter" class="filter-label">Store</label>
+            <sn-record-picker id="storeFilter" field="storeFilter" table="'u_aarons_department'" display-field="'name'"
+              display-fields="'name,description'" value-field="'sys_id'" search-fields="'name,description'"
+              page-size="100" value="data.userCompany"></sn-record-picker>
+          </div>
+          <div class="form-group">
+            <label for="userFilter" class="filter-label">User</label>
+            <sn-record-picker id="userFilter" field="userFilter" table="'sys_user'" display-field="'name'"
+              display-fields="'name,user_name'" value-field="'sys_id'" page-size="100" value="data.userCompany"
+              search-fields="'name,user_name'"></sn-record-picker>
+          </div>
+          <div class="form-group">
+            <label for="captionFilter" class="filter-label">Caption</label>
+            <input type="text" class="form-control" id="captionFilter" placeholder="Type caption here"
+              ng-model="captionFilter">
+          </div>
         </div>
-        <div class="form-group">
-          <label for="userFilter" class="filter-label">User</label>
-          <sn-record-picker id="userFilter" field="userFilter" table="'sys_user'" display-field="'name'" display-fields="'name,user_name'"
-            value-field="'sys_id'" page-size="100" value="data.userCompany" search-fields="'name,user_name'"></sn-record-picker>
+        <div class="search-button-container">
+          <input type="submit" class="btn btn-primary" ng-click="setFilter('custom')" value="Search" />
         </div>
-        <div class="form-group">
-          <label for="captionFilter" class="filter-label">Caption</label>
-          <input type="text" class="form-control" id="captionFilter" placeholder="Type caption here"
-            ng-model="captionFilter">
-        </div>
-      </div>
-      <div class="search-button-container">
-        <div class="btn btn-primary">
-          <i class="fa fa-search"></i>
-          Search
-        </div>
-      </div>
+      </form>
     </div>
   </div>
   <div class="moments-grid-container" in-view-container>
     <div class="no-moments-message" ng-if="data.moments.length==0">
-      There are no moments here yet
+      <span> There are no moments yet </span>
     </div>
-    <div class="moment" ng-repeat="(key,moment) in data.moments" in-view="c.loadMore($last, $inview)">
+    <div class="moment" ng-repeat="(key,moment) in data.moments" in-view="c.loadMore($last, $inview)"
+      ng-class="{inactive: moment.data.approval!='approved'&&c.filter!='approvals'}">
       <div class="avatar-timeago-container">
         <div ng-if="!data.isLoggedIn" class="avatar-large avatar-container">
           <div class="avatar soloAvatar">
@@ -357,7 +539,16 @@ $blue: #0069c8;&#13;
             <i class="fa fa-location-arrow"></i> {{moment.data.store.name}} ({{moment.data.store.description}})
           </div>
         </div>
-
+        <div class="approval-state" ng-if="moment.data.approval!='approved'">
+          <div class="requested" ng-if="moment.data.approval=='requested'">
+            <i class="fa fa-hourglass-o"></i>
+            <span>Waiting for approval</span>
+          </div>
+          <div class="rejected" ng-if="moment.data.approval=='rejected'">
+            <i class="fa fa-times"></i>
+            <span>Rejected</span>
+          </div>
+        </div>
       </div>
 
       <uib-carousel interval="0" template-url="/tpl.html">
@@ -377,6 +568,12 @@ $blue: #0069c8;&#13;
           <sn-time-ago timestamp="moment.data.created_on" />
         </div>
       </div>
+      <div class="approve-buttons-container" ng-if="c.filter=='approvals'&&!loading">
+        <input type="button" value="Approve" class="btn btn-success approve" ng-click="approve(moment)"
+          ng-disabled="moment.approving">
+        <input type="button" value="Reject" class="btn btn-danger reject" ng-click="reject(moment)"
+          ng-disabled="moment.approving">
+      </div>
     </div>
     <div class="loader-container" ng-show="loading">
       <div class="lds-ripple">
@@ -387,6 +584,7 @@ $blue: #0069c8;&#13;
     </div>
 
   </div>
+
   <div class="moment-gallery">
 
     <div class="close-gallery-button" ng-click="closeGallery();stopPropagation();">
@@ -433,6 +631,16 @@ $blue: #0069c8;&#13;
             <sn-time-ago timestamp="selectedMoment.data.created_on" />
           </div>
         </div>
+        <div class="comment-input-container" ng-if="data.commentsEnabled">
+          <div class="input-group">
+            <input type="text" class="form-control" placeholder="Type comment here...">
+            <span class="input-group-btn">
+              <button class="btn btn-default" type="button">
+                <i class="fa fa-paper-plane-o"></i>
+              </button>
+            </span>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -447,7 +655,7 @@ $blue: #0069c8;&#13;
        </div>
        <div >
          <ol class="carousel-indicators" ng-show="slides.length > 1">
-          <li ng-repeat="slide in slides | orderBy:indexOfSlide track by $index" ng-class="{ active: isActive(slide) }">
+          <li ng-repeat="slide in slides | orderBy:indexOfSlide track by $index" ng-class="{ active: isActive(slide) }" ng-click="select(slide)">
           </li>
          </ol>
        </div>

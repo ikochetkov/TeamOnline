@@ -4,18 +4,21 @@
         <client_script><![CDATA[function ($scope, $rootScope, spUtil) {
 	/* widget controller */
 	var c = this;
-	
+
 	$scope.limit = 10;
 	$scope.loadMore = function (last, inview) {
 		if (last && inview)
 			$scope.limit += 3;
-	}	
-	spUtil.recordWatch($scope, $scope.data.momentsTable, "", function (name) {
+	}
+	spUtil.recordWatch($scope, $scope.data.momentsTable, "approval=appoved", function (name) {
 		if (~name.data.changes.indexOf('approval')) {
 			$scope.data.action = ''
-			spUtil.update($scope);
+			c.server.get({}).then(resp => {
+				$scope.data.moments = resp.data.moments;
+			})
 		}
 	})
+	
 	var gallery = document.getElementsByClassName('moment-gallery')[0];
 	$scope.openImage = function (momentIndex, imageIndex) {
 		$scope.selectedMomentIndex = momentIndex;
@@ -23,8 +26,7 @@
 		$scope.selectedImageIndex = imageIndex;
 		gallery.classList.add('active')
 	}
-	$(document).keydown(function(e) {
-		// ESCAPE key pressed
+	$(document).keydown(function (e) {
 		if (e.keyCode == 27) {
 			$scope.closeGallery()
 		}
@@ -32,48 +34,45 @@
 	$scope.closeGallery = function () {
 		$scope.selectedMoment = {}
 		gallery.classList.remove('active');
-		
+
 	}
 	$scope.selectImage = function (index) {
 		$scope.selectedImageIndex = index
 	}
-	$scope.iterateImage = function(amount){
-		var length = $scope.data.moments[$scope.selectedMomentIndex].attachments.length
-		if($scope.selectedImageIndex + amount > length - 1 ) $scope.selectedImageIndex = 0;
-		else if($scope.selectedImageIndex + amount < 0) $scope.selectedImageIndex = length - 1;
-		else $scope.selectedImageIndex += amount;
-	}
-	$scope.iterateMoment = function(amount){
+	$scope.iterateMoment = function (amount) {
 		var length = $scope.data.moments.length
-		if($scope.selectedMomentIndex + amount > length - 1 ) $scope.selectedMomentIndex = 0;
-		else if($scope.selectedMomentIndex + amount < 0) $scope.selectedMomentIndex = length - 1;
+		if ($scope.selectedMomentIndex + amount > length - 1) $scope.selectedMomentIndex = 0;
+		else if ($scope.selectedMomentIndex + amount < 0) $scope.selectedMomentIndex = length - 1;
 		else $scope.selectedMomentIndex += amount;
 		$scope.selectedMoment = $scope.data.moments[$scope.selectedMomentIndex]
 		$scope.selectedImageIndex = 0;
 	}
-	
+	$scope.selectSlide = (slide) => {
+		console.log(slide)
+		slide.active = true
+	}
 	/* context Menu */
 	$scope.contextMenu = function (moment) {
 		if (!$scope.data.canEdit) { return [] }
 		return [
 			['Archive', function ($itemScope) {
-				var currentScope = getCurrentScopeByMethod($itemScope,'archive');
-				currentScope.archive(moment);	
+				var currentScope = getCurrentScopeByMethod($itemScope, 'archive');
+				currentScope.archive(moment);
 			}]
 		]
 	}
-	
+
 	/* returs current scope */
-	function getCurrentScopeByMethod(scope,method){
-		var currentScope = scope; 
+	function getCurrentScopeByMethod(scope, method) {
+		var currentScope = scope;
 		var i = 0;
-		while (!currentScope.hasOwnProperty(method) && i<10){
+		while (!currentScope.hasOwnProperty(method) && i < 10) {
 			currentScope = currentScope.$parent;
 			i++;
 		}
 		return currentScope;
 	}
-	
+
 }
 ]]></client_script>
         <controller_as>c</controller_as>
@@ -81,6 +80,31 @@
 $blue: #0069c8;&#13;
 #moments-container {&#13;
   margin-bottom: 0;&#13;
+  position: relative;&#13;
+  &amp;:hover {&#13;
+    #to-gallery {&#13;
+      visibility: visible;&#13;
+      opacity: 1;&#13;
+      height: 30px;&#13;
+    }&#13;
+  }&#13;
+}&#13;
+#to-gallery {&#13;
+  z-index: 16;&#13;
+  background-color: white;&#13;
+  position: absolute;&#13;
+  bottom: 0;&#13;
+  left: 0;&#13;
+  width: 100%;&#13;
+  display: flex;&#13;
+  justify-content: center;&#13;
+  place-items: center;&#13;
+  transition: all 0.3s ease-in-out;&#13;
+  height: 0;&#13;
+  opacity: 0;&#13;
+  visibility: hidden;&#13;
+  border: 1px solid #eee;&#13;
+  font-weight: 800;&#13;
 }&#13;
 </css>
         <data_table>sp_instance</data_table>
@@ -108,10 +132,12 @@ $blue: #0069c8;&#13;
   if (!input || !input.action)
     getMoments()
 
-  data.action = ''
+  if(input){
+    getMoments()
+  }
 
   function getMoments(){
-   data.moments = m_Util.getFilteredNext('approval=approved')
+   data.moments = m_Util.getFilteredNext('approval=approved', '', 5)
   }
  
 })();
@@ -122,7 +148,7 @@ $blue: #0069c8;&#13;
         <sys_created_on>2020-07-06 09:31:10</sys_created_on>
         <sys_customer_update>false</sys_customer_update>
         <sys_id>86d568dadbb9545084c240981396194b</sys_id>
-        <sys_mod_count>613</sys_mod_count>
+        <sys_mod_count>653</sys_mod_count>
         <sys_name>Teamonline Memories</sys_name>
         <sys_package display_value="TEAMonline" source="x_aaro2_teamonline">a2dfc25fdb7244105f65ba03e29619fa</sys_package>
         <sys_policy/>
@@ -130,9 +156,12 @@ $blue: #0069c8;&#13;
         <sys_scope display_value="TEAMonline">a2dfc25fdb7244105f65ba03e29619fa</sys_scope>
         <sys_update_name>sp_widget_86d568dadbb9545084c240981396194b</sys_update_name>
         <sys_updated_by>andrey.mironyuk</sys_updated_by>
-        <sys_updated_on>2020-09-11 13:09:48</sys_updated_on>
+        <sys_updated_on>2020-09-17 14:46:59</sys_updated_on>
         <template><![CDATA[<div>
   <div id="moments-container">
+    <div id="to-gallery" >
+      <a href="?id=teamonline_moments">To Moments Gallery <i class="fa fa-arrow-right"></i></a>
+    </div>
     <div class="moments-header">
       <span>Teamonline Moments</span>
     </div>
@@ -176,11 +205,10 @@ $blue: #0069c8;&#13;
         </div>
       </div>
     </div>
-    
   </div>
   <div class="moment-gallery">
 
-    <div class="close-gallery-button" ng-click="closeGallery();stopPropagation();">
+    <div class="close-gallery-button" ng-click="closeGallery()">
       <i class="fa fa-times"></i>
     </div>
 
@@ -238,7 +266,7 @@ $blue: #0069c8;&#13;
        </div>
        <div >
          <ol class="carousel-indicators" ng-show="slides.length > 1">
-          <li ng-repeat="slide in slides | orderBy:indexOfSlide track by $index" ng-class="{ active: isActive(slide) }">
+          <li ng-repeat="slide in slides | orderBy:indexOfSlide track by $index" ng-click="select(slide)" ng-class="{ active: isActive(slide) }" >
           </li>
          </ol>
        </div>

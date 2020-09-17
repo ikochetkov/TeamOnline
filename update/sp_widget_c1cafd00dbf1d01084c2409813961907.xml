@@ -355,9 +355,6 @@ h5, .h5 {
   padding-top: 25%;
 }
 
-.each-article{
-  border: 1px solid #eee
-}
 .each-article-content .small .each-article-empty:before,
 .each-article-content .small .each-article:before {
   content: "";
@@ -704,7 +701,7 @@ h5, .h5 {
         <sys_created_on>2020-06-29 15:55:52</sys_created_on>
         <sys_customer_update>false</sys_customer_update>
         <sys_id>c1cafd00dbf1d01084c2409813961907</sys_id>
-        <sys_mod_count>148</sys_mod_count>
+        <sys_mod_count>149</sys_mod_count>
         <sys_name>Team Online 4 Blocks</sys_name>
         <sys_package display_value="TEAMonline" source="x_aaro2_teamonline">a2dfc25fdb7244105f65ba03e29619fa</sys_package>
         <sys_policy/>
@@ -712,7 +709,7 @@ h5, .h5 {
         <sys_scope display_value="TEAMonline">a2dfc25fdb7244105f65ba03e29619fa</sys_scope>
         <sys_update_name>sp_widget_c1cafd00dbf1d01084c2409813961907</sys_update_name>
         <sys_updated_by>andrey.mironyuk</sys_updated_by>
-        <sys_updated_on>2020-09-14 13:19:46</sys_updated_on>
+        <sys_updated_on>2020-09-14 15:44:30</sys_updated_on>
         <template><![CDATA[<div class="each-article-content ffffff" >
   
 
