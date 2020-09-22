@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sp_angular_provider">
+    <sp_angular_provider action="INSERT_OR_UPDATE">
+        <name>moment</name>
+        <script><![CDATA[function moment() {
+	function controller($rootScope) {
+		var c = this;
+		c.selectImage = (imageIndex) => {
+			$rootScope.$broadcast('momentOpened', { momentIndex: c.key, imageIndex })
+		}
+		c.approveAction = (state, isArchive) => {
+			$rootScope.$broadcast('momentApprovalAction', { sys_id: c.moment.data.sys_id, state, isArchive })
+		}
+		c.contextMenu = () => {
+			if (!c.canEdit) return;
+			return [['Archive', () => { c.approveAction('rejected', true) }]]
+		}
+		$rootScope.$on('loadingStart', () => { c.loading = true })
+		$rootScope.$on('loadingEnd', () => { c.loading = false })
+	}
+	return {
+		templateUrl: function (element, attrs) {
+			return attrs.templateUrl;
+		},
+		restrict: 'E',
+		replace: true,
+		bindToController: {
+			moment: '=',
+			key: '=',
+			isLoggedIn: '=',
+			canEdit: '=',
+			activeAllowed: '=?',
+			approvals: '=?'
+		},
+		controller: controller,
+		controllerAs: 'c'
+	}
+}]]></script>
+        <sys_class_name>sp_angular_provider</sys_class_name>
+        <sys_created_by>andrey.mironyuk</sys_created_by>
+        <sys_created_on>2020-09-18 13:04:43</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_id>bf1a5242db935090389b84d8689619bf</sys_id>
+        <sys_mod_count>38</sys_mod_count>
+        <sys_name>moment</sys_name>
+        <sys_package display_value="TEAMonline" source="x_aaro2_teamonline">a2dfc25fdb7244105f65ba03e29619fa</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="TEAMonline">a2dfc25fdb7244105f65ba03e29619fa</sys_scope>
+        <sys_update_name>sp_angular_provider_bf1a5242db935090389b84d8689619bf</sys_update_name>
+        <sys_updated_by>andrey.mironyuk</sys_updated_by>
+        <sys_updated_on>2020-09-22 14:59:12</sys_updated_on>
+        <type>directive</type>
+    </sp_angular_provider>
+</record_update>

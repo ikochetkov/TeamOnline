@@ -1,52 +1,48 @@
 <?xml version="1.0" encoding="UTF-8"?><record_update table="sp_widget">
     <sp_widget action="INSERT_OR_UPDATE">
         <category>custom</category>
-        <client_script><![CDATA[function($scope, spModal, spUtil) {
-  /* widget controller */
+        <client_script><![CDATA[function($scope, spUtil, $rootScope) {
   var c = this;
-  $scope.loading = false;
   c.lastPage = false;
-  c.filter = 'all'
-  c.customFilterCollapsed = true;
-  $scope.storeFilter = { name: 'storeFilter', displayValue: '', value: '' }
-  $scope.userFilter = { name: 'userFilter', displayValue: '', value: '' }
-  $scope.captionFilter = ''
   $scope.previousDateTime = '';
-
-  c.loadMore = (last, inview) => {
-
+  c.filter = 'all'
+  $scope.loadMore = (last, inview) => {
     if (!(last && inview) || c.lastPage) return;
 
     const payload = {
       lastDateTime: c.data.moments[c.data.moments.length - 1].data.created_on,
       filter: c.filter,
       count: 3,
-      user: c.user,
-      store: c.store,
-      caption: $scope.captionFilter, 
+      user: c.user || '',
+      store: c.store || '',
+      caption: c.caption || '',
       action: 'loading'
     }
-    if ($scope.previousDateTime === payload.lastDateTime) return;
+    if ($scope.previousDateTime === payload.lastDateTime) 
+      return;
+    
 
     c.server.get(payload).then(resp => {
       $scope.previousDateTime = payload.lastDateTime;
-      if (resp.data.nextMoments.length == 0)
+      if (resp.data.nextMoments.length == 0){
         c.lastPage = true;
-
+        console.log('last page ',c.lastPage)
+      }
       c.data.moments = [...c.data.moments, ...resp.data.nextMoments]
     })
   }
 
-  $scope.$on("field.change", function (evt, parms) {
-    if (parms.field.name === 'storeFilter') {
-      c.store = parms.newValue;
-    }
-    if (parms.field.name === 'userFilter') {
-      c.user = parms.newValue
-    }
-  });
-  $scope.setFilter = (filter) => {
-    c.customFilterCollapsed = filter != 'custom';
+  $rootScope.$on('filterChanged', (evt, data) => {
+    c.user = data.user;
+    c.store = data.store;
+    c.caption = data.caption,
+    c.filter = data.filter
+    setFilter(data.filter)
+  })
+
+  function setFilter(filter) {
+    $scope.previousDateTime = ''
+    $rootScope.$broadcast('loadingStart');
     c.lastPage = false;
     scrollTop()
     c.filter = filter;
@@ -57,206 +53,55 @@
       count: 9,
       user: c.user,
       store: c.store,
-      caption: $scope.captionFilter,
+      caption: c.caption,
       action: 'loading',
     }
     c.server.get(payload).then(resp => {
-      console.log(resp.data)
-      console.log(resp.data.nextMoments.length)
+      $rootScope.$broadcast('loadingEnd');
+      $scope.loading = false;
       if (resp.data.nextMoments.length == 0) {
         c.data.moments = [];
-        $scope.loading = false;
         return;
       }
       c.data.moments = resp.data.nextMoments;
-      $scope.loading = false;
+     
 
-      c.loadMore(true, true)
+      $scope.loadMore(true, true)
     })
   }
-  $scope.openCustomFilter = () => {
-    c.customFilterCollapsed = !c.customFilterCollapsed;
-    c.filter = 'custom'
-  }
-  $scope.openSubmitForm = () => {
-    spModal.open({
-      title: 'New moment',
-      widget: c.data.submitFormWidget,
-      widgetInput: { collapsed: false, showButton: false, source: 'grid' },
-      buttons: [
-        { label: 'Close', cancel: true }
-      ]
-    })
-  }
-  $scope.approve = (moment) => {
-    approveAction(moment.data.sys_id, 'approved')
-  }
-  $scope.reject = (moment) => {
-    
-    approveAction(moment.data.sys_id, 'rejected')
-  }
-  $scope.archive = (moment)=>{
-   approveAction(moment.sys_id, 'rejected', true)
-  }
+ 
   function approveAction(sys_id, state, isArchive) {
-    $scope.approving = true;
     const payload = {
       approval: sys_id,
       approveState: state,
       action: 'approval'
     }
-    c.server.get(payload).then((resp) =>{
-      $scope.approving = false;
+    c.server.get(payload).then((resp) => {
       spUtil.addInfoMessage('Moment successfully ' + (isArchive ? 'archived' : state))
       $scope.data.moments = resp.data.moments
       $scope.data.approvalsCount = resp.data.approvalsCount
     })
   }
-if($scope.data.canEdit)
-spUtil.recordWatch($scope, $scope.data.momentsTable, "approval=requested", () => {
-    c.server.get({action: 'getApprovalsCount'}).then(resp => {
-      if(resp.data.approvalsCount > $scope.data.approvalsCount){
-        spUtil.addInfoMessage('New moment has been added and is awaiting for approval')
-      }
-      $scope.data.approvalsCount = resp.data.approvalsCount;
-  })
-})
-  var gallery = document.getElementsByClassName('moment-gallery')[0];
-  $scope.openImage = function (momentIndex, imageIndex) {
-    $scope.selectedMomentIndex = momentIndex;
-    $scope.selectedMoment = $scope.data.moments[momentIndex]
-    $scope.selectedImageIndex = imageIndex;
-    gallery.classList.add('active')
-  }
-  $(document).keydown(function (e) {
-    if (e.keyCode == 27) {
-      $scope.closeGallery()
-    }
-  });
+  if ($scope.data.canEdit)
+    spUtil.recordWatch($scope, $scope.data.momentsTable, "approval=requested", () => {
+      c.server.get({ action: 'getApprovalsCount' }).then(resp => {
+        if (resp.data.approvalsCount > $scope.data.approvalsCount) {
+          spUtil.addInfoMessage('New moment has been added and is awaiting for approval')
+        }
+        $scope.data.approvalsCount = resp.data.approvalsCount;
+      })
+    })
+
   function scrollTop() {
     var container = document.getElementsByClassName('moments-grid-container')[0];
     if (container)
       container.scrollTop = 0;
-
-  }
-  $scope.closeGallery = function () {
-    $scope.selectedMoment = {}
-    gallery.classList.remove('active');
-
-  }
-  $scope.selectImage = function (index) {
-    $scope.selectedImageIndex = index
-  }
-  $scope.iterateMoment = function (amount) {
-    var length = $scope.data.moments.length
-    if ($scope.selectedMomentIndex + amount > length - 1) $scope.selectedMomentIndex = 0;
-    else if ($scope.selectedMomentIndex + amount < 0) $scope.selectedMomentIndex = length - 1;
-    else $scope.selectedMomentIndex += amount;
-    $scope.selectedMoment = $scope.data.moments[$scope.selectedMomentIndex]
-    $scope.selectedImageIndex = 0;
-  }
-
-  /* context Menu */
-  $scope.contextMenu = function (moment) {
-    if (!$scope.data.canEdit) { return [] }
-    return [
-      ['Archive', function ($itemScope) {
-        var currentScope = getCurrentScopeByMethod($itemScope, 'archive');
-        currentScope.archive(moment);
-      }]
-    ]
-  }
-
-  /* returs current scope */
-  function getCurrentScopeByMethod(scope, method) {
-    var currentScope = scope;
-    var i = 0;
-    while (!currentScope.hasOwnProperty(method) && i < 10) {
-      currentScope = currentScope.$parent;
-      i++;
-    }
-    return currentScope;
   }
 }]]></client_script>
         <controller_as>c</controller_as>
         <css>$blue: #0069c8;&#13;
 $darkgrey: #2f2f2f;&#13;
-.filters-container,&#13;
-.moments-grid-container {&#13;
-  display: flex;&#13;
-  transition: all 300ms ease-in-out;&#13;
-}&#13;
-.filters-container {&#13;
-  margin: 5px 0;&#13;
-  height: 100%;&#13;
-  background-color: white;&#13;
-  justify-content: center;&#13;
-  flex-wrap: wrap;&#13;
-  border: 1px solid #eee;&#13;
-}&#13;
-.filter-button {&#13;
-  border-bottom: 1px solid #999;&#13;
-  width: 16rem;&#13;
-  display: flex;&#13;
-  height: 4rem;&#13;
-  place-items: center;&#13;
-  justify-content: center;&#13;
-  color: #999;&#13;
-  font-size: 1.2rem;&#13;
-  position: relative;&#13;
-  i {&#13;
-    margin-right: 1rem;&#13;
-  }&#13;
-  cursor: pointer;&#13;
-  &amp;:hover {&#13;
-    color: $darkgrey;&#13;
-    .counter {&#13;
-      background-color: #da4141;&#13;
-    }&#13;
-  }&#13;
-  &amp;.active {&#13;
-    border-bottom-color: $darkgrey;&#13;
-    color: $darkgrey;&#13;
-    .counter {&#13;
-      background-color: #da4141;&#13;
-    }&#13;
-  }&#13;
-  &amp;.add-button {&#13;
-    background-color: #0069c8;&#13;
-    color: white;&#13;
-    border-bottom: none;&#13;
-  }&#13;
-  .counter {&#13;
-    position: absolute;&#13;
-    top: 0;&#13;
-    right: 0;&#13;
-    border-radius: 50%;&#13;
-    width: 2rem;&#13;
-    height: 2rem;&#13;
-    background-color: #999;&#13;
-    color: white;&#13;
-    font-size: 1.1rem;&#13;
-    line-height: 2rem;&#13;
-    text-align: center;&#13;
-    font-weight: 900;&#13;
-  }&#13;
-}&#13;
-.custom-filter-form {&#13;
-  width: 100%;&#13;
-}&#13;
-.custom-filter {&#13;
-  display: flex;&#13;
-  .form-group {&#13;
-    width: 100%;&#13;
-    margin: 10px;&#13;
-  }&#13;
-}&#13;
-.search-button-container {&#13;
-  display: flex;&#13;
-  justify-content: flex-end;&#13;
-  padding-bottom: 1rem;&#13;
-  padding-right: 1rem;&#13;
-}&#13;
+&#13;
 .no-moments-message{&#13;
   width: 100%;&#13;
   background-color: white;&#13;
@@ -266,6 +111,7 @@ $darkgrey: #2f2f2f;&#13;
   font-size: 3rem;&#13;
 }&#13;
 .moments-grid-container {&#13;
+  display: flex;&#13;
   flex-flow: row wrap;&#13;
   justify-content: flex-start;&#13;
   max-height: 81vh;&#13;
@@ -280,11 +126,7 @@ $darkgrey: #2f2f2f;&#13;
     background-color: darkgrey;&#13;
   }&#13;
 }&#13;
-label.filter-label {&#13;
-  font-size: 1.3rem;&#13;
-  font-weight: 500;&#13;
-  color: #262626;&#13;
-}&#13;
+&#13;
 $blue: #0069c8;&#13;
 #moments-container {&#13;
   margin-bottom: 10px;&#13;
@@ -418,7 +260,7 @@ $blue: #0069c8;&#13;
     custom: function () { return getCustomFilter() }
   }
   if (!input) {
-    data.moments = m_Util.getFilteredNext(filters.all(), '', 6);
+    data.moments = m_Util.getFilteredNext(filters.all(), '', 9);
     data.isLoggedIn = gs.getSession().isLoggedIn();
     data.canEdit = gs.getUser().isMemberOf(gs.getProperty("x_aaro2_teamonline.teamonline_administration_group")) || gs.hasRole("admin");
     data.submitFormWidget = 'teamonline_moment_submit_form';
@@ -452,7 +294,7 @@ $blue: #0069c8;&#13;
         <sys_created_on>2020-09-03 08:33:18</sys_created_on>
         <sys_customer_update>false</sys_customer_update>
         <sys_id>c82e4c5ddb4f9450389b84d868961992</sys_id>
-        <sys_mod_count>304</sys_mod_count>
+        <sys_mod_count>348</sys_mod_count>
         <sys_name>Teamonline Moments Grid</sys_name>
         <sys_package display_value="TEAMonline" source="x_aaro2_teamonline">a2dfc25fdb7244105f65ba03e29619fa</sys_package>
         <sys_policy/>
@@ -460,121 +302,21 @@ $blue: #0069c8;&#13;
         <sys_scope display_value="TEAMonline">a2dfc25fdb7244105f65ba03e29619fa</sys_scope>
         <sys_update_name>sp_widget_c82e4c5ddb4f9450389b84d868961992</sys_update_name>
         <sys_updated_by>andrey.mironyuk</sys_updated_by>
-        <sys_updated_on>2020-09-17 15:04:04</sys_updated_on>
+        <sys_updated_on>2020-09-22 14:35:00</sys_updated_on>
         <template><![CDATA[<div>
-  <div class="filters-container">
-    <div class="filter-button add-button" ng-class="{active: c.filter=='submit'}" ng-click="openSubmitForm()"
-      ng-if="data.isLoggedIn">
-      <i class="fa fa-plus-circle"></i>
-      <span> Add moment </span>
-    </div>
-    <div class="filter-button" ng-class="{active: c.filter=='all'}" ng-click="setFilter('all')">
-      <i class="fa fa-th"></i>
-      <span> All Moments </span>
-    </div>
-    <div class="filter-button" ng-class="{active: c.filter=='my'}" ng-click="setFilter('my')" ng-if="data.isLoggedIn">
-      <i class="fa fa-user"></i>
-      <span> My Moments </span>
-    </div>
-    <div class="filter-button" ng-class="{active: c.filter=='store'}" ng-click="setFilter('store')"
-      ng-if="data.isLoggedIn">
-      <i class="fa fa-location-arrow"></i>
-      <span> My Store Moments </span>
-    </div>
-    <div class="filter-button" ng-class="{active: c.filter=='custom'}" ng-click="openCustomFilter()">
-      <i class="fa fa-filter"></i>
-      <span> Filter </span>
-    </div>
-    <div class="filter-button" ng-class="{active: c.filter=='approvals'}" ng-click="setFilter('approvals')"
-      ng-if="data.canEdit">
-      <i class="fa fa-check-circle-o"></i>
-      <span> My Approvals </span>
-      <div class="counter">{{data.approvalsCount}}</div>
-    </div>
-
-    <div uib-collapse="c.customFilterCollapsed" class="custom-filter-form">
-      <form>
-        <div class="custom-filter">
-
-          <div class="form-group">
-            <label for="storeFilter" class="filter-label">Store</label>
-            <sn-record-picker id="storeFilter" field="storeFilter" table="'u_aarons_department'" display-field="'name'"
-              display-fields="'name,description'" value-field="'sys_id'" search-fields="'name,description'"
-              page-size="100" value="data.userCompany"></sn-record-picker>
-          </div>
-          <div class="form-group">
-            <label for="userFilter" class="filter-label">User</label>
-            <sn-record-picker id="userFilter" field="userFilter" table="'sys_user'" display-field="'name'"
-              display-fields="'name,user_name'" value-field="'sys_id'" page-size="100" value="data.userCompany"
-              search-fields="'name,user_name'"></sn-record-picker>
-          </div>
-          <div class="form-group">
-            <label for="captionFilter" class="filter-label">Caption</label>
-            <input type="text" class="form-control" id="captionFilter" placeholder="Type caption here"
-              ng-model="captionFilter">
-          </div>
-        </div>
-        <div class="search-button-container">
-          <input type="submit" class="btn btn-primary" ng-click="setFilter('custom')" value="Search" />
-        </div>
-      </form>
-    </div>
-  </div>
   <div class="moments-grid-container" in-view-container>
     <div class="no-moments-message" ng-if="data.moments.length==0">
       <span> There are no moments yet </span>
     </div>
-    <div class="moment" ng-repeat="(key,moment) in data.moments" in-view="c.loadMore($last, $inview)"
-      ng-class="{inactive: moment.data.approval!='approved'&&c.filter!='approvals'}">
-      <div class="avatar-timeago-container">
-        <div ng-if="!data.isLoggedIn" class="avatar-large avatar-container">
-          <div class="avatar soloAvatar">
-            <div class="sub-avatar" style="background-image: url(c4436fe21b3250d0d6c54229bc4bcbac.iix)" />
-          </div>
-        </div>
-        <sn-avatar ng-if="data.isLoggedIn" class="avatar-large" primary="moment.data.opened_by.id" />
-        <div class="autror-container">
-          <div class="author">{{moment.data.opened_by.name}} </div>
-          <div class="location">
-            <i class="fa fa-location-arrow"></i> {{moment.data.store.name}} ({{moment.data.store.description}})
-          </div>
-        </div>
-        <div class="approval-state" ng-if="moment.data.approval!='approved'">
-          <div class="requested" ng-if="moment.data.approval=='requested'">
-            <i class="fa fa-hourglass-o"></i>
-            <span>Waiting for approval</span>
-          </div>
-          <div class="rejected" ng-if="moment.data.approval=='rejected'">
-            <i class="fa fa-times"></i>
-            <span>Rejected</span>
-          </div>
-        </div>
-      </div>
-
-      <uib-carousel interval="0" template-url="/tpl.html">
-        <uib-slide ng-repeat="slide in moment.attachments" active="slide.active">
-          <div class="moment-image-container">
-            <img class="moment-image" ng-src="{{slide.thumbnail_url}}" role="presentation"
-              ng-click="openImage(key, $index)">
-          </div>
-        </uib-slide>
-      </uib-carousel>
-      <div class="caption-container">
-
-        <div class="caption"><b>{{moment.data.opened_by.name}}:</b> <span></span> "{{moment.data.caption}}"
-        </div>
-        <div class="timeago">
-          <i class="fa fa-clock-o"></i>
-          <sn-time-ago timestamp="moment.data.created_on" />
-        </div>
-      </div>
-      <div class="approve-buttons-container" ng-if="c.filter=='approvals'&&!loading">
-        <input type="button" value="Approve" class="btn btn-success approve" ng-click="approve(moment)"
-          ng-disabled="moment.approving">
-        <input type="button" value="Reject" class="btn btn-danger reject" ng-click="reject(moment)"
-          ng-disabled="moment.approving">
-      </div>
-    </div>
+    <moment 
+      ng-repeat="(key, moment) in data.moments" 
+      key="key"
+      moment="moment"
+      template-url="moment.html"
+      is-logged-in="data.isLoggedIn"
+      can-edit="data.canEdit"
+      active-allowed="c.filter=='approvals'"
+      in-view="loadMore($last, $inview)"/>
     <div class="loader-container" ng-show="loading">
       <div class="lds-ripple">
         <div></div>
@@ -582,91 +324,11 @@ $blue: #0069c8;&#13;
         <div></div>
       </div>
     </div>
-
   </div>
-
-  <div class="moment-gallery">
-
-    <div class="close-gallery-button" ng-click="closeGallery();stopPropagation();">
-      <i class="fa fa-times"></i>
-    </div>
-
-    <div class="controls-container">
-      <div class="image-control left" ng-click="iterateMoment(-1)"><i class="fa fa-chevron-left"></i></div>
-      <div class="image-control right" ng-click="iterateMoment(1)"><i class="fa fa-chevron-right"></i></div>
-    </div>
-    <div class="gallery-container">
-
-      <div class="gallery-left-container">
-        <div class="gallery-carousel-container">
-          <uib-carousel interval="0" template-url="/tpl.html" active="0">
-            <uib-slide ng-repeat="slide in selectedMoment.attachments" actual="slide.active">
-              <div class="gallery-image-container">
-                <img class="moment-image" ng-src="{{slide.image_url}}" role="presentation">
-              </div>
-            </uib-slide>
-          </uib-carousel>
-        </div>
-      </div>
-      <div class="gallery-right-container">
-        <div class="avatar-timeago-container">
-          <div ng-if="!data.isLoggedIn" class="avatar-large avatar-container">
-            <div class="avatar soloAvatar">
-              <div class="sub-avatar" style="background-image: url(c4436fe21b3250d0d6c54229bc4bcbac.iix)" />
-            </div>
-          </div>
-          <sn-avatar ng-if="data.isLoggedIn" class="avatar-large" primary="selectedMoment.data.opened_by.id" />
-          <div class="autror-container">
-            <div class="author"> {{selectedMoment.data.opened_by.name}} </div>
-            <div class="location">
-              <i class="fa fa-location-arrow"></i>
-              {{selectedMoment.data.store.name}}({{selectedMoment.data.store.description}})
-            </div>
-          </div>
-        </div>
-        <div class="caption-container">
-          <div class="caption"><b>{{selectedMoment.data.opened_by.name}}:</b> "{{selectedMoment.data.caption}}"</div>
-          <div class="timeago">
-            <i class="fa fa-clock-o"></i>
-            <sn-time-ago timestamp="selectedMoment.data.created_on" />
-          </div>
-        </div>
-        <div class="comment-input-container" ng-if="data.commentsEnabled">
-          <div class="input-group">
-            <input type="text" class="form-control" placeholder="Type comment here...">
-            <span class="input-group-btn">
-              <button class="btn btn-default" type="button">
-                <i class="fa fa-paper-plane-o"></i>
-              </button>
-            </span>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-  <script type="text/ng-template" id="/tpl.html">
-    <div class="carousel">
-     <div class="carousel-inner" ng-transclude></div>
-     <div class="carousel-controls">
-       <div class="carousel-control left">
-        <div role="button" href class="chevron-circle-left" ng-click="prev()" ng-class="{ disabled: isPrevDisabled() }" ng-show="slides.length > 1">
-          <i class="fa fa-chevron-circle-left"></i>
-        </div>
-       </div>
-       <div >
-         <ol class="carousel-indicators" ng-show="slides.length > 1">
-          <li ng-repeat="slide in slides | orderBy:indexOfSlide track by $index" ng-class="{ active: isActive(slide) }" ng-click="select(slide)">
-          </li>
-         </ol>
-       </div>
-       <div class="carousel-control right" >
-         <div role="button" href class="chevron-circle-right" ng-click="next()" ng-class="{ disabled: isNextDisabled() }" ng-show="slides.length > 1">
-           <i class="fa fa-chevron-circle-right"></i>
-         </div>
-       </div>
-     </div>
-    </div>
-  </script>
+  <teamonline-gallery 
+    template-url="moment-gallery.html"
+    moments="data.moments"
+    is-logged-in="data.isLoggedIn" />
 </div>]]></template>
     </sp_widget>
 </record_update>

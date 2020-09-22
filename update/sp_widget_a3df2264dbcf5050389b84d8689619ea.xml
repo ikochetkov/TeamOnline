@@ -1,29 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?><record_update table="sp_widget">
     <sp_widget action="INSERT_OR_UPDATE">
         <category>custom</category>
-        <client_script><![CDATA[function($scope, spUtil) {
+        <client_script><![CDATA[function($scope, $rootScope, spUtil) {
   /* widget controller */
   var c = this;
-  $scope.approve = (moment) => {
-    approveAction(moment.data.sys_id, 'approved')
-  }
-  $scope.reject = (moment) => {
-    
-    approveAction(moment.data.sys_id, 'rejected')
-  }
-  $scope.archive = (moment)=>{
-   approveAction(moment.sys_id, 'rejected', true)
-  }
+
+  $rootScope.$on('momentApprovalAction', (evt, data) => {
+    approveAction(data.sys_id, data.state, data.isArchive)
+  })
   function approveAction(sys_id, state, isArchive) {
-    $scope.approving = true;
+    $rootScope.$broadcast('loadingStart')
     const payload = {
       approval: sys_id,
       approveState: state
     }
     c.server.get(payload).then((resp) =>{
-      $scope.approving = false;
       spUtil.addInfoMessage('Moment successfully ' + (isArchive ? 'archived' : state))
       $scope.data.moments = resp.data.moments
+      $rootScope.$broadcast('loadingEnd')
     })
   }
  
@@ -32,69 +26,6 @@
 				$scope.data.moments = resp.data.moments;
 		})
 	})
-  var gallery = document.getElementsByClassName('moment-gallery')[0];
-  $scope.openImage = function (momentIndex, imageIndex) {
-    $scope.selectedMomentIndex = momentIndex;
-    $scope.selectedMoment = $scope.data.moments[momentIndex]
-    $scope.selectedImageIndex = imageIndex;
-    gallery.classList.add('active')
-  }
-  $(document).keydown(function (e) {
-    if (e.keyCode == 27) {
-      $scope.closeGallery()
-    }
-  });
-  $scope.openImage = function (momentIndex, imageIndex) {
-		$scope.selectedMomentIndex = momentIndex;
-		$scope.selectedMoment = $scope.data.moments[momentIndex]
-		$scope.selectedImageIndex = imageIndex;
-		gallery.classList.add('active')
-	}
-  $scope.closeGallery = function () {
-    $scope.selectedMoment = {}
-    gallery.classList.remove('active');
-
-  }
-  $scope.selectImage = function (index) {
-    $scope.selectedImageIndex = index
-  }
-  $scope.iterateImage = function (amount) {
-    var length = $scope.data.moments[$scope.selectedMomentIndex].attachments.length
-    if ($scope.selectedImageIndex + amount > length - 1) $scope.selectedImageIndex = 0;
-    else if ($scope.selectedImageIndex + amount < 0) $scope.selectedImageIndex = length - 1;
-    else $scope.selectedImageIndex += amount;
-  }
-  $scope.iterateMoment = function (amount) {
-    var length = $scope.data.moments.length
-    if ($scope.selectedMomentIndex + amount > length - 1) $scope.selectedMomentIndex = 0;
-    else if ($scope.selectedMomentIndex + amount < 0) $scope.selectedMomentIndex = length - 1;
-    else $scope.selectedMomentIndex += amount;
-    $scope.selectedMoment = $scope.data.moments[$scope.selectedMomentIndex]
-    $scope.selectedImageIndex = 0;
-  }
-
-  /* context Menu */
-  $scope.contextMenu = function (moment) {
-    if (!$scope.data.canEdit) { return [] }
-    return [
-      ['Archive', function ($itemScope) {
-        var currentScope = getCurrentScopeByMethod($itemScope, 'archive');
-        currentScope.archive(moment);
-      }]
-    ]
-  }
-
-  /* returs current scope */
-  function getCurrentScopeByMethod(scope, method) {
-    var currentScope = scope;
-    var i = 0;
-    while (!currentScope.hasOwnProperty(method) && i < 10) {
-      currentScope = currentScope.$parent;
-      i++;
-    }
-    return currentScope;
-  }
-
 }]]></client_script>
         <controller_as>c</controller_as>
         <css>/*all styles moved to shared css include moments.css*/&#13;
@@ -142,10 +73,10 @@
   data.isLoggedIn = gs.getSession().isLoggedIn();
   data.canEdit = gs.getUser().isMemberOf(gs.getProperty("x_aaro2_teamonline.teamonline_administration_group")) || gs.hasRole("admin");
   
-  if(input){
+  if(input && input.approval){
     m_Util.approveAction(input, input.approval, input.approveState);
   }
-  
+
   data.moments = m_Util.getFilteredNext('approval=requested')
 
  
@@ -156,7 +87,7 @@
         <sys_created_on>2020-09-01 12:24:24</sys_created_on>
         <sys_customer_update>false</sys_customer_update>
         <sys_id>a3df2264dbcf5050389b84d8689619ea</sys_id>
-        <sys_mod_count>47</sys_mod_count>
+        <sys_mod_count>50</sys_mod_count>
         <sys_name>Teamonline Moment Approvals</sys_name>
         <sys_package display_value="TEAMonline" source="x_aaro2_teamonline">a2dfc25fdb7244105f65ba03e29619fa</sys_package>
         <sys_policy/>
@@ -164,7 +95,7 @@
         <sys_scope display_value="TEAMonline">a2dfc25fdb7244105f65ba03e29619fa</sys_scope>
         <sys_update_name>sp_widget_a3df2264dbcf5050389b84d8689619ea</sys_update_name>
         <sys_updated_by>andrey.mironyuk</sys_updated_by>
-        <sys_updated_on>2020-09-17 13:11:04</sys_updated_on>
+        <sys_updated_on>2020-09-22 12:55:42</sys_updated_on>
         <template><![CDATA[<div>
   <div class="to-approve-container" ng-if="data.canEdit && data.moments.length>0">
     <div class="moments-header">
@@ -188,7 +119,7 @@
             </div>
           </div>
 
-          <uib-carousel template-url="/tpl.html" interval="0">
+          <uib-carousel template-url="custom_carousel.html" interval="0">
             <uib-slide ng-repeat="slide in moment.attachments" active="slide.active">
               <div class="moment-image-container">
                 <img class="moment-image" ng-src="{{slide.thumbnail_url}}" role="presentation"
@@ -229,7 +160,7 @@
 
     <div class="gallery-left-container">
       <div class="gallery-carousel-container">
-        <uib-carousel interval="0" template-url="/tpl.html" active="0">
+        <uib-carousel interval="0" template-url="custom_carousel.html" active="0">
           <uib-slide ng-repeat="slide in selectedMoment.attachments" actual="slide.active">
             <div class="gallery-image-container">
               <img class="moment-image" ng-src="{{slide.image_url}}" role="presentation">
@@ -264,29 +195,6 @@
     </div>
   </div>
 
-</div>
-<script type="text/ng-template" id="/tpl.html">
-    <div class="carousel">
-     <div class="carousel-inner" ng-transclude></div>
-     <div class="carousel-controls">
-       <div class="carousel-control left" ng-click="prev()" ng-class="{ disabled: isPrevDisabled() }" ng-show="slides.length > 1">
-        <div role="button" href class="chevron-circle-left" >
-          <i class="fa fa-chevron-circle-left"></i>
-        </div>
-       </div>
-       <div >
-         <ol class="carousel-indicators" ng-show="slides.length > 1">
-          <li ng-repeat="slide in slides | orderBy:indexOfSlide track by $index" ng-class="{ active: isActive(slide) }" ng-click="select(slide)">
-          </li>
-         </ol>
-       </div>
-       <div class="carousel-control right" ng-click="next()" ng-class="{ disabled: isNextDisabled() }" ng-show="slides.length > 1">
-         <div role="button" href class="chevron-circle-right" >
-           <i class="fa fa-chevron-circle-right"></i>
-         </div>
-       </div>
-     </div>
-    </div>
-    </script>]]></template>
+</div>]]></template>
     </sp_widget>
 </record_update>

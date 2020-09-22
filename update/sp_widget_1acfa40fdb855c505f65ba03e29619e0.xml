@@ -288,27 +288,27 @@ function collectSlides(){
         <sys_created_on>2020-06-01 11:22:57</sys_created_on>
         <sys_customer_update>false</sys_customer_update>
         <sys_id>1acfa40fdb855c505f65ba03e29619e0</sys_id>
-        <sys_mod_count>343</sys_mod_count>
+        <sys_mod_count>347</sys_mod_count>
         <sys_name>TeamOnline Carousel</sys_name>
         <sys_package display_value="TEAMonline" source="x_aaro2_teamonline">a2dfc25fdb7244105f65ba03e29619fa</sys_package>
         <sys_policy/>
         <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
         <sys_scope display_value="TEAMonline">a2dfc25fdb7244105f65ba03e29619fa</sys_scope>
         <sys_update_name>sp_widget_1acfa40fdb855c505f65ba03e29619e0</sys_update_name>
-        <sys_updated_by>andrey.mironyuk</sys_updated_by>
-        <sys_updated_on>2020-09-10 14:52:17</sys_updated_on>
+        <sys_updated_by>xxikochet</sys_updated_by>
+        <sys_updated_on>2020-09-21 18:52:34</sys_updated_on>
         <template><![CDATA[<div id="slider">
   <div class="pull-in">
     <uib-carousel interval="options.interval">
       <uib-slide ng-repeat="slide in data.slides" active="slide.active">
         <div context-menu="contextMenu()" class="container">
+					<a ng-href="{{slide.url}}">
+          	<img context-menu="contextMenu()" ng-src="{{slide.background}}" style="margin:auto; width:100%;" role="presentation">
 
-          <img context-menu="contextMenu()" ng-src="{{slide.background}}" style="margin:auto; width:100%;" role="presentation">
-
-          <div context-menu="contextMenu()" class="carousel-caption d-none d-md-block">
+          	<div context-menu="contextMenu()" class="carousel-caption d-none d-md-block">
             <!--<h2 class="name">{{slide.header}}</h2>
             <h4 class="description">{{slide.description}}</h4>
-            <p class="description">{{slide.full_description}}</p>-->
+            <p class="description">{{slide.full_description}}</p>
             <div ng-if="slide.enable_link == 'true'" class="button-wrapper">
               <svg height="60" width="320" xmlns="http://www.w3.org/2000/svg">
                 <rect class="shape" height="60" width="320" />
@@ -322,8 +322,9 @@ function collectSlides(){
                   </a>
                 </div>
               </svg>
-            </div>
-          </div>
+            </div>-->
+          	</div>
+          </a>
         </div>
 
       </uib-slide>

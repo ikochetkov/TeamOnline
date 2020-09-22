@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sp_widget">
+    <sp_widget action="INSERT_OR_UPDATE">
+        <category>custom</category>
+        <client_script><![CDATA[function( $scope, $rootScope, spModal ) {
+  /* widget controller */
+  var c = this;
+
+  $scope.data.filter = 'all'
+  $scope.customFilterCollapsed = true;
+  $scope.storeFilter = { name: 'storeFilter', displayValue: '', value: '' }
+  $scope.userFilter = { name: 'userFilter', displayValue: '', value: '' }
+  $scope.captionFilter = ''
+  $scope.previousDateTime = '';
+
+
+  $scope.setFilter = (filter) => {
+    $scope.customFilterCollapsed = filter != 'custom';
+    $scope.data.filter = filter;
+    console.log('broadcasting:: ', $scope.captionFilter)
+    $rootScope.$broadcast('filterChanged', {
+      filter, 
+      user: $scope.userFilter.value, 
+      store: $scope.storeFilter.value,
+      caption: $scope.captionFilter  
+    })
+  }
+  
+  $scope.openCustomFilter = () => {
+    $scope.customFilterCollapsed = ! $scope.customFilterCollapsed;
+    $scope.data.filter = 'custom'
+  }
+
+  $scope.openSubmitForm = () => {
+    spModal.open({
+      title: 'New moment',
+      widget: c.data.submitFormWidget,
+      widgetInput: { collapsed: false, showButton: false, source: 'grid' },
+      buttons: [
+        { label: 'Close', cancel: true }
+      ]
+    })
+  }
+}]]></client_script>
+        <controller_as>c</controller_as>
+        <css>$blue: #0069c8;&#13;
+$darkgrey: #2f2f2f;&#13;
+&#13;
+.filters-container,&#13;
+.moments-grid-container {&#13;
+  display: flex;&#13;
+  transition: all 300ms ease-in-out;&#13;
+}&#13;
+.filters-container {&#13;
+  margin: 5px 0;&#13;
+  background-color: white;&#13;
+  justify-content: center;&#13;
+  flex-wrap: wrap;&#13;
+  border: 1px solid #eee;&#13;
+}&#13;
+.filter-button {&#13;
+  border-bottom: 1px solid #999;&#13;
+  width: 16rem;&#13;
+  display: flex;&#13;
+  height: 4rem;&#13;
+  place-items: center;&#13;
+  justify-content: center;&#13;
+  color: #999;&#13;
+  font-size: 1.2rem;&#13;
+  position: relative;&#13;
+  i {&#13;
+    margin-right: 1rem;&#13;
+  }&#13;
+  cursor: pointer;&#13;
+  &amp;:hover {&#13;
+    color: $darkgrey;&#13;
+    .counter {&#13;
+      background-color: #da4141;&#13;
+    }&#13;
+  }&#13;
+  &amp;.active {&#13;
+    border-bottom-color: $darkgrey;&#13;
+    color: $darkgrey;&#13;
+    .counter {&#13;
+      background-color: #da4141;&#13;
+    }&#13;
+  }&#13;
+  &amp;.add-button {&#13;
+    background-color: #0069c8;&#13;
+    color: white;&#13;
+    border-bottom: none;&#13;
+  }&#13;
+  .counter {&#13;
+    position: absolute;&#13;
+    top: 0;&#13;
+    right: 0;&#13;
+    border-radius: 50%;&#13;
+    width: 2rem;&#13;
+    height: 2rem;&#13;
+    background-color: #999;&#13;
+    color: white;&#13;
+    font-size: 1.1rem;&#13;
+    line-height: 2rem;&#13;
+    text-align: center;&#13;
+    font-weight: 900;&#13;
+  }&#13;
+}&#13;
+.custom-filter-form {&#13;
+  width: 100%;&#13;
+}&#13;
+.custom-filter {&#13;
+  display: flex;&#13;
+  .form-group {&#13;
+    width: 100%;&#13;
+    margin: 10px;&#13;
+  }&#13;
+}&#13;
+.search-button-container {&#13;
+  display: flex;&#13;
+  justify-content: flex-end;&#13;
+  padding-bottom: 1rem;&#13;
+  padding-right: 1rem;&#13;
+}&#13;
+label.filter-label {&#13;
+    font-size: 1.3rem;&#13;
+    font-weight: 500;&#13;
+    color: #262626;&#13;
+  }</css>
+        <data_table>sp_instance</data_table>
+        <demo_data/>
+        <description/>
+        <docs/>
+        <field_list/>
+        <has_preview>false</has_preview>
+        <id>teamonline_moments_grid_filter</id>
+        <internal>false</internal>
+        <link><![CDATA[function link(scope, element, attrs, controller) { 
+
+ }]]></link>
+        <name>Teamonline Moments Grid Filter</name>
+        <option_schema/>
+        <public>false</public>
+        <roles/>
+        <script><![CDATA[(function () {
+  var m_Util = new MomentsUtil();
+  data.isLoggedIn = gs.getSession().isLoggedIn();
+  data.canEdit = gs.getUser().isMemberOf(gs.getProperty("x_aaro2_teamonline.teamonline_administration_group")) || gs.hasRole("admin");
+  data.approvalsCount = m_Util.getApprovalsCount();
+  data.submitFormWidget = 'teamonline_moment_submit_form';
+})();]]></script>
+        <servicenow>false</servicenow>
+        <sys_class_name>sp_widget</sys_class_name>
+        <sys_created_by>andrey.mironyuk</sys_created_by>
+        <sys_created_on>2020-09-22 09:44:45</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_id>d784161fdb171010389b84d8689619a2</sys_id>
+        <sys_mod_count>21</sys_mod_count>
+        <sys_name>Teamonline Moments Grid Filter</sys_name>
+        <sys_package display_value="TEAMonline" source="x_aaro2_teamonline">a2dfc25fdb7244105f65ba03e29619fa</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="TEAMonline">a2dfc25fdb7244105f65ba03e29619fa</sys_scope>
+        <sys_update_name>sp_widget_d784161fdb171010389b84d8689619a2</sys_update_name>
+        <sys_updated_by>andrey.mironyuk</sys_updated_by>
+        <sys_updated_on>2020-09-22 13:44:15</sys_updated_on>
+        <template><![CDATA[<div>
+  <div class="filters-container">
+    <div class="filter-button add-button" ng-click="openSubmitForm()" ng-if="data.isLoggedIn">
+      <i class="fa fa-plus-circle"></i>
+      <span> Add moment </span>
+    </div>
+    <div class="filter-button" ng-class="{active: data.filter=='all'}" ng-click="setFilter('all')">
+      
+      <i class="fa fa-th"></i>
+      <span> All Moments </span>
+    </div>
+    <div class="filter-button" ng-class="{active: data.filter=='my'}" ng-click="setFilter('my')" ng-if="data.isLoggedIn">
+      <i class="fa fa-user"></i>
+      <span> My Moments </span>
+    </div>
+    <div class="filter-button" ng-class="{active: data.filter=='store'}" ng-click="setFilter('store')"
+      ng-if="data.isLoggedIn">
+      <i class="fa fa-location-arrow"></i>
+      <span> My Store Moments </span>
+    </div>
+    <div class="filter-button" ng-class="{active: data.filter=='custom'}" ng-click="openCustomFilter()">
+      <i class="fa fa-filter"></i>
+      <span> Filter </span>
+    </div>
+    <div class="filter-button" ng-class="{active: data.filter=='approvals'}" ng-click="setFilter('approvals')"
+      ng-if="data.canEdit">
+      <i class="fa fa-check-circle-o"></i>
+      <span> My Approvals </span>
+      <div class="counter">{{data.approvalsCount}}</div>
+    </div>
+
+    <div uib-collapse="customFilterCollapsed" class="custom-filter-form">
+      <form>
+        <div class="custom-filter">
+
+          <div class="form-group">
+            <label for="storeFilter" class="filter-label">Store</label>
+            <sn-record-picker id="storeFilter" field="storeFilter" table="'u_aarons_department'" display-field="'name'"
+              display-fields="'name,description'" value-field="'sys_id'" search-fields="'name,description'"
+              page-size="100" value="data.userCompany"></sn-record-picker>
+          </div>
+          <div class="form-group">
+            <label for="userFilter" class="filter-label">User</label>
+            <sn-record-picker id="userFilter" field="userFilter" table="'sys_user'" display-field="'name'"
+              display-fields="'name,user_name'" value-field="'sys_id'" page-size="100" value="data.userCompany"
+              search-fields="'name,user_name'"></sn-record-picker>
+          </div>
+          <div class="form-group">
+            <label for="captionFilter" class="filter-label">Caption</label>
+            <input type="text" class="form-control" id="captionFilter" placeholder="Type caption here"
+              ng-model="captionFilter">
+          </div>
+        </div>
+        <div class="search-button-container">
+          <input type="submit" class="btn btn-primary" ng-click="setFilter('custom')" value="Search" />
+        </div>
+      </form>
+    </div>
+  </div>
+</div>]]></template>
+    </sp_widget>
+</record_update>

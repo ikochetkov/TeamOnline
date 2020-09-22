@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?><record_update table="m2m_sp_widget_dependency">
     <m2m_sp_widget_dependency action="INSERT_OR_UPDATE">
         <sp_dependency display_value="moments.css">02690a62db839010389b84d868961944</sp_dependency>
-        <sp_widget display_value="Teamonline Memories">86d568dadbb9545084c240981396194b</sp_widget>
+        <sp_widget display_value="Teamonline Moments">86d568dadbb9545084c240981396194b</sp_widget>
         <sys_class_name>m2m_sp_widget_dependency</sys_class_name>
         <sys_created_by>andrey.mironyuk</sys_created_by>
         <sys_created_on>2020-09-07 15:05:16</sys_created_on>

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sp_ng_template">
+    <sp_ng_template action="INSERT_OR_UPDATE">
+        <id>custom_carousel.html</id>
+        <sp_widget display_value="Teamonline Footer">3f3e9a6cdb3dd41084c24098139619d1</sp_widget>
+        <sys_class_name>sp_ng_template</sys_class_name>
+        <sys_created_by>andrey.mironyuk</sys_created_by>
+        <sys_created_on>2020-09-18 12:13:44</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_id>fc909a4edb135090389b84d868961943</sys_id>
+        <sys_mod_count>2</sys_mod_count>
+        <sys_name>custom_carousel.html</sys_name>
+        <sys_package display_value="TEAMonline" source="x_aaro2_teamonline">a2dfc25fdb7244105f65ba03e29619fa</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="TEAMonline">a2dfc25fdb7244105f65ba03e29619fa</sys_scope>
+        <sys_update_name>sp_ng_template_fc909a4edb135090389b84d868961943</sys_update_name>
+        <sys_updated_by>andrey.mironyuk</sys_updated_by>
+        <sys_updated_on>2020-09-18 12:39:58</sys_updated_on>
+        <template><![CDATA[<div class="carousel">
+  <div class="carousel-inner" ng-transclude></div>
+  <div class="carousel-controls">
+    <div class="carousel-control left">
+      <div role="button" href class="chevron-circle-left" ng-click="prev()" ng-class="{ disabled: isPrevDisabled() }" ng-show="slides.length > 1">
+        <i class="fa fa-chevron-circle-left"></i>
+      </div>
+    </div>
+    <div >
+      <ol class="carousel-indicators" ng-show="slides.length > 1">
+        <li ng-repeat="slide in slides | orderBy:indexOfSlide track by $index" ng-click="select(slide)" ng-class="{ active: isActive(slide) }" >
+        </li>
+      </ol>
+    </div>
+    <div class="carousel-control right" >
+      <div role="button" href class="chevron-circle-right" ng-click="next()" ng-class="{ disabled: isNextDisabled() }" ng-show="slides.length > 1">
+        <i class="fa fa-chevron-circle-right"></i>
+      </div>
+    </div>
+  </div>
+</div>]]></template>
+    </sp_ng_template>
+</record_update>
