@@ -33,6 +33,9 @@
     transition: all 0.3s ease-in-out;&#13;
     border: 1px solid #eee;&#13;
     border-radius: 2px;&#13;
+    .rejected{&#13;
+        filter: grayscale(1)&#13;
+    }&#13;
 }&#13;
 .moment .avatar-timeago-container {&#13;
     border-bottom: 1px #f3f3f4 solid;&#13;
@@ -314,7 +317,7 @@
         <sys_created_on>2020-09-07 14:45:19</sys_created_on>
         <sys_customer_update>false</sys_customer_update>
         <sys_id>22d906a2db839010389b84d868961983</sys_id>
-        <sys_mod_count>25</sys_mod_count>
+        <sys_mod_count>26</sys_mod_count>
         <sys_name>moments.css</sys_name>
         <sys_package display_value="TEAMonline" source="x_aaro2_teamonline">a2dfc25fdb7244105f65ba03e29619fa</sys_package>
         <sys_policy/>
@@ -322,6 +325,6 @@
         <sys_scope display_value="TEAMonline">a2dfc25fdb7244105f65ba03e29619fa</sys_scope>
         <sys_update_name>sp_css_22d906a2db839010389b84d868961983</sys_update_name>
         <sys_updated_by>andrey.mironyuk</sys_updated_by>
-        <sys_updated_on>2020-09-18 12:08:19</sys_updated_on>
+        <sys_updated_on>2020-09-23 12:47:19</sys_updated_on>
     </sp_css>
 </record_update>

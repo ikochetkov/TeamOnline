@@ -11,11 +11,12 @@
 MomentsUtil.prototype = {
   initialize: function () {
     this.MOMENTS_TABLE = "x_aaro2_teamonline_moment"
+    this.MOMENT_IMAGE_TABLE = "x_aaro2_teamonline_moment_image"
   },
-  getFilteredNext:function(filter, lastDateTime, limit){
+  getFilteredNext:function(filter, lastDateTime, limit, skipRejected){
     var query = filter+(lastDateTime?'^sys_created_on<'+lastDateTime: '');
     
-    return this._getMoments(query,limit)
+    return this._getMoments(query,limit, skipRejected)
   },
   getUserStore: function (user_sys_id) {
     var userGr = new GlideRecord('sys_user');
@@ -31,7 +32,13 @@ MomentsUtil.prototype = {
     approvalsGa.next();
     return approvalsGa.getAggregate('COUNT');
   },
-  _getMoments: function (query, limit) {
+  removeImage: function(imageName){
+    var imageGr = new GlideRecord(this.MOMENT_IMAGE_TABLE);
+    imageGr.get('name', imageName);
+    imageGr.rejected = true;
+    imageGr.update();
+  },
+  _getMoments: function (query, limit, skipRejected) {
     var momentGr = new GlideRecord(this.MOMENTS_TABLE);
     momentGr.addEncodedQuery(query);
     momentGr.orderByDesc('sys_created_on');
@@ -40,7 +47,7 @@ MomentsUtil.prototype = {
     moments = []
     while (momentGr.next()) {
       var moment = {};
-      moment.attachments = this._getAttachments(momentGr.getUniqueValue())
+      moment.attachments = this._getAttachments(momentGr.getUniqueValue(), skipRejected)
       moment.data = {
         sys_id: momentGr.getUniqueValue(),
         caption: momentGr.getValue('caption'),
@@ -56,16 +63,19 @@ MomentsUtil.prototype = {
     }
     return moments;
   },
-  _getAttachments: function (record_sys_id) {
-    var attGr = new GlideRecord('x_aaro2_teamonline_moment_image');
+  _getAttachments: function (record_sys_id, skipRejected) {
+    var attGr = new GlideRecord(this.MOMENT_IMAGE_TABLE);
     attGr.addQuery('moment', record_sys_id);
+    if(skipRejected)
+      attGr.addEncodedQuery('rejected!=true')
     attGr.query();
     var attachments = []
     while (attGr.next()) {
       attachments.push({
         name: attGr.getValue('image_name'),
         image_url: "/" + attGr.getValue('image_name'),
-        thumbnail_url: "/" + attGr.getValue('thumbnail_name')
+        thumbnail_url: "/" + attGr.getValue('thumbnail_name'),
+        rejected: attGr.getValue('rejected') == "1"
       });
     }
     return attachments
@@ -137,7 +147,7 @@ MomentsUtil.prototype = {
         <sys_created_on>2020-09-01 12:37:42</sys_created_on>
         <sys_customer_update>false</sys_customer_update>
         <sys_id>a213faa8dbcf5050389b84d8689619dd</sys_id>
-        <sys_mod_count>18</sys_mod_count>
+        <sys_mod_count>24</sys_mod_count>
         <sys_name>MomentsUtil</sys_name>
         <sys_package display_value="TEAMonline" source="x_aaro2_teamonline">a2dfc25fdb7244105f65ba03e29619fa</sys_package>
         <sys_policy/>
@@ -145,6 +155,6 @@ MomentsUtil.prototype = {
         <sys_scope display_value="TEAMonline">a2dfc25fdb7244105f65ba03e29619fa</sys_scope>
         <sys_update_name>sys_script_include_a213faa8dbcf5050389b84d8689619dd</sys_update_name>
         <sys_updated_by>andrey.mironyuk</sys_updated_by>
-        <sys_updated_on>2020-09-22 12:55:55</sys_updated_on>
+        <sys_updated_on>2020-09-23 13:08:02</sys_updated_on>
     </sys_script_include>
 </record_update>

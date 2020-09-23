@@ -98,6 +98,20 @@
             <sys_user/>
             <type/>
         </sys_ui_element>
+        <sys_ui_element action="INSERT_OR_UPDATE">
+            <element>rejected</element>
+            <position>7</position>
+            <sys_created_by>andrey.mironyuk</sys_created_by>
+            <sys_created_on>2020-09-23 12:12:39</sys_created_on>
+            <sys_id>3d6040fbdb93d010389b84d868961939</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_ui_formatter/>
+            <sys_ui_section caption="NULL" display_value="" name="x_aaro2_teamonline_moment_image" sys_domain="global" view="Default view">b1f54f97db761810389b84d8689619a6</sys_ui_section>
+            <sys_updated_by>andrey.mironyuk</sys_updated_by>
+            <sys_updated_on>2020-09-23 12:12:39</sys_updated_on>
+            <sys_user/>
+            <type/>
+        </sys_ui_element>
         <sys_ui_section action="INSERT_OR_UPDATE">
             <caption/>
             <header>false</header>

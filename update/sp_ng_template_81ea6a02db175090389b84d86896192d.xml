@@ -7,7 +7,7 @@
         <sys_created_on>2020-09-18 14:09:19</sys_created_on>
         <sys_customer_update>false</sys_customer_update>
         <sys_id>81ea6a02db175090389b84d86896192d</sys_id>
-        <sys_mod_count>15</sys_mod_count>
+        <sys_mod_count>22</sys_mod_count>
         <sys_name>moment.html</sys_name>
         <sys_package display_value="TEAMonline" source="x_aaro2_teamonline">a2dfc25fdb7244105f65ba03e29619fa</sys_package>
         <sys_policy/>
@@ -15,7 +15,7 @@
         <sys_scope display_value="TEAMonline">a2dfc25fdb7244105f65ba03e29619fa</sys_scope>
         <sys_update_name>sp_ng_template_81ea6a02db175090389b84d86896192d</sys_update_name>
         <sys_updated_by>andrey.mironyuk</sys_updated_by>
-        <sys_updated_on>2020-09-22 14:59:34</sys_updated_on>
+        <sys_updated_on>2020-09-23 13:37:43</sys_updated_on>
         <template><![CDATA[<div context-menu="contextMenu(moment)" class="moment" >
   <div class="avatar-timeago-container">
     <div ng-if="!c.isLoggedIn" class="avatar-large avatar-container">
@@ -44,10 +44,14 @@
 
   <uib-carousel interval="0" template-url="custom_carousel.html">
     <uib-slide ng-repeat="slide in moment.attachments" active="slide.active">
-      <div class="moment-image-container">
+      <div class="moment-image-container" ng-class="{rejected: slide.rejected}">
         <img class="moment-image" ng-src="{{slide.thumbnail_url}}" role="presentation"
              ng-click="c.selectImage($index)">
+             <!--<div class="reject-image" ng-click="c.rejectImage(slide)" ng-if="c.canEdit&&moment.data.approval=='requested'">
+               <i class="fa fa-times"></i> <span>Reject this image</span>
+             </div>-->
       </div>
+
     </uib-slide>
   </uib-carousel>
   <div class="caption-container">

@@ -73,14 +73,14 @@ $darkgrey: #2f2f2f;&#13;
   cursor: pointer;&#13;
   &amp;:hover {&#13;
     color: $darkgrey;&#13;
-    .counter {&#13;
+    .approval-counter {&#13;
       background-color: #da4141;&#13;
     }&#13;
   }&#13;
   &amp;.active {&#13;
     border-bottom-color: $darkgrey;&#13;
     color: $darkgrey;&#13;
-    .counter {&#13;
+    .approval-counter {&#13;
       background-color: #da4141;&#13;
     }&#13;
   }&#13;
@@ -88,20 +88,6 @@ $darkgrey: #2f2f2f;&#13;
     background-color: #0069c8;&#13;
     color: white;&#13;
     border-bottom: none;&#13;
-  }&#13;
-  .counter {&#13;
-    position: absolute;&#13;
-    top: 0;&#13;
-    right: 0;&#13;
-    border-radius: 50%;&#13;
-    width: 2rem;&#13;
-    height: 2rem;&#13;
-    background-color: #999;&#13;
-    color: white;&#13;
-    font-size: 1.1rem;&#13;
-    line-height: 2rem;&#13;
-    text-align: center;&#13;
-    font-weight: 900;&#13;
   }&#13;
 }&#13;
 .custom-filter-form {&#13;
@@ -146,6 +132,7 @@ label.filter-label {&#13;
   data.canEdit = gs.getUser().isMemberOf(gs.getProperty("x_aaro2_teamonline.teamonline_administration_group")) || gs.hasRole("admin");
   data.approvalsCount = m_Util.getApprovalsCount();
   data.submitFormWidget = 'teamonline_moment_submit_form';
+  data.approvalsEngineWidget =  $sp.getWidget('teamonline_moments_approval_engine')
 })();]]></script>
         <servicenow>false</servicenow>
         <sys_class_name>sp_widget</sys_class_name>
@@ -153,7 +140,7 @@ label.filter-label {&#13;
         <sys_created_on>2020-09-22 09:44:45</sys_created_on>
         <sys_customer_update>false</sys_customer_update>
         <sys_id>d784161fdb171010389b84d8689619a2</sys_id>
-        <sys_mod_count>21</sys_mod_count>
+        <sys_mod_count>30</sys_mod_count>
         <sys_name>Teamonline Moments Grid Filter</sys_name>
         <sys_package display_value="TEAMonline" source="x_aaro2_teamonline">a2dfc25fdb7244105f65ba03e29619fa</sys_package>
         <sys_policy/>
@@ -161,7 +148,7 @@ label.filter-label {&#13;
         <sys_scope display_value="TEAMonline">a2dfc25fdb7244105f65ba03e29619fa</sys_scope>
         <sys_update_name>sp_widget_d784161fdb171010389b84d8689619a2</sys_update_name>
         <sys_updated_by>andrey.mironyuk</sys_updated_by>
-        <sys_updated_on>2020-09-22 13:44:15</sys_updated_on>
+        <sys_updated_on>2020-09-23 12:51:35</sys_updated_on>
         <template><![CDATA[<div>
   <div class="filters-container">
     <div class="filter-button add-button" ng-click="openSubmitForm()" ng-if="data.isLoggedIn">
@@ -190,7 +177,8 @@ label.filter-label {&#13;
       ng-if="data.canEdit">
       <i class="fa fa-check-circle-o"></i>
       <span> My Approvals </span>
-      <div class="counter">{{data.approvalsCount}}</div>
+      <sp-widget widget="data.approvalsEngineWidget"></sp-widget>
+      
     </div>
 
     <div uib-collapse="customFilterCollapsed" class="custom-filter-form">

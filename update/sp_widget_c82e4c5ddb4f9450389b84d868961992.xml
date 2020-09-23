@@ -6,32 +6,7 @@
   c.lastPage = false;
   $scope.previousDateTime = '';
   c.filter = 'all'
-  $scope.loadMore = (last, inview) => {
-    if (!(last && inview) || c.lastPage) return;
-
-    const payload = {
-      lastDateTime: c.data.moments[c.data.moments.length - 1].data.created_on,
-      filter: c.filter,
-      count: 3,
-      user: c.user || '',
-      store: c.store || '',
-      caption: c.caption || '',
-      action: 'loading'
-    }
-    if ($scope.previousDateTime === payload.lastDateTime) 
-      return;
-    
-
-    c.server.get(payload).then(resp => {
-      $scope.previousDateTime = payload.lastDateTime;
-      if (resp.data.nextMoments.length == 0){
-        c.lastPage = true;
-        console.log('last page ',c.lastPage)
-      }
-      c.data.moments = [...c.data.moments, ...resp.data.nextMoments]
-    })
-  }
-
+  
   $rootScope.$on('filterChanged', (evt, data) => {
     c.user = data.user;
     c.store = data.store;
@@ -40,6 +15,11 @@
     setFilter(data.filter)
   })
 
+  $rootScope.$on('approvalsUpdated', () =>{
+    console.log('approvalsUpdated received')
+    if(c.filter === 'approvals')
+      setFilter('approvals');
+  })
   function setFilter(filter) {
     $scope.previousDateTime = ''
     $rootScope.$broadcast('loadingStart');
@@ -69,28 +49,32 @@
       $scope.loadMore(true, true)
     })
   }
- 
-  function approveAction(sys_id, state, isArchive) {
+
+  $scope.loadMore = (last, inview) => {
+    if (!(last && inview) || c.lastPage) return;
+
     const payload = {
-      approval: sys_id,
-      approveState: state,
-      action: 'approval'
+      lastDateTime: c.data.moments[c.data.moments.length - 1].data.created_on,
+      filter: c.filter,
+      count: 3,
+      user: c.user || '',
+      store: c.store || '',
+      caption: c.caption || '',
+      action: 'loading'
     }
-    c.server.get(payload).then((resp) => {
-      spUtil.addInfoMessage('Moment successfully ' + (isArchive ? 'archived' : state))
-      $scope.data.moments = resp.data.moments
-      $scope.data.approvalsCount = resp.data.approvalsCount
+    if ($scope.previousDateTime === payload.lastDateTime) 
+      return;
+    
+
+    c.server.get(payload).then(resp => {
+      $scope.previousDateTime = payload.lastDateTime;
+      if (resp.data.nextMoments.length == 0){
+        c.lastPage = true;
+        console.log('last page ',c.lastPage)
+      }
+      c.data.moments = [...c.data.moments, ...resp.data.nextMoments]
     })
   }
-  if ($scope.data.canEdit)
-    spUtil.recordWatch($scope, $scope.data.momentsTable, "approval=requested", () => {
-      c.server.get({ action: 'getApprovalsCount' }).then(resp => {
-        if (resp.data.approvalsCount > $scope.data.approvalsCount) {
-          spUtil.addInfoMessage('New moment has been added and is awaiting for approval')
-        }
-        $scope.data.approvalsCount = resp.data.approvalsCount;
-      })
-    })
 
   function scrollTop() {
     var container = document.getElementsByClassName('moments-grid-container')[0];
@@ -264,37 +248,37 @@ $blue: #0069c8;&#13;
     data.isLoggedIn = gs.getSession().isLoggedIn();
     data.canEdit = gs.getUser().isMemberOf(gs.getProperty("x_aaro2_teamonline.teamonline_administration_group")) || gs.hasRole("admin");
     data.submitFormWidget = 'teamonline_moment_submit_form';
-    data.approvalsCount = m_Util.getApprovalsCount();
     data.commentsEnabled = gs.getProperty('x_aaro2_teamonline.moment_comments_enabled', "false") === "true"
   }
   if (input && input.action==='loading') {
-    data.nextMoments = m_Util.getFilteredNext(filters[input.filter](), input.lastDateTime, input.count);
+    data.nextMoments = m_Util.getFilteredNext(filters[input.filter](), input.lastDateTime, input.count, skipRejectedImages(input));
   }
-  if(input&& input.action === 'approval'){
+  if(input && input.action === 'approval'){
     m_Util.approveAction(input, input.approval, input.approveState);
-    data.moments = m_Util.getFilteredNext(filters.approvals())
+    data.moments = m_Util.getFilteredNext(filters.approvals(), skipRejectedImages(input))
     data.approvalsCount = m_Util.getApprovalsCount();
   }
 
-  if(input && input.action === 'getApprovalsCount'){
-    data.approvalsCount = m_Util.getApprovalsCount();
-  }
   function getCustomFilter() {
     var filterString = filters.all() +
       (input.store ? '^store=' + input.store : '') +
       (input.user ? '^opened_by=' + input.user : '') +
       (input.caption ? '^captionLIKE' + input.caption : '')
-
     return filterString;
   }
-})();]]></script>
+  function skipRejectedImages(input){
+    return (input.filter !== 'my' && input.filter !== 'approvals')
+  }
+})();
+
+]]></script>
         <servicenow>false</servicenow>
         <sys_class_name>sp_widget</sys_class_name>
         <sys_created_by>andrey.mironyuk</sys_created_by>
         <sys_created_on>2020-09-03 08:33:18</sys_created_on>
         <sys_customer_update>false</sys_customer_update>
         <sys_id>c82e4c5ddb4f9450389b84d868961992</sys_id>
-        <sys_mod_count>348</sys_mod_count>
+        <sys_mod_count>355</sys_mod_count>
         <sys_name>Teamonline Moments Grid</sys_name>
         <sys_package display_value="TEAMonline" source="x_aaro2_teamonline">a2dfc25fdb7244105f65ba03e29619fa</sys_package>
         <sys_policy/>
@@ -302,7 +286,7 @@ $blue: #0069c8;&#13;
         <sys_scope display_value="TEAMonline">a2dfc25fdb7244105f65ba03e29619fa</sys_scope>
         <sys_update_name>sp_widget_c82e4c5ddb4f9450389b84d868961992</sys_update_name>
         <sys_updated_by>andrey.mironyuk</sys_updated_by>
-        <sys_updated_on>2020-09-22 14:35:00</sys_updated_on>
+        <sys_updated_on>2020-09-23 12:59:37</sys_updated_on>
         <template><![CDATA[<div>
   <div class="moments-grid-container" in-view-container>
     <div class="no-moments-message" ng-if="data.moments.length==0">
