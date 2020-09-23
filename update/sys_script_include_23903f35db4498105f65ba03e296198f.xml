@@ -109,6 +109,29 @@ TeamOnlineUtils.prototype = {
 		return dateTime.getDisplayValue();
 	},
 
+	validateIP: function(userIP){
+		var answer = false;
+		var whitelistGr = new GlideRecord('x_aaro2_teamonline_ip_whitelist');
+		whitelistGr.query();
+		while(whitelistGr.next() && !answer){
+			if(whitelistGr.range){
+				answer = this._getNumericIp(whitelistGr.getValue('start_ip')) < this._getNumericIp(userIP) && this._getNumericIp(whitelistGr.getValue('end_ip')) > this._getNumericIp(userIP);
+			} else {
+				answer = userIP == whitelistGr.getValue('ip');
+			}
+		}
+		return answer;
+	},
+
+	_getNumericIp: function(ip){
+		var formattedIP = '';
+		var splittedArray = ip.split('.');
+		splittedArray.forEach(function(part){
+			formattedIP += ("000"+part).substr(-3) ;
+		});
+		return parseInt(formattedIP,10);
+	},
+
 	type: 'TeamOnlineUtils'
 };]]></script>
         <sys_class_name>sys_script_include</sys_class_name>
@@ -116,14 +139,14 @@ TeamOnlineUtils.prototype = {
         <sys_created_on>2020-04-09 11:20:53</sys_created_on>
         <sys_customer_update>false</sys_customer_update>
         <sys_id>23903f35db4498105f65ba03e296198f</sys_id>
-        <sys_mod_count>2</sys_mod_count>
+        <sys_mod_count>5</sys_mod_count>
         <sys_name>TeamOnlineUtils</sys_name>
         <sys_package display_value="TEAMonline" source="x_aaro2_teamonline">a2dfc25fdb7244105f65ba03e29619fa</sys_package>
         <sys_policy/>
         <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
         <sys_scope display_value="TEAMonline">a2dfc25fdb7244105f65ba03e29619fa</sys_scope>
         <sys_update_name>sys_script_include_23903f35db4498105f65ba03e296198f</sys_update_name>
-        <sys_updated_by>xxabunko</sys_updated_by>
-        <sys_updated_on>2020-04-09 11:23:30</sys_updated_on>
+        <sys_updated_by>xxikochet</sys_updated_by>
+        <sys_updated_on>2020-09-23 15:54:25</sys_updated_on>
     </sys_script_include>
 </record_update>

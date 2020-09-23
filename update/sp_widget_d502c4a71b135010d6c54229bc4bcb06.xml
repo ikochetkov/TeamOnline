@@ -4,11 +4,15 @@
         <client_script><![CDATA[function(spUtil, $location, $window) {
   /* widget controller */
   var c = this;
-	//$window.location.href = c.data.instance;
 	
 }]]></client_script>
         <controller_as>c</controller_as>
-        <css>.main{width:100%;height:100%; background:lightblue}</css>
+        <css>.container{&#13;
+  font-family: Calibri;&#13;
+  font-weight:bold;&#13;
+  font-size:2em;&#13;
+  text-align:center;&#13;
+}</css>
         <data_table>sp_instance</data_table>
         <demo_data/>
         <description/>
@@ -26,13 +30,12 @@
         <roles/>
         <script><![CDATA[(function() {
  
-	data.instance = gs.getProperty('glide.servlet.uri')+'teamonline?id=home';
-	var url = $sp.getValue("url_suffix");
-	gs.addInfoMessage(url);
+	data.userIP = gs.getSession().getClientIP();
 	
-	var session = gs.getSession();
-	var addr = session.getClientIP();
-	gs.addInfoMessage(addr);
+	/*var logGR = new GlideRecord('x_aaro2_teamonline_activity_logs');
+	logGR.initialize();
+	logGR.setValue('ip_address' , addr);
+	logGR.insert();*/
 
 })();]]></script>
         <servicenow>false</servicenow>
@@ -41,7 +44,7 @@
         <sys_created_on>2020-09-22 17:42:28</sys_created_on>
         <sys_customer_update>false</sys_customer_update>
         <sys_id>d502c4a71b135010d6c54229bc4bcb06</sys_id>
-        <sys_mod_count>9</sys_mod_count>
+        <sys_mod_count>41</sys_mod_count>
         <sys_name>TeamOnline IP Check</sys_name>
         <sys_package display_value="TEAMonline" source="x_aaro2_teamonline">a2dfc25fdb7244105f65ba03e29619fa</sys_package>
         <sys_policy/>
@@ -49,9 +52,13 @@
         <sys_scope display_value="TEAMonline">a2dfc25fdb7244105f65ba03e29619fa</sys_scope>
         <sys_update_name>sp_widget_d502c4a71b135010d6c54229bc4bcb06</sys_update_name>
         <sys_updated_by>xxikochet</sys_updated_by>
-        <sys_updated_on>2020-09-22 18:35:36</sys_updated_on>
-        <template><![CDATA[<div class="main">
-We are checking your IP address
-</div>]]></template>
+        <sys_updated_on>2020-09-23 17:31:22</sys_updated_on>
+        <template><![CDATA[<div class="container">
+  <i class="glyphicon glyphicon-eye-close" aria-hidden="true"></i>
+  <p>{{data.userIP}}</p>
+  <p>This IP is not in whitelist for this resource</p>
+</div>
+
+]]></template>
     </sp_widget>
 </record_update>
