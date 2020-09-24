@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sp_ng_template">
+    <sp_ng_template action="INSERT_OR_UPDATE">
+        <id>comment-form.html</id>
+        <sp_widget display_value="Teamonline Footer">3f3e9a6cdb3dd41084c24098139619d1</sp_widget>
+        <sys_class_name>sp_ng_template</sys_class_name>
+        <sys_created_by>andrey.mironyuk</sys_created_by>
+        <sys_created_on>2020-09-24 15:04:05</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_id>d221b984db239410389b84d868961948</sys_id>
+        <sys_mod_count>10</sys_mod_count>
+        <sys_name>comment-form.html</sys_name>
+        <sys_package display_value="TEAMonline" source="x_aaro2_teamonline">a2dfc25fdb7244105f65ba03e29619fa</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="TEAMonline">a2dfc25fdb7244105f65ba03e29619fa</sys_scope>
+        <sys_update_name>sp_ng_template_d221b984db239410389b84d868961948</sys_update_name>
+        <sys_updated_by>andrey.mironyuk</sys_updated_by>
+        <sys_updated_on>2020-09-24 17:06:45</sys_updated_on>
+        <template><![CDATA[<div class="comment-input-container">
+  <form>
+    <div class="input-group">
+      <input type="text" class="form-control" placeholder="Type comment here..." ng-model="ctrl.comment">
+      <span class="input-group-btn">
+        <button class="btn btn-default" type="button" ng-click="ctrl.send()">
+          <i class="fa fa-paper-plane-o"></i>
+        </button>
+      </span>
+    </div>
+  </form>
+</div>]]></template>
+    </sp_ng_template>
+</record_update>

@@ -4,7 +4,7 @@
         <client_script><![CDATA[function($scope, $window) {
 
 	var c = this;
-	if(!c.data.userIPisValid) $window.location.href = 'ip_check';
+	//if(!c.data.userIPisValid) $window.location.href = 'ip_check';
 	
 }]]></client_script>
         <controller_as>c</controller_as>
@@ -112,7 +112,7 @@ $green: #91c712;&#13;
         <sys_created_on>2020-07-01 07:48:26</sys_created_on>
         <sys_customer_update>false</sys_customer_update>
         <sys_id>3f3e9a6cdb3dd41084c24098139619d1</sys_id>
-        <sys_mod_count>129</sys_mod_count>
+        <sys_mod_count>135</sys_mod_count>
         <sys_name>Teamonline Footer</sys_name>
         <sys_package display_value="TEAMonline" source="x_aaro2_teamonline">a2dfc25fdb7244105f65ba03e29619fa</sys_package>
         <sys_policy/>
@@ -120,71 +120,73 @@ $green: #91c712;&#13;
         <sys_scope display_value="TEAMonline">a2dfc25fdb7244105f65ba03e29619fa</sys_scope>
         <sys_update_name>sp_header_footer_3f3e9a6cdb3dd41084c24098139619d1</sys_update_name>
         <sys_updated_by>xxikochet</sys_updated_by>
-        <sys_updated_on>2020-09-23 17:05:10</sys_updated_on>
-        <template><![CDATA[<div id="footer" ng-style={{margin}}>
-  <div class="container-fluid">
-    <div class="row">
-      <div class="col-md-3 logo-container">
-        <div class="logo">
-          <a href="https://www.aarons.com" target="_blank">
-            <img src="2b9bbabddbc348505f65ba03e29619e5.iix" style="max-height: 25px;" />
-          </a>
-        </div>
-       
-        <p><a href="" target="_blank">Have an Idea?</a> | <a href="" target="_blank">Contact Us</a></p>
-
-      </div>
-      <div class="col-md-6 col-md-offset-2">
-        
-        <div class="heading">Internal resources</div>
-        <ul>
-          <li><a href="" target="_blank">Photo Stories</a></li>
-          <li><a href="" target="_blank">Knowledge Base</a></li>
-          <li><a href="" target="_blank">Articles</a></li>
-          <li><a href="" target="_blank">Intranet</a></li>
-          <li><a href="" target="_blank">Departments</a></li>
-          <li><a href="" target="_blank">Phone directory</a></li>
-          <li><a href="" target="_blank">Aaron's Cares</a></li>
-        </ul>
-
-      </div>
-
-    </div>
-  </div>
-</div>
-<div id="footer-bottom">
-  <div class="container-fluid">
-    <div class="row">
-      <div class="col-md-3">
-        <div class="external-links">
+        <sys_updated_on>2020-09-24 19:09:24</sys_updated_on>
+        <template><![CDATA[<!--<div ng-if="!data.userIPisValid">-->
+  <div id="footer" ng-style={{margin}}>
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-3 logo-container">
           <div class="logo">
             <a href="https://www.aarons.com" target="_blank">
-              <img src="teamonline_aarons_logo.png" style="max-height: 25px;" />
+              <img src="2b9bbabddbc348505f65ba03e29619e5.iix" style="max-height: 25px;" />
             </a>
           </div>
-          <div class="logo">
-            <a href="https://woodhaven.com/" target="_blank">
-              <img src="teamonline_woodhaven_logo.png" style="max-height: 35px" />
-            </a>
-          </div>
+
+          <p><a href="" target="_blank">Have an Idea?</a> | <a href="" target="_blank">Contact Us</a></p>
+
         </div>
-      </div>
-      <div class="col-md-3 col-md-offset-2">
-        <div class="heading">Socials</div>
-        <ul class="socials">
-          <li><a href="" target="_blank" target="_blank"><i class="fa fa-twitter"></i></a></li>
-          <li><a href="" target="_blank" target="_blank"><i class="fa fa-facebook-f"></i></a></li>
-          <li><a href="" target="_blank"><i class="fa fa-linkedin"></i></a></li>
-          <li><a href="" target="_blank"><i class="fa fa-instagram"></i></a></li>
-          <li><a href="" target="_blank"><i class="fa fa-youtube-play"></i></a></li>
-          <li><a href="" target="_blank"><i class="fa fa-telegram"></i></a></li>
-        </ul>
-      </div>
-      <div class="col-md-3">
-        <b>© 2020 Aaron's, Inc. All Rights Reserved.</b>
+        <div class="col-md-6 col-md-offset-2">
+
+          <div class="heading">Internal resources</div>
+          <ul>
+            <li><a href="" target="_blank">Photo Stories</a></li>
+            <li><a href="" target="_blank">Knowledge Base</a></li>
+            <li><a href="" target="_blank">Articles</a></li>
+            <li><a href="" target="_blank">Intranet</a></li>
+            <li><a href="" target="_blank">Departments</a></li>
+            <li><a href="" target="_blank">Phone directory</a></li>
+            <li><a href="" target="_blank">Aaron's Cares</a></li>
+          </ul>
+
+        </div>
+
       </div>
     </div>
   </div>
-</div>]]></template>
+  <div id="footer-bottom">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-3">
+          <div class="external-links">
+            <div class="logo">
+              <a href="https://www.aarons.com" target="_blank">
+                <img src="teamonline_aarons_logo.png" style="max-height: 25px;" />
+              </a>
+            </div>
+            <div class="logo">
+              <a href="https://woodhaven.com/" target="_blank">
+                <img src="teamonline_woodhaven_logo.png" style="max-height: 35px" />
+              </a>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3 col-md-offset-2">
+          <div class="heading">Socials</div>
+          <ul class="socials">
+            <li><a href="" target="_blank" target="_blank"><i class="fa fa-twitter"></i></a></li>
+            <li><a href="" target="_blank" target="_blank"><i class="fa fa-facebook-f"></i></a></li>
+            <li><a href="" target="_blank"><i class="fa fa-linkedin"></i></a></li>
+            <li><a href="" target="_blank"><i class="fa fa-instagram"></i></a></li>
+            <li><a href="" target="_blank"><i class="fa fa-youtube-play"></i></a></li>
+            <li><a href="" target="_blank"><i class="fa fa-telegram"></i></a></li>
+          </ul>
+        </div>
+        <div class="col-md-3">
+          <b>© 2020 Aaron's, Inc. All Rights Reserved.</b>
+        </div>
+      </div>
+    </div>
+  </div>
+<!---</div>--->]]></template>
     </sp_header_footer>
 </record_update>

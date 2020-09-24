@@ -7,7 +7,7 @@
         <sys_created_on>2020-09-18 14:09:19</sys_created_on>
         <sys_customer_update>false</sys_customer_update>
         <sys_id>81ea6a02db175090389b84d86896192d</sys_id>
-        <sys_mod_count>22</sys_mod_count>
+        <sys_mod_count>31</sys_mod_count>
         <sys_name>moment.html</sys_name>
         <sys_package display_value="TEAMonline" source="x_aaro2_teamonline">a2dfc25fdb7244105f65ba03e29619fa</sys_package>
         <sys_policy/>
@@ -15,8 +15,8 @@
         <sys_scope display_value="TEAMonline">a2dfc25fdb7244105f65ba03e29619fa</sys_scope>
         <sys_update_name>sp_ng_template_81ea6a02db175090389b84d86896192d</sys_update_name>
         <sys_updated_by>andrey.mironyuk</sys_updated_by>
-        <sys_updated_on>2020-09-23 13:37:43</sys_updated_on>
-        <template><![CDATA[<div context-menu="contextMenu(moment)" class="moment" >
+        <sys_updated_on>2020-09-24 13:39:43</sys_updated_on>
+        <template><![CDATA[<div context-menu="contextMenu(moment)" class="moment">
   <div class="avatar-timeago-container">
     <div ng-if="!c.isLoggedIn" class="avatar-large avatar-container">
       <div class="avatar soloAvatar">
@@ -25,7 +25,7 @@
     </div>
     <sn-avatar ng-if="c.isLoggedIn" class="avatar-large" primary="moment.data.opened_by.id" />
     <div class="autror-container">
-      <div class="author">{{moment.data.opened_by.name}} </div> 
+      <div class="author">{{moment.data.opened_by.name}} </div>
       <div class="location">
         <i class="fa fa-location-arrow"></i> {{moment.data.store.name}}({{moment.data.store.description}})
       </div>
@@ -45,11 +45,12 @@
   <uib-carousel interval="0" template-url="custom_carousel.html">
     <uib-slide ng-repeat="slide in moment.attachments" active="slide.active">
       <div class="moment-image-container" ng-class="{rejected: slide.rejected}">
-        <img class="moment-image" ng-src="{{slide.thumbnail_url}}" role="presentation"
-             ng-click="c.selectImage($index)">
-             <!--<div class="reject-image" ng-click="c.rejectImage(slide)" ng-if="c.canEdit&&moment.data.approval=='requested'">
-               <i class="fa fa-times"></i> <span>Reject this image</span>
-             </div>-->
+        <img class="moment-image" ng-src="{{slide.thumbnail_url}}" role="presentation" ng-click="c.selectImage($index)">
+        <div class="reject-image-hover-area"  ng-if="c.canEdit&&moment.data.approval=='requested'&&moment.attachments.length>0&&!slide.rejected">
+          <div class="reject-image" ng-click="c.rejectImage(slide, moment)">
+            <i class="fa fa-times-circle-o"></i> <span>Reject this image</span>
+          </div>
+        </div>
       </div>
 
     </uib-slide>

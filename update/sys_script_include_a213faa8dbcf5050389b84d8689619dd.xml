@@ -12,11 +12,12 @@ MomentsUtil.prototype = {
   initialize: function () {
     this.MOMENTS_TABLE = "x_aaro2_teamonline_moment"
     this.MOMENT_IMAGE_TABLE = "x_aaro2_teamonline_moment_image"
+    this.MOMENT_COMMENTS_TABLE = "x_aaro2_teamonline_moment_comment"
   },
-  getFilteredNext:function(filter, lastDateTime, limit, skipRejected){
-    var query = filter+(lastDateTime?'^sys_created_on<'+lastDateTime: '');
-    
-    return this._getMoments(query,limit, skipRejected)
+  getFilteredNext: function (filter, lastDateTime, limit, skipRejected) {
+    var query = filter + (lastDateTime ? '^sys_created_on<' + lastDateTime : '');
+
+    return this._getMoments(query, limit, skipRejected)
   },
   getUserStore: function (user_sys_id) {
     var userGr = new GlideRecord('sys_user');
@@ -24,7 +25,7 @@ MomentsUtil.prototype = {
     var dept = userGr.department.getRefRecord()
     return { name: '', displayValue: dept.getValue('name'), value: dept.getUniqueValue() }
   },
-  getApprovalsCount: function(){
+  getApprovalsCount: function () {
     var approvalsGa = new GlideAggregate(this.MOMENTS_TABLE);
     approvalsGa.addQuery('approval=requested');
     approvalsGa.addAggregate('COUNT');
@@ -32,11 +33,20 @@ MomentsUtil.prototype = {
     approvalsGa.next();
     return approvalsGa.getAggregate('COUNT');
   },
-  removeImage: function(imageName){
+  rejectImage: function (imageName) {
     var imageGr = new GlideRecord(this.MOMENT_IMAGE_TABLE);
-    imageGr.get('name', imageName);
+    imageGr.get('image_name', imageName);
     imageGr.rejected = true;
     imageGr.update();
+  },
+  sendComment: function (comment, parent, moment) {
+    var gr = new GlideRecord(this.MOMENT_COMMENTS_TABLE);
+    gr.initialize();
+    gr.text = comment;
+    gr.parent = parent;
+    gr.moment = moment;
+    gr.author = gs.getUserID();
+    gr.insert()
   },
   _getMoments: function (query, limit, skipRejected) {
     var momentGr = new GlideRecord(this.MOMENTS_TABLE);
@@ -48,6 +58,7 @@ MomentsUtil.prototype = {
     while (momentGr.next()) {
       var moment = {};
       moment.attachments = this._getAttachments(momentGr.getUniqueValue(), skipRejected)
+      moment.number = momentGr.getValue('number');
       moment.data = {
         sys_id: momentGr.getUniqueValue(),
         caption: momentGr.getValue('caption'),
@@ -59,6 +70,7 @@ MomentsUtil.prototype = {
         },
         created_on: momentGr.getValue('sys_created_on')
       };
+      moment.comments = this._getComments(momentGr.getUniqueValue());
       moments.push(moment)
     }
     return moments;
@@ -66,7 +78,7 @@ MomentsUtil.prototype = {
   _getAttachments: function (record_sys_id, skipRejected) {
     var attGr = new GlideRecord(this.MOMENT_IMAGE_TABLE);
     attGr.addQuery('moment', record_sys_id);
-    if(skipRejected)
+    if (skipRejected)
       attGr.addEncodedQuery('rejected!=true')
     attGr.query();
     var attachments = []
@@ -80,11 +92,51 @@ MomentsUtil.prototype = {
     }
     return attachments
   },
-  _getStore: function(record){
+  _getComments: function (moment) {
+    var comments = []
+    var commentGr = new GlideRecord(this.MOMENT_COMMENTS_TABLE);
+    commentGr.addEncodedQuery('rejected!=true^parentISEMPTY^moment=' + moment);
+    commentGr.query();
+    gs.info('comments:::::' + commentGr.getRowCount())
+    while (commentGr.next()) {
+      var comment = this._getCommentObject(commentGr);
+      comment.children = this._getCommentChildren(commentGr.getUniqueValue())
+      comments.push(comment);
+    }
+    return comments;
+  },
+  _getCommentChildren: function (parent) {
+    var comments = [];
+    var gr = new GlideRecord(this.MOMENT_COMMENTS_TABLE);
+    gr.addQuery('parent', parent);
+    gr.addEncodedQuery('rejected!=true^parent=' + parent);
+    gr.query();
+    while (gr.next()) {
+      var comment = this._getCommentObject(gr)
+      comments.push(comment);
+    }
+    return comments;
+  },
+  _getCommentObject: function (commentGr) {
+    var author = commentGr.author.getRefRecord();
+    var comment = {
+      sys_id: commentGr.getUniqueValue(),
+      comment: commentGr.getValue('text'),
+      author: {
+        userName: author.getValue('name'),
+        userSysId: author.getUniqueValue(),
+        userId: author.getValue('user_name'),
+        userStore: author.getValue('company')
+      },
+      moment: commentGr.getValue('moment'),
+    }
+    return comment;
+  },
+  _getStore: function (record) {
     return {
       sys_id: record.getUniqueValue(),
       name: record.getValue('name'),
-      description: record.getValue('description') 
+      description: record.getValue('description')
     }
   },
   approveAction: function (input, record_sys_id, approveState) {
@@ -112,7 +164,7 @@ MomentsUtil.prototype = {
   },
   _createMomentImages: function (thumbnails, images, momentSysId) {
     for (var i = 0; i < thumbnails.length; i++) {
-      var thumbnailName = this._createDbImage(thumbnails[i],true);
+      var thumbnailName = this._createDbImage(thumbnails[i], true);
       var imageName = this._createDbImage(images[i]);
       this._createMomentImage(momentSysId, thumbnailName, imageName);
     }
@@ -147,7 +199,7 @@ MomentsUtil.prototype = {
         <sys_created_on>2020-09-01 12:37:42</sys_created_on>
         <sys_customer_update>false</sys_customer_update>
         <sys_id>a213faa8dbcf5050389b84d8689619dd</sys_id>
-        <sys_mod_count>24</sys_mod_count>
+        <sys_mod_count>37</sys_mod_count>
         <sys_name>MomentsUtil</sys_name>
         <sys_package display_value="TEAMonline" source="x_aaro2_teamonline">a2dfc25fdb7244105f65ba03e29619fa</sys_package>
         <sys_policy/>
@@ -155,6 +207,6 @@ MomentsUtil.prototype = {
         <sys_scope display_value="TEAMonline">a2dfc25fdb7244105f65ba03e29619fa</sys_scope>
         <sys_update_name>sys_script_include_a213faa8dbcf5050389b84d8689619dd</sys_update_name>
         <sys_updated_by>andrey.mironyuk</sys_updated_by>
-        <sys_updated_on>2020-09-23 13:08:02</sys_updated_on>
+        <sys_updated_on>2020-09-24 18:05:56</sys_updated_on>
     </sys_script_include>
 </record_update>

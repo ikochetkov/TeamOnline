@@ -2,15 +2,18 @@
     <sp_angular_provider action="INSERT_OR_UPDATE">
         <name>moment</name>
         <script><![CDATA[function moment() {
+	
 	function controller($rootScope) {
 		var c = this;
 		c.selectImage = (imageIndex) => {
-			console.log('moment opened fired')
 			$rootScope.$broadcast('momentOpened', { momentIndex: c.key, imageIndex })
 		}
 		c.approveAction = (state, isArchive) => {
-			console.log('momentApprovalAction fired')
 			$rootScope.$broadcast('momentApprovalAction', { sys_id: c.moment.data.sys_id, state, isArchive })
+		}
+		c.rejectImage = (imageData, momentData) => {
+			$rootScope.$broadcast('imageRejectionRequested', {imageName: imageData.name, moment: momentData})
+			imageData.rejected = true;
 		}
 		c.contextMenu = () => {
 			if (!c.canEdit) return;
@@ -43,7 +46,7 @@
         <sys_created_on>2020-09-18 13:04:43</sys_created_on>
         <sys_customer_update>false</sys_customer_update>
         <sys_id>bf1a5242db935090389b84d8689619bf</sys_id>
-        <sys_mod_count>40</sys_mod_count>
+        <sys_mod_count>46</sys_mod_count>
         <sys_name>moment</sys_name>
         <sys_package display_value="TEAMonline" source="x_aaro2_teamonline">a2dfc25fdb7244105f65ba03e29619fa</sys_package>
         <sys_policy/>
@@ -51,7 +54,7 @@
         <sys_scope display_value="TEAMonline">a2dfc25fdb7244105f65ba03e29619fa</sys_scope>
         <sys_update_name>sp_angular_provider_bf1a5242db935090389b84d8689619bf</sys_update_name>
         <sys_updated_by>andrey.mironyuk</sys_updated_by>
-        <sys_updated_on>2020-09-23 12:50:32</sys_updated_on>
+        <sys_updated_on>2020-09-24 15:18:49</sys_updated_on>
         <type>directive</type>
     </sp_angular_provider>
 </record_update>

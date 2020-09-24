@@ -5,7 +5,6 @@
   /* widget controller */
   var c = this;
 
-  $scope.data.filter = 'all'
   $scope.customFilterCollapsed = true;
   $scope.storeFilter = { name: 'storeFilter', displayValue: '', value: '' }
   $scope.userFilter = { name: 'userFilter', displayValue: '', value: '' }
@@ -73,14 +72,14 @@ $darkgrey: #2f2f2f;&#13;
   cursor: pointer;&#13;
   &amp;:hover {&#13;
     color: $darkgrey;&#13;
-    .approval-counter {&#13;
+    .badge {&#13;
       background-color: #da4141;&#13;
     }&#13;
   }&#13;
   &amp;.active {&#13;
     border-bottom-color: $darkgrey;&#13;
     color: $darkgrey;&#13;
-    .approval-counter {&#13;
+    .badge {&#13;
       background-color: #da4141;&#13;
     }&#13;
   }&#13;
@@ -132,7 +131,10 @@ label.filter-label {&#13;
   data.canEdit = gs.getUser().isMemberOf(gs.getProperty("x_aaro2_teamonline.teamonline_administration_group")) || gs.hasRole("admin");
   data.approvalsCount = m_Util.getApprovalsCount();
   data.submitFormWidget = 'teamonline_moment_submit_form';
-  data.approvalsEngineWidget =  $sp.getWidget('teamonline_moments_approval_engine')
+  data.approvalsEngineWidget =  $sp.getWidget('teamonline_moments_approval_engine');
+  var paramFilter = $sp.getParameter('filter');
+  data.filter = (paramFilter === 'approvals' && !data.canEdit)? 'all': paramFilter
+
 })();]]></script>
         <servicenow>false</servicenow>
         <sys_class_name>sp_widget</sys_class_name>
@@ -140,7 +142,7 @@ label.filter-label {&#13;
         <sys_created_on>2020-09-22 09:44:45</sys_created_on>
         <sys_customer_update>false</sys_customer_update>
         <sys_id>d784161fdb171010389b84d8689619a2</sys_id>
-        <sys_mod_count>30</sys_mod_count>
+        <sys_mod_count>36</sys_mod_count>
         <sys_name>Teamonline Moments Grid Filter</sys_name>
         <sys_package display_value="TEAMonline" source="x_aaro2_teamonline">a2dfc25fdb7244105f65ba03e29619fa</sys_package>
         <sys_policy/>
@@ -148,35 +150,35 @@ label.filter-label {&#13;
         <sys_scope display_value="TEAMonline">a2dfc25fdb7244105f65ba03e29619fa</sys_scope>
         <sys_update_name>sp_widget_d784161fdb171010389b84d8689619a2</sys_update_name>
         <sys_updated_by>andrey.mironyuk</sys_updated_by>
-        <sys_updated_on>2020-09-23 12:51:35</sys_updated_on>
+        <sys_updated_on>2020-09-24 14:52:21</sys_updated_on>
         <template><![CDATA[<div>
   <div class="filters-container">
     <div class="filter-button add-button" ng-click="openSubmitForm()" ng-if="data.isLoggedIn">
       <i class="fa fa-plus-circle"></i>
-      <span> Add moment </span>
+      <span> ${tom_filter_add} </span>
     </div>
     <div class="filter-button" ng-class="{active: data.filter=='all'}" ng-click="setFilter('all')">
       
       <i class="fa fa-th"></i>
-      <span> All Moments </span>
+      <span> ${tom_filter_all} </span>
     </div>
     <div class="filter-button" ng-class="{active: data.filter=='my'}" ng-click="setFilter('my')" ng-if="data.isLoggedIn">
       <i class="fa fa-user"></i>
-      <span> My Moments </span>
+      <span> ${tom_filter_my} </span>
     </div>
     <div class="filter-button" ng-class="{active: data.filter=='store'}" ng-click="setFilter('store')"
       ng-if="data.isLoggedIn">
       <i class="fa fa-location-arrow"></i>
-      <span> My Store Moments </span>
+      <span> ${tom_filter_location} </span>
     </div>
     <div class="filter-button" ng-class="{active: data.filter=='custom'}" ng-click="openCustomFilter()">
       <i class="fa fa-filter"></i>
-      <span> Filter </span>
+      <span> ${tom_filter_custom} </span>
     </div>
     <div class="filter-button" ng-class="{active: data.filter=='approvals'}" ng-click="setFilter('approvals')"
       ng-if="data.canEdit">
       <i class="fa fa-check-circle-o"></i>
-      <span> My Approvals </span>
+      <span> ${tom_filter_approvals} </span>
       <sp-widget widget="data.approvalsEngineWidget"></sp-widget>
       
     </div>

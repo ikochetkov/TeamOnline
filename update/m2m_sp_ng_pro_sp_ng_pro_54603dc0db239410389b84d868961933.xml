@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="m2m_sp_ng_pro_sp_ng_pro">
+    <m2m_sp_ng_pro_sp_ng_pro action="INSERT_OR_UPDATE">
+        <required_by display_value="teamonlineGallery">1e964147db9fd490389b84d8689619bb</required_by>
+        <requires display_value="teamonlineMomentCommentForm">ebaf6980db239410389b84d8689619b1</requires>
+        <sys_class_name>m2m_sp_ng_pro_sp_ng_pro</sys_class_name>
+        <sys_created_by>andrey.mironyuk</sys_created_by>
+        <sys_created_on>2020-09-24 15:00:22</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_id>54603dc0db239410389b84d868961933</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>teamonlineGallery.teamonlineMomentCommentForm</sys_name>
+        <sys_package display_value="TEAMonline" source="x_aaro2_teamonline">a2dfc25fdb7244105f65ba03e29619fa</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="TEAMonline">a2dfc25fdb7244105f65ba03e29619fa</sys_scope>
+        <sys_update_name>m2m_sp_ng_pro_sp_ng_pro_54603dc0db239410389b84d868961933</sys_update_name>
+        <sys_updated_by>andrey.mironyuk</sys_updated_by>
+        <sys_updated_on>2020-09-24 15:00:22</sys_updated_on>
+    </m2m_sp_ng_pro_sp_ng_pro>
+</record_update>

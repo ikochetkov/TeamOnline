@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?><record_update table="sp_widget">
     <sp_widget action="INSERT_OR_UPDATE">
         <category>custom</category>
-        <client_script><![CDATA[function($scope, $rootScope, spUtil) {
+        <client_script><![CDATA[function($scope, $rootScope, spUtil, spModal) {
   var c = this;
 
   $rootScope.$on('momentApprovalAction', (evt, data) => {
     approveAction(data.sys_id, data.state, data.isArchive)
   })
 
-  $rootScope.$on('imageRemoved', (evt, data) => {
-    const payload = {
-      action: 'imageRemoved',
-      imageName: data.imageName
+  $rootScope.$on('imageRejectionRequested', (evt, data) => {
+    console.log('asking for rejection::: ', data)
+    if(data.moment.attachments.filter(x => !x.rejected).length==1){
+      askForMomentRejection(data.moment);
+      return
     }
-    c.server.get(payload).then(resp => {
-      $rootScope.$broadcast('approvalsUpdated')
-    })
+    rejectImage(data.imageName)
   })
+ 
   spUtil.recordWatch($scope, $scope.data.momentsTable, "approval=requested", () => {
     c.server.get({ action: 'getApprovalsCount' }).then(resp => {
       console.log('approval=requested has changed')
@@ -27,8 +27,27 @@
       $rootScope.$broadcast('approvalsUpdated')
     })
   })
-
+  function askForMomentRejection(moment){
+    spModal.confirm("This is the last image you want to reject in this moment. Whole moment will be rejected. Continue?").then(function (confirmed) {
+      if(confirmed)
+        approveAction(moment.data.sys_id, 'rejected')
+    })
+  }
+  function rejectImage(imageName){
+    spModal.confirm("Do you really want to reject this image?").then(function (confirmed) {
+      console.log(confirmed)
+      if(!confirmed) return
+      const payload = {
+        action: 'imageRejected',
+        imageName: imageName
+      }
+      c.server.get(payload).then(resp => {
+        $rootScope.$broadcast('imageRejected')
+      })
+    })
+  }
   function approveAction(sys_id, state, isArchive) {
+    console.log('approving::', sys_id, state)
     const payload = {
       approval: sys_id,
       approveState: state,
@@ -46,15 +65,9 @@
     position: absolute;&#13;
     top: 0;&#13;
     right: 0;&#13;
-    border-radius: 50%;&#13;
-    width: 2rem;&#13;
-    height: 2rem;&#13;
-    background-color: #999;&#13;
-    color: white;&#13;
-    font-size: 1.1rem;&#13;
-    line-height: 2rem;&#13;
-    text-align: center;&#13;
-    font-weight: 900;&#13;
+   .badge{&#13;
+     background-color: #999;&#13;
+   }&#13;
   }</css>
         <data_table>sp_instance</data_table>
         <demo_data/>
@@ -79,8 +92,11 @@
     m_Util.approveAction(input, input.approval, input.approveState);
     data.count = m_Util.getApprovalsCount();
   }
-  if(input && input.action === 'imageRemoved'){
-    m_Util.removeImage(input.imageName);
+  if(input && input.action === 'imageRejected'){
+    m_Util.rejectImage(input.imageName);
+  }
+  if(input && input.action === 'commentSent'){
+    m_Util.sendComment(input.comment, input.parent, input.moment);
   }
 })();]]></script>
         <servicenow>false</servicenow>
@@ -89,7 +105,7 @@
         <sys_created_on>2020-09-23 09:17:06</sys_created_on>
         <sys_customer_update>false</sys_customer_update>
         <sys_id>36d6d32fdb1f9010389b84d8689619bb</sys_id>
-        <sys_mod_count>12</sys_mod_count>
+        <sys_mod_count>25</sys_mod_count>
         <sys_name>Teamonline Moments Approval Engine</sys_name>
         <sys_package display_value="TEAMonline" source="x_aaro2_teamonline">a2dfc25fdb7244105f65ba03e29619fa</sys_package>
         <sys_policy/>
@@ -97,9 +113,9 @@
         <sys_scope display_value="TEAMonline">a2dfc25fdb7244105f65ba03e29619fa</sys_scope>
         <sys_update_name>sp_widget_36d6d32fdb1f9010389b84d8689619bb</sys_update_name>
         <sys_updated_by>andrey.mironyuk</sys_updated_by>
-        <sys_updated_on>2020-09-23 12:59:33</sys_updated_on>
+        <sys_updated_on>2020-09-24 17:14:49</sys_updated_on>
         <template><![CDATA[<div class="approval-counter">
-{{data.count}}
+    <span class="badge">{{data.count}}</span>
 </div>]]></template>
     </sp_widget>
 </record_update>

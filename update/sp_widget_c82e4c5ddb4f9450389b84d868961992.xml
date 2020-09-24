@@ -5,7 +5,7 @@
   var c = this;
   c.lastPage = false;
   $scope.previousDateTime = '';
-  c.filter = 'all'
+  c.filter = c.data.filter;
   
   $rootScope.$on('filterChanged', (evt, data) => {
     c.user = data.user;
@@ -235,7 +235,6 @@ $blue: #0069c8;&#13;
         <script><![CDATA[(function () {
   var m_Util = new MomentsUtil();
   data.momentsTable = 'x_aaro2_teamonline_moment'
- 
   var filters = {
     all: function () { return 'approval=approved' },
     my: function () { return 'opened_by=' + gs.getUserID() },
@@ -244,21 +243,27 @@ $blue: #0069c8;&#13;
     custom: function () { return getCustomFilter() }
   }
   if (!input) {
-    data.moments = m_Util.getFilteredNext(filters.all(), '', 9);
+    
     data.isLoggedIn = gs.getSession().isLoggedIn();
     data.canEdit = gs.getUser().isMemberOf(gs.getProperty("x_aaro2_teamonline.teamonline_administration_group")) || gs.hasRole("admin");
     data.submitFormWidget = 'teamonline_moment_submit_form';
-    data.commentsEnabled = gs.getProperty('x_aaro2_teamonline.moment_comments_enabled', "false") === "true"
+    data.commentsEnabled = gs.getProperty('x_aaro2_teamonline.moment_comments_enabled', "false") === "true";
+    data.filter = getDefaultFilter(data.canEdit);
+    data.moments = m_Util.getFilteredNext(filters[data.filter](), '', 9, skipRejectedImages(data.filter));
   }
   if (input && input.action==='loading') {
     data.nextMoments = m_Util.getFilteredNext(filters[input.filter](), input.lastDateTime, input.count, skipRejectedImages(input));
   }
   if(input && input.action === 'approval'){
     m_Util.approveAction(input, input.approval, input.approveState);
-    data.moments = m_Util.getFilteredNext(filters.approvals(), skipRejectedImages(input))
+    data.moments = m_Util.getFilteredNext(filters.approvals(), skipRejectedImages(input.filter))
     data.approvalsCount = m_Util.getApprovalsCount();
   }
 
+  function getDefaultFilter(canEdit){
+    var paramFilter = $sp.getParameter('filter')|| 'all';
+    return (paramFilter === 'approvals' && !data.canEdit)? 'all': paramFilter
+  }
   function getCustomFilter() {
     var filterString = filters.all() +
       (input.store ? '^store=' + input.store : '') +
@@ -266,8 +271,8 @@ $blue: #0069c8;&#13;
       (input.caption ? '^captionLIKE' + input.caption : '')
     return filterString;
   }
-  function skipRejectedImages(input){
-    return (input.filter !== 'my' && input.filter !== 'approvals')
+  function skipRejectedImages(filter){
+    return (filter !== 'my' && filter !== 'approvals')
   }
 })();
 
@@ -278,7 +283,7 @@ $blue: #0069c8;&#13;
         <sys_created_on>2020-09-03 08:33:18</sys_created_on>
         <sys_customer_update>false</sys_customer_update>
         <sys_id>c82e4c5ddb4f9450389b84d868961992</sys_id>
-        <sys_mod_count>355</sys_mod_count>
+        <sys_mod_count>366</sys_mod_count>
         <sys_name>Teamonline Moments Grid</sys_name>
         <sys_package display_value="TEAMonline" source="x_aaro2_teamonline">a2dfc25fdb7244105f65ba03e29619fa</sys_package>
         <sys_policy/>
@@ -286,11 +291,11 @@ $blue: #0069c8;&#13;
         <sys_scope display_value="TEAMonline">a2dfc25fdb7244105f65ba03e29619fa</sys_scope>
         <sys_update_name>sp_widget_c82e4c5ddb4f9450389b84d868961992</sys_update_name>
         <sys_updated_by>andrey.mironyuk</sys_updated_by>
-        <sys_updated_on>2020-09-23 12:59:37</sys_updated_on>
+        <sys_updated_on>2020-09-24 15:25:04</sys_updated_on>
         <template><![CDATA[<div>
   <div class="moments-grid-container" in-view-container>
     <div class="no-moments-message" ng-if="data.moments.length==0">
-      <span> There are no moments yet </span>
+      <span> ${tom_no_moments_emoji}</span>
     </div>
     <moment 
       ng-repeat="(key, moment) in data.moments" 

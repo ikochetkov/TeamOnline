@@ -7,7 +7,7 @@
         <sys_created_on>2020-09-21 09:19:02</sys_created_on>
         <sys_customer_update>false</sys_customer_update>
         <sys_id>0025c183db9fd490389b84d86896199e</sys_id>
-        <sys_mod_count>10</sys_mod_count>
+        <sys_mod_count>13</sys_mod_count>
         <sys_name>moment-gallery.html</sys_name>
         <sys_package display_value="TEAMonline" source="x_aaro2_teamonline">a2dfc25fdb7244105f65ba03e29619fa</sys_package>
         <sys_policy/>
@@ -15,7 +15,7 @@
         <sys_scope display_value="TEAMonline">a2dfc25fdb7244105f65ba03e29619fa</sys_scope>
         <sys_update_name>sp_ng_template_0025c183db9fd490389b84d86896199e</sys_update_name>
         <sys_updated_by>andrey.mironyuk</sys_updated_by>
-        <sys_updated_on>2020-09-21 14:52:05</sys_updated_on>
+        <sys_updated_on>2020-09-24 15:33:27</sys_updated_on>
         <template><![CDATA[<div class="moment-gallery">
   <div class="close-gallery-button" ng-click="c.close()">
     <i class="fa fa-times"></i>
@@ -59,6 +59,7 @@
           <sn-time-ago timestamp="selectedMoment.data.created_on" />
         </div>
       </div>
+      <teamonline-moment-comment-form template-url="comment-form.html" moment="c.selectedMoment"></teamonline-moment-comment-form>
     </div>
   </div>
 </div>]]></template>
