@@ -4,21 +4,28 @@
         <script><![CDATA[function teamonlineMomentCommentForm() {
 	function link(controller) {
 		var c = controller
-		c.comment = 'asasas'		
+		c.comment = ''
 	}
 
 	function controller($rootScope) {
 		var ctrl = this;
-		ctrl.comment = 'ph'
+		ctrl.comment = '';
 		ctrl.send = () => {
-			console.log('sending data:: ', ctrl.parent, ctrl.moment, ctrl.comment)
-			$rootScope.$broadcast('commentSent', { comment: ctrl.comment, parent: ctrl.parent, moment: ctrl.moment })
+			const payload = {
+				comment: ctrl.comment, 
+				parent: ctrl.parent?ctrl.parent.sys_id : '', 
+				moment: ctrl.moment.data.sys_id 
+			}
+			$rootScope.$broadcast('commentSent', payload)
 		}
-
-		// ctrl.$on('commentSelected', (evt, data) => {
-		// 	ctrl.parent = data.comment
-		// 	ctrl.comment = '@'+ctrl.parent.author.userId + ', ' +comment
-		// })
+		$rootScope.$on('replyToRoot', (evt, data) => {
+			ctrl.comment = '@' + data.comment.author.id + ', '+ ctrl.comment;
+			ctrl.parent = data.comment;
+		});
+		$rootScope.$on('replyToChild', (evt, data) => {
+			ctrl.comment = '@' + data.comment.author.id + ', '+ ctrl.comment;
+			ctrl.parent = '';
+		});
 	}
 	return {
 		templateUrl: function (element, attrs) {
@@ -40,7 +47,7 @@
         <sys_created_on>2020-09-24 15:00:22</sys_created_on>
         <sys_customer_update>false</sys_customer_update>
         <sys_id>ebaf6980db239410389b84d8689619b1</sys_id>
-        <sys_mod_count>12</sys_mod_count>
+        <sys_mod_count>17</sys_mod_count>
         <sys_name>teamonlineMomentCommentForm</sys_name>
         <sys_package display_value="TEAMonline" source="x_aaro2_teamonline">a2dfc25fdb7244105f65ba03e29619fa</sys_package>
         <sys_policy/>
@@ -48,7 +55,7 @@
         <sys_scope display_value="TEAMonline">a2dfc25fdb7244105f65ba03e29619fa</sys_scope>
         <sys_update_name>sp_angular_provider_ebaf6980db239410389b84d8689619b1</sys_update_name>
         <sys_updated_by>andrey.mironyuk</sys_updated_by>
-        <sys_updated_on>2020-09-25 12:08:45</sys_updated_on>
+        <sys_updated_on>2020-09-25 15:43:03</sys_updated_on>
         <type>directive</type>
     </sp_angular_provider>
 </record_update>
