@@ -129,25 +129,27 @@ $blue: #0069c8;&#13;
         <public>true</public>
         <roles/>
         <script><![CDATA[(function () {
-  /* populate the 'data' object */
-  /* e.g., data.table = $sp.getValue('table'); */
-  var m_Util = new MomentsUtil();
-  data.isLoggedIn = gs.getSession().isLoggedIn();
-  data.canEdit = gs.getUser().isMemberOf(gs.getProperty("x_aaro2_teamonline.teamonline_administration_group")) || gs.hasRole("admin");
-  data.momentsTable = "x_aaro2_teamonline_moment";
-  
+	/* populate the 'data' object */
+	/* e.g., data.table = $sp.getValue('table'); */
+	var userIP = gs.getSession().getClientIP();
+	data.userIPisValid = new TeamOnlineUtils().validateIP(userIP);
+	var m_Util = new MomentsUtil();
+	data.isLoggedIn = gs.getSession().isLoggedIn();
+	data.canEdit = gs.getUser().isMemberOf(gs.getProperty("x_aaro2_teamonline.teamonline_administration_group")) || gs.hasRole("admin");
+	data.momentsTable = "x_aaro2_teamonline_moment";
 
-  if (!input || !input.action)
-    getMoments()
 
-  if(input){
-    getMoments()
-  }
+	if (!input || !input.action)
+		getMoments()
 
-  function getMoments(){
-   data.moments = m_Util.getFilteredNext('approval=approved', '', 5,true)
-  }
- 
+	if(input){
+		getMoments()
+	}
+
+	function getMoments(){
+		data.moments = m_Util.getFilteredNext('approval=approved', '', 5,true)
+	}
+
 })();
 ]]></script>
         <servicenow>false</servicenow>
@@ -156,16 +158,16 @@ $blue: #0069c8;&#13;
         <sys_created_on>2020-07-06 09:31:10</sys_created_on>
         <sys_customer_update>false</sys_customer_update>
         <sys_id>86d568dadbb9545084c240981396194b</sys_id>
-        <sys_mod_count>682</sys_mod_count>
+        <sys_mod_count>683</sys_mod_count>
         <sys_name>Teamonline Moments</sys_name>
         <sys_package display_value="TEAMonline" source="x_aaro2_teamonline">a2dfc25fdb7244105f65ba03e29619fa</sys_package>
         <sys_policy/>
         <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
         <sys_scope display_value="TEAMonline">a2dfc25fdb7244105f65ba03e29619fa</sys_scope>
         <sys_update_name>sp_widget_86d568dadbb9545084c240981396194b</sys_update_name>
-        <sys_updated_by>andrey.mironyuk</sys_updated_by>
-        <sys_updated_on>2020-09-24 14:40:54</sys_updated_on>
-        <template><![CDATA[<div>
+        <sys_updated_by>xxikochet</sys_updated_by>
+        <sys_updated_on>2020-09-24 21:37:12</sys_updated_on>
+        <template><![CDATA[<div ng-if="data.userIPisValid">
   <div id="moments-container">
     <!--<div id="to-gallery" >
       <a href="?id=teamonline_moments">To Moments Gallery <i class="fa fa-arrow-right"></i></a>

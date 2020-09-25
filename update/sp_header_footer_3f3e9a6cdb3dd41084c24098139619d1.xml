@@ -101,9 +101,7 @@ $green: #91c712;&#13;
         <script><![CDATA[(function() {
 	
 	var userIP = gs.getSession().getClientIP();
-	//gs.addInfoMessage(userIP);
 	data.userIPisValid = new TeamOnlineUtils().validateIP(userIP);
-	//gs.addInfoMessage('userIP is valid: '+data.userIPisValid);
 
 })();]]></script>
         <servicenow>false</servicenow>
@@ -112,7 +110,7 @@ $green: #91c712;&#13;
         <sys_created_on>2020-07-01 07:48:26</sys_created_on>
         <sys_customer_update>false</sys_customer_update>
         <sys_id>3f3e9a6cdb3dd41084c24098139619d1</sys_id>
-        <sys_mod_count>135</sys_mod_count>
+        <sys_mod_count>137</sys_mod_count>
         <sys_name>Teamonline Footer</sys_name>
         <sys_package display_value="TEAMonline" source="x_aaro2_teamonline">a2dfc25fdb7244105f65ba03e29619fa</sys_package>
         <sys_policy/>
@@ -120,8 +118,8 @@ $green: #91c712;&#13;
         <sys_scope display_value="TEAMonline">a2dfc25fdb7244105f65ba03e29619fa</sys_scope>
         <sys_update_name>sp_header_footer_3f3e9a6cdb3dd41084c24098139619d1</sys_update_name>
         <sys_updated_by>xxikochet</sys_updated_by>
-        <sys_updated_on>2020-09-24 19:09:24</sys_updated_on>
-        <template><![CDATA[<!--<div ng-if="!data.userIPisValid">-->
+        <sys_updated_on>2020-09-24 21:20:10</sys_updated_on>
+        <template><![CDATA[<div ng-if="data.userIPisValid">
   <div id="footer" ng-style={{margin}}>
     <div class="container-fluid">
       <div class="row">
@@ -187,6 +185,6 @@ $green: #91c712;&#13;
       </div>
     </div>
   </div>
-<!---</div>--->]]></template>
+</div>]]></template>
     </sp_header_footer>
 </record_update>

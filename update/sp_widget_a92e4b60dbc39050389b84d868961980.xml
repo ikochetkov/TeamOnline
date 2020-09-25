@@ -203,6 +203,8 @@
         <public>false</public>
         <roles/>
         <script><![CDATA[(function() {
+	var userIP = gs.getSession().getClientIP();
+	data.userIPisValid = new TeamOnlineUtils().validateIP(userIP);
   var m_Util = new MomentsUtil(); 
   if(!input||input.source==='grid'){
     data.store =  getStore(gs.getUserID());
@@ -235,16 +237,16 @@
         <sys_created_on>2020-09-01 14:36:26</sys_created_on>
         <sys_customer_update>false</sys_customer_update>
         <sys_id>a92e4b60dbc39050389b84d868961980</sys_id>
-        <sys_mod_count>114</sys_mod_count>
+        <sys_mod_count>115</sys_mod_count>
         <sys_name>Teamonline Moment Submit Form</sys_name>
         <sys_package display_value="TEAMonline" source="x_aaro2_teamonline">a2dfc25fdb7244105f65ba03e29619fa</sys_package>
         <sys_policy/>
         <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
         <sys_scope display_value="TEAMonline">a2dfc25fdb7244105f65ba03e29619fa</sys_scope>
         <sys_update_name>sp_widget_a92e4b60dbc39050389b84d868961980</sys_update_name>
-        <sys_updated_by>andrey.mironyuk</sys_updated_by>
-        <sys_updated_on>2020-09-17 14:56:53</sys_updated_on>
-        <template><![CDATA[<div style="margin: 5px 0">
+        <sys_updated_by>xxikochet</sys_updated_by>
+        <sys_updated_on>2020-09-24 21:38:44</sys_updated_on>
+        <template><![CDATA[<div ng-if="data.userIPisValid" style="margin: 5px 0">
   <div class="submit-area">
     <button type="button" class="btn btn-primary submit-memory-btn" ng-if="data.showButton"
       ng-click="data.collapsed = !data.collapsed">{{data.collapsed?'Add moment':'Collapse form'}}</button>

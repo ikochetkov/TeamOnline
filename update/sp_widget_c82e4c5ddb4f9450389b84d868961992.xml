@@ -166,24 +166,7 @@ $blue: #0069c8;&#13;
     }&#13;
   }&#13;
 }&#13;
-.comment-input-container {&#13;
-  .input-group {&#13;
-    border-top: 1px solid #eee;&#13;
-  }&#13;
-  input {&#13;
-    border: none;&#13;
-  }&#13;
-}&#13;
-.gallery-container {&#13;
-  .caption-container {&#13;
-    display: flex;&#13;
-    justify-content: flex-start;&#13;
-    align-content: flex-start;&#13;
-    padding: 9px;&#13;
-    flex-wrap: wrap;&#13;
-    flex-grow: 1;&#13;
-  }&#13;
-}&#13;
+&#13;
 .approval-state {&#13;
   font-size: 1rem;&#13;
   text-align: right;&#13;
@@ -283,7 +266,7 @@ $blue: #0069c8;&#13;
         <sys_created_on>2020-09-03 08:33:18</sys_created_on>
         <sys_customer_update>false</sys_customer_update>
         <sys_id>c82e4c5ddb4f9450389b84d868961992</sys_id>
-        <sys_mod_count>366</sys_mod_count>
+        <sys_mod_count>367</sys_mod_count>
         <sys_name>Teamonline Moments Grid</sys_name>
         <sys_package display_value="TEAMonline" source="x_aaro2_teamonline">a2dfc25fdb7244105f65ba03e29619fa</sys_package>
         <sys_policy/>
@@ -291,7 +274,7 @@ $blue: #0069c8;&#13;
         <sys_scope display_value="TEAMonline">a2dfc25fdb7244105f65ba03e29619fa</sys_scope>
         <sys_update_name>sp_widget_c82e4c5ddb4f9450389b84d868961992</sys_update_name>
         <sys_updated_by>andrey.mironyuk</sys_updated_by>
-        <sys_updated_on>2020-09-24 15:25:04</sys_updated_on>
+        <sys_updated_on>2020-09-25 07:55:05</sys_updated_on>
         <template><![CDATA[<div>
   <div class="moments-grid-container" in-view-container>
     <div class="no-moments-message" ng-if="data.moments.length==0">

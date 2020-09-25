@@ -294,6 +294,8 @@ $sn-chatbot-animation-speed: 300ms;&#13;
 	/* populate the 'data' object */
 	/* e.g., data.table = $sp.getValue('table'); */
 
+	var userIP = gs.getSession().getClientIP();
+	data.userIPisValid = new TeamOnlineUtils().validateIP(userIP);
 	var instanceGR = $sp.getInstanceRecord();
 
 	options.va_url_params = options.va_url_params || "";
@@ -311,16 +313,16 @@ $sn-chatbot-animation-speed: 300ms;&#13;
         <sys_created_on>2020-06-30 11:19:42</sys_created_on>
         <sys_customer_update>false</sys_customer_update>
         <sys_id>19258e54dbf5541084c240981396196f</sys_id>
-        <sys_mod_count>13</sys_mod_count>
+        <sys_mod_count>14</sys_mod_count>
         <sys_name>Teamonline Virtual Agent</sys_name>
         <sys_package display_value="TEAMonline" source="x_aaro2_teamonline">a2dfc25fdb7244105f65ba03e29619fa</sys_package>
         <sys_policy/>
         <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
         <sys_scope display_value="TEAMonline">a2dfc25fdb7244105f65ba03e29619fa</sys_scope>
         <sys_update_name>sp_widget_19258e54dbf5541084c240981396196f</sys_update_name>
-        <sys_updated_by>andrey.mironyuk</sys_updated_by>
-        <sys_updated_on>2020-07-15 11:53:18</sys_updated_on>
-        <template><![CDATA[<div class="conversation-button-container">
+        <sys_updated_by>xxikochet</sys_updated_by>
+        <sys_updated_on>2020-09-24 21:39:17</sys_updated_on>
+        <template><![CDATA[<div ng-if="data.userIPisValid" class="conversation-button-container">
 	<div class="conversation-region fade" 
        ng-class="{'open': $ctrl.isWindowVisible}">
     <div class="sn-connect sn-connect-floating">

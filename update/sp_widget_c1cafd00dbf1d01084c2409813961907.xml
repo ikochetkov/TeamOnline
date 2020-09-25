@@ -638,6 +638,8 @@ h5, .h5 {
         <public>true</public>
         <roles/>
         <script><![CDATA[(function() {
+	var userIP = gs.getSession().getClientIP();
+	data.userIPisValid = new TeamOnlineUtils().validateIP(userIP);
 
 	data.searchForm = input ?  input.searchForm : '';
 	data.table = "x_aaro2_teamonline_blocks_config";
@@ -701,7 +703,7 @@ h5, .h5 {
         <sys_created_on>2020-06-29 15:55:52</sys_created_on>
         <sys_customer_update>false</sys_customer_update>
         <sys_id>c1cafd00dbf1d01084c2409813961907</sys_id>
-        <sys_mod_count>154</sys_mod_count>
+        <sys_mod_count>155</sys_mod_count>
         <sys_name>Team Online 4 Blocks</sys_name>
         <sys_package display_value="TEAMonline" source="x_aaro2_teamonline">a2dfc25fdb7244105f65ba03e29619fa</sys_package>
         <sys_policy/>
@@ -709,8 +711,8 @@ h5, .h5 {
         <sys_scope display_value="TEAMonline">a2dfc25fdb7244105f65ba03e29619fa</sys_scope>
         <sys_update_name>sp_widget_c1cafd00dbf1d01084c2409813961907</sys_update_name>
         <sys_updated_by>xxikochet</sys_updated_by>
-        <sys_updated_on>2020-09-21 20:49:22</sys_updated_on>
-        <template><![CDATA[<div class="each-article-content ffffff" >
+        <sys_updated_on>2020-09-24 21:35:34</sys_updated_on>
+        <template><![CDATA[<div ng-if="data.userIPisValid" class="each-article-content ffffff" >
   
 
   <div class="small active">

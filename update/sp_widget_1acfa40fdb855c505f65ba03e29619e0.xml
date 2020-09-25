@@ -229,7 +229,9 @@
         <option_schema>[{"name":"interval","section":"other","default_value":"5000","label":"Interval","type":"integer"}]</option_schema>
         <public>true</public>
         <roles/>
-        <script><![CDATA[var widgetInstanceRecordsysId = $sp.getInstanceRecord().getUniqueValue();
+        <script><![CDATA[var userIP = gs.getSession().getClientIP();
+data.userIPisValid = new TeamOnlineUtils().validateIP(userIP);
+var widgetInstanceRecordsysId = $sp.getInstanceRecord().getUniqueValue();
 data.table = 'x_aaro2_teamonline_carousel_slide';
 data.canEdit = gs.getUser().isMemberOf(gs.getProperty("x_aaro2_teamonline.teamonline_administration_group")) || gs.hasRole("admin");
 data.imageLibrary = $sp.getWidget('image_library');
@@ -263,7 +265,7 @@ else if(input){
 
 function collectSlides(){
 	data.slides = [];
-	
+
 	var slidesGr = new GlideRecord('x_aaro2_teamonline_carousel_slide');
 	slidesGr.addQuery('carousel', widgetInstanceRecordsysId);
 	slidesGr.query();
@@ -288,7 +290,7 @@ function collectSlides(){
         <sys_created_on>2020-06-01 11:22:57</sys_created_on>
         <sys_customer_update>false</sys_customer_update>
         <sys_id>1acfa40fdb855c505f65ba03e29619e0</sys_id>
-        <sys_mod_count>347</sys_mod_count>
+        <sys_mod_count>348</sys_mod_count>
         <sys_name>TeamOnline Carousel</sys_name>
         <sys_package display_value="TEAMonline" source="x_aaro2_teamonline">a2dfc25fdb7244105f65ba03e29619fa</sys_package>
         <sys_policy/>
@@ -296,8 +298,8 @@ function collectSlides(){
         <sys_scope display_value="TEAMonline">a2dfc25fdb7244105f65ba03e29619fa</sys_scope>
         <sys_update_name>sp_widget_1acfa40fdb855c505f65ba03e29619e0</sys_update_name>
         <sys_updated_by>xxikochet</sys_updated_by>
-        <sys_updated_on>2020-09-21 18:52:34</sys_updated_on>
-        <template><![CDATA[<div id="slider">
+        <sys_updated_on>2020-09-24 21:34:50</sys_updated_on>
+        <template><![CDATA[<div ng-if="data.userIPisValid" id="slider">
   <div class="pull-in">
     <uib-carousel interval="options.interval">
       <uib-slide ng-repeat="slide in data.slides" active="slide.active">

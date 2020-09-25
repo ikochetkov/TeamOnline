@@ -349,6 +349,8 @@ small {&#13;
         <public>true</public>
         <roles/>
         <script><![CDATA[(function() {
+	var userIP = gs.getSession().getClientIP();
+	data.userIPisValid = new TeamOnlineUtils().validateIP(userIP);
 	data.kb_category = $sp.getParameter('kb_category');
 	if (input && input.action == 'delete_article') {
 		var articleGr = new GlideRecord('kb_knowledge');
@@ -476,16 +478,16 @@ function getCategories (knowledgeBaseId) {
         <sys_created_on>2020-02-12 15:25:13</sys_created_on>
         <sys_customer_update>false</sys_customer_update>
         <sys_id>b25843e7db7ac4105f65ba03e2961912</sys_id>
-        <sys_mod_count>432</sys_mod_count>
+        <sys_mod_count>433</sys_mod_count>
         <sys_name>Team Online All Base Articles</sys_name>
         <sys_package display_value="TEAMonline" source="x_aaro2_teamonline">a2dfc25fdb7244105f65ba03e29619fa</sys_package>
         <sys_policy/>
         <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
         <sys_scope display_value="TEAMonline">a2dfc25fdb7244105f65ba03e29619fa</sys_scope>
         <sys_update_name>sp_widget_b25843e7db7ac4105f65ba03e2961912</sys_update_name>
-        <sys_updated_by>andrey.mironyuk</sys_updated_by>
-        <sys_updated_on>2020-09-14 15:52:43</sys_updated_on>
-        <template><![CDATA[<section class="section">
+        <sys_updated_by>xxikochet</sys_updated_by>
+        <sys_updated_on>2020-09-24 21:36:26</sys_updated_on>
+        <template><![CDATA[<section ng-if="data.userIPisValid" class="section">
   <div class="row">
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
       <div class="page-wrapper">

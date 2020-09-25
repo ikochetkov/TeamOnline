@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sp_ng_template">
+    <sp_ng_template action="INSERT_OR_UPDATE">
+        <id>child-comment.html</id>
+        <sp_widget display_value="Teamonline Footer">3f3e9a6cdb3dd41084c24098139619d1</sp_widget>
+        <sys_class_name>sp_ng_template</sys_class_name>
+        <sys_created_by>andrey.mironyuk</sys_created_by>
+        <sys_created_on>2020-09-25 11:19:13</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_id>8c47065cdb631810389b84d868961932</sys_id>
+        <sys_mod_count>3</sys_mod_count>
+        <sys_name>child-comment.html</sys_name>
+        <sys_package display_value="TEAMonline" source="x_aaro2_teamonline">a2dfc25fdb7244105f65ba03e29619fa</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="TEAMonline">a2dfc25fdb7244105f65ba03e29619fa</sys_scope>
+        <sys_update_name>sp_ng_template_8c47065cdb631810389b84d868961932</sys_update_name>
+        <sys_updated_by>andrey.mironyuk</sys_updated_by>
+        <sys_updated_on>2020-09-25 12:11:30</sys_updated_on>
+        <template><![CDATA[<div class="comment child-comment">
+  <div class="comment-container">
+    <div class="avatar-container">
+      <sn-avatar class="avatar-large" primary="ctrl.child.author.id"></sn-avatar>
+    </div>
+    <div class="caption-container no-vertical-padding">
+      <div class="caption"><b>{{ctrl.comment.author.name}}:</b> "{{ctrl.comment.text}}"</div>
+      <div class="timeago">
+        <i class="fa fa-clock-o"></i>
+        <sn-time-ago timestamp="ctrl.comment.created_on" />
+      </div>
+    </div>
+  </div>
+</div>]]></template>
+    </sp_ng_template>
+</record_update>

@@ -486,11 +486,10 @@ a.semi-transparent:hover {&#13;
         <public>true</public>
         <roles/>
         <script><![CDATA[(function () {
+
 	// build menus
-// 	var session = gs.getSession();
-// 	var addr = session.getClientIP();
-// 	gs.addInfoMessage(addr);
-	//gs.setRedirect('https://google.ru');
+	var userIP = gs.getSession().getClientIP();
+	data.userIPisValid = new TeamOnlineUtils().validateIP(userIP);
 	
 	data.canEdit = gs.getUser().isMemberOf(gs.getProperty("x_aaro2_teamonline.teamonline_administration_group")) || gs.hasRole("admin");
 	data.isLoggedIn = true;//gs.getSession().isLoggedIn();
@@ -625,7 +624,7 @@ function prepareFormFields(fields, props) {
         <sys_created_on>2020-02-11 17:07:22</sys_created_on>
         <sys_customer_update>false</sys_customer_update>
         <sys_id>912616dfdbfa04108f26550a48961954</sys_id>
-        <sys_mod_count>348</sys_mod_count>
+        <sys_mod_count>363</sys_mod_count>
         <sys_name>Team Online Header Menu</sys_name>
         <sys_package display_value="TEAMonline" source="x_aaro2_teamonline">a2dfc25fdb7244105f65ba03e29619fa</sys_package>
         <sys_policy/>
@@ -633,7 +632,7 @@ function prepareFormFields(fields, props) {
         <sys_scope display_value="TEAMonline">a2dfc25fdb7244105f65ba03e29619fa</sys_scope>
         <sys_update_name>sp_widget_912616dfdbfa04108f26550a48961954</sys_update_name>
         <sys_updated_by>xxikochet</sys_updated_by>
-        <sys_updated_on>2020-09-22 18:59:58</sys_updated_on>
+        <sys_updated_on>2020-09-24 21:29:55</sys_updated_on>
         <template><![CDATA[<div class="menu-container">
 
   <nav class="header__nav-wrap" style="margin-top: 0; ">
@@ -646,13 +645,14 @@ function prepareFormFields(fields, props) {
         </div>
       </div>
 
-      <li ng-repeat="item in visibleItems" ng-class="{dropdown: item.items.length > 0, 'header-menu-item': true}"
-        ng-include="'teamOnlineMainMenu'" role="presentation"></li>
+      <li ng-if="data.userIPisValid" ng-repeat="item in visibleItems" ng-class="{dropdown: item.items.length > 0, 'header-menu-item': true}"
+          ng-include="'teamOnlineMainMenu'" role="presentation"></li>
       <li ng-if="data.canEdit">
         <sp-widget widget="newArticle"></sp-widget>
       </li>
     </ul>
   </nav>
-</div>]]></template>
+</div>
+]]></template>
     </sp_widget>
 </record_update>
