@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?><record_update table="m2m_sp_ng_pro_sp_ng_pro">
     <m2m_sp_ng_pro_sp_ng_pro action="INSERT_OR_UPDATE">
         <required_by display_value="teamonlineGallery">1e964147db9fd490389b84d8689619bb</required_by>
-        <requires display_value="momentRootComment">35a44658db631810389b84d8689619e4</requires>
+        <requires display_value="momentChildComment">a1b58658db631810389b84d86896192e</requires>
         <sys_class_name>m2m_sp_ng_pro_sp_ng_pro</sys_class_name>
         <sys_created_by>andrey.mironyuk</sys_created_by>
-        <sys_created_on>2020-09-25 11:11:51</sys_created_on>
+        <sys_created_on>2020-09-25 14:17:08</sys_created_on>
         <sys_customer_update>false</sys_customer_update>
-        <sys_id>7ea5821cdb631810389b84d868961992</sys_id>
+        <sys_id>45107694dbe71810389b84d868961986</sys_id>
         <sys_mod_count>0</sys_mod_count>
-        <sys_name>teamonlineGallery.momentRootComent</sys_name>
+        <sys_name>teamonlineGallery.momentChildComment</sys_name>
         <sys_package display_value="TEAMonline" source="x_aaro2_teamonline">a2dfc25fdb7244105f65ba03e29619fa</sys_package>
         <sys_policy/>
         <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
         <sys_scope display_value="TEAMonline">a2dfc25fdb7244105f65ba03e29619fa</sys_scope>
-        <sys_update_name>m2m_sp_ng_pro_sp_ng_pro_7ea5821cdb631810389b84d868961992</sys_update_name>
+        <sys_update_name>m2m_sp_ng_pro_sp_ng_pro_45107694dbe71810389b84d868961986</sys_update_name>
         <sys_updated_by>andrey.mironyuk</sys_updated_by>
-        <sys_updated_on>2020-09-25 11:11:51</sys_updated_on>
+        <sys_updated_on>2020-09-25 14:17:08</sys_updated_on>
     </m2m_sp_ng_pro_sp_ng_pro>
 </record_update>

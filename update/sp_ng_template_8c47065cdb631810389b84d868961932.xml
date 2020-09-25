@@ -7,7 +7,7 @@
         <sys_created_on>2020-09-25 11:19:13</sys_created_on>
         <sys_customer_update>false</sys_customer_update>
         <sys_id>8c47065cdb631810389b84d868961932</sys_id>
-        <sys_mod_count>3</sys_mod_count>
+        <sys_mod_count>5</sys_mod_count>
         <sys_name>child-comment.html</sys_name>
         <sys_package display_value="TEAMonline" source="x_aaro2_teamonline">a2dfc25fdb7244105f65ba03e29619fa</sys_package>
         <sys_policy/>
@@ -15,17 +15,17 @@
         <sys_scope display_value="TEAMonline">a2dfc25fdb7244105f65ba03e29619fa</sys_scope>
         <sys_update_name>sp_ng_template_8c47065cdb631810389b84d868961932</sys_update_name>
         <sys_updated_by>andrey.mironyuk</sys_updated_by>
-        <sys_updated_on>2020-09-25 12:11:30</sys_updated_on>
+        <sys_updated_on>2020-09-25 14:08:08</sys_updated_on>
         <template><![CDATA[<div class="comment child-comment">
   <div class="comment-container">
     <div class="avatar-container">
-      <sn-avatar class="avatar-large" primary="ctrl.child.author.id"></sn-avatar>
+      <sn-avatar class="avatar-large" primary="cntrl.child.author.id"></sn-avatar>
     </div>
     <div class="caption-container no-vertical-padding">
-      <div class="caption"><b>{{ctrl.comment.author.name}}:</b> "{{ctrl.comment.text}}"</div>
+      <div class="caption"><b>{{cntrl.comment.author.name}}:</b> "{{cntrl.comment.text}}"</div>
       <div class="timeago">
         <i class="fa fa-clock-o"></i>
-        <sn-time-ago timestamp="ctrl.comment.created_on" />
+        <sn-time-ago timestamp="cntrl.comment.created_on" />
       </div>
     </div>
   </div>

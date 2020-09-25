@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?><record_update table="m2m_sp_ng_pro_sp_ng_pro">
     <m2m_sp_ng_pro_sp_ng_pro action="INSERT_OR_UPDATE">
-        <required_by display_value="momentRootComent">35a44658db631810389b84d8689619e4</required_by>
+        <required_by display_value="momentRootComment">35a44658db631810389b84d8689619e4</required_by>
         <requires display_value="momentChildComment">a1b58658db631810389b84d86896192e</requires>
         <sys_class_name>m2m_sp_ng_pro_sp_ng_pro</sys_class_name>
         <sys_created_by>andrey.mironyuk</sys_created_by>
