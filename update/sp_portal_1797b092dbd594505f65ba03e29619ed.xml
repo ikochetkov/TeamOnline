@@ -35,7 +35,7 @@ $text-muted:#979797;
         <sc_category_page/>
         <sp_chat_queue/>
         <sp_rectangle_menu display_value="Team Online Menu">c0561213db3e04108f26550a489619b7</sp_rectangle_menu>
-        <sqanda_knowledge_base display_value="TeamOnline">ada02741dbffc0d05f65ba03e296197f</sqanda_knowledge_base>
+        <sqanda_knowledge_base display_value="">ada02741dbffc0d05f65ba03e296197f</sqanda_knowledge_base>
         <sys_class_name>sp_portal</sys_class_name>
         <sys_created_by>xxikochet</sys_created_by>
         <sys_created_on>2020-06-11 14:17:24</sys_created_on>

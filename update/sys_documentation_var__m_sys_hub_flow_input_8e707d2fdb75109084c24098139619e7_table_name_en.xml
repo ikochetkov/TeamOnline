@@ -1,27 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?><record_update>
-    <sys_documentation element="" label="Moment" language="en" table="x_aaro2_teamonline_moment">
+    <sys_documentation element="table_name" label="Table Name" language="en" table="var__m_sys_hub_flow_input_8e707d2fdb75109084c24098139619e7">
         <sys_documentation action="INSERT_OR_UPDATE">
-            <element/>
+            <element>table_name</element>
             <help/>
             <hint/>
-            <label>Moment</label>
+            <label>Table Name</label>
             <language>en</language>
-            <name>x_aaro2_teamonline_moment</name>
-            <plural>Moments</plural>
+            <name>var__m_sys_hub_flow_input_8e707d2fdb75109084c24098139619e7</name>
+            <plural/>
             <sys_class_name>sys_documentation</sys_class_name>
             <sys_created_by>andrey.mironyuk</sys_created_by>
-            <sys_created_on>2020-07-07 14:59:20</sys_created_on>
+            <sys_created_on>2020-07-10 12:09:39</sys_created_on>
             <sys_customer_update>false</sys_customer_update>
-            <sys_id>cbdddc091b23d010d6c54229bc4bcbc3</sys_id>
+            <sys_id>2670f16fdb75109084c240981396190d</sys_id>
             <sys_mod_count>0</sys_mod_count>
-            <sys_name>Moment</sys_name>
+            <sys_name>Table Name</sys_name>
             <sys_package display_value="TEAMonline" source="x_aaro2_teamonline">a2dfc25fdb7244105f65ba03e29619fa</sys_package>
             <sys_policy/>
             <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
             <sys_scope display_value="TEAMonline">a2dfc25fdb7244105f65ba03e29619fa</sys_scope>
-            <sys_update_name>sys_documentation_x_aaro2_teamonline_moment__en</sys_update_name>
+            <sys_update_name>sys_documentation_var__m_sys_hub_flow_input_8e707d2fdb75109084c24098139619e7_table_name_en</sys_update_name>
             <sys_updated_by>andrey.mironyuk</sys_updated_by>
-            <sys_updated_on>2020-07-07 14:59:20</sys_updated_on>
+            <sys_updated_on>2020-07-10 12:09:39</sys_updated_on>
             <url/>
             <url_target/>
         </sys_documentation>

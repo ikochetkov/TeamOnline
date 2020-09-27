@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?><database>
-    <element label="Blocks Config" max_length="40" name="x_aaro2_teamonline_blocks_config" sizeclass="13" type="collection">
+    <element label="Blocks Config" max_length="40" name="x_aaro2_teamonline_blocks_config" type="collection">
         <element calculation="(function calculatedFieldValue(current) {&#13;&#10;&#13;&#10;&#9;// Add your code here&#13;&#10;&#9;return '';  // return the calculated value&#13;&#10;&#13;&#10;})(current);" label="Article" max_length="32" name="article" reference="kb_knowledge" type="reference"/>
         <element calculation="(function calculatedFieldValue(current) {&#13;&#10;&#13;&#10;&#9;// Add your code here&#13;&#10;&#9;return '';  // return the calculated value&#13;&#10;&#13;&#10;})(current);" default="javascript: gs.getUserID()" label="Author" max_length="32" name="author" reference="sys_user" type="reference"/>
         <element calculation="(function calculatedFieldValue(current) {&#13;&#10;&#13;&#10;&#9;// Add your code here&#13;&#10;&#9;return '';  // return the calculated value&#13;&#10;&#13;&#10;})(current);" label="Background" max_length="40" name="background" reference="db_image" reference_qual="category=kb^EQ" reference_qual_condition="category=kb^EQ" type="reference"/>

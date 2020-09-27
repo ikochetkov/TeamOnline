@@ -19,8 +19,8 @@
         <condition/>
         <description/>
         <execute_function>false</execute_function>
-        <filter_condition table="kb_knowledge">kb_knowledge_base=ada02741dbffc0d05f65ba03e296197f^kb_category=1f39f697db3244108f26550a489619bb^EQ<item display_table="kb_knowledge_base" display_value="TeamOnline" endquery="false" field="kb_knowledge_base" goto="false" newquery="false" operator="=" or="false" value="ada02741dbffc0d05f65ba03e296197f"/>
-            <item display_table="kb_category" display_value="Highlight articles " endquery="false" field="kb_category" goto="false" newquery="false" operator="=" or="false" value="1f39f697db3244108f26550a489619bb"/>
+        <filter_condition table="kb_knowledge">kb_knowledge_base=ada02741dbffc0d05f65ba03e296197f^kb_category=1f39f697db3244108f26550a489619bb^EQ<item endquery="false" field="kb_knowledge_base" goto="false" newquery="false" operator="=" or="false" value="ada02741dbffc0d05f65ba03e296197f"/>
+            <item endquery="false" field="kb_category" goto="false" newquery="false" operator="=" or="false" value="1f39f697db3244108f26550a489619bb"/>
             <item endquery="true" field="" goto="false" newquery="false" operator="=" or="false" value=""/>
         </filter_condition>
         <is_rest>false</is_rest>

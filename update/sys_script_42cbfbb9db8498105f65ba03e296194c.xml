@@ -19,8 +19,8 @@
         <condition/>
         <description>Gives to article , that goes to Base Category , unique Order to be used in Teamonline in Base Articles widget for drag-n-drop.</description>
         <execute_function>false</execute_function>
-        <filter_condition table="kb_knowledge">kb_knowledge_base=ada02741dbffc0d05f65ba03e296197f^kb_categoryCHANGESTO3c78f697db3244108f26550a4896194c^EQ<item display_table="kb_knowledge_base" display_value="TeamOnline" endquery="false" field="kb_knowledge_base" goto="false" newquery="false" operator="=" or="false" value="ada02741dbffc0d05f65ba03e296197f"/>
-            <item display_table="kb_category" display_value="Base articles " endquery="false" field="kb_category" goto="false" newquery="false" operator="CHANGESTO" or="false" value="3c78f697db3244108f26550a4896194c"/>
+        <filter_condition table="kb_knowledge">kb_knowledge_base=ada02741dbffc0d05f65ba03e296197f^kb_categoryCHANGESTO3c78f697db3244108f26550a4896194c^EQ<item endquery="false" field="kb_knowledge_base" goto="false" newquery="false" operator="=" or="false" value="ada02741dbffc0d05f65ba03e296197f"/>
+            <item endquery="false" field="kb_category" goto="false" newquery="false" operator="CHANGESTO" or="false" value="3c78f697db3244108f26550a4896194c"/>
             <item endquery="true" field="" goto="false" newquery="false" operator="=" or="false" value=""/>
         </filter_condition>
         <is_rest>false</is_rest>
