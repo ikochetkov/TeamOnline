@@ -9,9 +9,21 @@
         <controller_as>c</controller_as>
         <css>.container{&#13;
   font-family: Calibri;&#13;
-  font-weight:bold;&#13;
-  font-size:2em;&#13;
   text-align:center;&#13;
+}&#13;
+&#13;
+.text1{&#13;
+  font-weight: bold;&#13;
+  font-size: 12em;&#13;
+}&#13;
+&#13;
+.text2{&#13;
+  font-size: 2em;&#13;
+  font-weight:bold;&#13;
+}&#13;
+&#13;
+.text3{&#13;
+  font-size:1em;&#13;
 }</css>
         <data_table>sp_instance</data_table>
         <demo_data/>
@@ -19,23 +31,18 @@
         <docs/>
         <field_list/>
         <has_preview>false</has_preview>
-        <id>teamonline_ip_check</id>
+        <id>teamonline_403</id>
         <internal>false</internal>
         <link><![CDATA[function link(scope, element, attrs, controller) { 
 
  }]]></link>
-        <name>TeamOnline IP Check</name>
+        <name>TeamOnline 403</name>
         <option_schema/>
         <public>true</public>
         <roles/>
         <script><![CDATA[(function() {
- 
-	data.userIP = gs.getSession().getClientIP();
-	
-	/*var logGR = new GlideRecord('x_aaro2_teamonline_activity_logs');
-	logGR.initialize();
-	logGR.setValue('ip_address' , addr);
-	logGR.insert();*/
+
+	data.userIPisValid = new TeamOnlineUtils().validateIP(gs.getSession().getClientIP());
 
 })();]]></script>
         <servicenow>false</servicenow>
@@ -44,19 +51,19 @@
         <sys_created_on>2020-09-22 17:42:28</sys_created_on>
         <sys_customer_update>false</sys_customer_update>
         <sys_id>d502c4a71b135010d6c54229bc4bcb06</sys_id>
-        <sys_mod_count>41</sys_mod_count>
-        <sys_name>TeamOnline IP Check</sys_name>
+        <sys_mod_count>43</sys_mod_count>
+        <sys_name>TeamOnline 403</sys_name>
         <sys_package display_value="TEAMonline" source="x_aaro2_teamonline">a2dfc25fdb7244105f65ba03e29619fa</sys_package>
         <sys_policy/>
         <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
         <sys_scope display_value="TEAMonline">a2dfc25fdb7244105f65ba03e29619fa</sys_scope>
         <sys_update_name>sp_widget_d502c4a71b135010d6c54229bc4bcb06</sys_update_name>
         <sys_updated_by>xxikochet</sys_updated_by>
-        <sys_updated_on>2020-09-23 17:31:22</sys_updated_on>
-        <template><![CDATA[<div class="container">
-  <i class="glyphicon glyphicon-eye-close" aria-hidden="true"></i>
-  <p>{{data.userIP}}</p>
-  <p>This IP is not in whitelist for this resource</p>
+        <sys_updated_on>2020-09-27 12:03:20</sys_updated_on>
+        <template><![CDATA[<div ng-if="!data.userIPisValid" class="container">
+  <p class="text1">403</p>
+  <p class="text2">Forbidden</p>
+  <p class="text3">Access to this resource on server is denied!</p>
 </div>
 
 ]]></template>

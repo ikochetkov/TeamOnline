@@ -103,7 +103,7 @@ $green: #91c712;&#13;
 	var userIP = gs.getSession().getClientIP();
 	data.userIPisValid = new TeamOnlineUtils().validateIP(userIP);
 
-	var browserVer = gs.getSession().getProperty('user_agent_browser') + " " + gs.getSession().getProperty('user_agent_version');
+	var browserVer = new global.AllowGlideTransaction().getUserAgent();
 	var logGR = new GlideRecord('x_aaro2_teamonline_activity_logs');
 	logGR.initialize();
 	logGR.setValue('ip_address', gs.getSession().getClientIP().toString());
@@ -119,7 +119,7 @@ $green: #91c712;&#13;
         <sys_created_on>2020-07-01 07:48:26</sys_created_on>
         <sys_customer_update>false</sys_customer_update>
         <sys_id>3f3e9a6cdb3dd41084c24098139619d1</sys_id>
-        <sys_mod_count>138</sys_mod_count>
+        <sys_mod_count>139</sys_mod_count>
         <sys_name>Teamonline Footer</sys_name>
         <sys_package display_value="TEAMonline" source="x_aaro2_teamonline">a2dfc25fdb7244105f65ba03e29619fa</sys_package>
         <sys_policy/>
@@ -127,7 +127,7 @@ $green: #91c712;&#13;
         <sys_scope display_value="TEAMonline">a2dfc25fdb7244105f65ba03e29619fa</sys_scope>
         <sys_update_name>sp_header_footer_3f3e9a6cdb3dd41084c24098139619d1</sys_update_name>
         <sys_updated_by>xxikochet</sys_updated_by>
-        <sys_updated_on>2020-09-25 15:46:06</sys_updated_on>
+        <sys_updated_on>2020-09-27 11:48:27</sys_updated_on>
         <template><![CDATA[<div ng-if="data.userIPisValid">
   <div id="footer" ng-style={{margin}}>
     <div class="container-fluid">

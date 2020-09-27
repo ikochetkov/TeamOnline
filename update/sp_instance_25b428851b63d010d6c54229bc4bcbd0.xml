@@ -6,29 +6,29 @@
         <css/>
         <glyph/>
         <id/>
-        <order>2</order>
+        <order>1</order>
         <roles/>
         <short_description/>
         <size>md</size>
-        <sp_column display_value="1">ccafd3d5dbb384d05f65ba03e29619ec</sp_column>
-        <sp_widget display_value="TeamOnline Articles Category">f1a4eb5ddbf384d05f65ba03e296195f</sp_widget>
+        <sp_column display_value="1">1e624fd7dbce5cd084c2409813961905</sp_column>
+        <sp_widget display_value="TeamOnline 403">d502c4a71b135010d6c54229bc4bcb06</sp_widget>
         <sys_class_name>sp_instance</sys_class_name>
-        <sys_created_by>xxabunko</sys_created_by>
-        <sys_created_on>2020-03-26 10:54:38</sys_created_on>
+        <sys_created_by>xxikochet</sys_created_by>
+        <sys_created_on>2020-09-27 12:03:41</sys_created_on>
         <sys_customer_update>false</sys_customer_update>
-        <sys_id>12c6ab91dbf384d05f65ba03e2961998</sys_id>
-        <sys_mod_count>2</sys_mod_count>
+        <sys_id>25b428851b63d010d6c54229bc4bcbd0</sys_id>
+        <sys_mod_count>1</sys_mod_count>
         <sys_name/>
         <sys_package display_value="TEAMonline" source="x_aaro2_teamonline">a2dfc25fdb7244105f65ba03e29619fa</sys_package>
         <sys_policy/>
         <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
         <sys_scope display_value="TEAMonline">a2dfc25fdb7244105f65ba03e29619fa</sys_scope>
-        <sys_update_name>sp_instance_12c6ab91dbf384d05f65ba03e2961998</sys_update_name>
+        <sys_update_name>sp_instance_25b428851b63d010d6c54229bc4bcbd0</sys_update_name>
         <sys_updated_by>xxikochet</sys_updated_by>
-        <sys_updated_on>2020-09-27 12:25:37</sys_updated_on>
+        <sys_updated_on>2020-09-27 12:03:59</sys_updated_on>
         <title/>
         <url/>
         <widget_parameters/>
     </sp_instance>
-    <sys_translated_text action="delete_multiple" query="documentkey=12c6ab91dbf384d05f65ba03e2961998"/>
+    <sys_translated_text action="delete_multiple" query="documentkey=25b428851b63d010d6c54229bc4bcbd0"/>
 </record_update>

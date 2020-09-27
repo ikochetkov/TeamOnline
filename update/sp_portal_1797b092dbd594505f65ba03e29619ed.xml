@@ -22,7 +22,7 @@ $btn-default-bg:#fff;
 $text-muted:#979797;
 </css_variables>
         <default>false</default>
-        <homepage display_value="ip_check">b1400c631b135010d6c54229bc4bcb18</homepage>
+        <homepage/>
         <icon>4abb0f53dbba44105f65ba03e29619a6</icon>
         <kb_knowledge_base/>
         <kb_knowledge_page/>

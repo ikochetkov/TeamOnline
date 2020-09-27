@@ -2,7 +2,7 @@
     <sp_portal action="INSERT_OR_UPDATE">
         <css_variables/>
         <default>false</default>
-        <homepage display_value="ip_check">b1400c631b135010d6c54229bc4bcb18</homepage>
+        <homepage/>
         <icon/>
         <kb_knowledge_base/>
         <kb_knowledge_page/>
