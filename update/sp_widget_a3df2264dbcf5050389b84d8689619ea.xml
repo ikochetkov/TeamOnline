@@ -87,114 +87,33 @@
         <sys_created_on>2020-09-01 12:24:24</sys_created_on>
         <sys_customer_update>false</sys_customer_update>
         <sys_id>a3df2264dbcf5050389b84d8689619ea</sys_id>
-        <sys_mod_count>52</sys_mod_count>
+        <sys_mod_count>58</sys_mod_count>
         <sys_name>Teamonline Moment Approvals</sys_name>
         <sys_package display_value="TEAMonline" source="x_aaro2_teamonline">a2dfc25fdb7244105f65ba03e29619fa</sys_package>
         <sys_policy/>
         <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
         <sys_scope display_value="TEAMonline">a2dfc25fdb7244105f65ba03e29619fa</sys_scope>
         <sys_update_name>sp_widget_a3df2264dbcf5050389b84d8689619ea</sys_update_name>
-        <sys_updated_by>andrey.mironyuk</sys_updated_by>
-        <sys_updated_on>2020-09-24 09:23:28</sys_updated_on>
+        <sys_updated_by>xxamirony</sys_updated_by>
+        <sys_updated_on>2020-09-29 14:12:19</sys_updated_on>
         <template><![CDATA[<div>
   <div class="to-approve-container" ng-if="data.canEdit && data.moments.length>0">
     <div class="moments-header header-with-link">
-      <span> <a href="?id=teamonline_moments&filter=approvals">waiting for approval ({{data.moments.length}})</a> <i class="fa fa-chevron-right"></i></span>
+      <widget id="teamonline_moments_approval_engine"/>
+      <span> <a href="?id=teamonline_moments&filter=approvals">${tom_waiting_for_approval} ({{data.moments.length}})</a> <i class="fa fa-chevron-right"></i></span>
     </div>
-    <div class="to-approve-moments">
-      <div class="to-approve-moment" ng-repeat="moment in data.moments">
-        <div context-menu="contextMenu(moment)" class="moment">
-          <div class="avatar-timeago-container">
-            <div ng-if="!data.isLoggedIn" class="avatar-large avatar-container">
-              <div class="avatar soloAvatar">
-                <div class="sub-avatar" style="background-image: url(c4436fe21b3250d0d6c54229bc4bcbac.iix)"></div>
-              </div>
-            </div>
-            <sn-avatar ng-if="data.isLoggedIn" class="avatar-large" primary="moment.data.opened_by.id" />
-            <div class="autror-container">
-              <div class="author"> {{moment.data.opened_by.name}} </div>
-              <div class="location">
-                <i class="fa fa-location-arrow"></i> {{moment.data.store.name}}({{moment.data.store.description}})
-              </div>
-            </div>
-          </div>
-
-          <uib-carousel template-url="custom_carousel.html" interval="0">
-            <uib-slide ng-repeat="slide in moment.attachments" active="slide.active">
-              <div class="moment-image-container">
-                <img class="moment-image" ng-src="{{slide.thumbnail_url}}" role="presentation"
-                  ng-click="openImage($parent.$parent.$parent.$index, $index)">
-              </div>
-            </uib-slide>
-          </uib-carousel>
-          <div class="caption-container">
-
-            <div class="caption"><b>{{moment.data.opened_by.name}}:</b> <i>"{{moment.data.caption}}"</i>
-            </div>
-            <div class="timeago">
-              <i class="fa fa-clock-o"></i>
-              <sn-time-ago timestamp="moment.data.created_on" />
-            </div>
-          </div>
-          <div class="approve-buttons-container">
-            <input type="button" value="Approve" class="btn btn-success approve" ng-click="approve(moment)"
-              ng-disabled="moment.approving">
-            <input type="button" value="Reject" class="btn btn-danger reject" ng-click="reject(moment)"
-              ng-disabled="moment.approving">
-          </div>
-        </div>
-      </div>
+    <div class="to-approve-moments" in-view-container>
+    <moment 
+      ng-repeat="(key, moment) in data.moments" 
+      key="key"
+      moment="moment"
+      template-url="moment.html"
+      is-logged-in="data.isLoggedIn"
+      can-edit="data.canEdit"
+      active-allowed="c.filter=='approvals'"
+      in-view="loadMore($last, $inview)"/>
     </div>
-  </div>
-</div>
-
-<div class="moment-gallery">
-  <div class="close-gallery-button" ng-click="closeGallery()">
-    <i class="fa fa-times"></i>
-  </div>
-  <div class="controls-container">
-    <div class="image-control left" ng-click="iterateMoment(-1)"><i class="fa fa-chevron-left"></i></div>
-    <div class="image-control right" ng-click="iterateMoment(1)"><i class="fa fa-chevron-right"></i></div>
-  </div>
-  <div class="gallery-container">
-
-    <div class="gallery-left-container">
-      <div class="gallery-carousel-container">
-        <uib-carousel interval="0" template-url="custom_carousel.html" active="0">
-          <uib-slide ng-repeat="slide in selectedMoment.attachments" actual="slide.active">
-            <div class="gallery-image-container">
-              <img class="moment-image" ng-src="{{slide.image_url}}" role="presentation">
-            </div>
-          </uib-slide>
-        </uib-carousel>
-      </div>
-    </div>
-    <div class="gallery-right-container">
-      <div class="avatar-timeago-container">
-        <div ng-if="!data.isLoggedIn" class="avatar-large avatar-container">
-          <div class="avatar soloAvatar">
-            <div class="sub-avatar" style="background-image: url(c4436fe21b3250d0d6c54229bc4bcbac.iix)" />
-          </div>
-        </div>
-        <sn-avatar ng-if="data.isLoggedIn" class="avatar-large" primary="selectedMoment.data.opened_by.id" />
-        <div class="autror-container">
-          <div class="author"> {{selectedMoment.data.opened_by.name}} </div>
-          <div class="location">
-            <i class="fa fa-location-arrow"></i> {{selectedMoment.data.store.name}}({{selectedMoment.data.store.description}})
-          </div>
-        </div>
-      </div>
-      <div class="caption-container">
-        <div class="caption"><b>{{selectedMoment.data.opened_by.name}}:</b> "{{selectedMoment.data.caption}}"
-        </div>
-        <div class="timeago">
-          <i class="fa fa-clock-o"></i>
-          <sn-time-ago timestamp="selectedMoment.data.created_on" />
-        </div>
-      </div>
-    </div>
-  </div>
-
+      <widget id="teamonline_moments_gallery"></widget>
 </div>]]></template>
     </sp_widget>
 </record_update>

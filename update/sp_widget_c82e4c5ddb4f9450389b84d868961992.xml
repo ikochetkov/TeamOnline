@@ -166,11 +166,7 @@ $blue: #0069c8;&#13;
   }&#13;
 }&#13;
 &#13;
-.approval-state {&#13;
-  font-size: 1rem;&#13;
-  text-align: right;&#13;
-  flex-grow: 1;&#13;
-}&#13;
+&#13;
 .moment-image-container {&#13;
   width: 100%;&#13;
   height: 27.2rem;&#13;
@@ -266,16 +262,16 @@ $blue: #0069c8;&#13;
         <sys_created_on>2020-09-03 08:33:18</sys_created_on>
         <sys_customer_update>false</sys_customer_update>
         <sys_id>c82e4c5ddb4f9450389b84d868961992</sys_id>
-        <sys_mod_count>372</sys_mod_count>
+        <sys_mod_count>374</sys_mod_count>
         <sys_name>Teamonline Moments Grid</sys_name>
         <sys_package display_value="TEAMonline" source="x_aaro2_teamonline">a2dfc25fdb7244105f65ba03e29619fa</sys_package>
         <sys_policy/>
         <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
         <sys_scope display_value="TEAMonline">a2dfc25fdb7244105f65ba03e29619fa</sys_scope>
         <sys_update_name>sp_widget_c82e4c5ddb4f9450389b84d868961992</sys_update_name>
-        <sys_updated_by>andrey.mironyuk</sys_updated_by>
-        <sys_updated_on>2020-09-29 12:19:51</sys_updated_on>
-        <template><![CDATA[<div ng-if="data.userIPisValid">
+        <sys_updated_by>xxamirony</sys_updated_by>
+        <sys_updated_on>2020-09-29 13:08:27</sys_updated_on>
+        <template><![CDATA[<div>
   <div class="moments-grid-container" in-view-container>
     <div class="no-moments-message" ng-if="data.moments.length==0">
       <span> ${tom_no_moments_emoji}</span>
@@ -297,7 +293,7 @@ $blue: #0069c8;&#13;
       </div>
     </div>
   </div>
-  <widget id="teamonline_moments_gallery" options="{moments: data.moments, isLoggedIn: data.isLoggedIn}">
+  <widget id="teamonline_moments_gallery"/>
   <!-- <teamonline-gallery 
     template-url="moment-gallery.html"
     moments="data.moments"

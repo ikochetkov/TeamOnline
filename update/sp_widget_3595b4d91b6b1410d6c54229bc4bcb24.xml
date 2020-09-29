@@ -9,6 +9,8 @@
   c.selectedImageIndex = 0;
 
   $rootScope.$on('momentOpened', (evt, data) => {
+    if(data.source != $scope.$parent.widget.sys_id) return;
+    
     c.moments = $scope.$parent.data.moments;
     c.open( data.momentIndex, data.imageIndex);
   });
@@ -64,15 +66,15 @@
         <sys_created_on>2020-09-28 07:56:53</sys_created_on>
         <sys_customer_update>false</sys_customer_update>
         <sys_id>3595b4d91b6b1410d6c54229bc4bcb24</sys_id>
-        <sys_mod_count>21</sys_mod_count>
+        <sys_mod_count>22</sys_mod_count>
         <sys_name>Teamonline Moments Gallery</sys_name>
         <sys_package display_value="TEAMonline" source="x_aaro2_teamonline">a2dfc25fdb7244105f65ba03e29619fa</sys_package>
         <sys_policy/>
         <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
         <sys_scope display_value="TEAMonline">a2dfc25fdb7244105f65ba03e29619fa</sys_scope>
         <sys_update_name>sp_widget_3595b4d91b6b1410d6c54229bc4bcb24</sys_update_name>
-        <sys_updated_by>andrey.mironyuk</sys_updated_by>
-        <sys_updated_on>2020-09-29 09:40:42</sys_updated_on>
+        <sys_updated_by>xxamirony</sys_updated_by>
+        <sys_updated_on>2020-09-29 14:29:04</sys_updated_on>
         <template><![CDATA[<div class="moment-gallery">
   <div class="close-gallery-button" ng-click="c.close()">
     <i class="fa fa-times"></i>
