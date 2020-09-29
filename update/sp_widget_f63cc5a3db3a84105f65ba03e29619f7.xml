@@ -318,7 +318,7 @@
 			if (element.sys_id == data.sys_id) {
 				answer = true;
 			}
-		})
+		});
 		return answer;
 	}
 
@@ -330,15 +330,15 @@
         <sys_created_on>2020-02-12 06:22:55</sys_created_on>
         <sys_customer_update>false</sys_customer_update>
         <sys_id>f63cc5a3db3a84105f65ba03e29619f7</sys_id>
-        <sys_mod_count>680</sys_mod_count>
+        <sys_mod_count>691</sys_mod_count>
         <sys_name>Team Online Article Editor</sys_name>
         <sys_package display_value="TEAMonline" source="x_aaro2_teamonline">a2dfc25fdb7244105f65ba03e29619fa</sys_package>
         <sys_policy/>
         <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
         <sys_scope display_value="TEAMonline">a2dfc25fdb7244105f65ba03e29619fa</sys_scope>
         <sys_update_name>sp_widget_f63cc5a3db3a84105f65ba03e29619f7</sys_update_name>
-        <sys_updated_by>andrey.mironyuk</sys_updated_by>
-        <sys_updated_on>2020-09-09 08:18:19</sys_updated_on>
+        <sys_updated_by>xxikochet</sys_updated_by>
+        <sys_updated_on>2020-09-29 19:53:21</sys_updated_on>
         <template><![CDATA[<span class="label-button" ng-if="options.operation === 'New'" ng-click="open()">
   Create New Article
 </span>

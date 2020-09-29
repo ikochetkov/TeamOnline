@@ -35,13 +35,13 @@ $text-muted:#979797;
         <sc_category_page/>
         <sp_chat_queue/>
         <sp_rectangle_menu display_value="Team Online Menu">c0561213db3e04108f26550a489619b7</sp_rectangle_menu>
-        <sqanda_knowledge_base display_value="">ada02741dbffc0d05f65ba03e296197f</sqanda_knowledge_base>
+        <sqanda_knowledge_base display_value="Teamonline">478f5071dbe71450389b84d8689619cc</sqanda_knowledge_base>
         <sys_class_name>sp_portal</sys_class_name>
         <sys_created_by>xxikochet</sys_created_by>
         <sys_created_on>2020-02-11 16:41:37</sys_created_on>
         <sys_customer_update>false</sys_customer_update>
         <sys_id>7320169fdb7244105f65ba03e296190c</sys_id>
-        <sys_mod_count>34</sys_mod_count>
+        <sys_mod_count>36</sys_mod_count>
         <sys_name>Aaron's Team Online</sys_name>
         <sys_package display_value="TEAMonline" source="x_aaro2_teamonline">a2dfc25fdb7244105f65ba03e29619fa</sys_package>
         <sys_policy/>
@@ -49,7 +49,7 @@ $text-muted:#979797;
         <sys_scope display_value="TEAMonline">a2dfc25fdb7244105f65ba03e29619fa</sys_scope>
         <sys_update_name>sp_portal_7320169fdb7244105f65ba03e296190c</sys_update_name>
         <sys_updated_by>xxikochet</sys_updated_by>
-        <sys_updated_on>2020-09-23 19:04:55</sys_updated_on>
+        <sys_updated_on>2020-09-29 19:37:35</sys_updated_on>
         <theme display_value="Team Online Theme">9c999a1fdb3e04108f26550a48961949</theme>
         <title>Aaron's Team Online</title>
         <ts_index_group/>
