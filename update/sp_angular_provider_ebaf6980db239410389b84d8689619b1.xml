@@ -3,29 +3,54 @@
         <name>teamonlineMomentCommentForm</name>
         <script><![CDATA[function teamonlineMomentCommentForm() {
 	function link(controller) {
-		var c = controller
-		c.comment = ''
 	}
 
 	function controller($rootScope) {
 		var ctrl = this;
+		const replyToRx = new RegExp(/@\w+.\w+,?\s?/g)
+		ctrl.input = document.getElementById('comment-input');
 		ctrl.comment = '';
 		ctrl.send = () => {
 			const payload = {
 				comment: ctrl.comment, 
-				parent: ctrl.parent?ctrl.parent.sys_id : '', 
+				parent: ctrl.parent ? ctrl.parent : '', 
 				moment: ctrl.moment.data.sys_id 
 			}
+			console.log('sending comment', payload)
+			ctrl.comment = '';
 			$rootScope.$broadcast('commentSent', payload)
 		}
+		ctrl.cancelParent = () =>{
+      ctrl.parent = '';
+      ctrl.parentText = '';
+		}
 		$rootScope.$on('replyToRoot', (evt, data) => {
-			ctrl.comment = '@' + data.comment.author.id + ', '+ ctrl.comment;
-			ctrl.parent = data.comment;
+			setReply(data)
+			ctrl.parent = data.comment.sys_id;
 		});
 		$rootScope.$on('replyToChild', (evt, data) => {
+		  setReply(data)
+			ctrl.parent = data.comment.parent;
+    });
+    
+		$rootScope.$on('openedMomentChanged', (evt, data) => {
+			refresh()
+    })
+    function setReply(data){
+      ctrl.comment = ctrl.comment.replace(replyToRx, '')
 			ctrl.comment = '@' + data.comment.author.id + ', '+ ctrl.comment;
-			ctrl.parent = '';
-		});
+      ctrl.parentText = truncateTo(data.comment.text, 50);
+      ctrl.input.focus()
+    }
+		function truncateTo(str, symbolCount){
+      if(str.length<=symbolCount)return str;
+      return str.slice(0,symbolCount)+ '...'
+    }
+    function refresh(){
+      ctrl.comment = '',
+      ctrl.parent = ''
+      ctrl.parentText = ''
+    }
 	}
 	return {
 		templateUrl: function (element, attrs) {
@@ -47,7 +72,7 @@
         <sys_created_on>2020-09-24 15:00:22</sys_created_on>
         <sys_customer_update>false</sys_customer_update>
         <sys_id>ebaf6980db239410389b84d8689619b1</sys_id>
-        <sys_mod_count>17</sys_mod_count>
+        <sys_mod_count>34</sys_mod_count>
         <sys_name>teamonlineMomentCommentForm</sys_name>
         <sys_package display_value="TEAMonline" source="x_aaro2_teamonline">a2dfc25fdb7244105f65ba03e29619fa</sys_package>
         <sys_policy/>
@@ -55,7 +80,7 @@
         <sys_scope display_value="TEAMonline">a2dfc25fdb7244105f65ba03e29619fa</sys_scope>
         <sys_update_name>sp_angular_provider_ebaf6980db239410389b84d8689619b1</sys_update_name>
         <sys_updated_by>andrey.mironyuk</sys_updated_by>
-        <sys_updated_on>2020-09-25 15:43:03</sys_updated_on>
+        <sys_updated_on>2020-09-29 09:14:15</sys_updated_on>
         <type>directive</type>
     </sp_angular_provider>
 </record_update>

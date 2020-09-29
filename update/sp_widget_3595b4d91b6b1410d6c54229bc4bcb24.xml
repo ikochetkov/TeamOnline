@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sp_widget">
+    <sp_widget action="INSERT_OR_UPDATE">
+        <category>custom</category>
+        <client_script><![CDATA[function($scope, $rootScope) {
+  /* widget controller */
+  var c = this;
+  var gallery = document.getElementsByClassName('moment-gallery')[0];
+  c.selectedImageIndex = 0;
+  c.selectedImageIndex = 0;
+
+  $rootScope.$on('momentOpened', (evt, data) => {
+    c.moments = $scope.$parent.data.moments;
+    c.open( data.momentIndex, data.imageIndex);
+  });
+  c.open = (momentIndex, imageIndex) => {
+   console.log($scope);
+    c.selectedMomentIndex = momentIndex;
+    c.selectedMoment = c.moments[momentIndex]
+    c.selectedImageIndex = imageIndex;
+    gallery.classList.add('active')
+  }
+  c.close = () => {
+    c.selectedMoment = {}
+    gallery.classList.remove('active');
+  }
+  $(document).keydown(function (e) {
+    if (e.keyCode == 27) {
+      c.close()
+    }
+  });
+  c.iterateMoment = function (amount) {
+    var length = c.moments.length
+    if (c.selectedMomentIndex + amount > length - 1) c.selectedMomentIndex = 0;
+    else if (c.selectedMomentIndex + amount < 0) c.selectedMomentIndex = length - 1;
+    else c.selectedMomentIndex += amount;
+    c.selectedMoment = c.moments[c.selectedMomentIndex]
+    c.selectedImageIndex = 0;
+    $rootScope.$broadcast('openedMomentChanged', {moment: c.selectedMoment})
+  }
+}]]></client_script>
+        <controller_as>c</controller_as>
+        <css/>
+        <data_table>sp_instance</data_table>
+        <demo_data/>
+        <description/>
+        <docs/>
+        <field_list/>
+        <has_preview>false</has_preview>
+        <id>teamonline_moments_gallery</id>
+        <internal>false</internal>
+        <link><![CDATA[function link(scope, element, attrs, controller) { 
+
+ }]]></link>
+        <name>Teamonline Moments Gallery</name>
+        <option_schema/>
+        <public>true</public>
+        <roles/>
+        <script><![CDATA[(function() {
+  data.isLoggedIn = gs.getSession().isLoggedIn();
+})();]]></script>
+        <servicenow>false</servicenow>
+        <sys_class_name>sp_widget</sys_class_name>
+        <sys_created_by>andrey.mironyuk</sys_created_by>
+        <sys_created_on>2020-09-28 07:56:53</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_id>3595b4d91b6b1410d6c54229bc4bcb24</sys_id>
+        <sys_mod_count>21</sys_mod_count>
+        <sys_name>Teamonline Moments Gallery</sys_name>
+        <sys_package display_value="TEAMonline" source="x_aaro2_teamonline">a2dfc25fdb7244105f65ba03e29619fa</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="TEAMonline">a2dfc25fdb7244105f65ba03e29619fa</sys_scope>
+        <sys_update_name>sp_widget_3595b4d91b6b1410d6c54229bc4bcb24</sys_update_name>
+        <sys_updated_by>andrey.mironyuk</sys_updated_by>
+        <sys_updated_on>2020-09-29 09:40:42</sys_updated_on>
+        <template><![CDATA[<div class="moment-gallery">
+  <div class="close-gallery-button" ng-click="c.close()">
+    <i class="fa fa-times"></i>
+  </div>
+  <div class="controls-container">
+    <div class="image-control left" ng-click="c.iterateMoment(-1)"><i class="fa fa-chevron-left"></i></div>
+    <div class="image-control right" ng-click="c.iterateMoment(1)"><i class="fa fa-chevron-right"></i></div>
+  </div>
+  <div class="gallery-container">
+
+    <div class="gallery-left-container">
+      <div class="gallery-carousel-container">
+        <uib-carousel interval="0" template-url="custom_carousel.html" active="0">
+          <uib-slide ng-repeat="slide in c.selectedMoment.attachments" actual="slide.active">
+            <div class="gallery-image-container">
+              <img class="moment-image" ng-src="{{slide.image_url}}" role="presentation">
+            </div>
+          </uib-slide>
+        </uib-carousel>
+      </div>
+    </div>
+    <div class="gallery-right-container">
+      <div class="avatar-timeago-container">
+        <div ng-if="!c.data.isLoggedIn" class="avatar-large avatar-container">
+          <div class="avatar soloAvatar">
+            <div class="sub-avatar" style="background-image: url(c4436fe21b3250d0d6c54229bc4bcbac.iix)" />
+          </div>
+        </div>
+        <sn-avatar ng-if="c.data.isLoggedIn" class="avatar-large" primary="c.selectedMoment.data.opened_by.id" />
+        <div class="autror-container">
+          <div class="author"> {{c.selectedMoment.data.opened_by.name}} </div>
+          <div class="location">
+            <i class="fa fa-location-arrow"></i> {{c.selectedMoment.data.store.name}}
+            ({{c.selectedMoment.data.store.description}})
+          </div>
+        </div>
+      </div>
+      <div class="caption-container">
+        <div class="caption"><b>{{c.selectedMoment.data.opened_by.name}}:</b> {{c.selectedMoment.data.caption}}</div>
+        <div class="timeago">
+          <i class="fa fa-clock-o"></i>
+          <sn-time-ago timestamp="c.selectedMoment.data.created_on" />
+        </div>
+      </div>
+      <div class="comments-feed">
+        <div class="comments-label">
+          <span><i class="fa fa-comment"> </i> Comments:</span>
+        </div>
+        <widget id="teamonline_moment_comments"></widget>
+      </div>
+      <teamonline-moment-comment-form template-url="comment-form.html" moment="c.selectedMoment">
+      </teamonline-moment-comment-form>
+    </div>
+  </div>
+</div>]]></template>
+    </sp_widget>
+</record_update>

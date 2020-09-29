@@ -252,6 +252,7 @@
   flex-grow: 1;&#13;
   overflow-y: auto;&#13;
   overflow-x: hidden;&#13;
+  max-height: min-content;&#13;
   font-size: 1.2rem;&#13;
 }&#13;
 .comments-feed .comment {&#13;
@@ -260,16 +261,38 @@
 }&#13;
 .comment-container {&#13;
   padding: 5px;&#13;
+  margin: 0.5rem;&#13;
   display: flex;&#13;
   flex-direction: row;&#13;
 }&#13;
-.avatar-container {&#13;
-  width: 20%;&#13;
-}&#13;
+&#13;
 .comment-text-container {&#13;
   width: 80%;&#13;
 }&#13;
-&#13;
+.last-child-comment {&#13;
+  border-bottom: 1px solid #eee;&#13;
+}&#13;
+.comment-reply-to {&#13;
+  padding: 0.5rem 1rem;&#13;
+  font-size: 1.1rem;&#13;
+  display: flex;&#13;
+  flex-direction: row;&#13;
+  justify-content: space-between;&#13;
+  border-top: 1px solid #eee;&#13;
+}&#13;
+.comment-reply-to .reply-to-parent {&#13;
+}&#13;
+.comment-input-container button {&#13;
+  margin-left: 0;&#13;
+}&#13;
+.comment-input-container textarea{&#13;
+  border-bottom: none;&#13;
+}&#13;
+.comments-label {&#13;
+  padding: 0 1rem;&#13;
+  font-size: 1.1rem;&#13;
+  font-weight: 600;&#13;
+}&#13;
 .comments-feed .root-comment {&#13;
 }&#13;
 .comments-feed .child-comment {&#13;
@@ -283,7 +306,7 @@
   color: #999;&#13;
   font-size: 1rem;&#13;
   font-weight: 600;&#13;
-  margin-left: 10px&#13;
+  margin-left: 10px;&#13;
 }&#13;
 .reply-timeago {&#13;
   display: flex;&#13;
@@ -291,7 +314,7 @@
   justify-content: space-between;&#13;
   font-size: 1rem;&#13;
   width: 100%;&#13;
-  margin:  0.7rem 0 0 0;&#13;
+  margin: 0.7rem 0 0 0;&#13;
 }&#13;
 .reply-timeago .comment-timeago {&#13;
   color: #999;&#13;
@@ -426,7 +449,7 @@
         <sys_created_on>2020-09-07 14:45:19</sys_created_on>
         <sys_customer_update>false</sys_customer_update>
         <sys_id>22d906a2db839010389b84d868961983</sys_id>
-        <sys_mod_count>57</sys_mod_count>
+        <sys_mod_count>66</sys_mod_count>
         <sys_name>moments.css</sys_name>
         <sys_package display_value="TEAMonline" source="x_aaro2_teamonline">a2dfc25fdb7244105f65ba03e29619fa</sys_package>
         <sys_policy/>
@@ -434,6 +457,6 @@
         <sys_scope display_value="TEAMonline">a2dfc25fdb7244105f65ba03e29619fa</sys_scope>
         <sys_update_name>sp_css_22d906a2db839010389b84d868961983</sys_update_name>
         <sys_updated_by>andrey.mironyuk</sys_updated_by>
-        <sys_updated_on>2020-09-25 15:54:17</sys_updated_on>
+        <sys_updated_on>2020-09-29 09:34:39</sys_updated_on>
     </sp_css>
 </record_update>

@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?><database>
-    <element label="Moment Comment" max_length="40" name="x_aaro2_teamonline_moment_comment" type="collection">
+    <element label="Moment Comment" max_length="40" name="x_aaro2_teamonline_moment_comment" sizeclass="4" type="collection">
         <element label="Author" max_length="40" name="author" reference="sys_user" type="reference"/>
         <element label="Moment" max_length="40" name="moment" reference="x_aaro2_teamonline_moment" type="reference"/>
         <element label="Parent" max_length="40" name="parent" reference="x_aaro2_teamonline_moment_comment" type="reference"/>
         <element label="Rejected" max_length="40" name="rejected" type="boolean"/>
-        <element display="true" label="Text" max_length="128" name="text" type="string_full_utf8"/>
+        <element display="true" label="Text" max_length="140" name="text" type="string_full_utf8"/>
         <index name="index">
             <element name="parent"/>
         </index>

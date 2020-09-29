@@ -12,7 +12,7 @@
         <description/>
         <internal_name>moments_flow</internal_name>
         <label_cache>[{"name":"00b78c91-b917-4076-8e49-ae58387559b3.record.assignment_group","label":"1➛Moment Record➛Assignment Group","reference":"sys_user_group","reference_display":"Group","type":"reference","base_type":"reference","parent_table_name":"x_aaro2_teamonline_moment","column_name":"assignment_group"},{"name":"{{static.73eaa14c1bef4c1c47ebff3ecc4bcb67}}","label":"Internal Communications","reference":"sys_user_group","reference_display":"Group","type":"reference","base_type":"reference"},{"name":"00b78c91-b917-4076-8e49-ae58387559b3.table_name","label":"1➛Table","reference_display":"Table","type":"table_name","base_type":"table_name","attributes":{"element_mapping_provider":"com.glide.flow_design.action.data.FlowDesignVariableMapper"}},{"name":"00b78c91-b917-4076-8e49-ae58387559b3.record","label":"1➛Record","reference_display":"Record","type":"document_id","base_type":"document_id","attributes":{"element_mapping_provider":"com.glide.flow_design.action.data.FlowDesignVariableMapper"}},{"name":"Created_1.current.assignment_group","label":"Trigger➛Moment Record➛Assignment Group","reference":"sys_user_group","reference_display":"Group","type":"reference","base_type":"reference","parent_table_name":"x_aaro2_teamonline_moment","column_name":"assignment_group"},{"name":"Created_1.current","label":"Trigger➛Moment Record","reference":"x_aaro2_teamonline_moment","reference_display":"Moment","type":"reference","base_type":"reference","attributes":{}},{"name":"f67609c5-936b-425d-883e-a6d7d82a6cf7.approval_state","label":"2➛Approval State","reference_display":"Approval State","type":"choice","base_type":"choice","attributes":{"element_mapping_provider":"com.glide.flow_design.action.data.FlowDesignVariableMapper"}}]</label_cache>
-        <latest_snapshot>344661eedb4f5010389b84d86896191b</latest_snapshot>
+        <latest_snapshot>f3064d51dbab5050389b84d868961982</latest_snapshot>
         <master_snapshot>8e707d2fdb75109084c24098139619e7</master_snapshot>
         <name>Moments Flow</name>
         <natlang/>
@@ -89,7 +89,7 @@
         <sys_created_on>2020-07-10 13:40:28</sys_created_on>
         <sys_customer_update>false</sys_customer_update>
         <sys_id>09454267db39109084c2409813961929</sys_id>
-        <sys_mod_count>36</sys_mod_count>
+        <sys_mod_count>38</sys_mod_count>
         <sys_name/>
         <sys_package/>
         <sys_policy/>
@@ -97,7 +97,7 @@
         <sys_scope display_value="TEAMonline">a2dfc25fdb7244105f65ba03e29619fa</sys_scope>
         <sys_update_name/>
         <sys_updated_by>andrey.mironyuk</sys_updated_by>
-        <sys_updated_on>2020-09-07 12:09:36</sys_updated_on>
+        <sys_updated_on>2020-09-28 09:07:53</sys_updated_on>
         <ui_id>00b78c91-b917-4076-8e49-ae58387559b3</ui_id>
     </sys_hub_action_instance>
     <sys_variable_value action="delete_multiple" query="document_key=09454267db39109084c2409813961929"/>
@@ -182,7 +182,7 @@
         <sys_created_on>2020-07-10 12:09:29</sys_created_on>
         <sys_customer_update>false</sys_customer_update>
         <sys_id>94703d2fdb75109084c24098139619c1</sys_id>
-        <sys_mod_count>44</sys_mod_count>
+        <sys_mod_count>46</sys_mod_count>
         <sys_name/>
         <sys_package/>
         <sys_policy/>
@@ -190,7 +190,7 @@
         <sys_scope display_value="TEAMonline">a2dfc25fdb7244105f65ba03e29619fa</sys_scope>
         <sys_update_name/>
         <sys_updated_by>andrey.mironyuk</sys_updated_by>
-        <sys_updated_on>2020-09-07 12:09:36</sys_updated_on>
+        <sys_updated_on>2020-09-28 09:07:53</sys_updated_on>
         <ui_id>f67609c5-936b-425d-883e-a6d7d82a6cf7</ui_id>
     </sys_hub_action_instance>
     <sys_variable_value action="delete_multiple" query="document_key=94703d2fdb75109084c24098139619c1"/>
@@ -581,7 +581,7 @@
         <sys_created_on>2020-07-10 13:40:28</sys_created_on>
         <sys_customer_update>false</sys_customer_update>
         <sys_id>09454267db39109084c2409813961929</sys_id>
-        <sys_mod_count>36</sys_mod_count>
+        <sys_mod_count>38</sys_mod_count>
         <sys_name/>
         <sys_package/>
         <sys_policy/>
@@ -589,7 +589,7 @@
         <sys_scope display_value="TEAMonline">a2dfc25fdb7244105f65ba03e29619fa</sys_scope>
         <sys_update_name/>
         <sys_updated_by>andrey.mironyuk</sys_updated_by>
-        <sys_updated_on>2020-09-07 12:09:36</sys_updated_on>
+        <sys_updated_on>2020-09-28 09:07:53</sys_updated_on>
         <ui_id>00b78c91-b917-4076-8e49-ae58387559b3</ui_id>
     </sys_hub_action_instance>
     <sys_variable_value action="delete_multiple" query="document_key=09454267db39109084c2409813961929"/>
@@ -674,7 +674,7 @@
         <sys_created_on>2020-07-10 12:09:29</sys_created_on>
         <sys_customer_update>false</sys_customer_update>
         <sys_id>94703d2fdb75109084c24098139619c1</sys_id>
-        <sys_mod_count>44</sys_mod_count>
+        <sys_mod_count>46</sys_mod_count>
         <sys_name/>
         <sys_package/>
         <sys_policy/>
@@ -682,7 +682,7 @@
         <sys_scope display_value="TEAMonline">a2dfc25fdb7244105f65ba03e29619fa</sys_scope>
         <sys_update_name/>
         <sys_updated_by>andrey.mironyuk</sys_updated_by>
-        <sys_updated_on>2020-09-07 12:09:36</sys_updated_on>
+        <sys_updated_on>2020-09-28 09:07:53</sys_updated_on>
         <ui_id>f67609c5-936b-425d-883e-a6d7d82a6cf7</ui_id>
     </sys_hub_action_instance>
     <sys_variable_value action="delete_multiple" query="document_key=94703d2fdb75109084c24098139619c1"/>
@@ -871,7 +871,7 @@
         <binding_strategy>com.snc.process_flow.engine.binding.OncePerRecord</binding_strategy>
         <plan>{"persistor":{"@class":".ChunkingPlanPersistor","table":"sys_flow_trigger_plan","id":"7a70f16fdb75109084c2409813961928","name":"plan"}}</plan>
         <plan_id>abbe29e7db75109084c2409813961953</plan_id>
-        <snapshot>344661eedb4f5010389b84d86896191b</snapshot>
+        <snapshot>f3064d51dbab5050389b84d868961982</snapshot>
         <sys_class_name>sys_flow_trigger_plan</sys_class_name>
         <sys_created_by>andrey.mironyuk</sys_created_by>
         <sys_created_on>2020-07-10 12:09:40</sys_created_on>

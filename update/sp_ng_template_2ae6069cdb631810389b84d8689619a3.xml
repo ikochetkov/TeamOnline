@@ -7,7 +7,7 @@
         <sys_created_on>2020-09-25 11:18:24</sys_created_on>
         <sys_customer_update>false</sys_customer_update>
         <sys_id>2ae6069cdb631810389b84d8689619a3</sys_id>
-        <sys_mod_count>23</sys_mod_count>
+        <sys_mod_count>31</sys_mod_count>
         <sys_name>root-comment.html</sys_name>
         <sys_package display_value="TEAMonline" source="x_aaro2_teamonline">a2dfc25fdb7244105f65ba03e29619fa</sys_package>
         <sys_policy/>
@@ -15,14 +15,14 @@
         <sys_scope display_value="TEAMonline">a2dfc25fdb7244105f65ba03e29619fa</sys_scope>
         <sys_update_name>sp_ng_template_2ae6069cdb631810389b84d8689619a3</sys_update_name>
         <sys_updated_by>andrey.mironyuk</sys_updated_by>
-        <sys_updated_on>2020-09-25 15:50:55</sys_updated_on>
+        <sys_updated_on>2020-09-29 09:36:13</sys_updated_on>
         <template><![CDATA[<div class="comment root-comment">
   <div class="comment-container">
     <div class="avatar-container">
       <sn-avatar class="avatar-large" primary="ctrl.comment.author.sys_id" />
     </div>
     <div class="caption-container no-vertical-padding">
-      <div class="caption"><b>{{ctrl.comment.author.name}}:</b> "{{ctrl.comment.text}}"</div>
+      <div class="caption"><b>{{ctrl.comment.author.name}}:</b> {{ctrl.comment.text}}</div>
       <div class="reply-timeago">
         <div class="reply"><a href="" ng-click="ctrl.reply()"> Reply </a> </div>
         <div class="comment-timeago">
@@ -34,26 +34,15 @@
   </div>
   <div class="replies">
     <span ng-if="ctrl.comment.children.length>0"
-      ng-click="ctrl.repliesCollapsed=!ctrl.repliesCollapsed">Replies({{ctrl.comment.children.length}})</span>
+      ng-click="ctrl.repliesCollapsed=!ctrl.repliesCollapsed">Replies({{ctrl.comment.children.length}})  
+      <i class="fa fa-chevron-down" ng-if="ctrl.repliesCollapsed"></i>
+      <i class="fa fa-chevron-up" ng-if="!ctrl.repliesCollapsed"></i>
+    </span>
   </div>
   <div uib-collapse="ctrl.repliesCollapsed">
     <moment-child-comment ng-repeat="childComment in ctrl.comment.children" comment="childComment"
-      template-url="child-comment.html"></moment-child-comment>
+      template-url="child-comment.html" ng-class="{'last-child-comment': $last}"></moment-child-comment>
   </div>
-  <!-- <div class="comment child-comment" ng-repeat="child in comment.children">
-    <div class="comment-container">
-      <div class="avatar-container">
-        <sn-avatar class="avatar-large" primary="child.author.id"></sn-avatar>
-      </div>
-      <div class="caption-container no-vertical-padding">
-        <div class="caption"><b>{{child.author.name}}:</b> "{{child.text}}"</div>
-        <div class="timeago">
-          <i class="fa fa-clock-o"></i>
-          <sn-time-ago timestamp="child.created_on" />
-        </div>
-      </div>
-    </div>
-  </div> -->
 </div>]]></template>
     </sp_ng_template>
 </record_update>
