@@ -98,6 +98,34 @@
             <sys_user/>
             <type>.end_split</type>
         </sys_ui_element>
+        <sys_ui_element action="INSERT_OR_UPDATE">
+            <element>active</element>
+            <position>7</position>
+            <sys_created_by>xxikochet</sys_created_by>
+            <sys_created_on>2020-09-29 12:06:48</sys_created_on>
+            <sys_id>ba98fe61dbafd050389b84d868961948</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_ui_formatter/>
+            <sys_ui_section caption="NULL" display_value="" name="x_aaro2_teamonline_ip_whitelist" sys_domain="global" view="Default view">ff79a4f71bdbd010d6c54229bc4bcb98</sys_ui_section>
+            <sys_updated_by>xxikochet</sys_updated_by>
+            <sys_updated_on>2020-09-29 12:06:48</sys_updated_on>
+            <sys_user/>
+            <type/>
+        </sys_ui_element>
+        <sys_ui_element action="INSERT_OR_UPDATE">
+            <element>comment</element>
+            <position>8</position>
+            <sys_created_by>xxikochet</sys_created_by>
+            <sys_created_on>2020-09-29 12:07:47</sys_created_on>
+            <sys_id>09d8f6a1dbafd050389b84d86896197c</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_ui_formatter/>
+            <sys_ui_section caption="NULL" display_value="" name="x_aaro2_teamonline_ip_whitelist" sys_domain="global" view="Default view">ff79a4f71bdbd010d6c54229bc4bcb98</sys_ui_section>
+            <sys_updated_by>xxikochet</sys_updated_by>
+            <sys_updated_on>2020-09-29 12:07:47</sys_updated_on>
+            <sys_user/>
+            <type/>
+        </sys_ui_element>
         <sys_ui_section action="INSERT_OR_UPDATE">
             <caption/>
             <header>false</header>

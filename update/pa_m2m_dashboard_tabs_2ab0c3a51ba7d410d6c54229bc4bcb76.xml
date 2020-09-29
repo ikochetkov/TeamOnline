@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update sys_domain="global" table="pa_m2m_dashboard_tabs">
+    <pa_m2m_dashboard_tabs action="INSERT_OR_UPDATE">
+        <dashboard display_value="Teamonline ">e0b083a51ba7d410d6c54229bc4bcb4d</dashboard>
+        <home>false</home>
+        <homepage/>
+        <order>1</order>
+        <sys_class_name>pa_m2m_dashboard_tabs</sys_class_name>
+        <sys_created_by>xxamirony</sys_created_by>
+        <sys_created_on>2020-09-29 12:42:18</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_domain>global</sys_domain>
+        <sys_id>2ab0c3a51ba7d410d6c54229bc4bcb76</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>e0b083a51ba7d410d6c54229bc4bcb4d</sys_name>
+        <sys_overrides/>
+        <sys_package display_value="TEAMonline" source="x_aaro2_teamonline">a2dfc25fdb7244105f65ba03e29619fa</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="TEAMonline">a2dfc25fdb7244105f65ba03e29619fa</sys_scope>
+        <sys_update_name>pa_m2m_dashboard_tabs_2ab0c3a51ba7d410d6c54229bc4bcb76</sys_update_name>
+        <sys_updated_by>xxamirony</sys_updated_by>
+        <sys_updated_on>2020-09-29 12:42:18</sys_updated_on>
+        <tab display_value="Teamonline  - New Tab">e6b0c3a51ba7d410d6c54229bc4bcb73</tab>
+    </pa_m2m_dashboard_tabs>
+</record_update>

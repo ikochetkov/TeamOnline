@@ -158,16 +158,16 @@ $blue: #0069c8;&#13;
         <sys_created_on>2020-07-06 09:31:10</sys_created_on>
         <sys_customer_update>false</sys_customer_update>
         <sys_id>86d568dadbb9545084c240981396194b</sys_id>
-        <sys_mod_count>683</sys_mod_count>
+        <sys_mod_count>684</sys_mod_count>
         <sys_name>Teamonline Moments</sys_name>
         <sys_package display_value="TEAMonline" source="x_aaro2_teamonline">a2dfc25fdb7244105f65ba03e29619fa</sys_package>
         <sys_policy/>
         <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
         <sys_scope display_value="TEAMonline">a2dfc25fdb7244105f65ba03e29619fa</sys_scope>
         <sys_update_name>sp_widget_86d568dadbb9545084c240981396194b</sys_update_name>
-        <sys_updated_by>xxikochet</sys_updated_by>
-        <sys_updated_on>2020-09-24 21:37:12</sys_updated_on>
-        <template><![CDATA[<div ng-if="data.userIPisValid">
+        <sys_updated_by>andrey.mironyuk</sys_updated_by>
+        <sys_updated_on>2020-09-29 12:28:54</sys_updated_on>
+        <template><![CDATA[<div>
   <div id="moments-container">
     <!--<div id="to-gallery" >
       <a href="?id=teamonline_moments">To Moments Gallery <i class="fa fa-arrow-right"></i></a>
@@ -191,10 +191,7 @@ $blue: #0069c8;&#13;
       </a>
     </div>
   </div>
-  <teamonline-gallery 
-    template-url="moment-gallery.html" 
-    moments="data.moments" 
-    is-logged-in="data.isLoggedIn" />
+  <widget id="teamonline_moments_gallery">
 </div>
 ]]></template>
     </sp_widget>
