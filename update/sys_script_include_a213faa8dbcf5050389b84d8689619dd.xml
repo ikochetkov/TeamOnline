@@ -42,7 +42,7 @@ MomentsUtil.prototype = {
   sendComment: function (comment, parent, moment) {
     var gr = new GlideRecord(this.MOMENT_COMMENTS_TABLE);
     gr.initialize();
-    gr.text = comment;
+    gr.text = comment.trim().replace(/\s+/g, ' ');
     gr.parent = parent;
     gr.moment = moment;
     gr.author = gs.getUserID();
@@ -104,6 +104,12 @@ MomentsUtil.prototype = {
     }
     return comments;
   },
+  rejectComment: function(sys_id){
+    var commentGr = new GlideRecord(this.MOMENT_COMMENTS_TABLE);
+    commentGr.get(sys_id);
+    commentGr.rejected = true;
+    commentGr.update();
+  },
   _getCommentChildren: function (parent) {
     var comments = [];
     var gr = new GlideRecord(this.MOMENT_COMMENTS_TABLE);
@@ -159,7 +165,7 @@ MomentsUtil.prototype = {
   create: function (input) {
     var newMomentGr = new GlideRecord(this.MOMENTS_TABLE);
     newMomentGr.initialize();
-    newMomentGr.caption = input.caption;
+    newMomentGr.caption = input.caption.trim().replace(/\s+/g, ' ');;
     newMomentGr.store = input.store.value;
     momentSysId = newMomentGr.insert();
     this._createMomentImages(input.thumbnails, input.compressedImages, momentSysId)
@@ -201,14 +207,14 @@ MomentsUtil.prototype = {
         <sys_created_on>2020-09-01 12:37:42</sys_created_on>
         <sys_customer_update>false</sys_customer_update>
         <sys_id>a213faa8dbcf5050389b84d8689619dd</sys_id>
-        <sys_mod_count>46</sys_mod_count>
+        <sys_mod_count>48</sys_mod_count>
         <sys_name>MomentsUtil</sys_name>
         <sys_package display_value="TEAMonline" source="x_aaro2_teamonline">a2dfc25fdb7244105f65ba03e29619fa</sys_package>
         <sys_policy/>
         <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
         <sys_scope display_value="TEAMonline">a2dfc25fdb7244105f65ba03e29619fa</sys_scope>
         <sys_update_name>sys_script_include_a213faa8dbcf5050389b84d8689619dd</sys_update_name>
-        <sys_updated_by>andrey.mironyuk</sys_updated_by>
-        <sys_updated_on>2020-09-29 12:08:34</sys_updated_on>
+        <sys_updated_by>xxamirony</sys_updated_by>
+        <sys_updated_on>2020-09-30 13:41:15</sys_updated_on>
     </sys_script_include>
 </record_update>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?><database>
-    <element label="TeamOnline Carousel Slide" max_length="40" name="x_aaro2_teamonline_carousel_slide" sizeclass="1" type="collection">
+    <element label="TeamOnline Carousel Slide" max_length="40" name="x_aaro2_teamonline_carousel_slide" sizeclass="4" type="collection">
         <element attributes="pdf_cell_type=image" calculation="(function calculatedFieldValue(current) {&#13;&#10;&#13;&#10;&#9;// Add your code here&#13;&#10;&#9;return '';  // return the calculated value&#13;&#10;&#13;&#10;})(current);" label="Background" max_length="40" name="background" reference="db_image" type="reference"/>
         <element calculation="(function calculatedFieldValue(current) {&#13;&#10;&#13;&#10;&#9;// Add your code here&#13;&#10;&#9;return '';  // return the calculated value&#13;&#10;&#13;&#10;})(current);" label="Carousel" max_length="32" name="carousel" reference="x_aaro2_teamonline_instance_of_teamonline_carousel" type="reference"/>
         <element calculation="(function calculatedFieldValue(current) {&#13;&#10;&#13;&#10;&#9;// Add your code here&#13;&#10;&#9;return '';  // return the calculated value&#13;&#10;&#13;&#10;})(current);" label="Description" max_length="255" name="description" type="string"/>

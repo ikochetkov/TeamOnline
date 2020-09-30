@@ -20,6 +20,16 @@
       c.data.comments = resp.data.comments;
     })
   })
+  $rootScope.$on('commentRejected', (evt, data) => {
+    const payload = {
+      comment: data.comment,
+      moment:data.moment,
+      action: 'reject'
+    }
+    c.server.get(payload).then((resp) => {
+      c.data.comments = resp.data.comments;
+    })
+  })
   function refresh(momentSysId) {
     const payload = {
       sys_id: momentSysId,
@@ -60,6 +70,10 @@
     m_Util.sendComment(input.comment, input.parent, input.moment);
     data.comments = m_Util.getComments(input.moment)
   }
+  if(input && input.action === 'reject'){
+    m_Util.rejectComment(input.comment.sys_id);
+    data.comments = m_Util.getComments(input.moment)
+  }
 })();]]></script>
         <servicenow>false</servicenow>
         <sys_class_name>sp_widget</sys_class_name>
@@ -67,15 +81,15 @@
         <sys_created_on>2020-09-25 15:57:39</sys_created_on>
         <sys_customer_update>false</sys_customer_update>
         <sys_id>49f6071cdb6b1810389b84d868961943</sys_id>
-        <sys_mod_count>17</sys_mod_count>
+        <sys_mod_count>20</sys_mod_count>
         <sys_name>Teamonline Moment Comments</sys_name>
         <sys_package display_value="TEAMonline" source="x_aaro2_teamonline">a2dfc25fdb7244105f65ba03e29619fa</sys_package>
         <sys_policy/>
         <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
         <sys_scope display_value="TEAMonline">a2dfc25fdb7244105f65ba03e29619fa</sys_scope>
         <sys_update_name>sp_widget_49f6071cdb6b1810389b84d868961943</sys_update_name>
-        <sys_updated_by>andrey.mironyuk</sys_updated_by>
-        <sys_updated_on>2020-09-29 09:26:01</sys_updated_on>
+        <sys_updated_by>xxamirony</sys_updated_by>
+        <sys_updated_on>2020-09-30 13:35:25</sys_updated_on>
         <template><![CDATA[  <div>
     <div class="no-comments" ng-if="c.data.comments.length==0">
       <span>There are no comments yet</span>

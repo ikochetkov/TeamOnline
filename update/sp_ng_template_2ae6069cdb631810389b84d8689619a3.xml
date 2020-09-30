@@ -7,17 +7,17 @@
         <sys_created_on>2020-09-25 11:18:24</sys_created_on>
         <sys_customer_update>false</sys_customer_update>
         <sys_id>2ae6069cdb631810389b84d8689619a3</sys_id>
-        <sys_mod_count>31</sys_mod_count>
+        <sys_mod_count>32</sys_mod_count>
         <sys_name>root-comment.html</sys_name>
         <sys_package display_value="TEAMonline" source="x_aaro2_teamonline">a2dfc25fdb7244105f65ba03e29619fa</sys_package>
         <sys_policy/>
         <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
         <sys_scope display_value="TEAMonline">a2dfc25fdb7244105f65ba03e29619fa</sys_scope>
         <sys_update_name>sp_ng_template_2ae6069cdb631810389b84d8689619a3</sys_update_name>
-        <sys_updated_by>andrey.mironyuk</sys_updated_by>
-        <sys_updated_on>2020-09-29 09:36:13</sys_updated_on>
+        <sys_updated_by>xxamirony</sys_updated_by>
+        <sys_updated_on>2020-09-30 13:29:07</sys_updated_on>
         <template><![CDATA[<div class="comment root-comment">
-  <div class="comment-container">
+  <div class="comment-container" context-menu="ctrl.contextMenu()">
     <div class="avatar-container">
       <sn-avatar class="avatar-large" primary="ctrl.comment.author.sys_id" />
     </div>
