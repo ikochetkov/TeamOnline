@@ -25,9 +25,6 @@
 .comments-thread {&#13;
   display: flex;&#13;
   flex-direction: column;&#13;
-  max-height: 29.7rem;&#13;
-  overflow-y: scroll;&#13;
-  overflow-x: hidden;&#13;
   font-size: 1.2rem;&#13;
   &amp;::-webkit-scrollbar {&#13;
     width: .5em;&#13;
@@ -353,31 +350,29 @@
         <public>true</public>
         <roles/>
         <script><![CDATA[(function() {
+	
+		data.isLoggedIn = gs.getSession().isLoggedIn();
+		var teamOnlineUtil = new TeamOnlineUtils();
+		var r = new sn_ws.RESTMessageV2('x_aaro2_teamonline.Team Award RSS', 'Default GET');
+		var response = r.execute();
+		var responseBody = response.getBody();
+		var httpStatus = response.getStatusCode();
 
-	var userIP = gs.getSession().getClientIP();
-	data.userIPisValid = new TeamOnlineUtils().validateIP(userIP);
-	data.isLoggedIn = gs.getSession().isLoggedIn();
-	var teamOnlineUtil = new TeamOnlineUtils();
-	var r = new sn_ws.RESTMessageV2('x_aaro2_teamonline.Team Award RSS', 'Default GET');
-	var response = r.execute();
-	var responseBody = response.getBody();
-	var httpStatus = response.getStatusCode();
+		var companyAwardRssFeed = gs.xmlToJSON(responseBody);
 
-	var companyAwardRssFeed = gs.xmlToJSON(responseBody);
+		data.rss_information = {
+			link: companyAwardRssFeed.rss.channel.link,
+			title: companyAwardRssFeed.rss.channel.title
+		};
 
-	data.rss_information = {
-		link: companyAwardRssFeed.rss.channel.link,
-		title: companyAwardRssFeed.rss.channel.title
-	};
+		var companyAwardArray = companyAwardRssFeed.rss.channel.item.slice(0,5)
 
-	var companyAwardArray = companyAwardRssFeed.rss.channel.item;
+		companyAwardArray.forEach(function (award) {
+			award.award_information = teamOnlineUtil.getAwardInformationFromHTML(award.description);
+			award.user_color = generateRandomColor();
+		});
 
-	companyAwardArray.forEach(function (award) {
-		award.award_information = teamOnlineUtil.getAwardInformationFromHTML(award.description);
-		award.user_color = generateRandomColor();
-	});
-
-	data.company_awards = companyAwardArray;
+		data.company_awards = companyAwardArray
 })();
 
 
@@ -395,16 +390,16 @@ function generateRandomColor () {
         <sys_created_on>2020-03-27 11:39:34</sys_created_on>
         <sys_customer_update>false</sys_customer_update>
         <sys_id>1eaabcf5dbff08d05f65ba03e296197b</sys_id>
-        <sys_mod_count>478</sys_mod_count>
+        <sys_mod_count>487</sys_mod_count>
         <sys_name>Team Online Aaron's Awards Feed</sys_name>
         <sys_package display_value="TEAMonline" source="x_aaro2_teamonline">a2dfc25fdb7244105f65ba03e29619fa</sys_package>
         <sys_policy/>
         <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
         <sys_scope display_value="TEAMonline">a2dfc25fdb7244105f65ba03e29619fa</sys_scope>
         <sys_update_name>sp_widget_1eaabcf5dbff08d05f65ba03e296197b</sys_update_name>
-        <sys_updated_by>xxikochet</sys_updated_by>
-        <sys_updated_on>2020-09-24 21:38:04</sys_updated_on>
-        <template><![CDATA[<div ng-if="data.userIPisValid" class="comments">
+        <sys_updated_by>xxamirony</sys_updated_by>
+        <sys_updated_on>2020-10-01 09:48:48</sys_updated_on>
+        <template><![CDATA[<div class="comments">
   <h2 class="comments-title header-with-link">
     <a ng-href="{{ data.rss_information.link }}" target="_blank"> Aaron's Applause </a> <i class="fa fa-chevron-right"></i>
   </h2>
@@ -418,7 +413,7 @@ function generateRandomColor () {
           </div>
         </div>
         <sn-avatar ng-if="data.isLoggedIn"class="avatar-small-medium" primary="award.award_information.user"
-                   style="background: {{ award.user_color }}" />
+                   ng-style="{'background': award.user_color}" />
         <sn-time-ago timestamp="award.award_information.date" />
       </div>
       <div class="text--award-information">

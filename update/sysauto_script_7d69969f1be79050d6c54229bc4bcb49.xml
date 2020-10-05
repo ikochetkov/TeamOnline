@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sysauto_script">
+    <sysauto_script action="INSERT_OR_UPDATE">
+        <active>true</active>
+        <business_calendar/>
+        <condition/>
+        <conditional>false</conditional>
+        <entered_time/>
+        <name>Get public IPs via Meraki API</name>
+        <run_as display_value="System Process">389fef4f1589b100a75e2f63a71089d8</run_as>
+        <run_as_tz/>
+        <run_dayofmonth>1</run_dayofmonth>
+        <run_dayofweek>1</run_dayofweek>
+        <run_period>1970-01-01 00:10:00</run_period>
+        <run_start>2020-10-04 20:19:50</run_start>
+        <run_time>1970-01-01 05:00:00</run_time>
+        <run_type>periodically</run_type>
+        <script><![CDATA[var baseURL = "https://api.meraki.com/api/v0";
+var apikey = "5b308bc90f58c4f702529daa2aae85b97a1a00fb";
+var organizations = getOrganizations(baseURL, apikey);
+var organizationsIds = getOrganizationIds(organizations);
+var organizationDeviceStatuses = getOrganizationDeviceStatuses(baseURL, apikey, organizationsIds);
+var devicesOnlineWithPublicIPs = getDevicesOnlineWithPublicIPs(organizationDeviceStatuses);
+var uniqueDevicesOnlineWithPublicIPs = getUniqueDevicesByKey(devicesOnlineWithPublicIPs, "publicIp");
+
+clearTable('x_aaro2_teamonline_ip_whitelist_entry_meraki');
+createRecord('x_aaro2_teamonline_ip_whitelist_entry_meraki', uniqueDevicesOnlineWithPublicIPs);
+
+//gs.info("=====================================");
+//gs.info("Organizations = " + JSON.stringify(organizations));
+//gs.info("OrganizationsIds = " + JSON.stringify(organizationsIds));
+//gs.info("OrganizationDeviceStatuses count = " + organizationDeviceStatuses.length);
+//gs.info("OrganizationDeviceStatuses = " + JSON.stringify(organizationDeviceStatuses));
+//gs.info("devicesOnlineWithPublicIPs count = " + devicesOnlineWithPublicIPs.length);
+//gs.info("devicesOnlineWithPublicIPs = " + JSON.stringify(devicesOnlineWithPublicIPs));
+gs.info("uniqueDevicesOnlineWithPublicIPs count = " + uniqueDevicesOnlineWithPublicIPs.length);
+gs.info("uniqueDevicesOnlineWithPublicIPs = " + JSON.stringify(uniqueDevicesOnlineWithPublicIPs));
+
+function getOrganizations(baseURL, apikey){
+	var rest, restResponse;
+	var endpoint = baseURL + "/organizations";
+	
+	try {
+		rest = new sn_ws.RESTMessageV2();
+		rest.setHttpMethod('GET');
+		rest.setEndpoint(endpoint);
+		rest.setRequestHeader('Content-Type', 'application/json');
+		rest.setRequestHeader('X-Cisco-Meraki-API-Key', apikey);
+		rest.setHttpTimeout(60000); //In milliseconds. Wait at most 60 seconds for response from http request.
+		restResponse = rest.execute();
+		restResponse.waitForResponse(60);
+		responseObj = new global.RESTResponseUtils(restResponse);
+	}catch(ex) {
+		responseObj = new global.RESTResponseUtils(restResponse);
+		responseObj.setBody(ex.toString());
+		responseObj.setErrorMessage("There was an error calling the webservice.");
+		responseObj.setStatusCode(503);
+		responseObj.setHaveError(true);
+		gs.error("There is an error with the following REST Resource: {0} Error: {1}", endpoint, "There was an error calling the webservice.");
+	}
+	//gs.info("FUNCTION getOrganizations; responseObj = " + JSON.stringify(responseObj));
+	//gs.info("hasError = " + responseObj.haveError());
+	if(responseObj.haveError() == false){
+		return organizations = JSON.parse(responseObj.getBody());
+	}		
+}
+
+function getOrganizationIds(organizations){
+	var organizationIdsArray = [];
+	var arrayUtil = new global.ArrayUtil();
+	
+	for(var i = 0; i < organizations.length; i++){
+		organizationIdsArray.push(organizations[i].id);
+	}
+	return arrayUtil.unique(organizationIdsArray);
+}
+
+function getOrganizationDeviceStatuses(baseURL, apikey, organizationIds){
+	var rest, restResponse;
+	var organizationDeviceStatuses = '';
+	//gs.info("getOrganizationDeviceStatuses organizationIds = " + organizationIds.toString());
+	for(var i = 0; i < organizationIds.length; i++){
+		var endpoint = baseURL + "/organizations/" + organizationIds[i] + "/deviceStatuses";
+		//gs.info("getOrganizationDeviceStatuses endpoint = " + endpoint);
+		try {
+			rest = new sn_ws.RESTMessageV2();
+			rest.setHttpMethod('GET');
+			rest.setEndpoint(endpoint);
+			rest.setRequestHeader('Content-Type', 'application/json');
+			rest.setRequestHeader('X-Cisco-Meraki-API-Key', apikey);
+			rest.setHttpTimeout(60000); //In milliseconds. Wait at most 60 seconds for response from http request.
+			restResponse = rest.execute();
+			restResponse.waitForResponse(60);
+			responseObj = new global.RESTResponseUtils(restResponse);
+		}catch(ex) {
+			responseObj = new global.RESTResponseUtils(restResponse);
+			responseObj.setBody(ex.toString());
+			responseObj.setErrorMessage("There was an error calling the webservice.");
+			responseObj.setStatusCode(503);
+			responseObj.setHaveError(true);
+			gs.error("There is an error with the following REST Resource: {0} Error: {1}", endpoint, "There was an error calling the webservice.");
+		}
+		//gs.info("FUNCTION getOrganizationDeviceStatuses; responseObj = " + JSON.stringify(responseObj));
+		//gs.info("hasError = " + responseObj.haveError());
+		if(responseObj.haveError() == false){
+			organizationDeviceStatuses += responseObj.getBody();
+		}	
+	}
+	//gs.info("getOrganizationDeviceStatuses organizationDeviceStatuses = " + organizationDeviceStatuses);
+	return JSON.parse(organizationDeviceStatuses);
+}
+
+function getDevicesOnlineWithPublicIPs(deviceArray){
+	var devicesOnlineWithPublicIPsArray = [];
+		
+	for(var i = 0; i < deviceArray.length; i++){
+		if(deviceArray[i].status == "online" & deviceArray[i].publicIp != ''){
+			devicesOnlineWithPublicIPsArray.push(deviceArray[i]);
+		}
+	}
+	return devicesOnlineWithPublicIPsArray;
+}
+
+function getUniqueDevicesByKey(deviceArray, key){
+	var uniqueDevices = [];
+	var arrayUtil = new global.ArrayUtil();
+	//gs.info("key = " + key);
+	//gs.info("getUniqueDevicesByKey deviceArray = " + JSON.stringify(deviceArray));
+		
+	for(var i = 0; i < deviceArray.length; i++){
+		//gs.info(JSON.stringify(deviceArray[i]));
+		if(deviceArray[i][key] != '' || deviceArray[i][key] != null || deviceArray[i][key] != undefined){
+			//gs.info("yay = " + JSON.stringify(deviceArray[i]));
+			uniqueDevices.push(deviceArray[i][key]);
+		}
+	}
+	//gs.info("getUniqueDevicesByKey length = " + uniqueDevices.length);
+	//gs.info("getUniqueDevicesByKey uniqueDevices = " + JSON.stringify(uniqueDevices));
+	return arrayUtil.unique(uniqueDevices);
+}
+
+function clearTable(table){
+	var gr = new GlideRecord(table);
+	gr.query();
+	gr.deleteMultiple();
+}
+
+function createRecord(table, objArray){
+	for(var i = 0; i < objArray.length; i++){
+		var gr = new GlideRecord(table);
+		gr.initialize();	
+		gr.ip = objArray[i];
+		gr.insert();
+	}
+
+}]]></script>
+        <sys_class_name>sysauto_script</sys_class_name>
+        <sys_created_by>xxcjgibiss</sys_created_by>
+        <sys_created_on>2020-10-04 20:23:33</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_id>7d69969f1be79050d6c54229bc4bcb49</sys_id>
+        <sys_mod_count>1</sys_mod_count>
+        <sys_name>Get public IPs via Meraki API</sys_name>
+        <sys_package display_value="TEAMonline" source="x_aaro2_teamonline">a2dfc25fdb7244105f65ba03e29619fa</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="TEAMonline">a2dfc25fdb7244105f65ba03e29619fa</sys_scope>
+        <sys_update_name>sysauto_script_7d69969f1be79050d6c54229bc4bcb49</sys_update_name>
+        <sys_updated_by>xxcjgibiss</sys_updated_by>
+        <sys_updated_on>2020-10-04 20:45:55</sys_updated_on>
+        <time_zone/>
+        <u_description>Obtains public IPs from online devices  via the Meraki API.&#13;
+Used for whitelisting devices.</u_description>
+        <upgrade_safe>false</upgrade_safe>
+    </sysauto_script>
+</record_update>

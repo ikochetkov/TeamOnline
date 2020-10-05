@@ -40,8 +40,9 @@
 	
 gs.info("pushing to the midserver and syslog");
 var default_midserver = gs.getProperty('mid.server.rba_default');
-var sl = new global.Syslog('172.31.252.130', default_midserver, 16);
+var sl = new Syslog('172.31.252.85', default_midserver, 16);
 var msg = "UserID:"+current.user+", IP Address:"+current.ip_address+" , Browser:" + current.browser  ;
+gs.info("pushing TeamOnline access logs to the midserver and syslog" + msg);
 sl.log(msg, 6);
 
 })(current, previous);]]></script>
@@ -51,7 +52,7 @@ sl.log(msg, 6);
         <sys_customer_update>false</sys_customer_update>
         <sys_domain>global</sys_domain>
         <sys_id>f84d15041be79410d6c54229bc4bcb72</sys_id>
-        <sys_mod_count>1</sys_mod_count>
+        <sys_mod_count>4</sys_mod_count>
         <sys_name>Push logs to SIEM</sys_name>
         <sys_overrides/>
         <sys_package display_value="TEAMonline" source="x_aaro2_teamonline">a2dfc25fdb7244105f65ba03e29619fa</sys_package>
@@ -60,7 +61,7 @@ sl.log(msg, 6);
         <sys_scope display_value="TEAMonline">a2dfc25fdb7244105f65ba03e29619fa</sys_scope>
         <sys_update_name>sys_script_f84d15041be79410d6c54229bc4bcb72</sys_update_name>
         <sys_updated_by>xxsbhuvan</sys_updated_by>
-        <sys_updated_on>2020-09-24 13:39:10</sys_updated_on>
+        <sys_updated_on>2020-10-02 19:09:21</sys_updated_on>
         <template/>
         <when>after</when>
     </sys_script>

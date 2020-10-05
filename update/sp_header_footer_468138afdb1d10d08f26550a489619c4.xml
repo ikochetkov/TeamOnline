@@ -117,11 +117,13 @@
 .header__content {&#13;
   display: flex;&#13;
   justify-content: space-evenly;&#13;
-  padding: 15px 0 15px 0;&#13;
   font-size: 20px;&#13;
   line-height: 1.2em;&#13;
+  flex-wrap: wrap;&#13;
   .header__content-item {&#13;
     align-self: center;&#13;
+    padding: 1rem 0;&#13;
+&#13;
   }&#13;
 }&#13;
 &#13;
@@ -163,21 +165,25 @@
 }&#13;
 &#13;
 .header__logo a img {&#13;
-  height: 30px;&#13;
+  max-height: 30px;&#13;
+  max-width: 100%;&#13;
 }&#13;
 &#13;
 .header__nav-wrap {&#13;
-  display: flex;&#13;
   text-align: center;&#13;
   justify-content: center;&#13;
-  margin-top: 15px;&#13;
   border-top: 1px solid rgba(255, 255, 255, 0.04);&#13;
   padding: 1rem 0;&#13;
   background-color: #0069c8;&#13;
+  .navbar-header{&#13;
+    display: flex;&#13;
+    flex-direction: row;&#13;
+    width: 100%;&#13;
+  }&#13;
 }&#13;
 &#13;
+&#13;
 .header__nav {&#13;
-  list-style: none;&#13;
   margin: 0;&#13;
   padding: 0;&#13;
   font-family: sans-serif;&#13;
@@ -185,21 +191,23 @@
 }&#13;
 &#13;
 .header__nav li {&#13;
-  display: inline-block;&#13;
+  display: block;&#13;
   position: relative;&#13;
   padding: 0 2rem;&#13;
 }&#13;
 &#13;
+&#13;
 .header__nav li &gt; a {&#13;
   display: block;&#13;
-  color: rgba(255, 255, 255, 0.8);&#13;
+  color: rgb(224, 224, 224);&#13;
   line-height: 1.8rem;&#13;
   font-size: 1.6rem;&#13;
+  transition: all .3s ease-in-out;&#13;
 }&#13;
 &#13;
 .header__nav li:hover &gt; a {&#13;
   color: #ffffff;&#13;
-  &#13;
+  // font-size: 1.7rem;&#13;
 }&#13;
 &#13;
 .navbar-fade {&#13;
@@ -278,6 +286,7 @@ nav {&#13;
 }&#13;
 &#13;
 .header {&#13;
+  display: none;&#13;
   text-align: center;&#13;
   top: 30px;&#13;
   width: 100%;&#13;
@@ -374,6 +383,18 @@ nav {&#13;
     display: flex !important;&#13;
   }&#13;
 }&#13;
+&#13;
+@media (min-width: 768px) {&#13;
+  .header{&#13;
+    display: block;&#13;
+  }&#13;
+  .header__nav{&#13;
+    list-style: none;&#13;
+  }&#13;
+  .header__nav li{&#13;
+    display: inline-block;&#13;
+  }&#13;
+}&#13;
 </css>
         <data_table>sp_instance</data_table>
         <demo_data/>
@@ -456,15 +477,15 @@ if (data.menu && data.menu.data) {
         <sys_created_on>2020-06-15 11:03:14</sys_created_on>
         <sys_customer_update>false</sys_customer_update>
         <sys_id>468138afdb1d10d08f26550a489619c4</sys_id>
-        <sys_mod_count>68</sys_mod_count>
+        <sys_mod_count>83</sys_mod_count>
         <sys_name>Team Online 2 Header</sys_name>
         <sys_package display_value="TEAMonline" source="x_aaro2_teamonline">a2dfc25fdb7244105f65ba03e29619fa</sys_package>
         <sys_policy/>
         <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
         <sys_scope display_value="TEAMonline">a2dfc25fdb7244105f65ba03e29619fa</sys_scope>
         <sys_update_name>sp_header_footer_468138afdb1d10d08f26550a489619c4</sys_update_name>
-        <sys_updated_by>xxikochet</sys_updated_by>
-        <sys_updated_on>2020-09-24 21:16:24</sys_updated_on>
+        <sys_updated_by>xxamirony</sys_updated_by>
+        <sys_updated_on>2020-10-05 14:18:00</sys_updated_on>
         <template><![CDATA[<div ng-if="data.userIPisValid">
   <div class="header navbar-inverse">
     <div class="container-fluid">
@@ -478,37 +499,35 @@ if (data.menu && data.menu.data) {
         <div class="header__logo header__content-item">
           <a href="?id={{::portal.homepage_dv}}"><img ng-src="{{::portal.logo}}"></a>
         </div>
-
         <div class="header__search header__content-item">
           <sp-widget widget="data.search"></sp-widget>
         </div>
-        <ul>
+        <ul class="header__content-item">
           <li ng-if="showAvatar" class="hidden-xs dropdown has-children avatar profile-menu-item" role="presentation">
-            <a href class="toggle-dropdown" data-toggle="dropdown" aria-expanded="false" title="{{::data.profileBtnMsg}}"
-               aria-label="{{::data.profileBtnMsg}}: {{::user.name}}" id="profile-dropdown" role="menuitem"
-               aria-haspopup="true">
+            <a href class="toggle-dropdown" data-toggle="dropdown" aria-expanded="false"
+              title="{{::data.profileBtnMsg}}" aria-label="{{::data.profileBtnMsg}}: {{::user.name}}"
+              id="profile-dropdown" role="menuitem" aria-haspopup="true">
               <span aria-hidden="true">
                 <sn-avatar class="avatar-small-medium" primary="avatarProfile" /></span>
               <span class="visible-lg-inline">{{::user.name}}</span>
             </a>
             <ul class="dropdown-menu sub-menu profile-dropdown" role="menu" aria-label="{{::data.profileBtnMsg}}">
               <li role="presentation"><a tabindex="-1" ng-href="?id=user_profile&sys_id={{::user.sys_id}}"
-                                         role="menuitem">${Profile}</a></li>
+                  role="menuitem">${Profile}</a></li>
               <li ng-if="::!(isViewNative || isViewNativeTablet)" role="presentation"><a tabindex="-1"
-                                                                                         href="{{::portal.logoutUrl}}" role="menuitem">${Logout}</a></li>
+                  href="{{::portal.logoutUrl}}" role="menuitem">${Logout}</a></li>
             </ul>
           </li>
           <li ng-if="showXSAvatar" class="visible-xs-block" role="presentation"><a role="menuitem"
-                                                                                   ng-href="?id=user_profile&sys_id={{::user.sys_id}}" ng-click="collapse()">
-            <span class="navbar-avatar">
-              <sn-avatar class="avatar-small-medium" primary="avatarProfile" /></span>{{::user.name}}</a>
+              ng-href="?id=user_profile&sys_id={{::user.sys_id}}" ng-click="collapse()">
+              <span class="navbar-avatar">
+                <sn-avatar class="avatar-small-medium" primary="avatarProfile" /></span>{{::user.name}}</a>
           </li>
           <li ng-if="::!(isViewNative || isViewNativeTablet)" class="visible-xs-block" role="presentation"><a
-                                                                                                              role="menuitem" ng-href="{{::portal.logoutUrl}}" ng-click="collapse()">${Logout}</a></li>
+              role="menuitem" ng-href="{{::portal.logoutUrl}}" ng-click="collapse()">${Logout}</a></li>
         </ul>
-
-        <ul ng-if="(!user.logged_in && page.id != portal.login_page_dv && !data.hasLogin)" class="nav navbar-nav"
-            role="presentation">
+        <ul class="header__content-item" ng-if="(!user.logged_in && page.id != portal.login_page_dv && !data.hasLogin)" class="nav navbar-nav"
+          role="presentation">
           <li role="presentation"><a href ng-click="::openLogin()">${Login}</a></li>
         </ul>
       </div>

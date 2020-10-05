@@ -119,15 +119,15 @@ $green: #91c712;&#13;
         <sys_created_on>2020-07-01 07:48:26</sys_created_on>
         <sys_customer_update>false</sys_customer_update>
         <sys_id>3f3e9a6cdb3dd41084c24098139619d1</sys_id>
-        <sys_mod_count>139</sys_mod_count>
+        <sys_mod_count>141</sys_mod_count>
         <sys_name>Teamonline Footer</sys_name>
         <sys_package display_value="TEAMonline" source="x_aaro2_teamonline">a2dfc25fdb7244105f65ba03e29619fa</sys_package>
         <sys_policy/>
         <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
         <sys_scope display_value="TEAMonline">a2dfc25fdb7244105f65ba03e29619fa</sys_scope>
         <sys_update_name>sp_header_footer_3f3e9a6cdb3dd41084c24098139619d1</sys_update_name>
-        <sys_updated_by>xxikochet</sys_updated_by>
-        <sys_updated_on>2020-09-27 11:48:27</sys_updated_on>
+        <sys_updated_by>xxamirony</sys_updated_by>
+        <sys_updated_on>2020-10-01 13:59:19</sys_updated_on>
         <template><![CDATA[<div ng-if="data.userIPisValid">
   <div id="footer" ng-style={{margin}}>
     <div class="container-fluid">
@@ -139,14 +139,14 @@ $green: #91c712;&#13;
             </a>
           </div>
 
-          <p><a href="" target="_blank">Have an Idea?</a> | <a href="" target="_blank">Contact Us</a></p>
+          <p><a href="" target="_blank">${to_have_an_idea}</a> | <a href="" target="_blank">${to_contact_us}</a></p>
 
         </div>
         <div class="col-md-6 col-md-offset-2">
 
-          <div class="heading">Internal resources</div>
+          <div class="heading">${to_useful_links}</div>
           <ul>
-            <li><a href="" target="_blank">Photo Stories</a></li>
+            <li><a href="?id=teamonline_moments">${tom_header}</a></li>
             <li><a href="" target="_blank">Knowledge Base</a></li>
             <li><a href="" target="_blank">Articles</a></li>
             <li><a href="" target="_blank">Intranet</a></li>
@@ -171,17 +171,17 @@ $green: #91c712;&#13;
               </a>
             </div>
             <div class="logo">
-              <a href="https://woodhaven.com/" target="_blank">
+              <a href="https://woodhavenusa.com/" target="_blank">
                 <img src="teamonline_woodhaven_logo.png" style="max-height: 35px" />
               </a>
             </div>
           </div>
         </div>
         <div class="col-md-3 col-md-offset-2">
-          <div class="heading">Socials</div>
+          <div class="heading">${to_socials}</div>
           <ul class="socials">
-            <li><a href="" target="_blank" target="_blank"><i class="fa fa-twitter"></i></a></li>
-            <li><a href="" target="_blank" target="_blank"><i class="fa fa-facebook-f"></i></a></li>
+            <li><a href="https://twitter.com/aaronsinc" target="_blank"><i class="fa fa-twitter"></i></a></li>
+            <li><a href="" target="_blank" ><i class="fa fa-facebook-f"></i></a></li>
             <li><a href="" target="_blank"><i class="fa fa-linkedin"></i></a></li>
             <li><a href="" target="_blank"><i class="fa fa-instagram"></i></a></li>
             <li><a href="" target="_blank"><i class="fa fa-youtube-play"></i></a></li>
@@ -189,7 +189,7 @@ $green: #91c712;&#13;
           </ul>
         </div>
         <div class="col-md-3">
-          <b>© 2020 Aaron's, Inc. All Rights Reserved.</b>
+          <b>${to_all_rights_reserved}</b>
         </div>
       </div>
     </div>

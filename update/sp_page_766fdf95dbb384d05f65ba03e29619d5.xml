@@ -8,6 +8,7 @@
         <internal>false</internal>
         <public>true</public>
         <roles/>
+        <seo_script/>
         <short_description/>
         <sys_class_name>sp_page</sys_class_name>
         <sys_created_by>xxabunko</sys_created_by>
@@ -24,6 +25,7 @@
         <sys_updated_by>xxabunko</sys_updated_by>
         <sys_updated_on>2020-03-26 10:22:50</sys_updated_on>
         <title>TeamOnline All Articles</title>
+        <use_seo_script>false</use_seo_script>
     </sp_page>
     <sys_translated_text action="delete_multiple" query="documentkey=766fdf95dbb384d05f65ba03e29619d5"/>
 </record_update>
