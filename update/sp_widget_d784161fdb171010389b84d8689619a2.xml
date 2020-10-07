@@ -1,45 +1,61 @@
 <?xml version="1.0" encoding="UTF-8"?><record_update table="sp_widget">
     <sp_widget action="INSERT_OR_UPDATE">
         <category>custom</category>
-        <client_script><![CDATA[function( $scope, $rootScope, spModal ) {
-  /* widget controller */
-  var c = this;
+        <client_script><![CDATA[function ($scope, $rootScope, spModal) {
+	/* widget controller */
+	var c = this;
+	if (c.data.userIPisValid) {
 
-  $scope.customFilterCollapsed = true;
-  $scope.storeFilter = { name: 'storeFilter', displayValue: '', value: '' }
-  $scope.userFilter = { name: 'userFilter', displayValue: '', value: '' }
-  $scope.captionFilter = ''
-  $scope.previousDateTime = '';
+		$scope.customFilterCollapsed = true;
+		$scope.storeFilter = {
+			name: 'storeFilter',
+			displayValue: '',
+			value: ''
+		}
+		$scope.userFilter = {
+			name: 'userFilter',
+			displayValue: '',
+			value: ''
+		}
+		$scope.captionFilter = ''
+		$scope.previousDateTime = '';
 
 
-  $scope.setFilter = (filter) => {
-    $scope.customFilterCollapsed = filter != 'custom';
-    $scope.data.filter = filter;
-    console.log('broadcasting:: ', $scope.captionFilter)
-    $rootScope.$broadcast('filterChanged', {
-      filter, 
-      user: $scope.userFilter.value, 
-      store: $scope.storeFilter.value,
-      caption: $scope.captionFilter  
-    })
-  }
-  
-  $scope.openCustomFilter = () => {
-    $scope.customFilterCollapsed = ! $scope.customFilterCollapsed;
-    $scope.data.filter = 'custom'
-  }
+		$scope.setFilter = (filter) => {
+			$scope.customFilterCollapsed = filter != 'custom';
+			$scope.data.filter = filter;
+			console.log('broadcasting:: ', $scope.captionFilter)
+			$rootScope.$broadcast('filterChanged', {
+				filter,
+				user: $scope.userFilter.value,
+				store: $scope.storeFilter.value,
+				caption: $scope.captionFilter
+			})
+		}
 
-  $scope.openSubmitForm = () => {
-    spModal.open({
-      title: 'New moment',
-      widget: c.data.submitFormWidget,
-      widgetInput: { collapsed: false, showButton: false, source: 'grid' },
-      buttons: [
-        { label: 'Close', cancel: true }
-      ]
-    })
-  }
-}]]></client_script>
+		$scope.openCustomFilter = () => {
+			$scope.customFilterCollapsed = !$scope.customFilterCollapsed;
+			$scope.data.filter = 'custom'
+		}
+
+		$scope.openSubmitForm = () => {
+			spModal.open({
+				title: 'New moment',
+				widget: c.data.submitFormWidget,
+				widgetInput: {
+					collapsed: false,
+					showButton: false,
+					source: 'grid'
+				},
+				buttons: [{
+					label: 'Close',
+					cancel: true
+				}]
+			})
+		}
+	}
+}
+]]></client_script>
         <controller_as>c</controller_as>
         <css>$blue: #0069c8;&#13;
 $darkgrey: #2f2f2f;&#13;
@@ -126,24 +142,27 @@ label.filter-label {&#13;
         <public>false</public>
         <roles/>
         <script><![CDATA[(function () {
-  data.userIPisValid = new TeamOnlineUtils().validateIP(gs.getSession().getClientIP());
-  var m_Util = new MomentsUtil();
-  data.isLoggedIn = gs.getSession().isLoggedIn();
-  data.canEdit = gs.getUser().isMemberOf(gs.getProperty("x_aaro2_teamonline.teamonline_administration_group")) || gs.hasRole("admin");
-  data.approvalsCount = m_Util.getApprovalsCount();
-  data.submitFormWidget = 'teamonline_moment_submit_form';
-  data.approvalsEngineWidget =  $sp.getWidget('teamonline_moments_approval_engine');
-  var paramFilter = $sp.getParameter('filter');
-  data.filter = (paramFilter === 'approvals' && !data.canEdit)? 'all': paramFilter
+	data.userIPisValid = new TeamOnlineUtils().validateIP(gs.getSession().getClientIP());
+	if (data.userIPisValid) {
+		var m_Util = new MomentsUtil();
+		data.isLoggedIn = gs.getSession().isLoggedIn();
+		data.canEdit = gs.getUser().isMemberOf(gs.getProperty("x_aaro2_teamonline.teamonline_administration_group")) || gs.hasRole("admin");
+		data.approvalsCount = m_Util.getApprovalsCount();
+		data.submitFormWidget = 'teamonline_moment_submit_form';
+		data.approvalsEngineWidget = $sp.getWidget('teamonline_moments_approval_engine');
+		var paramFilter = $sp.getParameter('filter');
+		data.filter = (paramFilter === 'approvals' && !data.canEdit) ? 'all' : paramFilter
+	}
 
-})();]]></script>
+})();
+]]></script>
         <servicenow>false</servicenow>
         <sys_class_name>sp_widget</sys_class_name>
         <sys_created_by>andrey.mironyuk</sys_created_by>
         <sys_created_on>2020-09-22 09:44:45</sys_created_on>
         <sys_customer_update>false</sys_customer_update>
         <sys_id>d784161fdb171010389b84d8689619a2</sys_id>
-        <sys_mod_count>38</sys_mod_count>
+        <sys_mod_count>40</sys_mod_count>
         <sys_name>Teamonline Moments Grid Filter</sys_name>
         <sys_package display_value="TEAMonline" source="x_aaro2_teamonline">a2dfc25fdb7244105f65ba03e29619fa</sys_package>
         <sys_policy/>
@@ -151,7 +170,7 @@ label.filter-label {&#13;
         <sys_scope display_value="TEAMonline">a2dfc25fdb7244105f65ba03e29619fa</sys_scope>
         <sys_update_name>sp_widget_d784161fdb171010389b84d8689619a2</sys_update_name>
         <sys_updated_by>xxikochet</sys_updated_by>
-        <sys_updated_on>2020-09-29 11:33:38</sys_updated_on>
+        <sys_updated_on>2020-10-06 17:17:10</sys_updated_on>
         <template><![CDATA[<div ng-if="data.userIPisValid">
   <div class="filters-container">
     <div class="filter-button add-button" ng-click="openSubmitForm()" ng-if="data.isLoggedIn">

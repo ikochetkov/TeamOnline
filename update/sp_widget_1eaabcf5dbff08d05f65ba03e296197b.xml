@@ -1,21 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?><record_update table="sp_widget">
     <sp_widget action="INSERT_OR_UPDATE">
         <category>custom</category>
-        <client_script><![CDATA[function($scope, $sce, spUtil) {
+        <client_script><![CDATA[function ($scope, $sce, spUtil) {
 	/* widget controller */
 	var c = this;
-	$scope.isLoading = true;
-	
-	$scope.showComments = false;
-	
-	$scope.trustedHTML = function (html) {
-		return $sce.getTrustedHtml(html)
+	if (c.data.userIPisValid) {
+		$scope.isLoading = true;
+
+		$scope.showComments = false;
+
+		$scope.trustedHTML = function (html) {
+			return $sce.getTrustedHtml(html)
+		}
+
+		$scope.isHasComments = function (comments) {
+			return !!comments.length;
+		}
 	}
-	
-	$scope.isHasComments = function (comments) {
-		return !!comments.length;
-	}
-}]]></client_script>
+}
+]]></client_script>
         <controller_as>c</controller_as>
         <css>$primary: #0069C8;&#13;
 &#13;
@@ -349,10 +352,13 @@
         <option_schema/>
         <public>true</public>
         <roles/>
-        <script><![CDATA[(function() {
-	
-		data.isLoggedIn = gs.getSession().isLoggedIn();
-		var teamOnlineUtil = new TeamOnlineUtils();
+        <script><![CDATA[(function () {
+
+	data.isLoggedIn = gs.getSession().isLoggedIn();
+	var userIP = gs.getSession().getClientIP();
+	var teamOnlineUtil = new TeamOnlineUtils();
+	data.userIPisValid = teamOnlineUtil.validateIP(userIP);
+	if (data.userIPisValid) {
 		var r = new sn_ws.RESTMessageV2('x_aaro2_teamonline.Team Award RSS', 'Default GET');
 		var response = r.execute();
 		var responseBody = response.getBody();
@@ -365,41 +371,44 @@
 			title: companyAwardRssFeed.rss.channel.title
 		};
 
-		var companyAwardArray = companyAwardRssFeed.rss.channel.item.slice(0,5)
+		var companyAwardArray = companyAwardRssFeed.rss.channel.item.slice(0, 5)
 
 		companyAwardArray.forEach(function (award) {
 			award.award_information = teamOnlineUtil.getAwardInformationFromHTML(award.description);
 			award.user_color = generateRandomColor();
 		});
 
-		data.company_awards = companyAwardArray
+		data.company_awards = companyAwardArray;
+	}
+	
 })();
 
 
-function generateRandomColor () {
+function generateRandomColor() {
 	var letters = '0123456789ABCDEF';
 	var color = '#';
 	for (var i = 0; i < 6; i++) {
 		color += letters[Math.floor(Math.random() * 16)];
 	}
 	return color;
-}]]></script>
+}
+]]></script>
         <servicenow>false</servicenow>
         <sys_class_name>sp_widget</sys_class_name>
         <sys_created_by>xxabunko</sys_created_by>
         <sys_created_on>2020-03-27 11:39:34</sys_created_on>
         <sys_customer_update>false</sys_customer_update>
         <sys_id>1eaabcf5dbff08d05f65ba03e296197b</sys_id>
-        <sys_mod_count>487</sys_mod_count>
+        <sys_mod_count>494</sys_mod_count>
         <sys_name>Team Online Aaron's Awards Feed</sys_name>
         <sys_package display_value="TEAMonline" source="x_aaro2_teamonline">a2dfc25fdb7244105f65ba03e29619fa</sys_package>
         <sys_policy/>
         <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
         <sys_scope display_value="TEAMonline">a2dfc25fdb7244105f65ba03e29619fa</sys_scope>
         <sys_update_name>sp_widget_1eaabcf5dbff08d05f65ba03e296197b</sys_update_name>
-        <sys_updated_by>xxamirony</sys_updated_by>
-        <sys_updated_on>2020-10-01 09:48:48</sys_updated_on>
-        <template><![CDATA[<div class="comments">
+        <sys_updated_by>xxikochet</sys_updated_by>
+        <sys_updated_on>2020-10-06 16:06:36</sys_updated_on>
+        <template><![CDATA[<div class="comments" ng-if="data.userIPisValid">
   <h2 class="comments-title header-with-link">
     <a ng-href="{{ data.rss_information.link }}" target="_blank"> Aaron's Applause </a> <i class="fa fa-chevron-right"></i>
   </h2>

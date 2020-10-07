@@ -1,87 +1,90 @@
 <?xml version="1.0" encoding="UTF-8"?><record_update table="sp_widget">
     <sp_widget action="INSERT_OR_UPDATE">
         <category>custom</category>
-        <client_script><![CDATA[function($scope, spUtil, $rootScope) {
-  var c = this;
-  c.lastPage = false;
-  $scope.previousDateTime = '';
-  c.filter = c.data.filter;
-  
-  $rootScope.$on('filterChanged', (evt, data) => {
-    c.user = data.user;
-    c.store = data.store;
-    c.caption = data.caption,
-    c.filter = data.filter
-    setFilter(data.filter)
-  })
+        <client_script><![CDATA[function ($scope, spUtil, $rootScope) {
+	var c = this;
+	if (c.data.userIPisValid) {
+		c.lastPage = false;
+		$scope.previousDateTime = '';
+		c.filter = c.data.filter;
 
-  $rootScope.$on('approvalsUpdated', (evt, data) =>{
-    if(data.update)
-      setFilter(c.filter)
-  })
+		$rootScope.$on('filterChanged', (evt, data) => {
+			c.user = data.user;
+			c.store = data.store;
+			c.caption = data.caption,
+				c.filter = data.filter
+			setFilter(data.filter)
+		})
 
-  function setFilter(filter) {
-    $scope.previousDateTime = ''
-    $rootScope.$broadcast('loadingStart');
-    c.lastPage = false;
-    scrollTop()
-    c.filter = filter;
-    $scope.loading = true;
+		$rootScope.$on('approvalsUpdated', (evt, data) => {
+			if (data.update)
+				setFilter(c.filter)
+		})
 
-    const payload = {
-      filter: c.filter,
-      count: 9,
-      user: c.user,
-      store: c.store,
-      caption: c.caption,
-      action: 'loading',
-    }
-    c.server.get(payload).then(resp => {
-      $rootScope.$broadcast('loadingEnd');
-      $scope.loading = false;
-      if (resp.data.nextMoments.length == 0) {
-        c.data.moments = [];
-        return;
-      }
-      c.data.moments = resp.data.nextMoments;
-     
+		$scope.loadMore = (last, inview) => {
+			if (!(last && inview) || c.lastPage) return;
 
-      $scope.loadMore(true, true)
-    })
-  }
+			const payload = {
+				lastDateTime: c.data.moments[c.data.moments.length - 1].data.created_on,
+				filter: c.filter,
+				count: 3,
+				user: c.user || '',
+				store: c.store || '',
+				caption: c.caption || '',
+				action: 'loading'
+			}
+			if ($scope.previousDateTime === payload.lastDateTime)
+				return;
 
-  $scope.loadMore = (last, inview) => {
-    if (!(last && inview) || c.lastPage) return;
 
-    const payload = {
-      lastDateTime: c.data.moments[c.data.moments.length - 1].data.created_on,
-      filter: c.filter,
-      count: 3,
-      user: c.user || '',
-      store: c.store || '',
-      caption: c.caption || '',
-      action: 'loading'
-    }
-    if ($scope.previousDateTime === payload.lastDateTime) 
-      return;
-    
+			c.server.get(payload).then(resp => {
+				$scope.previousDateTime = payload.lastDateTime;
+				if (resp.data.nextMoments.length == 0) {
+					c.lastPage = true;
+					console.log('last page ', c.lastPage)
+				}
+				c.data.moments = [...c.data.moments, ...resp.data.nextMoments]
+			})
+		}
 
-    c.server.get(payload).then(resp => {
-      $scope.previousDateTime = payload.lastDateTime;
-      if (resp.data.nextMoments.length == 0){
-        c.lastPage = true;
-        console.log('last page ',c.lastPage)
-      }
-      c.data.moments = [...c.data.moments, ...resp.data.nextMoments]
-    })
-  }
+		function scrollTop() {
+			var container = document.getElementsByClassName('moments-grid-container')[0];
+			if (container)
+				container.scrollTop = 0;
+		}
 
-  function scrollTop() {
-    var container = document.getElementsByClassName('moments-grid-container')[0];
-    if (container)
-      container.scrollTop = 0;
-  }
-}]]></client_script>
+		function setFilter(filter) {
+			$scope.previousDateTime = ''
+			$rootScope.$broadcast('loadingStart');
+			c.lastPage = false;
+			scrollTop()
+			c.filter = filter;
+			$scope.loading = true;
+
+			const payload = {
+				filter: c.filter,
+				count: 9,
+				user: c.user,
+				store: c.store,
+				caption: c.caption,
+				action: 'loading',
+			}
+			c.server.get(payload).then(resp => {
+				$rootScope.$broadcast('loadingEnd');
+				$scope.loading = false;
+				if (resp.data.nextMoments.length == 0) {
+					c.data.moments = [];
+					return;
+				}
+				c.data.moments = resp.data.nextMoments;
+
+
+				$scope.loadMore(true, true)
+			})
+		}
+	}
+}
+]]></client_script>
         <controller_as>c</controller_as>
         <css>$blue: #0069c8;&#13;
 $darkgrey: #2f2f2f;&#13;
@@ -213,49 +216,62 @@ $blue: #0069c8;&#13;
         <roles/>
         <script><![CDATA[(function () {
 	data.userIPisValid = new TeamOnlineUtils().validateIP(gs.getSession().getClientIP());
-  var m_Util = new MomentsUtil();
-  data.momentsTable = 'x_aaro2_teamonline_moment'
-  var filters = {
-    all: function () { return 'approval=approved' },
-    my: function () { return 'opened_by=' + gs.getUserID() },
-    store: function () { return 'approval=approved^store=' + m_Util.getUserStore(gs.getUserID()).value },
-    approvals: function () { return 'approval=requested' },
-    custom: function () { return getCustomFilter() }
-  }
-  if (!input) {
-    
-    data.isLoggedIn = gs.getSession().isLoggedIn();
-    data.canEdit = gs.getUser().isMemberOf(gs.getProperty("x_aaro2_teamonline.teamonline_administration_group")) || gs.hasRole("admin");
-    data.submitFormWidget = 'teamonline_moment_submit_form';
-    data.commentsEnabled = gs.getProperty('x_aaro2_teamonline.moment_comments_enabled', "false") === "true";
-    data.filter = getDefaultFilter(data.canEdit);
-    data.moments = m_Util.getFilteredNext(filters[data.filter](), '', 9, skipRejectedImages(data.filter));
-  }
-  if (input && input.action==='loading') {
-    data.nextMoments = m_Util.getFilteredNext(filters[input.filter](), input.lastDateTime, input.count, skipRejectedImages(input));
-  }
-  if(input && input.action === 'approval'){
-    m_Util.approveAction(input, input.approval, input.approveState);
-    data.moments = m_Util.getFilteredNext(filters.approvals(), skipRejectedImages(input.filter))
-    data.approvalsCount = m_Util.getApprovalsCount();
-  }
+	if (data.userIPisValid) {
+		var m_Util = new MomentsUtil();
+		data.momentsTable = 'x_aaro2_teamonline_moment'
+		var filters = {
+			all: function () {
+				return 'approval=approved'
+			},
+			my: function () {
+				return 'opened_by=' + gs.getUserID()
+			},
+			store: function () {
+				return 'approval=approved^store=' + m_Util.getUserStore(gs.getUserID()).value
+			},
+			approvals: function () {
+				return 'approval=requested'
+			},
+			custom: function () {
+				return getCustomFilter()
+			}
+		}
+		if (!input) {
 
-  function getDefaultFilter(canEdit){
-    var paramFilter = $sp.getParameter('filter')|| 'all';
-    return (paramFilter === 'approvals' && !data.canEdit)? 'all': paramFilter
-  }
-  function getCustomFilter() {
-    var filterString = filters.all() +
-      (input.store ? '^store=' + input.store : '') +
-      (input.user ? '^opened_by=' + input.user : '') +
-      (input.caption ? '^captionLIKE' + input.caption : '')
-    return filterString;
-  }
-  function skipRejectedImages(filter){
-    return (filter !== 'my' && filter !== 'approvals')
-  }
+			data.isLoggedIn = gs.getSession().isLoggedIn();
+			data.canEdit = gs.getUser().isMemberOf(gs.getProperty("x_aaro2_teamonline.teamonline_administration_group")) || gs.hasRole("admin");
+			data.submitFormWidget = 'teamonline_moment_submit_form';
+			data.commentsEnabled = gs.getProperty('x_aaro2_teamonline.moment_comments_enabled', "false") === "true";
+			data.filter = getDefaultFilter(data.canEdit);
+			data.moments = m_Util.getFilteredNext(filters[data.filter](), '', 9, skipRejectedImages(data.filter));
+		}
+		if (input && input.action === 'loading') {
+			data.nextMoments = m_Util.getFilteredNext(filters[input.filter](), input.lastDateTime, input.count, skipRejectedImages(input));
+		}
+		if (input && input.action === 'approval') {
+			m_Util.approveAction(input, input.approval, input.approveState);
+			data.moments = m_Util.getFilteredNext(filters.approvals(), skipRejectedImages(input.filter))
+			data.approvalsCount = m_Util.getApprovalsCount();
+		}
+	}
+
+	function getDefaultFilter(canEdit) {
+		var paramFilter = $sp.getParameter('filter') || 'all';
+		return (paramFilter === 'approvals' && !data.canEdit) ? 'all' : paramFilter
+	}
+
+	function getCustomFilter() {
+		var filterString = filters.all() +
+			(input.store ? '^store=' + input.store : '') +
+			(input.user ? '^opened_by=' + input.user : '') +
+			(input.caption ? '^captionLIKE' + input.caption : '')
+		return filterString;
+	}
+
+	function skipRejectedImages(filter) {
+		return (filter !== 'my' && filter !== 'approvals')
+	}
 })();
-
 ]]></script>
         <servicenow>false</servicenow>
         <sys_class_name>sp_widget</sys_class_name>
@@ -263,16 +279,16 @@ $blue: #0069c8;&#13;
         <sys_created_on>2020-09-03 08:33:18</sys_created_on>
         <sys_customer_update>false</sys_customer_update>
         <sys_id>c82e4c5ddb4f9450389b84d868961992</sys_id>
-        <sys_mod_count>375</sys_mod_count>
+        <sys_mod_count>378</sys_mod_count>
         <sys_name>Teamonline Moments Grid</sys_name>
         <sys_package display_value="TEAMonline" source="x_aaro2_teamonline">a2dfc25fdb7244105f65ba03e29619fa</sys_package>
         <sys_policy/>
         <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
         <sys_scope display_value="TEAMonline">a2dfc25fdb7244105f65ba03e29619fa</sys_scope>
         <sys_update_name>sp_widget_c82e4c5ddb4f9450389b84d868961992</sys_update_name>
-        <sys_updated_by>xxamirony</sys_updated_by>
-        <sys_updated_on>2020-09-30 13:07:08</sys_updated_on>
-        <template><![CDATA[<div>
+        <sys_updated_by>xxikochet</sys_updated_by>
+        <sys_updated_on>2020-10-06 17:10:30</sys_updated_on>
+        <template><![CDATA[<div ng-if="data.userIPisValid">
   <div class="moments-grid-container" in-view-container>
     <div class="no-moments-message" ng-if="data.moments.length==0">
       <span> ${tom_no_moments_emoji}</span>

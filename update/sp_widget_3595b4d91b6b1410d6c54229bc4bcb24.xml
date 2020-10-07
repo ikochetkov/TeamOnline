@@ -1,45 +1,50 @@
 <?xml version="1.0" encoding="UTF-8"?><record_update table="sp_widget">
     <sp_widget action="INSERT_OR_UPDATE">
         <category>custom</category>
-        <client_script><![CDATA[function($scope, $rootScope) {
-  /* widget controller */
-  var c = this;
-  var gallery = document.getElementsByClassName('moment-gallery')[0];
-  c.selectedImageIndex = 0;
-  c.selectedImageIndex = 0;
+        <client_script><![CDATA[function ($scope, $rootScope) {
+	/* widget controller */
+	var c = this;
+	if (c.data.userIPisValid) {
+		var gallery = document.getElementsByClassName('moment-gallery')[0];
+		c.selectedImageIndex = 0;
+		c.selectedImageIndex = 0;
 
-  $rootScope.$on('momentOpened', (evt, data) => {
-    if(data.source != $scope.$parent.widget.sys_id) return;
-    
-    c.moments = $scope.$parent.data.moments;
-    c.open( data.momentIndex, data.imageIndex);
-  });
-  c.open = (momentIndex, imageIndex) => {
-   console.log($scope);
-    c.selectedMomentIndex = momentIndex;
-    c.selectedMoment = c.moments[momentIndex]
-    c.selectedImageIndex = imageIndex;
-    gallery.classList.add('active')
-  }
-  c.close = () => {
-    c.selectedMoment = {}
-    gallery.classList.remove('active');
-  }
-  $(document).keydown(function (e) {
-    if (e.keyCode == 27) {
-      c.close()
-    }
-  });
-  c.iterateMoment = function (amount) {
-    var length = c.moments.length
-    if (c.selectedMomentIndex + amount > length - 1) c.selectedMomentIndex = 0;
-    else if (c.selectedMomentIndex + amount < 0) c.selectedMomentIndex = length - 1;
-    else c.selectedMomentIndex += amount;
-    c.selectedMoment = c.moments[c.selectedMomentIndex]
-    c.selectedImageIndex = 0;
-    $rootScope.$broadcast('openedMomentChanged', {moment: c.selectedMoment})
-  }
-}]]></client_script>
+		$rootScope.$on('momentOpened', (evt, data) => {
+			if (data.source != $scope.$parent.widget.sys_id) return;
+
+			c.moments = $scope.$parent.data.moments;
+			c.open(data.momentIndex, data.imageIndex);
+		});
+		c.open = (momentIndex, imageIndex) => {
+			console.log($scope);
+			c.selectedMomentIndex = momentIndex;
+			c.selectedMoment = c.moments[momentIndex]
+			c.selectedImageIndex = imageIndex;
+			gallery.classList.add('active')
+		}
+		c.close = () => {
+			c.selectedMoment = {}
+			gallery.classList.remove('active');
+		}
+		$(document).keydown(function (e) {
+			if (e.keyCode == 27) {
+				c.close()
+			}
+		});
+		c.iterateMoment = function (amount) {
+			var length = c.moments.length
+			if (c.selectedMomentIndex + amount > length - 1) c.selectedMomentIndex = 0;
+			else if (c.selectedMomentIndex + amount < 0) c.selectedMomentIndex = length - 1;
+			else c.selectedMomentIndex += amount;
+			c.selectedMoment = c.moments[c.selectedMomentIndex]
+			c.selectedImageIndex = 0;
+			$rootScope.$broadcast('openedMomentChanged', {
+				moment: c.selectedMoment
+			})
+		}
+	}
+}
+]]></client_script>
         <controller_as>c</controller_as>
         <css>.gallery-container {&#13;
   position: relative;&#13;
@@ -89,24 +94,30 @@
         <option_schema/>
         <public>true</public>
         <roles/>
-        <script><![CDATA[(function() {
-  data.isLoggedIn = gs.getSession().isLoggedIn();
-})();]]></script>
+        <script><![CDATA[(function () {
+  
+	data.userIPisValid = new TeamOnlineUtils().validateIP(gs.getSession().getClientIP());
+	if (data.userIPisValid) {
+		data.isLoggedIn = gs.getSession().isLoggedIn();
+	}
+
+})();
+]]></script>
         <servicenow>false</servicenow>
         <sys_class_name>sp_widget</sys_class_name>
         <sys_created_by>andrey.mironyuk</sys_created_by>
         <sys_created_on>2020-09-28 07:56:53</sys_created_on>
         <sys_customer_update>false</sys_customer_update>
         <sys_id>3595b4d91b6b1410d6c54229bc4bcb24</sys_id>
-        <sys_mod_count>25</sys_mod_count>
+        <sys_mod_count>27</sys_mod_count>
         <sys_name>Teamonline Moments Gallery</sys_name>
         <sys_package display_value="TEAMonline" source="x_aaro2_teamonline">a2dfc25fdb7244105f65ba03e29619fa</sys_package>
         <sys_policy/>
         <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
         <sys_scope display_value="TEAMonline">a2dfc25fdb7244105f65ba03e29619fa</sys_scope>
         <sys_update_name>sp_widget_3595b4d91b6b1410d6c54229bc4bcb24</sys_update_name>
-        <sys_updated_by>xxamirony</sys_updated_by>
-        <sys_updated_on>2020-10-05 12:30:13</sys_updated_on>
+        <sys_updated_by>xxikochet</sys_updated_by>
+        <sys_updated_on>2020-10-06 17:19:49</sys_updated_on>
         <template><![CDATA[<div class="moment-gallery">
   <div class="close-gallery-button" ng-click="c.close()">
     <i class="fa fa-times"></i>

@@ -3,122 +3,126 @@
         <category>custom</category>
         <client_script><![CDATA[function($scope, $rootScope, $location, spUtil, spModal ,$uibModal, glideFormFactory, spAriaUtil, spAriaFocusManager) {
 	/* widget controller */
-	var c = this; var d = $scope.data;
+	var c = this; 
+	if(c.data.userIPisValid){
+		var d = $scope.data;
 
-	/* context Menu */
-	$scope.contextMenu = function () {
-		if (!$scope.data.canEdit) { return [] }
-		return [
-			['Edit Slide', function ($itemScope) {
-				var currentScope = getCurrentScopeByMethod($itemScope,'editSlide');
-				currentScope.editSlide($itemScope.slide);
-			}],
-			['Delete Slide', function ($itemScope) {
-				var currentScope = getCurrentScopeByMethod($itemScope,'deleteSlide');
-				currentScope.deleteSlide($itemScope.slide);		
-			}],
-			['Add new Slide', function ($itemScope) {
-				var currentScope = getCurrentScopeByMethod($itemScope,'editSlide');
-				currentScope.editSlide($itemScope.slide, true);	
-			}]
-		]
-	}
-
-	$scope.placeHolderContextMenu = function(){
-		if (!$scope.data.canEdit) { return [] }
-		return [
-			['Add new Slide', function ($itemScope) {
-				var currentScope = getCurrentScopeByMethod($itemScope,'editSlide');
-				currentScope.editSlide($itemScope.slide, true);	
-			}]
-		]
-	}
-
-	/* Modal to add new/edit */
-	$scope.open = function () {
-		$scope.modalInstance = $uibModal.open({
-			animation: true,
-			templateUrl: 'slider_editor.html',
-			size: 'lg',
-			backdrop: false,
-			scope: $scope
-		});
-	};
-
-	$scope.closeEdit = function(){
-		$scope.modalInstance.close();
-	}
-
-	/* add or edit slide */
-	$scope.editSlide = function(itemScope, isNew){
-		if(isNew){d.sys_id = -1}else{d.sys_id = itemScope.sys_id;}
-		spUtil.update($scope).then(function(){
-			/* === collect g_form object of form fields === */
-			var flatFields = [];
-			angular.forEach($scope.data.f._fields, function (field) {
-				flatFields.push(field);
-			});
-
-			var g_form = glideFormFactory.create($scope, $scope.data.f.table, $scope.data.f.sys_id, flatFields, null, { uiMessageHandler: uiMessageHandler });
-
-			$scope.getGlideForm = function () {
-				return g_form;
-			}
-
-			var uiMessageHandler = function (g_form, type, message) {
-				switch (type) {
-					case 'addInfoMessage':
-						spUtil.addInfoMessage(message);
-						break;
-					case 'addErrorMessage':
-						spUtil.addErrorMessage(message);
-						break;
-					case 'clearMessages':
-						break;
-					default:
-				}
-			};
-
-			$scope.open();
-		})
-	}
-
-	/* delete slide */
-	$scope.deleteSlide = function(slide){
-		spModal.open({
-			title: 'Delete this slide?',
-			message: 'Slide will be deleted from system permanently',
-			buttons: [
-				{label:'✘ ${No}', cancel: true},
-				{label:'✔️ ${Yes}', primary: true}
+		/* context Menu */
+		$scope.contextMenu = function () {
+			if (!$scope.data.canEdit) { return [] }
+			return [
+				['Edit Slide', function ($itemScope) {
+					var currentScope = getCurrentScopeByMethod($itemScope,'editSlide');
+					currentScope.editSlide($itemScope.slide);
+				}],
+				['Delete Slide', function ($itemScope) {
+					var currentScope = getCurrentScopeByMethod($itemScope,'deleteSlide');
+					currentScope.deleteSlide($itemScope.slide);		
+				}],
+				['Add new Slide', function ($itemScope) {
+					var currentScope = getCurrentScopeByMethod($itemScope,'editSlide');
+					currentScope.editSlide($itemScope.slide, true);	
+				}]
 			]
-		}).then(function() {
-			d.slide_sysid = slide.sys_id;
-			d.action = "delete_slide";
+		}
+
+		$scope.placeHolderContextMenu = function(){
+			if (!$scope.data.canEdit) { return [] }
+			return [
+				['Add new Slide', function ($itemScope) {
+					var currentScope = getCurrentScopeByMethod($itemScope,'editSlide');
+					currentScope.editSlide($itemScope.slide, true);	
+				}]
+			]
+		}
+
+		/* Modal to add new/edit */
+		$scope.open = function () {
+			$scope.modalInstance = $uibModal.open({
+				animation: true,
+				templateUrl: 'slider_editor.html',
+				size: 'lg',
+				backdrop: false,
+				scope: $scope
+			});
+		};
+
+		$scope.closeEdit = function(){
+			$scope.modalInstance.close();
+		}
+
+		/* add or edit slide */
+		$scope.editSlide = function(itemScope, isNew){
+			if(isNew){d.sys_id = -1}else{d.sys_id = itemScope.sys_id;}
 			spUtil.update($scope).then(function(){
+				/* === collect g_form object of form fields === */
+				var flatFields = [];
+				angular.forEach($scope.data.f._fields, function (field) {
+					flatFields.push(field);
+				});
+
+				var g_form = glideFormFactory.create($scope, $scope.data.f.table, $scope.data.f.sys_id, flatFields, null, { uiMessageHandler: uiMessageHandler });
+
+				$scope.getGlideForm = function () {
+					return g_form;
+				}
+
+				var uiMessageHandler = function (g_form, type, message) {
+					switch (type) {
+						case 'addInfoMessage':
+							spUtil.addInfoMessage(message);
+							break;
+						case 'addErrorMessage':
+							spUtil.addErrorMessage(message);
+							break;
+						case 'clearMessages':
+							break;
+						default:
+					}
+				};
+
+				$scope.open();
+			})
+		}
+
+		/* delete slide */
+		$scope.deleteSlide = function(slide){
+			spModal.open({
+				title: 'Delete this slide?',
+				message: 'Slide will be deleted from system permanently',
+				buttons: [
+					{label:'✘ ${No}', cancel: true},
+					{label:'✔️ ${Yes}', primary: true}
+				]
+			}).then(function() {
+				d.slide_sysid = slide.sys_id;
+				d.action = "delete_slide";
+				spUtil.update($scope).then(function(){
+					d.action = d.f = undefined;
+				});
+			});
+		}
+
+		/* update image from embedded widget */
+		$rootScope.$on('ImageLibrary.imageSelected', function (event, respData) {
+			if(d.f && d.f._fields){
+				$scope.data.f._fields.background.value = respData.sys_id;
+				$scope.data.f._fields.background.displayValue = respData.name;
+				//spUtil.addInfoMessage('New background selected!');
+			}
+		})
+
+		/*=== save current g_form object to table ===*/
+		$scope.saveRecord = function () {
+			d.action = "saveRecord";
+			spUtil.update($scope).then(function (response) {
+				$scope.closeEdit();
 				d.action = d.f = undefined;
 			});
-		});
-	}
-
-	/* update image from embedded widget */
-	$rootScope.$on('ImageLibrary.imageSelected', function (event, respData) {
-		if(d.f && d.f._fields){
-			$scope.data.f._fields.background.value = respData.sys_id;
-			$scope.data.f._fields.background.displayValue = respData.name;
-			//spUtil.addInfoMessage('New background selected!');
 		}
-	})
 
-	/*=== save current g_form object to table ===*/
-	$scope.saveRecord = function () {
-		d.action = "saveRecord";
-		spUtil.update($scope).then(function (response) {
-			$scope.closeEdit();
-			d.action = d.f = undefined;
-		});
+
 	}
-
 	/* returs current scope */
 	function getCurrentScopeByMethod(scope,method){
 		var currentScope = scope; 
@@ -229,37 +233,38 @@
         <option_schema>[{"name":"interval","section":"other","default_value":"5000","label":"Interval","type":"integer"}]</option_schema>
         <public>true</public>
         <roles/>
-        <script><![CDATA[var userIP = gs.getSession().getClientIP();
-data.userIPisValid = new TeamOnlineUtils().validateIP(userIP);
-var widgetInstanceRecordsysId = $sp.getInstanceRecord().getUniqueValue();
-data.table = 'x_aaro2_teamonline_carousel_slide';
-data.canEdit = gs.getUser().isMemberOf(gs.getProperty("x_aaro2_teamonline.teamonline_administration_group")) || gs.hasRole("admin");
-data.imageLibrary = $sp.getWidget('image_library');
-if (input && input.action == 'saveRecord'){
-	var result = {};
-	if (input.f._fields) {
-		input.f._fields.carousel.value = widgetInstanceRecordsysId;
-		result = $sp.saveRecord(input.table, input.sys_id, input.f._fields);
-		if(result){
+        <script><![CDATA[data.userIPisValid = new TeamOnlineUtils().validateIP(gs.getSession().getClientIP());
+if(data.userIPisValid){
+	var widgetInstanceRecordsysId = $sp.getInstanceRecord().getUniqueValue();
+	data.table = 'x_aaro2_teamonline_carousel_slide';
+	data.canEdit = gs.getUser().isMemberOf(gs.getProperty("x_aaro2_teamonline.teamonline_administration_group")) || gs.hasRole("admin");
+	data.imageLibrary = $sp.getWidget('image_library');
+	if (input && input.action == 'saveRecord'){
+		var result = {};
+		if (input.f._fields) {
+			input.f._fields.carousel.value = widgetInstanceRecordsysId;
+			result = $sp.saveRecord(input.table, input.sys_id, input.f._fields);
+			if(result){
+				collectSlides();
+				gs.addInfoMessage('Slide has been saved');
+			}
+		}
+	} else if(input && input.action == 'delete_slide'){
+		var slideGr = new GlideRecord('x_aaro2_teamonline_carousel_slide');
+		if(slideGr.get(input.slide_sysid)){
+			slideGr.deleteRecord();
 			collectSlides();
-			gs.addInfoMessage('Slide has been saved');
+			gs.addInfoMessage('Slide has been deleted.');
+		}else{
+			gs.addErrorMessage('Slide not found, could not be deleted.');
 		}
 	}
-} else if(input && input.action == 'delete_slide'){
-	var slideGr = new GlideRecord('x_aaro2_teamonline_carousel_slide');
-	if(slideGr.get(input.slide_sysid)){
-		slideGr.deleteRecord();
+	else if(input){
+		data.sys_id = input.sys_id;
+		data.f = $sp.getForm(data.table, data.sys_id, data.query, data.view);
+	} else {
 		collectSlides();
-		gs.addInfoMessage('Slide has been deleted.');
-	}else{
-		gs.addErrorMessage('Slide not found, could not be deleted.');
 	}
-}
-else if(input){
-	data.sys_id = input.sys_id;
-	data.f = $sp.getForm(data.table, data.sys_id, data.query, data.view);
-} else {
-	collectSlides();
 }
 
 
@@ -290,7 +295,7 @@ function collectSlides(){
         <sys_created_on>2020-06-01 11:22:57</sys_created_on>
         <sys_customer_update>false</sys_customer_update>
         <sys_id>1acfa40fdb855c505f65ba03e29619e0</sys_id>
-        <sys_mod_count>349</sys_mod_count>
+        <sys_mod_count>350</sys_mod_count>
         <sys_name>TeamOnline Carousel</sys_name>
         <sys_package display_value="TEAMonline" source="x_aaro2_teamonline">a2dfc25fdb7244105f65ba03e29619fa</sys_package>
         <sys_policy/>
@@ -298,7 +303,7 @@ function collectSlides(){
         <sys_scope display_value="TEAMonline">a2dfc25fdb7244105f65ba03e29619fa</sys_scope>
         <sys_update_name>sp_widget_1acfa40fdb855c505f65ba03e29619e0</sys_update_name>
         <sys_updated_by>xxikochet</sys_updated_by>
-        <sys_updated_on>2020-09-29 20:00:59</sys_updated_on>
+        <sys_updated_on>2020-10-06 15:28:51</sys_updated_on>
         <template><![CDATA[<div ng-if="data.userIPisValid" id="slider">
   <div class="pull-in">
     <uib-carousel interval="options.interval">

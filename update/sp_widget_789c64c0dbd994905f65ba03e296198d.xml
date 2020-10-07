@@ -1,86 +1,95 @@
 <?xml version="1.0" encoding="UTF-8"?><record_update table="sp_widget">
     <sp_widget action="INSERT_OR_UPDATE">
         <category>custom</category>
-        <client_script><![CDATA[function($scope, $rootScope, spUtil, spModal) {
+        <client_script><![CDATA[function ($scope, $rootScope, spUtil, spModal) {
 	/* widget controller */
-	var c = this;var d = $scope.data;
+	var c = this;
+	if (c.data.userIPisValid) {
+		var d = $scope.data;
 
-	$scope.contextMenu = function (sys_id) {
-		if (!d.canEdit) return [];
-		return [
-			['Delete Image', function ($itemScope) {
-				var currentScope = $itemScope;
-				var i = 0;
-				while (!currentScope.hasOwnProperty('deleteImage') && i<10){
-					currentScope = currentScope.$parent;
-				}
-				currentScope.deleteImage(sys_id);
-			}]
-		];
-	}
-
-	$scope.deleteImage = function (imageSysID) {
-		spModal.open({
-			title: 'Delete this image?',
-			message: 'It will be removed from all articles which contains this image in background',
-			buttons: [
-				{ label: '✘ ${No}', cancel: true },
-				{ label: '✔ ${Yes}', primary: true }
-			]
-		}).then(function () {
-			d.imageSysID = imageSysID;
-			d.action = 'deleteImage';
-			spUtil.update($scope).then(function () {
-				spUtil.addInfoMessage('Image was deleted');
-				d.action = undefined;
-			});
-		})
-	};
-
-	/*==================  PAGINATION  ==================*/
-	$scope.getNumber = function (num) {
-		return new Array(num);
-	}
-
-	$scope.setPageNum = function (num) {
-		d.p = num;
-		spUtil.update($scope);
-	}
-
-	$scope.mathMin = function (v1, v2) {
-		return Math.min(v1, v2);
-	}
-	/*===== search ====*/
-	$scope.$watch('data.searchForm', function (newValue, oldValue) {
-		if (newValue != oldValue) {
-			d.searchForm = newValue;
-			d.p = 1;
-			$scope.loading = true; //to disable search form
-			c.server.update().then(function () {
-				$scope.loading = false;
-			})
+		$scope.contextMenu = function (sys_id) {
+			if (!d.canEdit) return [];
+			return [
+				['Delete Image', function ($itemScope) {
+					var currentScope = $itemScope;
+					var i = 0;
+					while (!currentScope.hasOwnProperty('deleteImage') && i < 10) {
+						currentScope = currentScope.$parent;
+					}
+					currentScope.deleteImage(sys_id);
+				}]
+			];
 		}
-	});
 
-	/*=== catch event update image on the form === */
-	$rootScope.$on('teamonline.imageLoadedAndSelected', function (event, respData) {
-		$rootScope.$broadcast('ImageLibrary.imageSelected',{
-			name: respData.name,
-			sys_id: respData.sys_id
-		});
-		spUtil.update($scope);
-	});
+		$scope.deleteImage = function (imageSysID) {
+			spModal.open({
+				title: 'Delete this image?',
+				message: 'It will be removed from all articles which contains this image in background',
+				buttons: [{
+						label: '✘ ${No}',
+						cancel: true
+					},
+					{
+						label: '✔ ${Yes}',
+						primary: true
+					}
+				]
+			}).then(function () {
+				d.imageSysID = imageSysID;
+				d.action = 'deleteImage';
+				spUtil.update($scope).then(function () {
+					spUtil.addInfoMessage('Image was deleted');
+					d.action = undefined;
+				});
+			})
+		};
 
-	/* === function on image selection === */
-	$scope.selectImg = function (obj) {
-		$rootScope.$broadcast('ImageLibrary.imageSelected',{
-			name: obj.name,
-			sys_id: obj.sys_id
+		/*==================  PAGINATION  ==================*/
+		$scope.getNumber = function (num) {
+			return new Array(num);
+		}
+
+		$scope.setPageNum = function (num) {
+			d.p = num;
+			spUtil.update($scope);
+		}
+
+		$scope.mathMin = function (v1, v2) {
+			return Math.min(v1, v2);
+		}
+		/*===== search ====*/
+		$scope.$watch('data.searchForm', function (newValue, oldValue) {
+			if (newValue != oldValue) {
+				d.searchForm = newValue;
+				d.p = 1;
+				$scope.loading = true; //to disable search form
+				c.server.update().then(function () {
+					$scope.loading = false;
+				})
+			}
 		});
-		spUtil.addInfoMessage('New background selected!');
+
+		/*=== catch event update image on the form === */
+		$rootScope.$on('teamonline.imageLoadedAndSelected', function (event, respData) {
+			$rootScope.$broadcast('ImageLibrary.imageSelected', {
+				name: respData.name,
+				sys_id: respData.sys_id
+			});
+			spUtil.update($scope);
+		});
+
+		/* === function on image selection === */
+		$scope.selectImg = function (obj) {
+			$rootScope.$broadcast('ImageLibrary.imageSelected', {
+				name: obj.name,
+				sys_id: obj.sys_id
+			});
+			spUtil.addInfoMessage('New background selected!');
+		}
 	}
 
-}]]></client_script>
+}
+]]></client_script>
         <controller_as>c</controller_as>
         <css>.header-group {
     display: flex;
@@ -124,31 +133,33 @@
         <option_schema/>
         <public>false</public>
         <roles/>
-        <script><![CDATA[(function() {
+        <script><![CDATA[(function () {
 	/* populate the 'data' object */
 	/* e.g., data.table = $sp.getValue('table'); */
+	data.userIPisValid = new TeamOnlineUtils().validateIP(gs.getSession().getClientIP());
+	if (data.userIPisValid) {
+		data.canEdit = gs.getUser().isMemberOf(gs.getProperty("x_aaro2_teamonline.teamonline_administration_group")) || gs.hasRole("admin");
+		data.imageUploader = $sp.getWidget('team_online_image_uploader');
+		data.searchForm = input ? input.searchForm : '';
 
-	data.canEdit = gs.getUser().isMemberOf(gs.getProperty("x_aaro2_teamonline.teamonline_administration_group")) || gs.hasRole("admin");
-	data.imageUploader = $sp.getWidget('team_online_image_uploader');
-	data.searchForm = input ?  input.searchForm : '';
+		if (input && input.action == 'deleteImage') {
+			var imageGr = new GlideRecord('db_image');
+			imageGr.get(input.imageSysID);
+			imageGr.deleteRecord();
+		}
 
-	if(input && input.action == 'deleteImage'){
-		var imageGr = new GlideRecord('db_image');
-		imageGr.get(input.imageSysID);
-		imageGr.deleteRecord();
+		data.dbImage = getImages();
 	}
 
-	data.dbImage = getImages();
+	function getImages() {
 
-	function getImages(){
-
-		data.p = input && input.p? input.p: 1;
+		data.p = input && input.p ? input.p : 1;
 		data.page_index = data.p - 1;
 
 		var imageObjects = [];
 		var img = new GlideRecord('db_image');
-		img.addQuery('name','CONTAINS', data.searchForm);
-		img.addQuery('category','kb');
+		img.addQuery('name', 'CONTAINS', data.searchForm);
+		img.addQuery('category', 'kb');
 		img.query();
 
 		data.row_count = img.getRowCount();
@@ -159,11 +170,11 @@
 
 		img.chooseWindow(data.window_start, data.window_end);
 		img.query();
-		while(img.next()){
+		while (img.next()) {
 			imageObjects.push({
-				sys_id	: img.getUniqueValue(),
-				name		: img.getDisplayValue('name'),
-				created	: img.orderBy('sys_created_on')
+				sys_id: img.getUniqueValue(),
+				name: img.getDisplayValue('name'),
+				created: img.orderBy('sys_created_on')
 			});
 		}
 
@@ -171,14 +182,15 @@
 	}
 
 
-})();]]></script>
+})();
+]]></script>
         <servicenow>false</servicenow>
         <sys_class_name>sp_widget</sys_class_name>
         <sys_created_by>xxikochet</sys_created_by>
         <sys_created_on>2020-06-04 13:42:51</sys_created_on>
         <sys_customer_update>false</sys_customer_update>
         <sys_id>789c64c0dbd994905f65ba03e296198d</sys_id>
-        <sys_mod_count>49</sys_mod_count>
+        <sys_mod_count>52</sys_mod_count>
         <sys_name>Image Library</sys_name>
         <sys_package display_value="TEAMonline" source="x_aaro2_teamonline">a2dfc25fdb7244105f65ba03e29619fa</sys_package>
         <sys_policy/>
@@ -186,7 +198,7 @@
         <sys_scope display_value="TEAMonline">a2dfc25fdb7244105f65ba03e29619fa</sys_scope>
         <sys_update_name>sp_widget_789c64c0dbd994905f65ba03e296198d</sys_update_name>
         <sys_updated_by>xxikochet</sys_updated_by>
-        <sys_updated_on>2020-08-05 14:21:29</sys_updated_on>
+        <sys_updated_on>2020-10-06 16:59:47</sys_updated_on>
         <template><![CDATA[<uib-accordion>
   <div uib-accordion-group class="panel-default" is-open="expand">
     <uib-accordion-heading>

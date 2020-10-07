@@ -203,49 +203,56 @@
         <option_schema/>
         <public>false</public>
         <roles/>
-        <script><![CDATA[(function() {
+        <script><![CDATA[(function () {
 	data.userIPisValid = new TeamOnlineUtils().validateIP(gs.getSession().getClientIP());
-  var m_Util = new MomentsUtil(); 
-  if(!input||input.source==='grid'){
-    data.store =  getStore(gs.getUserID());
-    data.storesQuery = 'u_is_store=true^ORu_is_store_support_center=true^u_state=GA';
-    data.isLoggedIn = gs.getSession().isLoggedIn();
-    data.maxFiles = parseInt(gs.getProperty('x_aaro2_teamonline.moment_max_files',5))
-    data.thumbnail_compression_ratio = parseFloat(gs.getProperty('x_aaro2_teamonline.moments_thumbnail_compression_ratio', "0.7"));
-    data.thumbnail_max_width = parseInt(gs.getProperty("x_aaro2_teamonline.moments_thumbnail_max_width","600"));
-    data.thumbnail_max_height = parseInt(gs.getProperty("x_aaro2_teamonline.moments_thumbnail_max_height","400"));
-    data.fullsize_compression_ratio = parseFloat(gs.getProperty('x_aaro2_teamonline.moments_fullsize_compression_ratio', "0.7"));
-    data.fullsize_max_width = parseInt(gs.getProperty("x_aaro2_teamonline.moments_fullsize_max_width","1920"));
-    data.fullsize_max_height = parseInt(gs.getProperty("x_aaro2_teamonline.moments_fullsize_max_height","1080"));
-    data.collapsed = input?input.collapsed:true;
-    data.showButton = input?input.showButton:true;
-  }
-  if (input && !input.source) {
-    m_Util.create(input)
-  }
-  
-  function getStore(sys_id) {
-    var userGr = new GlideRecord('sys_user');
-    userGr.get(sys_id)
-    var dept = userGr.department.getRefRecord()
-    return { name: '', displayValue: dept.getValue('name'), value: dept.getUniqueValue() }
-  }
-})();]]></script>
+	if (data.userIPisValid) {
+		var m_Util = new MomentsUtil();
+		if (!input || input.source === 'grid') {
+			data.store = getStore(gs.getUserID());
+			data.storesQuery = 'u_is_store=true^ORu_is_store_support_center=true^u_state=GA';
+			data.isLoggedIn = gs.getSession().isLoggedIn();
+			data.maxFiles = parseInt(gs.getProperty('x_aaro2_teamonline.moment_max_files', 5))
+			data.thumbnail_compression_ratio = parseFloat(gs.getProperty('x_aaro2_teamonline.moments_thumbnail_compression_ratio', "0.7"));
+			data.thumbnail_max_width = parseInt(gs.getProperty("x_aaro2_teamonline.moments_thumbnail_max_width", "600"));
+			data.thumbnail_max_height = parseInt(gs.getProperty("x_aaro2_teamonline.moments_thumbnail_max_height", "400"));
+			data.fullsize_compression_ratio = parseFloat(gs.getProperty('x_aaro2_teamonline.moments_fullsize_compression_ratio', "0.7"));
+			data.fullsize_max_width = parseInt(gs.getProperty("x_aaro2_teamonline.moments_fullsize_max_width", "1920"));
+			data.fullsize_max_height = parseInt(gs.getProperty("x_aaro2_teamonline.moments_fullsize_max_height", "1080"));
+			data.collapsed = input ? input.collapsed : true;
+			data.showButton = input ? input.showButton : true;
+		}
+		if (input && !input.source) {
+			m_Util.create(input)
+		}
+	}
+
+	function getStore(sys_id) {
+		var userGr = new GlideRecord('sys_user');
+		userGr.get(sys_id)
+		var dept = userGr.department.getRefRecord()
+		return {
+			name: '',
+			displayValue: dept.getValue('name'),
+			value: dept.getUniqueValue()
+		}
+	}
+})();
+]]></script>
         <servicenow>false</servicenow>
         <sys_class_name>sp_widget</sys_class_name>
         <sys_created_by>andrey.mironyuk</sys_created_by>
         <sys_created_on>2020-09-01 14:36:26</sys_created_on>
         <sys_customer_update>false</sys_customer_update>
         <sys_id>a92e4b60dbc39050389b84d868961980</sys_id>
-        <sys_mod_count>123</sys_mod_count>
+        <sys_mod_count>124</sys_mod_count>
         <sys_name>Teamonline Moment Submit Form</sys_name>
         <sys_package display_value="TEAMonline" source="x_aaro2_teamonline">a2dfc25fdb7244105f65ba03e29619fa</sys_package>
         <sys_policy/>
         <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
         <sys_scope display_value="TEAMonline">a2dfc25fdb7244105f65ba03e29619fa</sys_scope>
         <sys_update_name>sp_widget_a92e4b60dbc39050389b84d868961980</sys_update_name>
-        <sys_updated_by>xxamirony</sys_updated_by>
-        <sys_updated_on>2020-10-02 09:14:45</sys_updated_on>
+        <sys_updated_by>xxikochet</sys_updated_by>
+        <sys_updated_on>2020-10-06 17:21:24</sys_updated_on>
         <template><![CDATA[<div  style="margin: 5px 0">
   <div class="submit-area">
     <button type="button" class="btn btn-primary submit-memory-btn" ng-if="data.showButton"

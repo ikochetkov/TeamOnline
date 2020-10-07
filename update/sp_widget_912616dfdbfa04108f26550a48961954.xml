@@ -252,6 +252,16 @@
 		var regex = new RegExp(/https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/);
 		return regex.test(url)
 	}
+
+	$scope.switchDropdown = (event) => {
+		if (event.currentTarget.classList.contains('active')){
+      event.currentTarget.classList.remove('active')
+    }
+		else{
+      event.currentTarget.classList.add('active')
+    }
+	}
+	
 	/*var spWindow = getSpWindow();
 	var header = getHeader();
 	var head = getHead()
@@ -300,10 +310,10 @@ $lightblue: #0071ce;&#13;
 }&#13;
 .semi-transparent {&#13;
   color: white;&#13;
-  transition: all .1s ease-in-out;&#13;
+  transition: all 0.1s ease-in-out;&#13;
 }&#13;
 a.semi-transparent:hover {&#13;
-  font-size: 1.7rem&#13;
+  font-size: 1.7rem;&#13;
 }&#13;
 .avatar {&#13;
   float: right;&#13;
@@ -374,6 +384,7 @@ a.semi-transparent:hover {&#13;
   }&#13;
 }&#13;
 .megamenu-container {&#13;
+  display: none;&#13;
   position: absolute;&#13;
   top: auto;&#13;
   left: 0;&#13;
@@ -389,6 +400,15 @@ a.semi-transparent:hover {&#13;
 &#13;
   ul li {&#13;
     position: relative;&#13;
+  }&#13;
+}&#13;
+.megamenu.active{&#13;
+  font-weight: 500;&#13;
+  .megamenu-container {&#13;
+    display: block;&#13;
+    visibility: visible;&#13;
+    opacity: 1;&#13;
+    transform: translate3d(0, 0px, 0);&#13;
   }&#13;
 }&#13;
 .megamenu-list,&#13;
@@ -459,25 +479,33 @@ a.semi-transparent:hover {&#13;
 &#13;
   opacity: 1;&#13;
 }&#13;
-&#13;
-.megamenu {&#13;
-  &amp;:hover &gt; .megamenu-container {&#13;
-    visibility: visible;&#13;
-    opacity: 1;&#13;
-    transform: translate3d(0, 0px, 0);&#13;
-    transition: 300ms ease-in-out;&#13;
-  }&#13;
+.navbar-toggle {&#13;
+  margin: 15px;&#13;
 }&#13;
+&#13;
 .btn-lock {&#13;
   &amp;:hover {&#13;
     color: white;&#13;
   }&#13;
 }&#13;
-@media (min-width: 768px){&#13;
+@media (min-width: 768px) {&#13;
   .header__nav {&#13;
     position: static;&#13;
   }&#13;
-}</css>
+  .megamenu-container {&#13;
+    display: block;&#13;
+  }&#13;
+  .megamenu {&#13;
+    &amp;:hover &gt; .megamenu-container {&#13;
+      display: block;&#13;
+      visibility: visible;&#13;
+      opacity: 1;&#13;
+      transform: translate3d(0, 0px, 0);&#13;
+      transition: 300ms ease-in-out;&#13;
+    }&#13;
+  }&#13;
+}&#13;
+</css>
         <data_table>sp_instance_menu</data_table>
         <demo_data/>
         <description/>
@@ -494,106 +522,107 @@ a.semi-transparent:hover {&#13;
         <script><![CDATA[(function () {
 
 	// build menus
-	var userIP = gs.getSession().getClientIP();
-	data.userIPisValid = new TeamOnlineUtils().validateIP(userIP);
-	
-	data.canEdit = gs.getUser().isMemberOf(gs.getProperty("x_aaro2_teamonline.teamonline_administration_group")) || gs.hasRole("admin");
-	data.isLoggedIn = true;//gs.getSession().isLoggedIn();
+	data.userIPisValid = new TeamOnlineUtils().validateIP(gs.getSession().getClientIP());
+	if (data.userIPisValid) {
 
-	data.login_page = $sp.getValue('login_page');
-	data.profileBtnMsg = gs.getMessage("User options");
+		data.canEdit = gs.getUser().isMemberOf(gs.getProperty("x_aaro2_teamonline.teamonline_administration_group")) || gs.hasRole("admin");
+		data.isLoggedIn = true; //gs.getSession().isLoggedIn();
 
-	data.menuid = $sp.getValue('sys_id');
-	var menu_id = $sp.getValue('sys_id'); // instance sys_id
-	var gr = new GlideRecord('sp_instance_menu');
-	gr.get(menu_id);
+		data.login_page = $sp.getValue('login_page');
+		data.profileBtnMsg = gs.getMessage("User options");
 
-	data.menu = {};
-	data.menu.items = $sp.getMenuItems(menu_id);
+		data.menuid = $sp.getValue('sys_id');
+		var menu_id = $sp.getValue('sys_id'); // instance sys_id
+		var gr = new GlideRecord('sp_instance_menu');
+		gr.get(menu_id);
 
-	// Show tours only if gtd's sp sys property is set
-	data.showTours = (gs.getProperty('com.snc.guided_tours.sp.enable') === 'true') && data.isLoggedIn;
-	var catalogArr = ($sp.getCatalogs().value + "").split(",");
-	data.loginWidget = $sp.getWidgetFromInstance('login-modal');
-	catalogArr.forEach(function (catalog) {
-		data.showWishlist = data.showWishlist || new sn_sc.Catalog(catalog).isWishlistEnabled();
-	});
-	if (data.canEdit) {
-		var linkFields = {
-			label: {
-				readonly: false,
-				value: '',
-				displayValue: '',
-				mandatory: true
-			},
-			url: {
-				readonly: false,
-				value: '',
-				displayValue: '',
-				mandatory: true
-			},
-			glyph: {
-				readonly: false,
-				value: '',
-				displayValue: '',
-				mandatory: false
-			},
-			order: {
-				readonly: false,
-				value: '',
-				displayValue: '',
-				mandatory: false
-			},
-			type: {
-				readonly: true,
-				value: 'url',
-				displayValue: 'Url',
-				mandatory: false
-			},
-			sp_rectangle_menu_item: {
-				readonly: false,
-				value: '',
-				displayValue: '',
-				mandatory: true
-			},
-			url_target: {
-				readonly: false,
-				value: '_blank',
-				displayValue: '_blank',
-				mandatory: false
+		data.menu = {};
+		data.menu.items = $sp.getMenuItems(menu_id);
+
+		// Show tours only if gtd's sp sys property is set
+		data.showTours = (gs.getProperty('com.snc.guided_tours.sp.enable') === 'true') && data.isLoggedIn;
+		var catalogArr = ($sp.getCatalogs().value + "").split(",");
+		data.loginWidget = $sp.getWidgetFromInstance('login-modal');
+		catalogArr.forEach(function (catalog) {
+			data.showWishlist = data.showWishlist || new sn_sc.Catalog(catalog).isWishlistEnabled();
+		});
+		if (data.canEdit) {
+			var linkFields = {
+				label: {
+					readonly: false,
+					value: '',
+					displayValue: '',
+					mandatory: true
+				},
+				url: {
+					readonly: false,
+					value: '',
+					displayValue: '',
+					mandatory: true
+				},
+				glyph: {
+					readonly: false,
+					value: '',
+					displayValue: '',
+					mandatory: false
+				},
+				order: {
+					readonly: false,
+					value: '',
+					displayValue: '',
+					mandatory: false
+				},
+				type: {
+					readonly: true,
+					value: 'url',
+					displayValue: 'Url',
+					mandatory: false
+				},
+				sp_rectangle_menu_item: {
+					readonly: false,
+					value: '',
+					displayValue: '',
+					mandatory: true
+				},
+				url_target: {
+					readonly: false,
+					value: '_blank',
+					displayValue: '_blank',
+					mandatory: false
+				}
 			}
-		}
-		data.linkData = {};
-		data.linkData.table = 'sp_rectangle_menu_item';
-		data.linkData.sys_id = '-1';
-		data.linkData.view = 'teamonlineportaledit';
-		data.linkData.operation = 'Create';
-		data.linkData.query = '';
-		data.linkData.wasInput = !!input;
-		if (input && input.link) {
-			data.linkData.sys_id = input.link.sys_id ? input.link.sys_id : '-1';
-			data.linkData.operation = input.link.operation || 'Create';
-			data.linkData.parent = input.link.parent;
-		}
-		if (input && input._fields) {
-			saveFormData(input.table, input.sys_id, input._fields, linkFields);
-		}
-		if (input && input.linkData && input.linkData.operation == 'delete') {
-			data.deleteInfo = 'input.linkData.sys_id';
-			var menuItemGr = new GlideRecord(data.linkData.table);
-			menuItemGr.get(input.linkData.sys_id);
-			menuItemGr.deleteRecord();
-		}
-		data.linkData.form = $sp.getForm(data.linkData.table, data.linkData.sys_id, data.linkData.query, data.linkData.view);
-		var fields = data.linkData.form._fields;
+			data.linkData = {};
+			data.linkData.table = 'sp_rectangle_menu_item';
+			data.linkData.sys_id = '-1';
+			data.linkData.view = 'teamonlineportaledit';
+			data.linkData.operation = 'Create';
+			data.linkData.query = '';
+			data.linkData.wasInput = !!input;
+			if (input && input.link) {
+				data.linkData.sys_id = input.link.sys_id ? input.link.sys_id : '-1';
+				data.linkData.operation = input.link.operation || 'Create';
+				data.linkData.parent = input.link.parent;
+			}
+			if (input && input._fields) {
+				saveFormData(input.table, input.sys_id, input._fields, linkFields);
+			}
+			if (input && input.linkData && input.linkData.operation == 'delete') {
+				data.deleteInfo = 'input.linkData.sys_id';
+				var menuItemGr = new GlideRecord(data.linkData.table);
+				menuItemGr.get(input.linkData.sys_id);
+				menuItemGr.deleteRecord();
+			}
+			data.linkData.form = $sp.getForm(data.linkData.table, data.linkData.sys_id, data.linkData.query, data.linkData.view);
+			var fields = data.linkData.form._fields;
 
-		if (data.linkData.parent) {
-			linkFields.sp_rectangle_menu_item.value = data.linkData.parent.sys_id;
-			linkFields.sp_rectangle_menu_item.displayValue = data.linkData.parent.displayValue;
-			linkFields.sp_rectangle_menu_item.readonly = true;
-		}
+			if (data.linkData.parent) {
+				linkFields.sp_rectangle_menu_item.value = data.linkData.parent.sys_id;
+				linkFields.sp_rectangle_menu_item.displayValue = data.linkData.parent.displayValue;
+				linkFields.sp_rectangle_menu_item.readonly = true;
+			}
 
-		data.linkData.form._fields = prepareFormFields(fields, linkFields);
+			data.linkData.form._fields = prepareFormFields(fields, linkFields);
+		}
 	}
 
 })();
@@ -623,42 +652,24 @@ function prepareFormFields(fields, props) {
 	}
 
 	return fields;
-}]]></script>
+}
+]]></script>
         <servicenow>false</servicenow>
         <sys_class_name>sp_widget</sys_class_name>
         <sys_created_by>xxabunko</sys_created_by>
         <sys_created_on>2020-02-11 17:07:22</sys_created_on>
         <sys_customer_update>false</sys_customer_update>
         <sys_id>912616dfdbfa04108f26550a48961954</sys_id>
-        <sys_mod_count>389</sys_mod_count>
+        <sys_mod_count>424</sys_mod_count>
         <sys_name>Team Online Header Menu</sys_name>
         <sys_package display_value="TEAMonline" source="x_aaro2_teamonline">a2dfc25fdb7244105f65ba03e29619fa</sys_package>
         <sys_policy/>
         <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
         <sys_scope display_value="TEAMonline">a2dfc25fdb7244105f65ba03e29619fa</sys_scope>
         <sys_update_name>sp_widget_912616dfdbfa04108f26550a48961954</sys_update_name>
-        <sys_updated_by>xxamirony</sys_updated_by>
-        <sys_updated_on>2020-10-05 14:20:24</sys_updated_on>
+        <sys_updated_by>xxikochet</sys_updated_by>
+        <sys_updated_on>2020-10-06 17:24:23</sys_updated_on>
         <template><![CDATA[<div class="menu-container">
-
-  <!-- <nav class="header__nav-wrap" style="margin-top: 0; ">
-    <ul class="header__nav" aria-label="${Header menu}" role="menubar">
-      <div class="header-loader" ng-class="{'invisible': !loadingIndicator}">
-        <div class="hidden-xs sp-loading-indicator la-sm">
-          <div></div>
-          <div></div>
-          <div></div>
-        </div>
-      </div>
-
-      <li ng-repeat="item in visibleItems" ng-class="{dropdown: item.items.length > 0, 'header-menu-item': true}"
-        ng-include="'teamOnlineMainMenu'" role="presentation"></li>
-      <li ng-if="data.canEdit">
-        <sp-widget widget="newArticle"></sp-widget>
-      </li>
-    </ul>
-  </nav> -->
-
 
   <nav class="navbar navbar-default header__nav-wrap " role="navigation">
     <div class="navbar-header">
