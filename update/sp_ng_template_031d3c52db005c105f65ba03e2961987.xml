@@ -7,7 +7,7 @@
         <sys_created_on>2020-04-10 11:23:20</sys_created_on>
         <sys_customer_update>false</sys_customer_update>
         <sys_id>031d3c52db005c105f65ba03e2961987</sys_id>
-        <sys_mod_count>29</sys_mod_count>
+        <sys_mod_count>36</sys_mod_count>
         <sys_name>teamOnlineMainMenu</sys_name>
         <sys_package display_value="TEAMonline" source="x_aaro2_teamonline">a2dfc25fdb7244105f65ba03e29619fa</sys_package>
         <sys_policy/>
@@ -15,14 +15,14 @@
         <sys_scope display_value="TEAMonline">a2dfc25fdb7244105f65ba03e29619fa</sys_scope>
         <sys_update_name>sp_ng_template_031d3c52db005c105f65ba03e2961987</sys_update_name>
         <sys_updated_by>xxamirony</sys_updated_by>
-        <sys_updated_on>2020-10-06 12:16:18</sys_updated_on>
+        <sys_updated_on>2020-10-09 12:22:12</sys_updated_on>
         <template><![CDATA[<a role="menuitem" ng-if="item.items.length == 0 && !item.scriptedItems" ng-href="{{::item.href}}" ng-click="collapse()"
   target="{{::item.url_target}}" title="{{::item.hint}}">
   <fa ng-if="::item.glyph" name="{{::item.glyph}}"></fa>
   <span ng-bind-html="::item.label"></span>
 </a>
 
-<a role="menuitem" ng-if="item.items.length > 0" href="" class="sp-menu-has-items megamenu" title="{{::item.hint}}" ng-click="switchDropdown($event)">
+<a role="menuitem" ng-if="item.items.length > 0" href="" class="sp-menu-has-items megamenu" title="{{::item.hint}}" ng-click="switchDropdown($event)" context-menu="propagatedCtx()">
   <fa ng-if="::item.glyph" name="{{::item.glyph}}"></fa>
   <span ng-bind-html="::item.label"></span> <span class="caret"></span>
   <div ng-if="item.items.length > 0" class="megamenu-container border-0 p-0 m-0 " role="menu"

@@ -4,91 +4,92 @@
         <client_script><![CDATA[function($log, $scope, $element, $document, spModal, $q, $timeout, $window) {
 	'use strict';
 
-	/* widget controller */
-	var $ctrl = this;
-	var $spContainer = $document.find('.sp-page-root');
-	var $widgetParent = $element.parent();
-
-	$ctrl.isWindowVisible = false;
-	$ctrl.hasUnreadMessages = false;
-	$ctrl.firstPress = false;
-	$ctrl.vaSource = '';
-	console.log($scope.data)
-	if ($scope.data.autoopen) {
-		$timeout(function () {
-			if (!$ctrl.isWindowVisible) {
-				$ctrl.toggleWindow();
-			}
-		}, $scope.data.autoopen_timeout)
-	}
-
-	$ctrl.toggleWindow = function () {
-		if ($ctrl.isWindowVisible) {
-			$ctrl.isWindowVisible = false;
-			$timeout(function () {
-				if (!$ctrl.isWindowVisible) {
-					$element.find('.conversation-container').css("display", "none");
-					$element.find('.sn-connect-floating').css("display", "none");
-					$element.find('.sn-connect-floating-wrapper').css("display", "none");
-
-					// ios overlay hacky fix.
-					$document.find('.touch_scroll').css("-webkit-overflow-scrolling", "touch");
-				}
-			}, 300);
-		} else {
-			if (!$ctrl.firstPress) {
-				$ctrl.firstPress = true;
-				$ctrl.vaSource = '/$sn-va-web-client-app.do?sysparm_nostack=true&sysparm_stack=no&sysparm_skip_load_history=true';
-				if ($ctrl.options.va_url_params) {
-					$ctrl.vaSource = $ctrl.vaSource + '&' + $ctrl.options.va_url_params;
-				}
-			}
-			$ctrl.isWindowVisible = true;
-			$ctrl.hasUnreadMessages = false;
-			$element.find('.conversation-container').css("display", "block");
-			$element.find('.sn-connect-floating').css("display", "block");
-			$element.find('.sn-connect-floating-wrapper').css("display", "block");
-
-			// ios overlay hacky fix.
-			$document.find('.touch_scroll').css("-webkit-overflow-scrolling", "auto");
-		}
-	};
-
-	$window.addEventListener("message", function (e) {
-		if (e.data === 'sn-va-web-client-app-new-message' && $ctrl.isWindowVisible === false) {
-			$ctrl.hasUnreadMessages = true;
-		}
-		else if (e.data === 'sn-va-web-client-app-trigger-login') {
-			$window.location.reload(true);
-		}
-	});
-
-	$element.find('.help-button').on("mouseup", function (e) {
-		e.target.blur();
-		e.stopPropagation();
-	});
-
-	$element.find('.help-icon').on("mouseup", function (e) {
-		e.target.blur();
-		e.stopPropagation();
-	});
-
-	$ctrl.openWindow = function () {
-		$ctrl.isWindowVisible = true;
-		// delay before clearing unread message indicator
-		// in-case user opens and closes quickly
-		$timeout(function () {
-			if ($ctrl.isWindowVisible) {
-				$ctrl.hasUnreadMessages = false;
-			}
-		}, 500);
-	};
-
-	var _closeWindow = function () {
+	if(this.data.userIPisValid){
+		/* widget controller */
+		var $ctrl = this;
+		var $spContainer = $document.find('.sp-page-root');
+		var $widgetParent = $element.parent();
 
 		$ctrl.isWindowVisible = false;
-		$ctrl.hasActiveConversation = false;
-	};
+		$ctrl.hasUnreadMessages = false;
+		$ctrl.firstPress = false;
+		$ctrl.vaSource = '';
+		if ($scope.data.autoopen) {
+			$timeout(function () {
+				if (!$ctrl.isWindowVisible) {
+					$ctrl.toggleWindow();
+				}
+			}, $scope.data.autoopen_timeout)
+		}
+
+		$ctrl.toggleWindow = function () {
+			if ($ctrl.isWindowVisible) {
+				$ctrl.isWindowVisible = false;
+				$timeout(function () {
+					if (!$ctrl.isWindowVisible) {
+						$element.find('.conversation-container').css("display", "none");
+						$element.find('.sn-connect-floating').css("display", "none");
+						$element.find('.sn-connect-floating-wrapper').css("display", "none");
+
+						// ios overlay hacky fix.
+						$document.find('.touch_scroll').css("-webkit-overflow-scrolling", "touch");
+					}
+				}, 300);
+			} else {
+				if (!$ctrl.firstPress) {
+					$ctrl.firstPress = true;
+					$ctrl.vaSource = '/$sn-va-web-client-app.do?sysparm_nostack=true&sysparm_stack=no&sysparm_skip_load_history=true';
+					if ($ctrl.options.va_url_params) {
+						$ctrl.vaSource = $ctrl.vaSource + '&' + $ctrl.options.va_url_params;
+					}
+				}
+				$ctrl.isWindowVisible = true;
+				$ctrl.hasUnreadMessages = false;
+				$element.find('.conversation-container').css("display", "block");
+				$element.find('.sn-connect-floating').css("display", "block");
+				$element.find('.sn-connect-floating-wrapper').css("display", "block");
+
+				// ios overlay hacky fix.
+				$document.find('.touch_scroll').css("-webkit-overflow-scrolling", "auto");
+			}
+		};
+
+		$window.addEventListener("message", function (e) {
+			if (e.data === 'sn-va-web-client-app-new-message' && $ctrl.isWindowVisible === false) {
+				$ctrl.hasUnreadMessages = true;
+			}
+			else if (e.data === 'sn-va-web-client-app-trigger-login') {
+				$window.location.reload(true);
+			}
+		});
+
+		$element.find('.help-button').on("mouseup", function (e) {
+			e.target.blur();
+			e.stopPropagation();
+		});
+
+		$element.find('.help-icon').on("mouseup", function (e) {
+			e.target.blur();
+			e.stopPropagation();
+		});
+
+		$ctrl.openWindow = function () {
+			$ctrl.isWindowVisible = true;
+			// delay before clearing unread message indicator
+			// in-case user opens and closes quickly
+			$timeout(function () {
+				if ($ctrl.isWindowVisible) {
+					$ctrl.hasUnreadMessages = false;
+				}
+			}, 500);
+		};
+
+		var _closeWindow = function () {
+
+			$ctrl.isWindowVisible = false;
+			$ctrl.hasActiveConversation = false;
+		};
+	}
 }]]></client_script>
         <controller_as>$ctrl</controller_as>
         <css>$color-darker: #485563;&#13;
@@ -296,15 +297,18 @@ $sn-chatbot-animation-speed: 300ms;&#13;
 
 	var userIP = gs.getSession().getClientIP();
 	data.userIPisValid = new TeamOnlineUtils().validateIP(userIP);
-	var instanceGR = $sp.getInstanceRecord();
+	if(data.userIPisValid){
+		data.isLoggedIn = gs.getSession().isLoggedIn();
+		var instanceGR = $sp.getInstanceRecord();
 
-	options.va_url_params = options.va_url_params || "";
-	options.button_color = options.button_color || "red";
+		options.va_url_params = options.va_url_params || "";
+		options.button_color = options.button_color || "red";
 
 
-	data.instance = instanceGR;
-	data.autoopen = gs.getProperty('x_aaro2_teamonline.agent_autoopen', false) == "true" ? true : false;
-	data.autoopen_timeout = Number(gs.getProperty('x_aaro2_teamonline.open_agent_timeout', 10000));
+		data.instance = instanceGR;
+		data.autoopen = gs.getProperty('x_aaro2_teamonline.agent_autoopen', false) == "true" ? true : false;
+		data.autoopen_timeout = Number(gs.getProperty('x_aaro2_teamonline.open_agent_timeout', 10000));
+	}
 
 })();]]></script>
         <servicenow>false</servicenow>
@@ -313,7 +317,7 @@ $sn-chatbot-animation-speed: 300ms;&#13;
         <sys_created_on>2020-06-30 11:19:42</sys_created_on>
         <sys_customer_update>false</sys_customer_update>
         <sys_id>19258e54dbf5541084c240981396196f</sys_id>
-        <sys_mod_count>14</sys_mod_count>
+        <sys_mod_count>17</sys_mod_count>
         <sys_name>Teamonline Virtual Agent</sys_name>
         <sys_package display_value="TEAMonline" source="x_aaro2_teamonline">a2dfc25fdb7244105f65ba03e29619fa</sys_package>
         <sys_policy/>
@@ -321,8 +325,8 @@ $sn-chatbot-animation-speed: 300ms;&#13;
         <sys_scope display_value="TEAMonline">a2dfc25fdb7244105f65ba03e29619fa</sys_scope>
         <sys_update_name>sp_widget_19258e54dbf5541084c240981396196f</sys_update_name>
         <sys_updated_by>xxikochet</sys_updated_by>
-        <sys_updated_on>2020-09-24 21:39:17</sys_updated_on>
-        <template><![CDATA[<div ng-if="data.userIPisValid" class="conversation-button-container">
+        <sys_updated_on>2020-10-08 15:51:26</sys_updated_on>
+        <template><![CDATA[<div ng-if="data.userIPisValid && data.isLoggedIn" class="conversation-button-container">
 	<div class="conversation-region fade" 
        ng-class="{'open': $ctrl.isWindowVisible}">
     <div class="sn-connect sn-connect-floating">

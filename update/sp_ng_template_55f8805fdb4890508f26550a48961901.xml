@@ -7,70 +7,39 @@
         <sys_created_on>2020-04-13 10:10:08</sys_created_on>
         <sys_customer_update>false</sys_customer_update>
         <sys_id>55f8805fdb4890508f26550a48961901</sys_id>
-        <sys_mod_count>101</sys_mod_count>
+        <sys_mod_count>106</sys_mod_count>
         <sys_name>teamOnlineMegamenu</sys_name>
         <sys_package display_value="TEAMonline" source="x_aaro2_teamonline">a2dfc25fdb7244105f65ba03e29619fa</sys_package>
         <sys_policy/>
         <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
         <sys_scope display_value="TEAMonline">a2dfc25fdb7244105f65ba03e29619fa</sys_scope>
         <sys_update_name>sp_ng_template_55f8805fdb4890508f26550a48961901</sys_update_name>
-        <sys_updated_by>andrey.mironyuk</sys_updated_by>
-        <sys_updated_on>2020-09-04 15:01:57</sys_updated_on>
+        <sys_updated_by>xxamirony</sys_updated_by>
+        <sys_updated_on>2020-10-09 12:22:32</sys_updated_on>
         <template><![CDATA[<div class="megamenu-bg">
   <div class="container">
     <div class="row">
-      <button ng-if="data.canEdit" class="btn btn-add-subcategory btn-lock i-b" ng-click="allowEdit()">
-        <fa ng-if="!data.linkEditAllowed" name="lock"></fa>
-        <fa ng-if="data.linkEditAllowed" name="unlock"></fa>
-      </button>
-      <div ng-repeat="sitem in item.items | orderBy:'order'">
-        <h4 class="font-weight-bold text-uppercase" style="text-align: left">
+      <div ng-repeat="sitem in item.items | orderBy:'order'" context-menu="categoryCtxMenu(sitem)">
+        <h4 class="font-weight-bold text-uppercase">
           <a class="megamenu__category color-white" ng-href="{{::sitem.url}}" style="display:inline; "
             target="_self">{{::sitem.label}}</a>
-          <a class="color-white" ng-if="data.canEdit&&data.linkEditAllowed" href=""
-            ng-click="openLinkEditor('', 'Create', sitem)" style="font-size: 10pt; margin-left:10px">
-            <fa name="plus-circle"></fa>
-            Add new Link
-          </a>
-          <a class="color-white" ng-if="data.canEdit&&data.linkEditAllowed" href=""
-            ng-click="openLinkEditor(sitem, 'Edit')" style="font-size: 10pt; margin-left:10px">
-            <fa name="edit"></fa>
-            Edit folder
-          </a>
-          <a class="color-white" ng-if="data.canEdit&&data.linkEditAllowed" href=""
-            ng-click="deleteRecord(sitem, 'Folder')" style="font-size: 10pt; margin-left:10px">
-            <fa name="trash"></fa>
-            Remove folder
-          </a>
         </h4>
         <div ng-if="item.items.length > 0" class="subheading-list three-column-layout column-fill-auto">
-          <div class="subheading-list-item" ng-repeat="subitem in sitem.items | orderBy: 'order'">
+          <div class="subheading-list-item" ng-repeat="subitem in sitem.items | orderBy: 'order'" context-menu="itemCtxMenu(subitem, $scope)" allow-event-propagation="true">
             <a class="megamenu-subcategory semi-transparent" ng-href="{{subitem.url}}" ng-click="openUrl(subitem.url)">
               <fa ng-if="::subitem.glyph" name="{{::subitem.glyph}}"></fa>
               {{::subitem.label}}
             </a>
-            <a href="" style="float: right; margin-right:10px;" class="megamenu-subcategory semi-transparent"
-              ng-click="deleteRecord(subitem, 'Link')">
-              <fa ng-if="data.canEdit&&data.linkEditAllowed" name="trash"></fa>
-            </a>
-            <a href="" style="float: right; margin-right:10px;" class="megamenu-subcategory semi-transparent"
-              ng-click="openLinkEditor(subitem, 'Edit')">
-              <fa ng-if="data.canEdit&&data.linkEditAllowed" name="edit"></fa>
-            </a>
-
           </div>
         </div>
       </div>
       <h3 class="font-weight-bold text-uppercase" style="text-align: left">
-        <button ng-if="data.canEdit&&data.linkEditAllowed" class="btn btn-add-subcategory i-b"
+        <button ng-if="data.canEdit" class="btn btn-add-subcategory i-b"
           ng-click="openLinkEditor('','Create', item)">
           <fa name="plus-circle"></fa>
           <span style="display:inline; ">Add new folder</span>
         </button>
-
-        <!--<sp-widget widget="newLink"></sp-widget> -->
       </h3>
-
     </div>
   </div>
 </div>]]></template>

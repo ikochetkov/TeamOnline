@@ -43,9 +43,6 @@
 		});
 	}
 
-	$scope.allowEdit = function () {
-		$scope.data.linkEditAllowed = !$scope.data.linkEditAllowed;
-	}
 
 	if ($window.NOW.user_avatar) {
 		$scope.avatarProfile.userImage = $window.NOW.user_avatar;
@@ -261,7 +258,22 @@
       event.currentTarget.classList.add('active')
     }
 	}
-	
+	$scope.categoryCtxMenu = (item) =>{
+    if($scope.data.canEdit)
+      return [
+        ['And new link', () =>{$scope.openLinkEditor('', 'Create', item)}],
+        ['Edit Folder', () => {$scope.openLinkEditor(item, 'Edit')}],
+        ['Remove Folder', () => {$scope.deleteRecord(item, 'Folder')}]
+      ]
+  }
+  $scope.itemCtxMenu = (item) => {
+    if($scope.data.canEdit)
+    return [
+      ['Edit', () => {$scope.openLinkEditor(item, 'Edit')}],
+      ['Remove', () => {$scope.deleteRecord(item, 'Link')}],
+    ]
+  }
+  
 	/*var spWindow = getSpWindow();
 	var header = getHeader();
 	var head = getHead()
@@ -338,7 +350,9 @@ a.semi-transparent:hover {&#13;
     }&#13;
   }&#13;
 }&#13;
-&#13;
+.collapse.navbar-collapse{&#13;
+  padding: 0;&#13;
+}&#13;
 .header__nav li:hover &gt; a,&#13;
 .header__nav li:focus &gt; a {&#13;
   color: #ffffff;&#13;
@@ -354,6 +368,11 @@ a.semi-transparent:hover {&#13;
 }&#13;
 .header__nav &gt; li &gt; a {&#13;
   line-height: 39px;&#13;
+}&#13;
+.header__nav,&#13;
+.header__nav li {&#13;
+  width: 100%;&#13;
+  padding: 0 1rem;&#13;
 }&#13;
 .header-menu-item {&#13;
   font-size: 1.2em;&#13;
@@ -385,31 +404,30 @@ a.semi-transparent:hover {&#13;
 }&#13;
 .megamenu-container {&#13;
   display: none;&#13;
-  position: absolute;&#13;
-  top: auto;&#13;
-  left: 0;&#13;
-  padding-top: 10px;&#13;
+  position: relative;&#13;
   min-width: 100%;&#13;
   border: none;&#13;
-  z-index: 500;&#13;
   color: white;&#13;
-  visibility: hidden;&#13;
-  opacity: 0;&#13;
-  transform: translate3d(0, -15px, 0);&#13;
-  transition: visibility 0s 200ms, opacity 200ms ease-in-out, transform 200ms ease-in-out;&#13;
+  height: 0;&#13;
 &#13;
   ul li {&#13;
     position: relative;&#13;
   }&#13;
 }&#13;
-.megamenu.active{&#13;
-  font-weight: 500;&#13;
+.megamenu.active {&#13;
+  &gt; span {&#13;
+    font-weight: 500;&#13;
+  }&#13;
+&#13;
   .megamenu-container {&#13;
+    height: 100%;&#13;
     display: block;&#13;
     visibility: visible;&#13;
     opacity: 1;&#13;
-    transform: translate3d(0, 0px, 0);&#13;
   }&#13;
+}&#13;
+.text-uppercase{&#13;
+  text-align: center;&#13;
 }&#13;
 .megamenu-list,&#13;
 .megamenu-list-item {&#13;
@@ -420,20 +438,15 @@ a.semi-transparent:hover {&#13;
   text-decoration: none;&#13;
 }&#13;
 .subheading-list-item {&#13;
-  margin-left: 5px;&#13;
+  margin-left: 2rem;&#13;
+  line-height: 3.5rem;&#13;
 }&#13;
 .megamenu-subcategory:hover {&#13;
   color: white;&#13;
 }&#13;
 .three-column-layout {&#13;
-  -webkit-column-width: 30%;&#13;
-  -moz-column-width: 30%;&#13;
-  column-width: 30%;&#13;
-  -webkit-column-count: 3;&#13;
-  -moz-column-count: 3;&#13;
-  column-count: 3;&#13;
-  -webkit-column-gap: 30px;&#13;
-  -moz-column-gap: 30px;&#13;
+  column-width: 100%;&#13;
+  column-count: 1;&#13;
   column-gap: 30px;&#13;
   text-align: left;&#13;
 }&#13;
@@ -459,7 +472,6 @@ a.semi-transparent:hover {&#13;
 .megamenu__category {&#13;
   display: inline;&#13;
 }&#13;
-&#13;
 .dropdown .dropdown-menu {&#13;
   opacity: 0;&#13;
   display: none;&#13;
@@ -471,10 +483,7 @@ a.semi-transparent:hover {&#13;
 }&#13;
 .dropdown.open .dropdown-menu {&#13;
   display: block;&#13;
-  -webkit-transform: translate3d(0, 15px, 0);&#13;
-  -ms-transform: translate3d(0, 15px, 0);&#13;
-  transform: translate3d(0, 15px, 0);&#13;
-  -webkit-transition: all 0.5s ease-in-out;&#13;
+  &#13;
   transition: all 0.5s ease-in-out;&#13;
 &#13;
   opacity: 1;&#13;
@@ -494,15 +503,44 @@ a.semi-transparent:hover {&#13;
   }&#13;
   .megamenu-container {&#13;
     display: block;&#13;
+    position: absolute;&#13;
+    top: auto;&#13;
+    left: 0;&#13;
+    z-index: 500;&#13;
+    visibility: hidden;&#13;
+    opacity: 0;&#13;
+    //transform: translate3d(0, -15px, 0);&#13;
+    transition: visibility 0s 200ms, opacity 200ms ease-in-out, transform 200ms ease-in-out;&#13;
   }&#13;
   .megamenu {&#13;
     &amp;:hover &gt; .megamenu-container {&#13;
-      display: block;&#13;
       visibility: visible;&#13;
       opacity: 1;&#13;
-      transform: translate3d(0, 0px, 0);&#13;
+      //transform: translate3d(0, 0px, 0);&#13;
       transition: 300ms ease-in-out;&#13;
     }&#13;
+  }&#13;
+  .header__nav li {&#13;
+    width: auto;&#13;
+    padding: 0 1rem;&#13;
+  }&#13;
+  .three-column-layout {&#13;
+    -webkit-column-width: 30%;&#13;
+    -moz-column-width: 30%;&#13;
+    column-width: 30%;&#13;
+    -webkit-column-count: 3;&#13;
+    -moz-column-count: 3;&#13;
+    column-count: 3;&#13;
+    -webkit-column-gap: 30px;&#13;
+    -moz-column-gap: 30px;&#13;
+    column-gap: 30px;&#13;
+    text-align: left;&#13;
+  }&#13;
+  .text-uppercase{&#13;
+    text-align: left;&#13;
+  }&#13;
+  .subheading-list-item{&#13;
+    line-height: 39px;&#13;
   }&#13;
 }&#13;
 </css>
@@ -660,15 +698,15 @@ function prepareFormFields(fields, props) {
         <sys_created_on>2020-02-11 17:07:22</sys_created_on>
         <sys_customer_update>false</sys_customer_update>
         <sys_id>912616dfdbfa04108f26550a48961954</sys_id>
-        <sys_mod_count>424</sys_mod_count>
+        <sys_mod_count>461</sys_mod_count>
         <sys_name>Team Online Header Menu</sys_name>
         <sys_package display_value="TEAMonline" source="x_aaro2_teamonline">a2dfc25fdb7244105f65ba03e29619fa</sys_package>
         <sys_policy/>
         <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
         <sys_scope display_value="TEAMonline">a2dfc25fdb7244105f65ba03e29619fa</sys_scope>
         <sys_update_name>sp_widget_912616dfdbfa04108f26550a48961954</sys_update_name>
-        <sys_updated_by>xxikochet</sys_updated_by>
-        <sys_updated_on>2020-10-06 17:24:23</sys_updated_on>
+        <sys_updated_by>xxamirony</sys_updated_by>
+        <sys_updated_on>2020-10-09 12:28:55</sys_updated_on>
         <template><![CDATA[<div class="menu-container">
 
   <nav class="navbar navbar-default header__nav-wrap " role="navigation">
