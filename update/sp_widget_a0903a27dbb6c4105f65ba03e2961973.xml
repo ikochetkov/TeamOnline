@@ -404,68 +404,71 @@ li:before {
         <public>true</public>
         <roles/>
         <script><![CDATA[(function(){
-	data.editLayout = $sp.getParameter('edit') || false;
-	data.editWidget = $sp.getWidget('team_online_article_editor', { modal: false, operation: 'Edit' });
-	data.canEdit = gs.getUser().isMemberOf(gs.getProperty('x_aaro2_teamonline.teamonline_administration_group')) || gs.hasRole('admin');
-	data.isValid = isValidKbRecord();
-	if (!data.isValid) { return }
-	if (!input || (input && input.action == 'updateArticle')) {
-		var kbViewModel = new global.KBViewModel();
-		var kbPortal = new global.KBPortalServiceImpl();
+	data.userIPisValid = new TeamOnlineUtils().validateIP(gs.getSession().getClientIP());
+	if(data.userIPisValid){
+		data.editLayout = $sp.getParameter('edit') || false;
+		data.editWidget = $sp.getWidget('team_online_article_editor', { modal: false, operation: 'Edit' });
+		data.canEdit = gs.getUser().isMemberOf(gs.getProperty('x_aaro2_teamonline.teamonline_administration_group')) || gs.hasRole('admin');
+		data.isValid = isValidKbRecord();
+		if (!data.isValid) { return }
+		if (!input || (input && input.action == 'updateArticle')) {
+			var kbViewModel = new global.KBViewModel();
+			var kbPortal = new global.KBPortalServiceImpl();
 
-		data.params = populateParameters();
-		kbViewModel.getInfoForSP(data.params);
+			data.params = populateParameters();
+			kbViewModel.getInfoForSP(data.params);
 
-		var isValidRecord = kbViewModel.isValid;
-		data.knowledgeExists = kbViewModel.knowledgeExists;
-		data.kb_knowledge_page = $sp.getDisplayValue("kb_knowledge_page") || "kb_view2";
+			var isValidRecord = kbViewModel.isValid;
+			data.knowledgeExists = kbViewModel.knowledgeExists;
+			data.kb_knowledge_page = $sp.getDisplayValue("kb_knowledge_page") || "kb_view2";
 
-		options.knowledge_bases = options.knowledge_bases || String(kbPortal.getServicePortalKnowledgeBases($sp.getPortalRecord().url_suffix)) || "";
-		var knowledgeRecord = data.kb_record = kbViewModel.knowledgeRecord;
+			options.knowledge_bases = options.knowledge_bases || String(kbPortal.getServicePortalKnowledgeBases($sp.getPortalRecord().url_suffix)) || "";
+			var knowledgeRecord = data.kb_record = kbViewModel.knowledgeRecord;
 
-		if ( options.knowledge_bases && knowledgeRecord && knowledgeRecord.kb_knowledge_base) {
-			if ( options.knowledge_bases.indexOf(knowledgeRecord.kb_knowledge_base) == -1 )
-				if ( !kbPortal.isMemberOfAOG(knowledgeRecord) )
-					isValidRecord = false;
-		}
-		if (isValidRecord && !!knowledgeRecord) {
-			data.isKBAdmin = gs.hasRole('knowledge_admin');
-			data.isKBOwner = (gs.getUserID() == knowledgeRecord.kb_knowledge_base.owner);
+			if ( options.knowledge_bases && knowledgeRecord && knowledgeRecord.kb_knowledge_base) {
+				if ( options.knowledge_bases.indexOf(knowledgeRecord.kb_knowledge_base) == -1 )
+					if ( !kbPortal.isMemberOfAOG(knowledgeRecord) )
+						isValidRecord = false;
+			}
+			if (isValidRecord && !!knowledgeRecord) {
+				data.isKBAdmin = gs.hasRole('knowledge_admin');
+				data.isKBOwner = (gs.getUserID() == knowledgeRecord.kb_knowledge_base.owner);
 
-			populateDataFromKBViewModel(kbViewModel, knowledgeRecord);
-			data.page_title = getPageTitle();
+				populateDataFromKBViewModel(kbViewModel, knowledgeRecord);
+				data.page_title = getPageTitle();
 
 
-			populateCommonProperties();
-			data.viewCount = handleViewCountIncrement() || 0;
+				populateCommonProperties();
+				data.viewCount = handleViewCountIncrement() || 0;
 
-			data.sys_updated_on = "";
-			if (kbViewModel.publishedRecord) {
-				published = kbViewModel.publishedRecord.published;
-				data.sys_updated_on = kbViewModel.publishedRecord.sys_updated_on + "";
+				data.sys_updated_on = "";
+				if (kbViewModel.publishedRecord) {
+					published = kbViewModel.publishedRecord.published;
+					data.sys_updated_on = kbViewModel.publishedRecord.sys_updated_on + "";
+				}
+
+				data.shortDesc = knowledgeRecord.getValue('short_description');
+				data.kbCategory = knowledgeRecord.getDisplayValue('meta');
+
+				data.properties = populateSystemProperties(kbViewModel) || {};
+				data.messages = populateMessages(data.avgRating) || {};
+
+			}
+			else{
+				data.messages.INSUFFICIENT_PREVILEGES = gs.getMessage("You do not have sufficient privileges to access this knowledge item");
+				data.messages.RECORD_NOT_FOUND = gs.getMessage("Knowledge record not found");
 			}
 
-			data.shortDesc = knowledgeRecord.getValue('short_description');
-			data.kbCategory = knowledgeRecord.getDisplayValue('meta');
-
-			data.properties = populateSystemProperties(kbViewModel) || {};
-			data.messages = populateMessages(data.avgRating) || {};
-
+			data.view = 'teamonline_kb';
+			data.f = $sp.getForm(data.tableName, data.params.sys_kb_id, data.query, data.view);
+			data.f._fields.kb_knowledge_base.value = data.kbSysId;
+			data.f._fields.kb_knowledge_base.visible = false;
 		}
-		else{
-			data.messages.INSUFFICIENT_PREVILEGES = gs.getMessage("You do not have sufficient privileges to access this knowledge item");
-			data.messages.RECORD_NOT_FOUND = gs.getMessage("Knowledge record not found");
-		}
-
-		data.view = 'teamonline_kb';
-		data.f = $sp.getForm(data.tableName, data.params.sys_kb_id, data.query, data.view);
-		data.f._fields.kb_knowledge_base.value = data.kbSysId;
-		data.f._fields.kb_knowledge_base.visible = false;
-	}
-	else if (input && input.action == 'deleteArticle') {
-		var articleGr = new GlideRecord('kb_knowledge');
-		if (articleGr.get(input.params.sys_kb_id)) {
-			articleGr.deleteRecord();
+		else if (input && input.action == 'deleteArticle') {
+			var articleGr = new GlideRecord('kb_knowledge');
+			if (articleGr.get(input.params.sys_kb_id)) {
+				articleGr.deleteRecord();
+			}
 		}
 	}
 
@@ -632,7 +635,7 @@ li:before {
         <sys_created_on>2020-02-12 13:41:18</sys_created_on>
         <sys_customer_update>false</sys_customer_update>
         <sys_id>a0903a27dbb6c4105f65ba03e2961973</sys_id>
-        <sys_mod_count>171</sys_mod_count>
+        <sys_mod_count>172</sys_mod_count>
         <sys_name>Team Online Article</sys_name>
         <sys_package display_value="TEAMonline" source="x_aaro2_teamonline">a2dfc25fdb7244105f65ba03e29619fa</sys_package>
         <sys_policy/>
@@ -640,11 +643,11 @@ li:before {
         <sys_scope display_value="TEAMonline">a2dfc25fdb7244105f65ba03e29619fa</sys_scope>
         <sys_update_name>sp_widget_a0903a27dbb6c4105f65ba03e2961973</sys_update_name>
         <sys_updated_by>xxikochet</sys_updated_by>
-        <sys_updated_on>2020-02-23 11:49:04</sys_updated_on>
-        <template><![CDATA[<div ng-if="!editLayout">
+        <sys_updated_on>2020-10-12 15:19:37</sys_updated_on>
+        <template><![CDATA[<div ng-if="!editLayout && data.userIPisValid">
   <ng-include src="'article_view.html'"></ng-include>
 </div>
-<div ng-if="editLayout">
+<div ng-if="editLayout && data.userIPisValid">
   <sp_widget widget="data.editWidget"></sp_widget>
 </div>
 ]]></template>
