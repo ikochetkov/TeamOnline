@@ -5,22 +5,22 @@
         <format/>
         <height/>
         <image>aabda521dbb710105884eb184b96190b</image>
-        <name>thumbnail_56bda521dbb710105884eb184b961907_2 (2).PNG</name>
+        <name>eabda521dbb710105884eb184b961952_5e7dd5e8.png</name>
         <size_bytes/>
         <sys_class_name>db_image</sys_class_name>
         <sys_created_by>xxamirony</sys_created_by>
         <sys_created_on>2020-10-11 16:55:20</sys_created_on>
         <sys_customer_update>false</sys_customer_update>
         <sys_id>56bda521dbb710105884eb184b961907</sys_id>
-        <sys_mod_count>1</sys_mod_count>
-        <sys_name>thumbnail_56bda521dbb710105884eb184b961907_2 (2).PNG</sys_name>
+        <sys_mod_count>2</sys_mod_count>
+        <sys_name>eabda521dbb710105884eb184b961952_5e7dd5e8.png</sys_name>
         <sys_package display_value="TEAMonline" source="x_aaro2_teamonline">a2dfc25fdb7244105f65ba03e29619fa</sys_package>
         <sys_policy/>
         <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
         <sys_scope display_value="TEAMonline">a2dfc25fdb7244105f65ba03e29619fa</sys_scope>
         <sys_update_name>db_image_56bda521dbb710105884eb184b961907</sys_update_name>
         <sys_updated_by>xxamirony</sys_updated_by>
-        <sys_updated_on>2020-10-11 16:55:21</sys_updated_on>
+        <sys_updated_on>2020-10-12 11:02:22</sys_updated_on>
         <thumbnail/>
         <width/>
     </db_image>

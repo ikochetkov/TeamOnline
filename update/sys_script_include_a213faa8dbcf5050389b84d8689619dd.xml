@@ -172,17 +172,21 @@ MomentsUtil.prototype = {
   },
   _createMomentImages: function (thumbnails, images, momentSysId) {
     for (var i = 0; i < thumbnails.length; i++) {
-      var thumbnailName = this._createDbImage(thumbnails[i], true);
+      var thumbnailName = this._createDbImage(thumbnails[i]);
       var imageName = this._createDbImage(images[i]);
       this._createMomentImage(momentSysId, thumbnailName, imageName);
     }
 
 
   },
-  _createDbImage: function (file, isThumbnail) {
+  _createDbImage: function (file) {
     var dbiGr = new GlideRecord('db_image');
     dbiGr.newRecord()
-    var fileName = (isThumbnail ? 'thumbnail' : '') + '_' + dbiGr.sys_id + '_' + file.name;
+    var fileExt = file.name.split('.');
+    fileExt = fileExt[fileExt.length-1].toLowerCase();
+    var filePostfix = this._getRandomNamePostfix() 
+    var fileName = dbiGr.sys_id +'_'+ filePostfix +'.'+ fileExt;
+
     dbiGr.name = fileName;
     dbiGr.category = 'teamonline';
     dbiGr.insert();
@@ -192,6 +196,12 @@ MomentsUtil.prototype = {
     dbiGr.update();
     return fileName;
   },
+  _getRandomNamePostfix: function() {
+    return 'xxxxxxxx'.replace(/[xy]/g, function(c) {
+      var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+      return v.toString(16);
+    });
+  },
   _createMomentImage: function (momentSysId, thumbnailName, imageName) {
     var momentImageGr = new GlideRecord('x_aaro2_teamonline_moment_image');
     momentImageGr.initialize();
@@ -200,6 +210,40 @@ MomentsUtil.prototype = {
     momentImageGr.thumbnail_name = thumbnailName
     momentImageGr.insert();
   },
+  _fixFileNames: function(){
+    var m_image = new GlideRecord(this.MOMENT_IMAGE_TABLE);
+    m_image.query();
+    while(m_image.next()){
+      var imageName = m_image.getValue('image_name')
+      var imageNameByUnderscore = imageName.split('_');
+      var imageNameByDot = imageName.split('.')
+      var fileExt = imageNameByDot[imageNameByDot.length - 1].toLowerCase();
+      var db_image = new GlideRecord('db_image');
+      db_image.addEncodedQuery('nameSTARTSWITH'+m_image.getValue('image_name').substr(0,100))
+      db_image.query()
+      if(db_image.hasNext()){
+        db_image.next();
+        var postfix = this._getRandomNamePostfix()
+        var newImageName = imageNameByUnderscore[1] + '_' + postfix + '.' + fileExt;
+        db_image.setValue('name', newImageName);
+        m_image.setValue('image_name', newImageName);
+
+        db_image.update()
+      }
+      db_image = new GlideRecord('db_image');
+      db_image.addEncodedQuery('nameSTARTSWITH'+m_image.getValue('thumbnail_name').substr(0,100));
+      db_image.query()
+      if(db_image.hasNext()){
+        db_image.next()
+        var postfix = this._getRandomNamePostfix()
+        var newImageName = imageNameByUnderscore[1] + '_' + postfix + '.' + fileExt;
+        db_image.setValue('name', newImageName);
+        m_image.setValue('thumbnail_name', newImageName);
+        db_image.update()
+      }
+      m_image.update()
+    }
+  },
   type: 'MomentsUtil'
 };]]></script>
         <sys_class_name>sys_script_include</sys_class_name>
@@ -207,7 +251,7 @@ MomentsUtil.prototype = {
         <sys_created_on>2020-09-01 12:37:42</sys_created_on>
         <sys_customer_update>false</sys_customer_update>
         <sys_id>a213faa8dbcf5050389b84d8689619dd</sys_id>
-        <sys_mod_count>48</sys_mod_count>
+        <sys_mod_count>63</sys_mod_count>
         <sys_name>MomentsUtil</sys_name>
         <sys_package display_value="TEAMonline" source="x_aaro2_teamonline">a2dfc25fdb7244105f65ba03e29619fa</sys_package>
         <sys_policy/>
@@ -215,6 +259,6 @@ MomentsUtil.prototype = {
         <sys_scope display_value="TEAMonline">a2dfc25fdb7244105f65ba03e29619fa</sys_scope>
         <sys_update_name>sys_script_include_a213faa8dbcf5050389b84d8689619dd</sys_update_name>
         <sys_updated_by>xxamirony</sys_updated_by>
-        <sys_updated_on>2020-09-30 13:41:15</sys_updated_on>
+        <sys_updated_on>2020-10-12 10:59:36</sys_updated_on>
     </sys_script_include>
 </record_update>
