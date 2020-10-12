@@ -356,7 +356,7 @@ nav {
         <roles/>
         <script><![CDATA[var userIP = gs.getSession().getClientIP();
 data.userIPisValid = new TeamOnlineUtils().validateIP(userIP);
-//data.search = $sp.getWidget('teamonline_typeahead_search');
+data.search = $sp.getWidget('typeahead_search');
 // Defines the support queue ID that will be linked to by the Live Chat link in header
 data.connect_support_queue_id = $sp.getValue('sp_chat_queue');
 data.profileBtnMsg = gs.getMessage("User options");
@@ -382,7 +382,7 @@ if (data.menu && data.menu.data) {
         <sys_created_on>2020-02-11 17:58:33</sys_created_on>
         <sys_customer_update>false</sys_customer_update>
         <sys_id>47d12a1fdb7e04108f26550a48961944</sys_id>
-        <sys_mod_count>141</sys_mod_count>
+        <sys_mod_count>142</sys_mod_count>
         <sys_name>Team Online Header</sys_name>
         <sys_package display_value="TEAMonline" source="x_aaro2_teamonline">a2dfc25fdb7244105f65ba03e29619fa</sys_package>
         <sys_policy/>
@@ -390,7 +390,7 @@ if (data.menu && data.menu.data) {
         <sys_scope display_value="TEAMonline">a2dfc25fdb7244105f65ba03e29619fa</sys_scope>
         <sys_update_name>sp_header_footer_47d12a1fdb7e04108f26550a48961944</sys_update_name>
         <sys_updated_by>xxikochet</sys_updated_by>
-        <sys_updated_on>2020-10-07 15:14:43</sys_updated_on>
+        <sys_updated_on>2020-10-11 17:31:23</sys_updated_on>
         <template><![CDATA[<div ng-if="data.userIPisValid">
   <div class="header navbar-inverse">
     <div class="container">
